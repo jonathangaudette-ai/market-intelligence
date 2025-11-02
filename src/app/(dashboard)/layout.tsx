@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Building2, MessageSquare, FileText, Users, Settings, ChevronDown, LogOut, Menu, X, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CompanyProvider } from "@/components/company-provider";
 
 const navigation = [
   { name: "Dashboard", href: "/companies/demo-company/dashboard", icon: LayoutDashboard, current: false },
@@ -142,7 +143,7 @@ export default function DashboardLayout({
 
         {/* Page Content */}
         <main className="min-h-screen">
-          {children}
+          <CompanyProvider>{children}</CompanyProvider>
         </main>
       </div>
     </div>

@@ -177,7 +177,7 @@ export async function analyzeDocument(
   // 3. Appeler Claude Sonnet 4.5 avec extended thinking
   // Note: Extended thinking via API parameter may require specific SDK version
   const response = await getAnthropic().messages.create({
-    model: "claude-sonnet-4.5-20241022",
+    model: "claude-sonnet-4-5-20250929",
     max_tokens: 8000,
     temperature: 0, // Déterministe pour classification
     messages: [

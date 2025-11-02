@@ -202,7 +202,7 @@ Réponds en français de manière concise et professionnelle. Si les sources ne 
 
     // Call Claude Sonnet 4.5
     const response = await getAnthropic().messages.create({
-      model: "claude-sonnet-4.5-20241022",
+      model: "claude-sonnet-4-5-20250929",
       max_tokens: 4096,
       messages,
     });

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,56 +22,82 @@ import {
 } from "lucide-react";
 
 export default function DashboardPage() {
-  const stats = [
+  const params = useParams();
+  const slug = params.slug as string;
+
+  const [loading, setLoading] = useState(true);
+  const [statsData, setStatsData] = useState<any>(null);
+
+  // Load stats from API
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const response = await fetch(`/api/companies/${slug}/stats`);
+        if (response.ok) {
+          const data = await response.json();
+          setStatsData(data);
+        }
+      } catch (error) {
+        console.error("Error loading stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
+  }, [slug]);
+
+  // Build stats array from API data
+  const stats = statsData ? [
     {
       label: "Messages IA",
-      value: "247",
-      change: "+12%",
-      trend: "up" as const,
+      value: statsData.messages.current.toString(),
+      change: `${statsData.messages.change >= 0 ? "+" : ""}${statsData.messages.change}%`,
+      trend: statsData.messages.trend as "up" | "down",
       icon: MessageSquare,
       color: "teal",
     },
     {
       label: "Concurrents actifs",
-      value: "8",
-      change: "+2",
+      value: statsData.competitors.active.toString(),
+      change: "",
       trend: "up" as const,
       icon: Users,
       color: "blue",
     },
     {
       label: "Documents analysés",
-      value: "24",
-      change: "+5",
+      value: statsData.documents.total.toString(),
+      change: `+${statsData.documents.currentMonth}`,
       trend: "up" as const,
       icon: FileText,
       color: "purple",
     },
     {
       label: "Signaux détectés",
-      value: "15",
-      change: "+8",
+      value: statsData.signals.total.toString(),
+      change: `${statsData.signals.new} nouveaux`,
       trend: "up" as const,
       icon: Target,
       color: "orange",
     },
     {
       label: "Taux de réponse",
-      value: "98%",
-      change: "+2%",
+      value: `${statsData.responseRate}%`,
+      change: "",
       trend: "up" as const,
       icon: CheckCircle2,
       color: "green",
     },
     {
       label: "Temps moyen",
-      value: "1.2s",
-      change: "-0.3s",
+      value: statsData.avgProcessingTime || "2.3s",
+      change: "",
       trend: "down" as const,
       icon: Zap,
       color: "yellow",
     },
-  ];
+  ] : [];
 
   const recentActivity = [
     {

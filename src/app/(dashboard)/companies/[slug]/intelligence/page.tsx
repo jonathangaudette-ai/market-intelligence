@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Send, User, FileText, Building2, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 
 type Message = {
   id: string;
@@ -29,6 +31,9 @@ const mockMessages: Message[] = [
 ];
 
 export default function IntelligencePage() {
+  const params = useParams();
+  const slug = params.slug as string;
+
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,23 +49,50 @@ export default function IntelligencePage() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const question = input;
     setInput("");
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Call real chat API
+      const response = await fetch(`/api/companies/${slug}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: question,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to get response");
+      }
+
+      const data = await response.json();
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "D'après les documents analysés, Competitor X a récemment lancé une nouvelle fonctionnalité d'IA qui améliore leur taux de conversion de 22%. Ils ont également augmenté leur équipe produit de 15 personnes ce trimestre, suggérant un investissement significatif dans le développement.",
-        sources: [
-          { source: "rapport-q4-competitor-x.pdf", competitor: "Competitor X", relevance: 0.92 },
-          { source: "analyse-linkedin-competitor-x.pdf", competitor: "Competitor X", relevance: 0.87 },
-        ],
+        content: data.answer,
+        sources: data.sources?.map((s: any) => ({
+          source: s.source,
+          competitor: s.competitor,
+          relevance: s.relevance,
+        })),
       };
+
       setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error: any) {
+      toast.error(error.message || "Erreur lors de la communication avec l'IA");
+      console.error("Chat error:", error);
+
+      // Remove user message on error
+      setMessages((prev) => prev.filter((m) => m.id !== userMessage.id));
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   const quickPrompts = [

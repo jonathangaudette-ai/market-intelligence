@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,69 +40,52 @@ type Document = {
   size?: string;
 };
 
-// Mock data
-const mockDocuments: Document[] = [
-  {
-    id: "1",
-    name: "rapport-q4-competitor-x.pdf",
-    type: "pdf",
-    status: "completed",
-    competitor: "Competitor X",
-    uploadedAt: "Il y a 2 jours",
-    chunks: 42,
-    size: "2.4 MB",
-  },
-  {
-    id: "2",
-    name: "analyse-linkedin-competitor-x.pdf",
-    type: "pdf",
-    status: "completed",
-    competitor: "Competitor X",
-    uploadedAt: "Il y a 3 jours",
-    chunks: 28,
-    size: "1.8 MB",
-  },
-  {
-    id: "3",
-    name: "competitory.com/pricing",
-    type: "website",
-    status: "completed",
-    competitor: "Competitor Y",
-    uploadedAt: "Il y a 5 jours",
-    chunks: 15,
-  },
-  {
-    id: "4",
-    name: "presentation-produit-2024.pdf",
-    type: "pdf",
-    status: "processing",
-    competitor: "Competitor Z",
-    uploadedAt: "Il y a quelques minutes",
-    chunks: 0,
-    size: "4.2 MB",
-  },
-  {
-    id: "5",
-    name: "rapport-financier-failed.pdf",
-    type: "pdf",
-    status: "failed",
-    competitor: "Competitor X",
-    uploadedAt: "Il y a 1 semaine",
-    chunks: 0,
-    size: "8.1 MB",
-  },
-];
+interface DocumentStats {
+  total: number;
+  completed: number;
+  processing: number;
+  failed: number;
+  totalChunks: number;
+}
 
 export default function DocumentsPage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  const [documents] = useState<Document[]>(mockDocuments);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [stats, setStats] = useState<DocumentStats>({ total: 0, completed: 0, processing: 0, failed: 0, totalChunks: 0 });
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [uploadOpen, setUploadOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load documents from API
+  const loadDocuments = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/companies/${slug}/documents`);
+
+      if (!response.ok) {
+        throw new Error("Failed to load documents");
+      }
+
+      const data = await response.json();
+      setDocuments(data.documents);
+      setStats(data.stats);
+    } catch (error) {
+      console.error("Error loading documents:", error);
+      toast.error("Erreur lors du chargement des documents");
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
+
+  // Load documents on mount
+  useEffect(() => {
+    loadDocuments();
+  }, [loadDocuments]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -148,10 +131,8 @@ export default function DocumentsPage() {
       setUploadOpen(false);
       setSelectedFile(null);
 
-      // TODO: Refresh documents list
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      // Refresh documents list
+      loadDocuments();
     } catch (error: any) {
       toast.error(error.message || "Erreur lors du téléversement");
     } finally {
@@ -227,7 +208,7 @@ export default function DocumentsPage() {
                   <div>
                     <p className="text-sm text-gray-600">Total documents</p>
                     <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {documents.length}
+                      {stats.total}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
@@ -243,7 +224,7 @@ export default function DocumentsPage() {
                   <div>
                     <p className="text-sm text-gray-600">Complétés</p>
                     <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {documents.filter((d) => d.status === "completed").length}
+                      {stats.completed}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -259,7 +240,7 @@ export default function DocumentsPage() {
                   <div>
                     <p className="text-sm text-gray-600">En traitement</p>
                     <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {documents.filter((d) => d.status === "processing").length}
+                      {stats.processing}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -275,7 +256,7 @@ export default function DocumentsPage() {
                   <div>
                     <p className="text-sm text-gray-600">Total chunks</p>
                     <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {documents.reduce((sum, d) => sum + d.chunks, 0)}
+                      {stats.totalChunks}
                     </p>
                   </div>
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">

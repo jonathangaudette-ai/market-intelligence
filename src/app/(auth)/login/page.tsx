@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,16 +12,33 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
-    // TODO: Implement actual login
-    setTimeout(() => {
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Email ou mot de passe incorrect");
+        setLoading(false);
+      } else {
+        // Redirect to dashboard
+        router.push("/companies/demo-company/dashboard");
+        router.refresh();
+      }
+    } catch (error) {
+      setError("Une erreur est survenue. Veuillez réessayer.");
       setLoading(false);
-      // Redirect to dashboard
-    }, 1000);
+    }
   };
 
   return (
@@ -92,6 +111,13 @@ export default function LoginPage() {
                   Mot de passe oublié?
                 </a>
               </div>
+
+              {/* Error Message */}
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                  {error}
+                </div>
+              )}
 
               {/* Submit Button */}
               <Button type="submit" className="w-full" disabled={loading}>

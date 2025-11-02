@@ -1,0 +1,353 @@
+"use client";
+
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Upload,
+  FileText,
+  Globe,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  Search,
+  Filter,
+  Download,
+  Trash2,
+  Building2,
+} from "lucide-react";
+
+type Document = {
+  id: string;
+  name: string;
+  type: "pdf" | "website" | "linkedin";
+  status: "completed" | "processing" | "failed";
+  competitor?: string;
+  uploadedAt: string;
+  chunks: number;
+  size?: string;
+};
+
+// Mock data
+const mockDocuments: Document[] = [
+  {
+    id: "1",
+    name: "rapport-q4-competitor-x.pdf",
+    type: "pdf",
+    status: "completed",
+    competitor: "Competitor X",
+    uploadedAt: "Il y a 2 jours",
+    chunks: 42,
+    size: "2.4 MB",
+  },
+  {
+    id: "2",
+    name: "analyse-linkedin-competitor-x.pdf",
+    type: "pdf",
+    status: "completed",
+    competitor: "Competitor X",
+    uploadedAt: "Il y a 3 jours",
+    chunks: 28,
+    size: "1.8 MB",
+  },
+  {
+    id: "3",
+    name: "competitory.com/pricing",
+    type: "website",
+    status: "completed",
+    competitor: "Competitor Y",
+    uploadedAt: "Il y a 5 jours",
+    chunks: 15,
+  },
+  {
+    id: "4",
+    name: "presentation-produit-2024.pdf",
+    type: "pdf",
+    status: "processing",
+    competitor: "Competitor Z",
+    uploadedAt: "Il y a quelques minutes",
+    chunks: 0,
+    size: "4.2 MB",
+  },
+  {
+    id: "5",
+    name: "rapport-financier-failed.pdf",
+    type: "pdf",
+    status: "failed",
+    competitor: "Competitor X",
+    uploadedAt: "Il y a 1 semaine",
+    chunks: 0,
+    size: "8.1 MB",
+  },
+];
+
+export default function DocumentsPage() {
+  const [documents] = useState<Document[]>(mockDocuments);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const getStatusConfig = (status: string) => {
+    switch (status) {
+      case "completed":
+        return {
+          icon: CheckCircle2,
+          label: "Complété",
+          variant: "success" as const,
+        };
+      case "processing":
+        return {
+          icon: Clock,
+          label: "En cours",
+          variant: "warning" as const,
+        };
+      case "failed":
+        return {
+          icon: AlertCircle,
+          label: "Échec",
+          variant: "destructive" as const,
+        };
+      default:
+        return {
+          icon: Clock,
+          label: status,
+          variant: "default" as const,
+        };
+    }
+  };
+
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case "pdf":
+        return FileText;
+      case "website":
+        return Globe;
+      case "linkedin":
+        return Building2;
+      default:
+        return FileText;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Documents</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                Gérez vos documents et sources d'intelligence
+              </p>
+            </div>
+            <Button className="gap-2">
+              <Upload className="h-4 w-4" />
+              Téléverser un document
+            </Button>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Total documents</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-1">
+                      {documents.length}
+                    </p>
+                  </div>
+                  <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-5 w-5 text-teal-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Complétés</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-1">
+                      {documents.filter((d) => d.status === "completed").length}
+                    </p>
+                  </div>
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">En traitement</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-1">
+                      {documents.filter((d) => d.status === "processing").length}
+                    </p>
+                  </div>
+                  <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                    <Clock className="h-5 w-5 text-yellow-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Total chunks</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-1">
+                      {documents.reduce((sum, d) => sum + d.chunks, 0)}
+                    </p>
+                  </div>
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        {/* Filters */}
+        <Card className="mb-6">
+          <CardContent className="p-4">
+            <div className="flex gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Rechercher un document..."
+                  className="pl-10"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <Button variant="outline" className="gap-2">
+                <Filter className="h-4 w-4" />
+                Filtres
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Documents Table */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Document
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Concurrent
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Statut
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Chunks
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {documents.map((doc) => {
+                    const TypeIcon = getTypeIcon(doc.type);
+                    const statusConfig = getStatusConfig(doc.status);
+                    const StatusIcon = statusConfig.icon;
+
+                    return (
+                      <tr key={doc.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <TypeIcon className="h-5 w-5 text-teal-600" />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                                {doc.name}
+                              </p>
+                              {doc.size && (
+                                <p className="text-xs text-gray-500">{doc.size}</p>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {doc.competitor ? (
+                            <Badge variant="outline" className="gap-1">
+                              <Building2 className="h-3 w-3" />
+                              {doc.competitor}
+                            </Badge>
+                          ) : (
+                            <span className="text-sm text-gray-400">-</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Badge variant={statusConfig.variant} className="gap-1">
+                            <StatusIcon className="h-3 w-3" />
+                            {statusConfig.label}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {doc.chunks > 0 ? doc.chunks : "-"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {doc.uploadedAt}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                          <div className="flex items-center justify-end gap-2">
+                            {doc.status === "completed" && (
+                              <Button variant="ghost" size="sm">
+                                <Download className="h-4 w-4" />
+                              </Button>
+                            )}
+                            <Button variant="ghost" size="sm">
+                              <Trash2 className="h-4 w-4 text-red-600" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Upload Zone */}
+        <Card className="mt-6 border-2 border-dashed border-gray-300 hover:border-teal-400 transition-colors cursor-pointer">
+          <CardContent className="p-12 text-center">
+            <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Upload className="h-8 w-8 text-teal-600" />
+            </div>
+            <p className="text-sm font-medium text-gray-900 mb-1">
+              Glissez-déposez vos fichiers ici
+            </p>
+            <p className="text-xs text-gray-500 mb-4">
+              ou cliquez pour sélectionner (PDF uniquement, max 10 MB)
+            </p>
+            <Button>Sélectionner un fichier</Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

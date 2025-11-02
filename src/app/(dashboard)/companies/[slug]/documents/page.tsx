@@ -134,7 +134,11 @@ export default function DocumentsPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Upload failed");
+        // Show detailed error message if available
+        const errorMessage = error.details
+          ? `${error.error}: ${error.details}`
+          : (error.error || "Upload failed");
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();

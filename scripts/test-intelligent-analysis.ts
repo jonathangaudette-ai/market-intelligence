@@ -134,7 +134,7 @@ async function testContract() {
   );
 
   assert(
-    analysis.metadata.parties && analysis.metadata.parties.length >= 2,
+    (analysis.metadata.parties?.length ?? 0) >= 2,
     `Parties extracted: ${analysis.metadata.parties?.length || 0}`
   );
 

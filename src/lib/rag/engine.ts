@@ -1,6 +1,7 @@
 import { Pinecone } from "@pinecone-database/pinecone";
 import { Anthropic } from "@anthropic-ai/sdk";
 import OpenAI from "openai";
+import { getDateContextString } from "@/lib/utils/date";
 
 // Lazy initialization to avoid connecting during build time
 let _pinecone: Pinecone | null = null;
@@ -176,6 +177,9 @@ export class MultiTenantRAGEngine {
       })
       .join("\n\n---\n\n");
 
+    // Get current date context
+    const dateContext = getDateContextString();
+
     // Build messages
     const messages: Array<{ role: "user" | "assistant"; content: string }> = [
       ...conversationHistory.map((msg) => ({
@@ -184,7 +188,9 @@ export class MultiTenantRAGEngine {
       })),
       {
         role: "user" as const,
-        content: `Voici des informations pertinentes extraites de nos documents :
+        content: `${dateContext}
+
+Voici des informations pertinentes extraites de nos documents :
 
 ${context}
 
@@ -196,7 +202,7 @@ Réponds en français de manière concise et professionnelle. Si les sources ne 
 
     // Call Claude Sonnet 4.5
     const response = await getAnthropic().messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4.5-20241022",
       max_tokens: 4096,
       messages,
     });

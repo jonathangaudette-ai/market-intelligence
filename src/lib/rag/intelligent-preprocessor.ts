@@ -10,6 +10,7 @@ import {
   AnalysisConfig,
   getAnalysisConfig,
 } from "./analysis-config";
+import { getDateContextString } from "@/lib/utils/date";
 
 // Lazy initialization to avoid connecting during build time
 let _anthropic: Anthropic | null = null;
@@ -173,10 +174,10 @@ export async function analyzeDocument(
   // 2. Construire le prompt avec les règles configurées
   const prompt = buildAnalysisPrompt(rawText, config, options);
 
-  // 3. Appeler Claude Sonnet 4 avec extended thinking
+  // 3. Appeler Claude Sonnet 4.5 avec extended thinking
   // Note: Extended thinking via API parameter may require specific SDK version
   const response = await getAnthropic().messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-sonnet-4.5-20241022",
     max_tokens: 8000,
     temperature: 0, // Déterministe pour classification
     messages: [
@@ -244,7 +245,11 @@ function buildAnalysisPrompt(
     })
     .join("\n\n");
 
+  const dateContext = getDateContextString();
+
   return `Tu es un expert en analyse de documents pour l'intelligence concurrentielle et de marché.
+
+${dateContext}
 
 Analyse ce document de façon approfondie et structurée.
 

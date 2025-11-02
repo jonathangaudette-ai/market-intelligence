@@ -1,10 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Upload,
   FileText,
@@ -17,7 +25,9 @@ import {
   Download,
   Trash2,
   Building2,
+  X,
 } from "lucide-react";
+import { toast } from "sonner";
 
 type Document = {
   id: string;
@@ -84,8 +94,66 @@ const mockDocuments: Document[] = [
 ];
 
 export default function DocumentsPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+
   const [documents] = useState<Document[]>(mockDocuments);
   const [searchQuery, setSearchQuery] = useState("");
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type !== "application/pdf") {
+        toast.error("Seuls les fichiers PDF sont acceptés");
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Le fichier ne doit pas dépasser 10 MB");
+        return;
+      }
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch(`/api/companies/${slug}/documents/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Upload failed");
+      }
+
+      const result = await response.json();
+      toast.success("Document téléversé avec succès!");
+      toast.info(`Analyse en cours avec Claude Sonnet 4.5...`);
+
+      setUploadOpen(false);
+      setSelectedFile(null);
+
+      // TODO: Refresh documents list
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error: any) {
+      toast.error(error.message || "Erreur lors du téléversement");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const getStatusConfig = (status: string) => {
     switch (status) {
@@ -141,7 +209,7 @@ export default function DocumentsPage() {
                 Gérez vos documents et sources d'intelligence
               </p>
             </div>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => setUploadOpen(true)}>
               <Upload className="h-4 w-4" />
               Téléverser un document
             </Button>
@@ -333,7 +401,10 @@ export default function DocumentsPage() {
         </Card>
 
         {/* Upload Zone */}
-        <Card className="mt-6 border-2 border-dashed border-gray-300 hover:border-teal-400 transition-colors cursor-pointer">
+        <Card
+          className="mt-6 border-2 border-dashed border-gray-300 hover:border-teal-400 transition-colors cursor-pointer"
+          onClick={() => setUploadOpen(true)}
+        >
           <CardContent className="p-12 text-center">
             <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Upload className="h-8 w-8 text-teal-600" />
@@ -348,6 +419,91 @@ export default function DocumentsPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Upload Modal */}
+      <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Téléverser un document</DialogTitle>
+            <DialogDescription>
+              Sélectionnez un fichier PDF. L'analyse intelligente avec Claude Sonnet 4.5 commencera automatiquement.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* File Input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+
+            {/* Upload Area */}
+            {!selectedFile ? (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-teal-400 transition-colors"
+              >
+                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-sm font-medium text-gray-700 mb-1">
+                  Cliquez pour sélectionner un fichier
+                </p>
+                <p className="text-xs text-gray-500">
+                  PDF uniquement, max 10 MB
+                </p>
+              </div>
+            ) : (
+              <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <FileText className="h-8 w-8 text-teal-600" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {selectedFile.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedFile(null);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 justify-end pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setUploadOpen(false);
+                  setSelectedFile(null);
+                }}
+                disabled={uploading}
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={handleUpload}
+                disabled={!selectedFile || uploading}
+              >
+                {uploading ? "Téléversement..." : "Téléverser"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

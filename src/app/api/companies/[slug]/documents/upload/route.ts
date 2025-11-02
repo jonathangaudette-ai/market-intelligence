@@ -171,14 +171,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             wordCount: processed.metadata.wordCount,
 
             // Analysis results
-            language: analysis.language,
-            industry: analysis.industry,
             sectionsAnalyzed: analysis.sections.length,
             sectionsIndexed: analysis.sections.filter((s) => s.shouldIndex).length,
             signalsDetected: analysis.signals.length,
 
             // Extracted metadata (full DocumentMetadata)
             ...analysis.metadata,
+            // Override with top-level analysis fields if different
+            language: analysis.language,
+            industry: analysis.industry,
           },
         })
         .where(eq(documents.id, document.id));

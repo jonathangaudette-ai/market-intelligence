@@ -9,25 +9,11 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      email: string;
-      name?: string | null;
       isSuperAdmin: boolean;
     } & DefaultSession["user"];
   }
 
   interface User {
-    id: string;
-    email: string;
-    name?: string | null;
-    isSuperAdmin: boolean;
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    id: string;
-    email: string;
-    name?: string | null;
     isSuperAdmin: boolean;
   }
 }
@@ -81,10 +67,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id;
-        session.user.email = token.email;
-        session.user.name = token.name;
-        session.user.isSuperAdmin = token.isSuperAdmin;
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.user.name = token.name as string | null | undefined;
+        session.user.isSuperAdmin = token.isSuperAdmin as boolean;
       }
       return session;
     },

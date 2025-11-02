@@ -144,7 +144,7 @@ async function validateDatabaseConnection() {
       WHERE table_schema = 'public'
     `);
 
-    const tableNames = tables.rows.map((r: any) => r.table_name);
+    const tableNames = (tables as any[]).map((r: any) => r.table_name);
     const expectedTables = [
       "users",
       "companies",
@@ -171,7 +171,7 @@ async function validateDatabaseConnection() {
       WHERE table_name = 'documents'
     `);
 
-    const colNames = documentsCols.rows.map((r: any) => r.column_name);
+    const colNames = (documentsCols as any[]).map((r: any) => r.column_name);
     const newCols = ["document_type", "analysis_completed", "analysis_confidence"];
 
     for (const colName of newCols) {

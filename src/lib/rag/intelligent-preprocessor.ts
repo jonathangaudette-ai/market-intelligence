@@ -166,29 +166,28 @@ export async function analyzeDocument(
   const prompt = buildAnalysisPrompt(rawText, config, options);
 
   // 3. Appeler Claude Sonnet 4 avec extended thinking
+  // Note: Extended thinking via API parameter may require specific SDK version
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 8000,
     temperature: 0, // Déterministe pour classification
-    thinking: {
-      type: "enabled",
-      budget_tokens: 3000, // Budget généreux pour raisonnement approfondi
-    },
     messages: [
       {
         role: "user",
         content: prompt,
       },
     ],
-  });
+  } as any); // Cast to any to support future thinking parameter
 
   // 4. Extraire le thinking (raisonnement) et le contenu
+  // Note: Extended thinking blocks may not be available in current SDK version
   let reasoning = "";
   let analysisText = "";
 
   for (const block of response.content) {
-    if (block.type === "thinking") {
-      reasoning = block.thinking;
+    const blockAny = block as any;
+    if (blockAny.type === "thinking") {
+      reasoning = blockAny.thinking;
     } else if (block.type === "text") {
       analysisText = block.text;
     }

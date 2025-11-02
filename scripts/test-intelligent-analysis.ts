@@ -268,7 +268,7 @@ async function testCompetitiveReport() {
   );
 
   assert(
-    analysis.metadata.competitors?.includes("Competitor X"),
+    (analysis.metadata.competitors?.includes("Competitor X") ?? false),
     "Competitor X detected"
   );
 

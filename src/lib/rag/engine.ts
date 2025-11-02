@@ -2,17 +2,37 @@ import { Pinecone } from "@pinecone-database/pinecone";
 import { Anthropic } from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 
-const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY!,
-});
+// Lazy initialization to avoid connecting during build time
+let _pinecone: Pinecone | null = null;
+let _anthropic: Anthropic | null = null;
+let _openai: OpenAI | null = null;
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-});
+function getPinecone() {
+  if (!_pinecone) {
+    _pinecone = new Pinecone({
+      apiKey: process.env.PINECONE_API_KEY!,
+    });
+  }
+  return _pinecone;
+}
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+function getAnthropic() {
+  if (!_anthropic) {
+    _anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY!,
+    });
+  }
+  return _anthropic;
+}
+
+function getOpenAI() {
+  if (!_openai) {
+    _openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY!,
+    });
+  }
+  return _openai;
+}
 
 export interface RAGSource {
   text: string;
@@ -60,7 +80,7 @@ export class MultiTenantRAGEngine {
   private index;
 
   constructor() {
-    this.index = pinecone.index(process.env.PINECONE_INDEX_NAME || "market-intelligence-prod");
+    this.index = getPinecone().index(process.env.PINECONE_INDEX_NAME || "market-intelligence-prod");
   }
 
   /**
@@ -71,7 +91,7 @@ export class MultiTenantRAGEngine {
 
     // Generate embeddings for all chunks in parallel
     const embeddingPromises = chunks.map((chunk, idx) =>
-      openai.embeddings
+      getOpenAI().embeddings
         .create({
           model: "text-embedding-3-large",
           input: chunk,
@@ -109,7 +129,7 @@ export class MultiTenantRAGEngine {
     const { companyId, queryText, filters = {}, topK = 5 } = params;
 
     // Generate query embedding
-    const embeddingResponse = await openai.embeddings.create({
+    const embeddingResponse = await getOpenAI().embeddings.create({
       model: "text-embedding-3-large",
       input: queryText,
       dimensions: 1536,
@@ -175,7 +195,7 @@ Réponds en français de manière concise et professionnelle. Si les sources ne 
     ];
 
     // Call Claude Sonnet 4.5
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: "claude-sonnet-4-20250514",
       max_tokens: 4096,
       messages,
@@ -241,5 +261,19 @@ Réponds en français de manière concise et professionnelle. Si les sources ne 
   }
 }
 
-// Export singleton instance
-export const ragEngine = new MultiTenantRAGEngine();
+// Export singleton instance with lazy initialization
+let _ragEngine: MultiTenantRAGEngine | null = null;
+
+function getRagEngine() {
+  if (!_ragEngine) {
+    _ragEngine = new MultiTenantRAGEngine();
+  }
+  return _ragEngine;
+}
+
+// Export a Proxy to maintain backwards compatibility
+export const ragEngine = new Proxy({} as MultiTenantRAGEngine, {
+  get(target, prop) {
+    return (getRagEngine() as any)[prop];
+  }
+});

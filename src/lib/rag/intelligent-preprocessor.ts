@@ -11,9 +11,17 @@ import {
   getAnalysisConfig,
 } from "./analysis-config";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// Lazy initialization to avoid connecting during build time
+let _anthropic: Anthropic | null = null;
+
+function getAnthropic() {
+  if (!_anthropic) {
+    _anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    });
+  }
+  return _anthropic;
+}
 
 // ============================================================================
 // Types
@@ -167,7 +175,7 @@ export async function analyzeDocument(
 
   // 3. Appeler Claude Sonnet 4 avec extended thinking
   // Note: Extended thinking via API parameter may require specific SDK version
-  const response = await anthropic.messages.create({
+  const response = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 8000,
     temperature: 0, // Déterministe pour classification

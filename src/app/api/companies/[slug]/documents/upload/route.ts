@@ -6,6 +6,7 @@ import { analyzeDocument, getIndexableContent, getEnrichedMetadata } from "@/lib
 import { db } from "@/db";
 import { documents, competitors, signals } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { DocumentProgressTracker } from "@/lib/progress-tracker";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
@@ -78,33 +79,46 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // 7. Process PDF with intelligent analysis
     // For production, use a queue (BullMQ, Inngest, etc.)
     try {
+      // Initialize progress tracker
+      const progressTracker = new DocumentProgressTracker(document.id);
+
       const buffer = Buffer.from(await file.arrayBuffer());
 
       // 7a. Extract raw text from PDF
+      await progressTracker.updateStep("Extraction du PDF", "in_progress");
       const processed = await processPDF(buffer);
       const rawText = processed.text;
+      await progressTracker.updateStep("Extraction du PDF", "completed", `${processed.metadata.pageCount} pages, ${processed.metadata.wordCount} mots`);
 
       // 7b. ⭐ INTELLIGENT ANALYSIS with Claude Sonnet 4 (thinking)
       console.log(`[${document.id}] Starting intelligent analysis...`);
+      await progressTracker.updateStep("Analyse intelligente avec Claude", "in_progress");
       const analysis = await analyzeDocument(rawText, currentCompany.company.id, {
         fileName: file.name,
         fileType: "pdf",
       });
       console.log(`[${document.id}] Analysis complete. Type: ${analysis.documentType}, Confidence: ${analysis.confidence}`);
+      await progressTracker.updateStep("Analyse intelligente avec Claude", "completed", `Type: ${analysis.documentType}, Confiance: ${Math.round(analysis.confidence * 100)}%`);
 
       // 7c. Get only indexable content (filtered sections)
+      await progressTracker.updateStep("Filtrage des sections", "in_progress");
       const indexableContent = getIndexableContent(analysis);
       console.log(`[${document.id}] Indexable sections: ${analysis.sections.filter(s => s.shouldIndex).length}/${analysis.sections.length}`);
+      await progressTracker.updateStep("Filtrage des sections", "completed", `${analysis.sections.filter(s => s.shouldIndex).length}/${analysis.sections.length} sections indexées`);
 
       // 7d. Chunk the filtered content
+      await progressTracker.updateStep("Création des chunks", "in_progress");
       const { chunkText } = await import("@/lib/rag/document-processor");
       const allChunks = indexableContent.flatMap((content) => chunkText(content));
       console.log(`[${document.id}] Created ${allChunks.length} chunks from filtered content`);
+      await progressTracker.updateStep("Création des chunks", "completed", `${allChunks.length} chunks créés`);
 
       // 7e. Get enriched metadata for vector storage
       const enrichedMetadata = getEnrichedMetadata(analysis);
 
       // 8. Upsert to RAG with enriched metadata
+      await progressTracker.updateStep("Génération des embeddings", "in_progress");
+      await progressTracker.updateStep("Indexation dans Pinecone", "in_progress");
       const vectorsCreated = await ragEngine.upsertDocument({
         companyId: currentCompany.company.id,
         documentId: document.id,
@@ -117,8 +131,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           ...enrichedMetadata, // Spread enriched metadata (competitors, pricing, etc.)
         },
       });
+      await progressTracker.updateStep("Génération des embeddings", "completed", `${vectorsCreated} vecteurs créés`);
+      await progressTracker.updateStep("Indexation dans Pinecone", "completed", `${vectorsCreated} vecteurs indexés`);
 
       // 9. Save detected signals
+      await progressTracker.updateStep("Sauvegarde des signaux", "in_progress");
       if (analysis.signals && analysis.signals.length > 0) {
         console.log(`[${document.id}] Saving ${analysis.signals.length} detected signals...`);
 
@@ -151,9 +168,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             status: "new",
           });
         }
+        await progressTracker.updateStep("Sauvegarde des signaux", "completed", `${analysis.signals.length} signaux sauvegardés`);
+      } else {
+        await progressTracker.updateStep("Sauvegarde des signaux", "completed", `Aucun signal détecté`);
       }
 
       // 10. Update document with complete analysis
+      await progressTracker.updateStep("Finalisation", "in_progress");
       await db
         .update(documents)
         .set({
@@ -183,6 +204,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           },
         })
         .where(eq(documents.id, document.id));
+
+      await progressTracker.updateStep("Finalisation", "completed", `Document analysé avec succès`);
 
       return NextResponse.json({
         documentId: document.id,

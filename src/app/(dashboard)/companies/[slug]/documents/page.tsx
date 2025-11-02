@@ -28,6 +28,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { DocumentProgressTracker } from "@/components/document-progress-tracker";
 
 type Document = {
   id: string;
@@ -59,6 +60,7 @@ export default function DocumentsPage() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [processingDocuments, setProcessingDocuments] = useState<Array<{ id: string; name: string }>>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load documents from API
@@ -127,6 +129,9 @@ export default function DocumentsPage() {
       const result = await response.json();
       toast.success("Document téléversé avec succès!");
       toast.info(`Analyse en cours avec Claude Sonnet 4.5...`);
+
+      // Add to processing documents for real-time tracking
+      setProcessingDocuments(prev => [...prev, { id: result.documentId, name: selectedFile.name }]);
 
       setUploadOpen(false);
       setSelectedFile(null);
@@ -271,6 +276,30 @@ export default function DocumentsPage() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 py-6">
+        {/* Processing Documents - Real-time Progress */}
+        {processingDocuments.length > 0 && (
+          <div className="space-y-4 mb-6">
+            {processingDocuments.map((doc) => (
+              <DocumentProgressTracker
+                key={doc.id}
+                slug={slug}
+                documentId={doc.id}
+                documentName={doc.name}
+                onComplete={() => {
+                  setProcessingDocuments(prev => prev.filter(d => d.id !== doc.id));
+                  loadDocuments();
+                  toast.success(`${doc.name} traité avec succès!`);
+                }}
+                onError={(error) => {
+                  setProcessingDocuments(prev => prev.filter(d => d.id !== doc.id));
+                  toast.error(`Échec du traitement: ${error}`);
+                  loadDocuments();
+                }}
+              />
+            ))}
+          </div>
+        )}
+
         {/* Filters */}
         <Card className="mb-6">
           <CardContent className="p-4">

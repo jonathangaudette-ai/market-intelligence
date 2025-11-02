@@ -88,6 +88,9 @@ export const documents = pgTable("documents", {
   analysisCompleted: boolean("analysis_completed").default(false),
   analysisConfidence: integer("analysis_confidence"), // 0-100
 
+  // Progress tracking for real-time updates
+  processingSteps: jsonb("processing_steps"), // Array of { step: string, status: 'pending'|'in_progress'|'completed'|'failed', timestamp: number }
+
   metadata: jsonb("metadata"), // Full analysis metadata (DocumentMetadata type)
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

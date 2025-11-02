@@ -208,12 +208,12 @@ async function testRFP() {
   );
 
   assert(
-    analysis.metadata.budget?.min && analysis.metadata.budget.min.includes("2,000,000"),
+    (analysis.metadata.budget?.min?.includes("2,000,000") ?? false),
     `Budget min: ${analysis.metadata.budget?.min}`
   );
 
   assert(
-    analysis.metadata.budget?.max && analysis.metadata.budget.max.includes("5,000,000"),
+    (analysis.metadata.budget?.max?.includes("5,000,000") ?? false),
     `Budget max: ${analysis.metadata.budget?.max}`
   );
 

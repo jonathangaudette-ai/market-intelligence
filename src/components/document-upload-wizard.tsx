@@ -186,7 +186,7 @@ export function DocumentUploadWizard({
           } : undefined,
           chunking: data.progress.chunked && data.chunks ? {
             totalChunks: data.stats.totalChunks,
-            chunks: data.chunks.preview || [],
+            chunks: data.chunks.all || [],
           } : undefined,
           embeddings: data.progress.embedded ? {
             progress: 100,
@@ -816,9 +816,9 @@ function ChunkingStepContent({ data }: { data?: StepData["chunking"] }) {
       {data.chunks && data.chunks.length > 0 && (
         <div>
           <div className="text-sm font-medium text-gray-700 mb-2">
-            Aperçu des chunks (premiers 5)
+            Tous les chunks ({data.chunks.length})
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 max-h-96 overflow-y-auto">
             {data.chunks.map((chunk, index) => (
               <Card key={index} className="p-3">
                 <div className="flex items-center justify-between mb-2">

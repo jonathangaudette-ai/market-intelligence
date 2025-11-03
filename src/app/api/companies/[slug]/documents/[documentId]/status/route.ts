@@ -101,9 +101,9 @@ export async function GET(
         })) || [],
       } : null,
 
-      // Chunks preview (for view mode)
+      // Chunks (for view mode) - return all chunks
       chunks: metadata?.chunks ? {
-        preview: metadata.chunks.slice(0, 5).map((c: any, index: number) => ({
+        all: metadata.chunks.map((c: any, index: number) => ({
           index: index,
           content: c.content?.substring(0, 200) || c.substring(0, 200) || "",
           wordCount: (c.content || c).split(/\s+/).length,

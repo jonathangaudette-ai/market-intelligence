@@ -88,9 +88,33 @@ export function DocumentUploadWizard({
   const [stepData, setStepData] = useState<StepData>({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [progressMessage, setProgressMessage] = useState<string | null>(null);
 
   const updateStepStatus = (stepId: string, status: StepStatus) => {
     setStepStatuses((prev) => ({ ...prev, [stepId]: status }));
+  };
+
+  // Helper function to poll progress from status endpoint
+  const pollProgress = async (documentId: string): Promise<() => void> => {
+    const intervalId = setInterval(async () => {
+      try {
+        const response = await fetch(`/api/companies/${slug}/documents/${documentId}/status`);
+        if (response.ok) {
+          const status = await response.json();
+          if (status.progress?.currentStepMessage) {
+            setProgressMessage(status.progress.currentStepMessage);
+          }
+        }
+      } catch (error) {
+        console.error("Error polling progress:", error);
+      }
+    }, 1000); // Poll every second
+
+    // Return cleanup function
+    return () => {
+      clearInterval(intervalId);
+      setProgressMessage(null);
+    };
   };
 
   const handleNext = async () => {
@@ -198,26 +222,34 @@ export function DocumentUploadWizard({
       throw new Error("Document ID manquant");
     }
 
-    const response = await fetch(
-      `/api/companies/${slug}/documents/${stepData.upload.documentId}/extract`,
-      { method: "POST" }
-    );
+    // Start polling for progress
+    const stopPolling = await pollProgress(stepData.upload.documentId);
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Extraction failed");
+    try {
+      const response = await fetch(
+        `/api/companies/${slug}/documents/${stepData.upload.documentId}/extract`,
+        { method: "POST" }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Extraction failed");
+      }
+
+      const result = await response.json();
+
+      setStepData((prev) => ({
+        ...prev,
+        extraction: {
+          pages: result.pages,
+          wordCount: result.wordCount,
+          text: result.textPreview,
+        },
+      }));
+    } finally {
+      // Stop polling when done
+      stopPolling();
     }
-
-    const result = await response.json();
-
-    setStepData((prev) => ({
-      ...prev,
-      extraction: {
-        pages: result.pages,
-        wordCount: result.wordCount,
-        text: result.textPreview,
-      },
-    }));
   };
 
   const executeAnalysisStep = async () => {
@@ -225,26 +257,34 @@ export function DocumentUploadWizard({
       throw new Error("Document ID manquant");
     }
 
-    const response = await fetch(
-      `/api/companies/${slug}/documents/${stepData.upload.documentId}/analyze`,
-      { method: "POST" }
-    );
+    // Start polling for progress
+    const stopPolling = await pollProgress(stepData.upload.documentId);
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Analysis failed");
+    try {
+      const response = await fetch(
+        `/api/companies/${slug}/documents/${stepData.upload.documentId}/analyze`,
+        { method: "POST" }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Analysis failed");
+      }
+
+      const result = await response.json();
+
+      setStepData((prev) => ({
+        ...prev,
+        analysis: {
+          sections: result.sections,
+          documentType: result.documentType,
+          confidence: result.confidence,
+        },
+      }));
+    } finally {
+      // Stop polling when done
+      stopPolling();
     }
-
-    const result = await response.json();
-
-    setStepData((prev) => ({
-      ...prev,
-      analysis: {
-        sections: result.sections,
-        documentType: result.documentType,
-        confidence: result.confidence,
-      },
-    }));
   };
 
   const executeFilteringStep = async () => {
@@ -305,25 +345,33 @@ export function DocumentUploadWizard({
       throw new Error("Document ID manquant");
     }
 
-    const response = await fetch(
-      `/api/companies/${slug}/documents/${stepData.upload.documentId}/embed`,
-      { method: "POST" }
-    );
+    // Start polling for progress
+    const stopPolling = await pollProgress(stepData.upload.documentId);
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Embedding failed");
+    try {
+      const response = await fetch(
+        `/api/companies/${slug}/documents/${stepData.upload.documentId}/embed`,
+        { method: "POST" }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Embedding failed");
+      }
+
+      const result = await response.json();
+
+      setStepData((prev) => ({
+        ...prev,
+        embeddings: {
+          progress: 100,
+          totalVectors: result.vectorsCreated,
+        },
+      }));
+    } finally {
+      // Stop polling when done
+      stopPolling();
     }
-
-    const result = await response.json();
-
-    setStepData((prev) => ({
-      ...prev,
-      embeddings: {
-        progress: 100,
-        totalVectors: result.vectorsCreated,
-      },
-    }));
   };
 
   const executeFinalizeStep = async () => {
@@ -366,6 +414,19 @@ export function DocumentUploadWizard({
       >
         {renderStepContent()}
       </StepContent>
+
+      {/* Progress Message */}
+      {progressMessage && isProcessing && (
+        <div className="mt-4 rounded-lg bg-blue-50 p-4 border border-blue-200">
+          <div className="flex items-start">
+            <Loader2 className="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0 animate-spin" />
+            <div>
+              <h3 className="text-sm font-medium text-blue-800">Progrès</h3>
+              <p className="mt-1 text-sm text-blue-700">{progressMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Error Message */}
       {errorMessage && (

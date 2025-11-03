@@ -202,17 +202,16 @@ export async function analyzeDocument(
     }
   }
 
-  // 5. Parser la réponse JSON
+  // 5. Parser la réponse JSON - ULTRA ROBUSTE
   let analysis: DocumentAnalysis;
   try {
-    // Extraire le JSON (peut être entouré de ```json ... ``` avec variations)
-    let jsonText = analysisText;
+    let jsonText = analysisText.trim();
 
-    // Essayer plusieurs patterns pour extraire le JSON
+    // Strategy 1: Try multiple patterns to extract JSON from markdown
     const patterns = [
-      /```json\s*([\s\S]*?)\s*```/,  // ```json ... ``` avec espaces flexibles
-      /```\s*({\s*"documentType"[\s\S]*?})\s*```/, // ``` { ... } ``` sans "json"
-      /({\s*"documentType"[\s\S]*})/,  // Direct JSON sans balises
+      /```json\s*([\s\S]*?)\s*```/,  // ```json ... ```
+      /```\s*({\s*"documentType"[\s\S]*?})\s*```/, // ``` {...} ```
+      /({\s*"documentType"[\s\S]*})/,  // Direct JSON
     ];
 
     for (const pattern of patterns) {
@@ -223,14 +222,42 @@ export async function analyzeDocument(
       }
     }
 
+    // Strategy 2: If no pattern matched, find the largest {...} block
+    if (jsonText === analysisText || !jsonText.startsWith('{')) {
+      const jsonBlocks: string[] = [];
+      let depth = 0;
+      let start = -1;
+
+      for (let i = 0; i < analysisText.length; i++) {
+        if (analysisText[i] === '{') {
+          if (depth === 0) start = i;
+          depth++;
+        } else if (analysisText[i] === '}') {
+          depth--;
+          if (depth === 0 && start !== -1) {
+            jsonBlocks.push(analysisText.substring(start, i + 1));
+            start = -1;
+          }
+        }
+      }
+
+      // Take the largest JSON block (likely the complete response)
+      if (jsonBlocks.length > 0) {
+        jsonText = jsonBlocks.reduce((a, b) => a.length > b.length ? a : b);
+      }
+    }
+
     console.log(`[analyzeDocument] Attempting to parse JSON (length: ${jsonText.length})`);
+    console.log(`[analyzeDocument] JSON preview: ${jsonText.substring(0, 150)}...`);
+
     analysis = JSON.parse(jsonText);
     analysis.reasoning = reasoning;
-    console.log(`[analyzeDocument] Successfully parsed analysis for document type: ${analysis.documentType}`);
+    console.log(`[analyzeDocument] ✓ Successfully parsed analysis for document type: ${analysis.documentType}`);
   } catch (error) {
-    console.error("Failed to parse analysis JSON:", error);
-    console.error("Raw response (first 500 chars):", analysisText.substring(0, 500));
-    console.error("Raw response (last 500 chars):", analysisText.substring(Math.max(0, analysisText.length - 500)));
+    console.error("[analyzeDocument] ✗ Failed to parse analysis JSON:", error);
+    console.error("[analyzeDocument] Raw response length:", analysisText.length);
+    console.error("[analyzeDocument] First 1000 chars:", analysisText.substring(0, 1000));
+    console.error("[analyzeDocument] Last 1000 chars:", analysisText.substring(Math.max(0, analysisText.length - 1000)));
     throw new Error("Failed to parse document analysis response");
   }
 

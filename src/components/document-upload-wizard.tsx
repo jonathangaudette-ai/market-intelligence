@@ -16,6 +16,8 @@ import {
   Loader2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { LiveAnalysisView } from "@/components/live-analysis-view";
+import { LiveFilteringView } from "@/components/live-filtering-view";
 
 const STEPS: Step[] = [
   { id: "upload", label: "Upload", icon: <Upload className="h-6 w-6" /> },
@@ -271,10 +273,49 @@ export function DocumentUploadWizard({
         return <ExtractionStepContent data={stepData.extraction} />;
 
       case "analysis":
-        return <AnalysisStepContent data={stepData.analysis} />;
+        return stepStatuses.analysis === "in_progress" ? (
+          <LiveAnalysisView
+            documentId={stepData.upload?.documentId || ""}
+            slug={slug}
+            onComplete={(sections) => {
+              setStepData((prev) => ({
+                ...prev,
+                analysis: {
+                  sections,
+                  documentType: "Competitive Intelligence",
+                  confidence: 0.95,
+                },
+              }));
+            }}
+          />
+        ) : (
+          <AnalysisStepContent data={stepData.analysis} />
+        );
 
       case "filtering":
-        return <FilteringStepContent data={stepData.filtering} />;
+        return stepStatuses.filtering === "in_progress" ? (
+          <LiveFilteringView
+            sections={stepData.analysis?.sections || []}
+            onComplete={(keptSections) => {
+              setStepData((prev) => ({
+                ...prev,
+                filtering: {
+                  keptSections: keptSections.length,
+                  rejectedSections:
+                    (stepData.analysis?.sections.length || 0) - keptSections.length,
+                  sections: stepData.analysis?.sections.map((s) => ({
+                    id: s.id,
+                    title: s.title,
+                    kept: keptSections.some((ks) => ks.id === s.id),
+                  })) || [],
+                },
+              }));
+            }}
+            minRelevanceScore={0.7}
+          />
+        ) : (
+          <FilteringStepContent data={stepData.filtering} />
+        );
 
       case "chunking":
         return <ChunkingStepContent data={stepData.chunking} />;

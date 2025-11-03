@@ -84,7 +84,7 @@ export function DocumentUploadWizard({
 
   const [currentStep, setCurrentStep] = useState(0);
   const [stepStatuses, setStepStatuses] = useState<Record<string, StepStatus>>({
-    upload: viewMode ? "pending" : "in_progress",
+    upload: "pending",
     extraction: "pending",
     analysis: "pending",
     filtering: "pending",
@@ -214,20 +214,10 @@ export function DocumentUploadWizard({
     loadDocumentData();
   }, [viewMode, documentId, slug]);
 
-  const handleNext = async () => {
-    // In view mode, just navigate to next step without executing
-    if (viewMode) {
-      if (currentStep < STEPS.length - 1) {
-        setCurrentStep((prev) => prev + 1);
-      } else {
-        onComplete();
-      }
-      return;
-    }
-
+  // Execute the current step (without navigation)
+  const handleExecuteStep = async () => {
     const currentStepId = STEPS[currentStep].id;
 
-    // Execute the current step
     setIsProcessing(true);
     updateStepStatus(currentStepId, "in_progress");
 
@@ -257,14 +247,6 @@ export function DocumentUploadWizard({
       }
 
       updateStepStatus(currentStepId, "completed");
-
-      // Move to next step or complete
-      if (currentStep < STEPS.length - 1) {
-        setCurrentStep((prev) => prev + 1);
-        updateStepStatus(STEPS[currentStep + 1].id, "in_progress");
-      } else {
-        onComplete();
-      }
     } catch (error: any) {
       updateStepStatus(currentStepId, "failed");
       const errorMsg = error?.message || "Une erreur est survenue";
@@ -275,11 +257,18 @@ export function DocumentUploadWizard({
     }
   };
 
+  // Navigate to next step (without execution)
+  const handleNext = () => {
+    if (currentStep < STEPS.length - 1) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      onComplete();
+    }
+  };
+
   const handleRetry = () => {
-    const currentStepId = STEPS[currentStep].id;
     setErrorMessage(null);
-    updateStepStatus(currentStepId, "in_progress");
-    handleNext();
+    handleExecuteStep();
   };
 
   const handlePrevious = () => {
@@ -580,6 +569,7 @@ export function DocumentUploadWizard({
         </Button>
 
         <div className="flex gap-3">
+          {/* Précédent button */}
           {currentStep > 0 && (
             <Button
               variant="outline"
@@ -590,17 +580,48 @@ export function DocumentUploadWizard({
             </Button>
           )}
 
-          {!viewMode && currentStatus === "failed" ? (
-            <Button onClick={handleRetry} disabled={isProcessing}>
-              {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Réessayer
-            </Button>
-          ) : (
-            <Button onClick={handleNext} disabled={!viewMode && isProcessing}>
-              {!viewMode && isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {currentStep === STEPS.length - 1
-                ? (viewMode ? "Fermer" : "Terminer")
-                : "Suivant"}
+          {/* In execution mode (not viewMode), show two separate buttons */}
+          {!viewMode && (
+            <>
+              {/* Démarrer button - only show if step is not completed */}
+              {currentStatus !== "completed" && currentStatus !== "failed" && (
+                <Button
+                  onClick={handleExecuteStep}
+                  disabled={isProcessing}
+                  className="bg-teal-600 hover:bg-teal-700"
+                >
+                  {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Démarrer
+                </Button>
+              )}
+
+              {/* Réessayer button - only show if step failed */}
+              {currentStatus === "failed" && (
+                <Button
+                  onClick={handleRetry}
+                  disabled={isProcessing}
+                  className="bg-orange-600 hover:bg-orange-700"
+                >
+                  {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Réessayer
+                </Button>
+              )}
+
+              {/* Suivant button - only enabled when step is completed (no skipping) */}
+              <Button
+                onClick={handleNext}
+                disabled={currentStatus !== "completed"}
+                variant={currentStatus === "completed" ? "default" : "outline"}
+              >
+                {currentStep === STEPS.length - 1 ? "Terminer" : "Suivant"}
+              </Button>
+            </>
+          )}
+
+          {/* In view mode, only show navigation button */}
+          {viewMode && (
+            <Button onClick={handleNext}>
+              {currentStep === STEPS.length - 1 ? "Fermer" : "Suivant"}
             </Button>
           )}
         </div>

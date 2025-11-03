@@ -7,13 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Upload,
   FileText,
   Globe,
@@ -29,6 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { DocumentProgressTracker } from "@/components/document-progress-tracker";
+import { DocumentUploadWizard } from "@/components/document-upload-wizard";
 
 type Document = {
   id: string;
@@ -434,90 +428,23 @@ export default function DocumentsPage() {
         </Card>
       </div>
 
-      {/* Upload Modal */}
-      <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Téléverser un document</DialogTitle>
-            <DialogDescription>
-              Sélectionnez un fichier PDF. L'analyse intelligente avec Claude Sonnet 4.5 commencera automatiquement.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            {/* File Input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-
-            {/* Upload Area */}
-            {!selectedFile ? (
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-teal-400 transition-colors"
-              >
-                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-sm font-medium text-gray-700 mb-1">
-                  Cliquez pour sélectionner un fichier
-                </p>
-                <p className="text-xs text-gray-500">
-                  PDF uniquement, max 10 MB
-                </p>
-              </div>
-            ) : (
-              <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <FileText className="h-8 w-8 text-teal-600" />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {selectedFile.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedFile(null);
-                    }}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex gap-2 justify-end pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setUploadOpen(false);
-                  setSelectedFile(null);
-                }}
-                disabled={uploading}
-              >
-                Annuler
-              </Button>
-              <Button
-                onClick={handleUpload}
-                disabled={!selectedFile || uploading}
-              >
-                {uploading ? "Téléversement..." : "Téléverser"}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Upload Wizard */}
+      {uploadOpen && (
+        <div className="fixed inset-0 z-50 bg-white">
+          <DocumentUploadWizard
+            slug={slug}
+            onComplete={() => {
+              setUploadOpen(false);
+              loadDocuments();
+              toast.success("Document traité avec succès!");
+            }}
+            onCancel={() => {
+              setUploadOpen(false);
+              setSelectedFile(null);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

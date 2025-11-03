@@ -262,14 +262,16 @@ export async function analyzeDocument(
     analysis.reasoning = reasoning;
     console.log(`[analyzeDocument] ✓ Successfully parsed analysis for document type: ${analysis.documentType}`);
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error("[analyzeDocument] ✗ Failed to parse analysis JSON:", error);
+    console.error("[analyzeDocument] Parse error message:", errorMessage);
     console.error("[analyzeDocument] Raw response length:", analysisText.length);
     console.error("[analyzeDocument] First 1000 chars:", analysisText.substring(0, 1000));
     console.error("[analyzeDocument] Last 1000 chars:", analysisText.substring(Math.max(0, analysisText.length - 1000)));
 
-    // Include preview in error message for debugging
+    // Include preview AND parsing error in error message for debugging
     const preview = analysisText.substring(0, 500);
-    throw new Error(`Failed to parse document analysis response. Claude returned (first 500 chars): ${preview}`);
+    throw new Error(`Failed to parse JSON. Error: ${errorMessage}. Claude returned (first 500 chars): ${preview}`);
   }
 
   // 6. Appliquer les règles d'exclusion post-analyse

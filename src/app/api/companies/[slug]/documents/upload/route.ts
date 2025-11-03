@@ -7,7 +7,7 @@ import { put } from "@vercel/blob";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    // 1. Verify authentication
+    // 1. Verify authentication (Blob Storage now enabled)
     const { error: authError, session } = await verifyAuth();
     if (!session) return authError;
 

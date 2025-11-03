@@ -45,6 +45,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // 5. Get competitor info if provided
     let competitorInfo = null;
     if (competitorId) {
+      console.log(`[upload] Fetching competitor info for ID: ${competitorId}`);
       const [competitor] = await db
         .select()
         .from(competitors)
@@ -53,17 +54,39 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       if (competitor && competitor.companyId === currentCompany.company.id) {
         competitorInfo = competitor;
+        console.log(`[upload] Competitor found: ${competitor.name}`);
+      } else {
+        console.log(`[upload] No matching competitor found`);
       }
     }
 
     // 6. Upload file to Vercel Blob Storage
+    console.log(`[upload] Preparing to upload file: ${file.name}, size: ${file.size}`);
+
+    // Check if BLOB_READ_WRITE_TOKEN is available
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      console.error("[upload] BLOB_READ_WRITE_TOKEN not found in environment");
+      return NextResponse.json(
+        {
+          error: "Blob Storage not configured",
+          details: "BLOB_READ_WRITE_TOKEN environment variable is missing. Please enable Vercel Blob Storage on your project."
+        },
+        { status: 500 }
+      );
+    }
+
     const buffer = Buffer.from(await file.arrayBuffer());
+    console.log(`[upload] Buffer created, size: ${buffer.length} bytes`);
+
     const blob = await put(`documents/${currentCompany.company.id}/${Date.now()}-${file.name}`, buffer, {
       access: 'public',
       contentType: file.type,
     });
 
+    console.log(`[upload] File uploaded to blob storage: ${blob.url}`);
+
     // 7. Create document record with blob URL
+    console.log(`[upload] Creating document record in database`);
     const [document] = await db
       .insert(documents)
       .values({
@@ -80,6 +103,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         },
       })
       .returning();
+
+    console.log(`[upload] Document created successfully with ID: ${document.id}`);
 
     return NextResponse.json({
       documentId: document.id,

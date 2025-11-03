@@ -78,6 +78,38 @@ export async function GET(
       documentType: document.documentType,
       analysisConfidence: document.analysisConfidence,
 
+      // Analysis sections (for view mode)
+      analysis: metadata?.analysis ? {
+        sections: metadata.analysis.sections?.map((s: any) => ({
+          id: s.id,
+          title: s.title,
+          type: s.type,
+          relevanceScore: s.relevanceScore,
+          shouldIndex: s.shouldIndex,
+          tags: s.tags,
+          preview: s.content?.substring(0, 150) || "",
+        })) || [],
+      } : null,
+
+      // Filtering sections (for view mode)
+      filtering: metadata?.keptSectionIds ? {
+        keptSectionIds: metadata.keptSectionIds,
+        sections: metadata.analysis?.sections?.map((s: any) => ({
+          id: s.id,
+          title: s.title,
+          kept: metadata.keptSectionIds.includes(s.id),
+        })) || [],
+      } : null,
+
+      // Chunks preview (for view mode)
+      chunks: metadata?.chunks ? {
+        preview: metadata.chunks.slice(0, 5).map((c: any, index: number) => ({
+          index: index,
+          content: c.content?.substring(0, 200) || c.substring(0, 200) || "",
+          wordCount: (c.content || c).split(/\s+/).length,
+        })),
+      } : null,
+
       // Timestamps
       uploadedAt: document.createdAt,
       updatedAt: document.updatedAt,

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Stepper, StepContent, Step, StepStatus } from "@/components/ui/stepper";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Upload,
   FileText,
@@ -156,8 +157,7 @@ export function DocumentUploadWizard({
 
         setStepStatuses(newStatuses);
 
-        // Reconstruct step data (we need to fetch more details from metadata)
-        // For now, we'll reconstruct what we can from the status response
+        // Reconstruct step data from API response including all sections
         const newStepData: StepData = {
           upload: data.progress.uploaded ? {
             file: new File([], data.name), // Dummy file
@@ -168,19 +168,25 @@ export function DocumentUploadWizard({
             wordCount: data.stats.wordCount,
             text: "(Texte extrait - voir document original)",
           } : undefined,
-          analysis: data.progress.analyzed ? {
-            sections: [], // We'll populate this below if available
+          analysis: data.progress.analyzed && data.analysis ? {
+            sections: data.analysis.sections.map((s: any) => ({
+              id: s.id,
+              title: s.title,
+              type: s.type,
+              relevanceScore: s.relevanceScore,
+              preview: s.preview,
+            })),
             documentType: data.documentType || "Unknown",
             confidence: (data.analysisConfidence || 0) / 100,
           } : undefined,
-          filtering: data.stats.sectionsKept > 0 ? {
+          filtering: data.stats.sectionsKept > 0 && data.filtering ? {
             keptSections: data.stats.sectionsKept,
             rejectedSections: data.stats.sectionsTotal - data.stats.sectionsKept,
-            sections: [],
+            sections: data.filtering.sections,
           } : undefined,
-          chunking: data.progress.chunked ? {
+          chunking: data.progress.chunked && data.chunks ? {
             totalChunks: data.stats.totalChunks,
-            chunks: [],
+            chunks: data.chunks.preview || [],
           } : undefined,
           embeddings: data.progress.embedded ? {
             progress: 100,
@@ -759,15 +765,95 @@ function AnalysisStepContent({ data }: { data?: StepData["analysis"] }) {
 }
 
 function FilteringStepContent({ data }: { data?: StepData["filtering"] }) {
-  return <div>Filtrage des sections...</div>;
+  if (!data) return <div>Filtrage des sections...</div>;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <Card className="p-4">
+          <div className="text-sm text-gray-600">Sections conservées</div>
+          <div className="mt-1 text-2xl font-bold text-green-600">{data.keptSections}</div>
+        </Card>
+        <Card className="p-4">
+          <div className="text-sm text-gray-600">Sections rejetées</div>
+          <div className="mt-1 text-2xl font-bold text-red-600">{data.rejectedSections}</div>
+        </Card>
+      </div>
+
+      {data.sections && data.sections.length > 0 && (
+        <div>
+          <div className="text-sm font-medium text-gray-700 mb-2">
+            Détail des sections ({data.sections.length})
+          </div>
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {data.sections.map((section) => (
+              <Card key={section.id} className={`p-3 ${section.kept ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"}`}>
+                <div className="flex items-center justify-between">
+                  <div className="font-medium">{section.title}</div>
+                  <Badge variant={section.kept ? "success" : "destructive"}>
+                    {section.kept ? "Conservée" : "Rejetée"}
+                  </Badge>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function ChunkingStepContent({ data }: { data?: StepData["chunking"] }) {
-  return <div>Découpage en morceaux...</div>;
+  if (!data) return <div>Découpage en morceaux...</div>;
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <div className="text-sm text-gray-600">Total chunks créés</div>
+        <div className="mt-1 text-2xl font-bold">{data.totalChunks}</div>
+      </Card>
+
+      {data.chunks && data.chunks.length > 0 && (
+        <div>
+          <div className="text-sm font-medium text-gray-700 mb-2">
+            Aperçu des chunks (premiers 5)
+          </div>
+          <div className="space-y-2">
+            {data.chunks.map((chunk, index) => (
+              <Card key={index} className="p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-gray-500">Chunk #{chunk.index + 1}</span>
+                  <span className="text-xs text-gray-500">{chunk.wordCount} mots</span>
+                </div>
+                <div className="text-sm text-gray-700">{chunk.content}...</div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function EmbeddingsStepContent({ data }: { data?: StepData["embeddings"] }) {
-  return <div>Génération des embeddings...</div>;
+  if (!data) return <div>Génération des embeddings...</div>;
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <div className="text-sm text-gray-600">Vecteurs créés</div>
+        <div className="mt-1 text-2xl font-bold text-teal-600">{data.totalVectors}</div>
+      </Card>
+      <div className="rounded-lg bg-teal-50 p-4 border border-teal-200">
+        <div className="text-sm font-medium text-teal-800">Configuration</div>
+        <div className="mt-2 space-y-1 text-sm text-teal-700">
+          <div>Modèle: text-embedding-3-large</div>
+          <div>Dimensions: 1536</div>
+          <div>Stockage: Pinecone</div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function FinalizeStepContent() {

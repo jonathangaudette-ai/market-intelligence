@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Brain, CheckCircle2, Loader2, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,7 +12,15 @@ interface DetectedSection {
   title: string;
   type: string;
   relevanceScore: number;
-  preview: string;
+  preview?: string;
+  content?: string;
+  shouldIndex?: boolean;
+  tags?: string[];
+  reasoning?: string;
+  pageNumbers?: number[];
+  confidence?: number;
+  keyTopics?: string[];
+  entities?: string[];
   timestamp: number;
 }
 
@@ -40,54 +49,69 @@ export function LiveAnalysisView({
   }, [detectedSections]);
 
   useEffect(() => {
-    // Simulate streaming analysis
-    // TODO: Replace with actual EventSource streaming from API
-    let sectionIndex = 0;
-    const mockSections = [
-      {
-        id: "sec-1",
-        title: "I. Synthèse Analytique",
-        type: "analysis",
-        relevanceScore: 0.95,
-        preview: "First Databank (FDB) s'est imposé comme le leader incontesté...",
-      },
-      {
-        id: "sec-2",
-        title: "II. Positionnement Stratégique",
-        type: "strategy",
-        relevanceScore: 0.92,
-        preview: "L'entreprise occupe une position dominante grâce à...",
-      },
-      {
-        id: "sec-3",
-        title: "III. Analyse Concurrentielle",
-        type: "competitive",
-        relevanceScore: 0.88,
-        preview: "Face à Wolters Kluwer et Elsevier, FDB maintient...",
-      },
-    ];
+    let mounted = true;
+    const pollInterval = setInterval(async () => {
+      try {
+        const response = await fetch(`/api/companies/${slug}/documents/${documentId}/status`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch status");
+        }
 
-    const interval = setInterval(() => {
-      if (sectionIndex < mockSections.length) {
-        const section = mockSections[sectionIndex];
-        setDetectedSections((prev) => [
-          ...prev,
-          { ...section, timestamp: Date.now() },
-        ]);
-        setProgress(((sectionIndex + 1) / mockSections.length) * 100);
-        setCurrentText(section.preview);
-        sectionIndex++;
-      } else {
-        setIsAnalyzing(false);
-        clearInterval(interval);
-        setTimeout(() => {
-          onComplete(detectedSections);
-        }, 1000);
+        const data = await response.json();
+
+        if (!mounted) return;
+
+        // Update current text if available
+        if (data.progress.currentStepMessage) {
+          setCurrentText(data.progress.currentStepMessage);
+        }
+
+        // Update progress
+        const currentProgress = data.progress.currentStepProgress || 0;
+        setProgress(currentProgress);
+
+        // Update sections if analysis data is available
+        if (data.analysis?.sections) {
+          const sections = data.analysis.sections.map((s: any) => ({
+            id: s.id,
+            title: s.title,
+            type: s.type,
+            relevanceScore: s.relevanceScore,
+            content: s.content,
+            shouldIndex: s.shouldIndex,
+            tags: s.tags,
+            reasoning: s.reasoning,
+            pageNumbers: s.pageNumbers,
+            confidence: s.confidence,
+            keyTopics: s.keyTopics,
+            entities: s.entities,
+            preview: s.content?.substring(0, 200),
+            timestamp: Date.now(),
+          }));
+          setDetectedSections(sections);
+        }
+
+        // Check if analysis is complete
+        if (data.progress.analyzed) {
+          setIsAnalyzing(false);
+          clearInterval(pollInterval);
+          setTimeout(() => {
+            onComplete(detectedSections);
+          }, 1000);
+        }
+      } catch (error) {
+        console.error("Error polling analysis status:", error);
+        if (mounted) {
+          clearInterval(pollInterval);
+        }
       }
-    }, 2000);
+    }, 1000); // Poll every second
 
-    return () => clearInterval(interval);
-  }, [documentId, slug]);
+    return () => {
+      mounted = false;
+      clearInterval(pollInterval);
+    };
+  }, [documentId, slug, onComplete]);
 
   return (
     <div className="space-y-6">
@@ -180,47 +204,114 @@ function SectionCard({ section, index, isNew }: SectionCardProps) {
   return (
     <Card
       className={cn(
-        "transform transition-all duration-500",
+        "transform transition-all duration-500 p-4 border-l-4 border-teal-500",
         show ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0",
         isNew && "ring-2 ring-teal-500 ring-offset-2"
       )}
     >
-      <div className="flex items-start gap-3 p-4">
-        <div className="flex-shrink-0">
-          <div
-            className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-lg",
-              section.relevanceScore >= 0.9
-                ? "bg-green-100 text-green-700"
-                : section.relevanceScore >= 0.75
-                ? "bg-teal-100 text-teal-700"
-                : "bg-yellow-100 text-yellow-700"
+      {/* Section Header */}
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex-1">
+          <h4 className="font-semibold text-gray-900 text-base">{section.title}</h4>
+          <div className="flex items-center gap-2 mt-1">
+            <Badge variant="outline" className="text-xs">
+              {section.type}
+            </Badge>
+            {section.shouldIndex !== undefined && (
+              <Badge variant={section.shouldIndex ? "default" : "secondary"} className="text-xs">
+                {section.shouldIndex ? "À indexer" : "Non indexé"}
+              </Badge>
             )}
-          >
-            <TrendingUp className="h-5 w-5" />
           </div>
         </div>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2">
-            <h4 className="font-medium text-gray-900">{section.title}</h4>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <div className="h-2 w-2 rounded-full bg-teal-500" />
-              <span className="text-sm font-medium text-teal-600">
-                {Math.round(section.relevanceScore * 100)}%
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-1 text-xs text-gray-500">
-            Type: <span className="font-medium">{section.type}</span>
-          </div>
-
-          <div className="mt-2 text-sm text-gray-600 line-clamp-2">
-            {section.preview}
+        <div className="ml-4">
+          <div className="text-sm text-gray-500">Score</div>
+          <div className="text-lg font-bold text-teal-600">
+            {Math.round(section.relevanceScore * 100)}%
           </div>
         </div>
       </div>
+
+      {/* Tags */}
+      {section.tags && section.tags.length > 0 && (
+        <div className="mb-3">
+          <div className="text-xs font-medium text-gray-600 mb-1">Tags:</div>
+          <div className="flex flex-wrap gap-1">
+            {section.tags.map((tag, idx) => (
+              <span key={idx} className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Key Topics */}
+      {section.keyTopics && section.keyTopics.length > 0 && (
+        <div className="mb-3">
+          <div className="text-xs font-medium text-gray-600 mb-1">Sujets clés:</div>
+          <div className="flex flex-wrap gap-1">
+            {section.keyTopics.map((topic, idx) => (
+              <span key={idx} className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded">
+                {topic}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Entities */}
+      {section.entities && section.entities.length > 0 && (
+        <div className="mb-3">
+          <div className="text-xs font-medium text-gray-600 mb-1">Entités détectées:</div>
+          <div className="flex flex-wrap gap-1">
+            {section.entities.map((entity, idx) => (
+              <span key={idx} className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded">
+                {entity}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Page Numbers & Confidence */}
+      <div className="flex items-center gap-4 mb-3 text-xs text-gray-600">
+        {section.pageNumbers && section.pageNumbers.length > 0 && (
+          <div>
+            <span className="font-medium">Pages:</span> {section.pageNumbers.join(", ")}
+          </div>
+        )}
+        {section.confidence !== undefined && (
+          <div>
+            <span className="font-medium">Confiance:</span> {Math.round(section.confidence * 100)}%
+          </div>
+        )}
+      </div>
+
+      {/* Reasoning */}
+      {section.reasoning && (
+        <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 p-3">
+          <div className="text-xs font-medium text-amber-800 mb-1">Raisonnement:</div>
+          <div className="text-sm text-amber-900">{section.reasoning}</div>
+        </div>
+      )}
+
+      {/* Content */}
+      {section.content && (
+        <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
+          <div className="text-xs font-medium text-gray-700 mb-1">Contenu:</div>
+          <div className="text-sm text-gray-800 max-h-40 overflow-y-auto whitespace-pre-wrap">
+            {section.content}
+          </div>
+        </div>
+      )}
+
+      {/* Preview fallback if no content */}
+      {!section.content && section.preview && (
+        <div className="text-sm text-gray-600">
+          {section.preview}
+        </div>
+      )}
     </Card>
   );
 }

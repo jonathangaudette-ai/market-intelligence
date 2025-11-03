@@ -205,14 +205,32 @@ export async function analyzeDocument(
   // 5. Parser la réponse JSON
   let analysis: DocumentAnalysis;
   try {
-    // Extraire le JSON (peut être entouré de ```json ... ```)
-    const jsonMatch = analysisText.match(/```json\n([\s\S]*?)\n```/) || analysisText.match(/({\s*"documentType"[\s\S]*})/);
-    const jsonText = jsonMatch ? jsonMatch[1] : analysisText;
+    // Extraire le JSON (peut être entouré de ```json ... ``` avec variations)
+    let jsonText = analysisText;
+
+    // Essayer plusieurs patterns pour extraire le JSON
+    const patterns = [
+      /```json\s*([\s\S]*?)\s*```/,  // ```json ... ``` avec espaces flexibles
+      /```\s*({\s*"documentType"[\s\S]*?})\s*```/, // ``` { ... } ``` sans "json"
+      /({\s*"documentType"[\s\S]*})/,  // Direct JSON sans balises
+    ];
+
+    for (const pattern of patterns) {
+      const match = analysisText.match(pattern);
+      if (match && match[1]) {
+        jsonText = match[1].trim();
+        break;
+      }
+    }
+
+    console.log(`[analyzeDocument] Attempting to parse JSON (length: ${jsonText.length})`);
     analysis = JSON.parse(jsonText);
     analysis.reasoning = reasoning;
+    console.log(`[analyzeDocument] Successfully parsed analysis for document type: ${analysis.documentType}`);
   } catch (error) {
     console.error("Failed to parse analysis JSON:", error);
-    console.error("Raw response:", analysisText);
+    console.error("Raw response (first 500 chars):", analysisText.substring(0, 500));
+    console.error("Raw response (last 500 chars):", analysisText.substring(Math.max(0, analysisText.length - 500)));
     throw new Error("Failed to parse document analysis response");
   }
 

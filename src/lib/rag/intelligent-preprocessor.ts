@@ -178,7 +178,7 @@ export async function analyzeDocument(
   // Note: Extended thinking via API parameter may require specific SDK version
   const response = await getAnthropic().messages.create({
     model: "claude-sonnet-4-5-20250929",
-    max_tokens: 16000, // Increased from 8000 to handle larger document analyses
+    max_tokens: 100000, // Increased to 100k to ensure complete document analysis without truncation
     temperature: 0, // Déterministe pour classification
     messages: [
       {

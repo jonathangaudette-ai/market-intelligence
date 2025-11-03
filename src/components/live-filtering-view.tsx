@@ -18,7 +18,15 @@ interface Section {
   title: string;
   relevanceScore: number;
   type: string;
-  preview: string;
+  preview?: string;
+  content?: string;
+  shouldIndex?: boolean;
+  tags?: string[];
+  reasoning?: string;
+  pageNumbers?: number[];
+  confidence?: number;
+  keyTopics?: string[];
+  entities?: string[];
 }
 
 interface FilterDecision {
@@ -241,7 +249,7 @@ function FilterDecisionCard({ decision, index }: FilterDecisionCardProps) {
           <div className="mt-1 text-xs text-gray-600">{decision.reason}</div>
 
           <div className="mt-2 text-sm text-gray-600 line-clamp-1">
-            {decision.section.preview}
+            {decision.section.content?.substring(0, 200) || decision.section.preview || ""}
           </div>
         </div>
       </div>

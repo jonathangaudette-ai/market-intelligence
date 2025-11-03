@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { LiveAnalysisView } from "@/components/live-analysis-view";
 import { LiveFilteringView } from "@/components/live-filtering-view";
+import { LiveEmbeddingsView } from "@/components/live-embeddings-view";
 
 const STEPS: Step[] = [
   { id: "upload", label: "Upload", icon: <Upload className="h-6 w-6" /> },
@@ -666,7 +667,27 @@ export function DocumentUploadWizard({
         return <ChunkingStepContent data={stepData.chunking} />;
 
       case "embeddings":
-        return <EmbeddingsStepContent data={stepData.embeddings} />;
+        return stepStatuses.embeddings === "in_progress" ? (
+          <LiveEmbeddingsView
+            documentId={stepData.upload?.documentId || ""}
+            slug={slug}
+            onComplete={(totalVectors) => {
+              setStepData((prev) => ({
+                ...prev,
+                embeddings: {
+                  progress: 100,
+                  totalVectors,
+                },
+              }));
+            }}
+            onError={(error) => {
+              setErrorMessage(error);
+              updateStepStatus("embeddings", "failed");
+            }}
+          />
+        ) : (
+          <EmbeddingsStepContent data={stepData.embeddings} />
+        );
 
       case "finalize":
         return <FinalizeStepContent />;

@@ -178,7 +178,7 @@ export async function analyzeDocument(
   // Note: Extended thinking via API parameter may require specific SDK version
   const response = await getAnthropic().messages.create({
     model: "claude-sonnet-4-5-20250929",
-    max_tokens: 8000,
+    max_tokens: 16000, // Increased from 8000 to handle larger document analyses
     temperature: 0, // Déterministe pour classification
     messages: [
       {
@@ -187,6 +187,12 @@ export async function analyzeDocument(
       },
     ],
   } as any); // Cast to any to support future thinking parameter
+
+  // Check if response was truncated
+  console.log(`[analyzeDocument] Claude response stop_reason: ${response.stop_reason}`);
+  if (response.stop_reason === "max_tokens") {
+    console.warn("[analyzeDocument] ⚠️ WARNING: Claude response was truncated due to max_tokens limit");
+  }
 
   // 4. Extraire le thinking (raisonnement) et le contenu
   // Note: Extended thinking blocks may not be available in current SDK version
@@ -265,13 +271,15 @@ export async function analyzeDocument(
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error("[analyzeDocument] ✗ Failed to parse analysis JSON:", error);
     console.error("[analyzeDocument] Parse error message:", errorMessage);
+    console.error("[analyzeDocument] Stop reason:", response.stop_reason);
     console.error("[analyzeDocument] Raw response length:", analysisText.length);
     console.error("[analyzeDocument] First 1000 chars:", analysisText.substring(0, 1000));
     console.error("[analyzeDocument] Last 1000 chars:", analysisText.substring(Math.max(0, analysisText.length - 1000)));
 
     // Include preview AND parsing error in error message for debugging
     const preview = analysisText.substring(0, 500);
-    throw new Error(`Failed to parse JSON. Error: ${errorMessage}. Claude returned (first 500 chars): ${preview}`);
+    const truncationNote = response.stop_reason === "max_tokens" ? " [RESPONSE WAS TRUNCATED]" : "";
+    throw new Error(`Failed to parse JSON. Error: ${errorMessage}${truncationNote}. Claude returned (first 500 chars): ${preview}`);
   }
 
   // 6. Appliquer les règles d'exclusion post-analyse

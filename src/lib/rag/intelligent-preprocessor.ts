@@ -360,13 +360,18 @@ INSTRUCTIONS IMPORTANTES:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Réponds UNIQUEMENT avec un JSON valide selon cette structure:
+Réponds UNIQUEMENT avec un JSON valide selon cette structure (choisis UNE seule valeur pour chaque champ):
+
+VALEURS VALIDES pour documentType:
+- "competitive_report", "financial_report", "market_analysis", "product_spec", "press_article", "contract", "rfp", "deep_research", "other"
+
+EXEMPLE DE RÉPONSE:
 
 \`\`\`json
 {
-  "documentType": "competitive_report" | "financial_report" | "market_analysis" | "product_spec" | "press_article" | "contract" | "rfp" | "deep_research" | "other",
-  "industry": "string",
-  "language": "string",
+  "documentType": "competitive_report",
+  "industry": "Technology",
+  "language": "fr",
   "confidence": 0.95,
 
   "sections": [

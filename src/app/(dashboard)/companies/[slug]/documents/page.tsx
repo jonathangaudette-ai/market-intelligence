@@ -183,6 +183,24 @@ export default function DocumentsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Upload Wizard */}
+      {uploadOpen ? (
+        <div className="min-h-screen bg-white">
+          <DocumentUploadWizard
+            slug={slug}
+            onComplete={() => {
+              setUploadOpen(false);
+              loadDocuments();
+              toast.success("Document traité avec succès!");
+            }}
+            onCancel={() => {
+              setUploadOpen(false);
+              setSelectedFile(null);
+            }}
+          />
+        </div>
+      ) : (
+        <>
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-6">
         <div className="max-w-7xl mx-auto">
@@ -427,23 +445,7 @@ export default function DocumentsPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Upload Wizard */}
-      {uploadOpen && (
-        <div className="fixed inset-0 z-50 bg-white">
-          <DocumentUploadWizard
-            slug={slug}
-            onComplete={() => {
-              setUploadOpen(false);
-              loadDocuments();
-              toast.success("Document traité avec succès!");
-            }}
-            onCancel={() => {
-              setUploadOpen(false);
-              setSelectedFile(null);
-            }}
-          />
-        </div>
+        </>
       )}
     </div>
   );

@@ -15,7 +15,6 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { LiveAnalysisView } from "@/components/live-analysis-view";
 import { LiveFilteringView } from "@/components/live-filtering-view";
 
@@ -88,7 +87,6 @@ export function DocumentUploadWizard({
   });
   const [stepData, setStepData] = useState<StepData>({});
   const [isProcessing, setIsProcessing] = useState(false);
-  const { toast } = useToast();
 
   const updateStepStatus = (stepId: string, status: StepStatus) => {
     setStepStatuses((prev) => ({ ...prev, [stepId]: status }));
@@ -133,16 +131,11 @@ export function DocumentUploadWizard({
         setCurrentStep((prev) => prev + 1);
         updateStepStatus(STEPS[currentStep + 1].id, "in_progress");
       } else {
-        toast({ title: "Document traité avec succès!" });
         onComplete();
       }
     } catch (error: any) {
       updateStepStatus(currentStepId, "failed");
-      toast({
-        title: "Erreur",
-        description: error.message,
-        variant: "destructive",
-      });
+      // Error handling - parent component will show toast
     } finally {
       setIsProcessing(false);
     }
@@ -220,10 +213,11 @@ export function DocumentUploadWizard({
   const executeFilteringStep = async () => {
     // Filtering step - show live view
     // The live view will simulate filtering
-    if (!stepData.analysis?.sections) {
+    const sections = stepData.analysis?.sections;
+    if (!sections) {
       throw new Error("No sections to filter");
     }
-    await new Promise((resolve) => setTimeout(resolve, stepData.analysis.sections.length * 1500));
+    await new Promise((resolve) => setTimeout(resolve, sections.length * 1500));
   };
 
   const executeChunkingStep = async () => {

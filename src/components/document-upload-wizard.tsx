@@ -167,7 +167,7 @@ export function DocumentUploadWizard({
           extraction: data.progress.extracted ? {
             pages: data.stats.pageCount,
             wordCount: data.stats.wordCount,
-            text: "(Texte extrait - voir document original)",
+            text: data.extractedText || "(Texte non disponible)",
           } : undefined,
           analysis: data.progress.analyzed && data.analysis ? {
             sections: data.analysis.sections.map((s: any) => ({
@@ -339,7 +339,7 @@ export function DocumentUploadWizard({
         extraction: {
           pages: result.pages,
           wordCount: result.wordCount,
-          text: result.textPreview,
+          text: result.text,
         },
       }));
     } finally {
@@ -757,9 +757,9 @@ function ExtractionStepContent({ data }: { data?: StepData["extraction"] }) {
         </Card>
       </div>
       <div className="rounded-lg bg-gray-50 p-4">
-        <div className="text-sm font-medium text-gray-700">Aperçu du texte:</div>
-        <div className="mt-2 max-h-40 overflow-y-auto text-sm text-gray-600">
-          {data.text.substring(0, 500)}...
+        <div className="text-sm font-medium text-gray-700 mb-2">Texte extrait complet:</div>
+        <div className="mt-2 max-h-96 overflow-y-auto text-sm text-gray-600 whitespace-pre-wrap">
+          {data.text}
         </div>
       </div>
     </div>

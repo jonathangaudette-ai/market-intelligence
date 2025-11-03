@@ -115,7 +115,7 @@ export async function POST(
       success: true,
       pages: processed.metadata.pageCount,
       wordCount: processed.metadata.wordCount,
-      textPreview: processed.text.substring(0, 500),
+      text: processed.text,
     });
   } catch (error) {
     console.error("Extract API error:", error);

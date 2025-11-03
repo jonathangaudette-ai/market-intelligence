@@ -74,6 +74,9 @@ export async function GET(
         vectorCount: metadata?.vectorCount || 0,
       },
 
+      // Extracted text (full text for view mode)
+      extractedText: metadata?.extractedText || null,
+
       // Document type and analysis
       documentType: document.documentType,
       analysisConfidence: document.analysisConfidence,

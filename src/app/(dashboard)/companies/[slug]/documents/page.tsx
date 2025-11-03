@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useParams, Link } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -374,9 +374,12 @@ export default function DocumentsPage() {
                               <TypeIcon className="h-5 w-5 text-teal-600" />
                             </div>
                             <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                              <Link
+                                href={`/companies/${slug}/documents/${doc.id}`}
+                                className="text-sm font-medium text-gray-900 hover:text-teal-600 truncate max-w-xs block transition-colors"
+                              >
                                 {doc.name}
-                              </p>
+                              </Link>
                               {doc.size && (
                                 <p className="text-xs text-gray-500">{doc.size}</p>
                               )}

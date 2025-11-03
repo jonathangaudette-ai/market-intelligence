@@ -207,23 +207,31 @@ export async function analyzeDocument(
   try {
     let jsonText = analysisText.trim();
 
-    // Strategy 1: Try multiple patterns to extract JSON from markdown
-    const patterns = [
-      /```json\s*([\s\S]*?)\s*```/,  // ```json ... ```
-      /```\s*({\s*"documentType"[\s\S]*?})\s*```/, // ``` {...} ```
-      /({\s*"documentType"[\s\S]*})/,  // Direct JSON
-    ];
-
-    for (const pattern of patterns) {
-      const match = analysisText.match(pattern);
-      if (match && match[1]) {
-        jsonText = match[1].trim();
-        break;
+    // Strategy 1: Remove markdown code blocks if present
+    // Look for ```json at the start and ``` at the end
+    if (jsonText.startsWith('```json')) {
+      // Find the first { after ```json
+      const firstBrace = jsonText.indexOf('{');
+      if (firstBrace !== -1) {
+        // Find the last } before the closing ```
+        const lastBrace = jsonText.lastIndexOf('}');
+        if (lastBrace !== -1) {
+          jsonText = jsonText.substring(firstBrace, lastBrace + 1);
+        }
+      }
+    } else if (jsonText.startsWith('```')) {
+      // Handle ``` without json keyword
+      const firstBrace = jsonText.indexOf('{');
+      if (firstBrace !== -1) {
+        const lastBrace = jsonText.lastIndexOf('}');
+        if (lastBrace !== -1) {
+          jsonText = jsonText.substring(firstBrace, lastBrace + 1);
+        }
       }
     }
 
-    // Strategy 2: If no pattern matched, find the largest {...} block
-    if (jsonText === analysisText || !jsonText.startsWith('{')) {
+    // Strategy 2: If still not JSON, extract the largest {...} block
+    if (!jsonText.startsWith('{')) {
       const jsonBlocks: string[] = [];
       let depth = 0;
       let start = -1;

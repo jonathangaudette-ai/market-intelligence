@@ -258,7 +258,10 @@ export async function analyzeDocument(
     console.error("[analyzeDocument] Raw response length:", analysisText.length);
     console.error("[analyzeDocument] First 1000 chars:", analysisText.substring(0, 1000));
     console.error("[analyzeDocument] Last 1000 chars:", analysisText.substring(Math.max(0, analysisText.length - 1000)));
-    throw new Error("Failed to parse document analysis response");
+
+    // Include preview in error message for debugging
+    const preview = analysisText.substring(0, 500);
+    throw new Error(`Failed to parse document analysis response. Claude returned (first 500 chars): ${preview}`);
   }
 
   // 6. Appliquer les règles d'exclusion post-analyse

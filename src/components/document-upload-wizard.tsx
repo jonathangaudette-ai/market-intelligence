@@ -969,12 +969,12 @@ function ChunkingStepContent({ data }: { data?: StepData["chunking"] }) {
           </div>
           <div className="space-y-2 max-h-96 overflow-y-auto">
             {data.chunks.map((chunk, index) => (
-              <Card key={index} className="p-3">
+              <Card key={index} className="p-3 border-l-2 border-blue-400">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-gray-500">Chunk #{chunk.index + 1}</span>
+                  <span className="text-xs font-medium text-blue-600">Chunk #{index + 1}</span>
                   <span className="text-xs text-gray-500">{chunk.wordCount} mots</span>
                 </div>
-                <div className="text-sm text-gray-700">{chunk.content}...</div>
+                <div className="text-sm text-gray-700 whitespace-pre-wrap">{chunk.content}</div>
               </Card>
             ))}
           </div>

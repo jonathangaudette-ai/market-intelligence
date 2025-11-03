@@ -60,6 +60,29 @@ export async function POST(
 
     // 6. Analyze document with Claude Sonnet 4.5
     console.log(`[analyze] Starting Claude analysis for document ${documentId}`);
+
+    // Update progress: Starting analysis
+    await db.update(documents).set({
+      metadata: {
+        ...metadata,
+        currentStep: "analysis",
+        currentStepProgress: 0,
+        currentStepMessage: "Préparation de l'analyse avec Claude Sonnet 4.5...",
+      },
+      updatedAt: new Date(),
+    }).where(eq(documents.id, documentId));
+
+    // Update: Analyzing
+    await db.update(documents).set({
+      metadata: {
+        ...metadata,
+        currentStep: "analysis",
+        currentStepProgress: 25,
+        currentStepMessage: `Analyse en cours avec Claude Sonnet 4.5 (${Math.round(extractedText.length / 1000)}K mots)...`,
+      },
+      updatedAt: new Date(),
+    }).where(eq(documents.id, documentId));
+
     const analysis = await analyzeDocument(
       extractedText,
       currentCompany.company.id,
@@ -79,6 +102,9 @@ export async function POST(
         analysisConfidence: Math.round(analysis.confidence * 100),
         metadata: {
           ...metadata,
+          currentStep: "analysis",
+          currentStepProgress: 100,
+          currentStepMessage: `Analyse terminée: ${analysis.sections.length} sections détectées`,
           // Store full analysis
           analysis: {
             documentType: analysis.documentType,

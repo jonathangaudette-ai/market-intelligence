@@ -60,11 +60,44 @@ export async function POST(
 
     console.log(`[embed] Creating embeddings for ${chunks.length} chunks for document ${documentId}`);
 
+    // Update progress: Starting embeddings
+    await db.update(documents).set({
+      metadata: {
+        ...metadata,
+        currentStep: "embeddings",
+        currentStepProgress: 0,
+        currentStepMessage: `Préparation de ${chunks.length} chunks pour l'embedding...`,
+      },
+      updatedAt: new Date(),
+    }).where(eq(documents.id, documentId));
+
     // 6. Extract chunk content for embedding
     const chunkTexts = chunks.map((c: any) => c.content);
 
+    // Update progress: Creating embeddings
+    await db.update(documents).set({
+      metadata: {
+        ...metadata,
+        currentStep: "embeddings",
+        currentStepProgress: 33,
+        currentStepMessage: `Génération des embeddings avec OpenAI (${chunks.length} chunks)...`,
+      },
+      updatedAt: new Date(),
+    }).where(eq(documents.id, documentId));
+
     // 7. Create RAG engine and upsert embeddings to Pinecone
     const ragEngine = new MultiTenantRAGEngine();
+
+    // Update progress: Uploading to Pinecone
+    await db.update(documents).set({
+      metadata: {
+        ...metadata,
+        currentStep: "embeddings",
+        currentStepProgress: 66,
+        currentStepMessage: "Upload des vecteurs vers Pinecone...",
+      },
+      updatedAt: new Date(),
+    }).where(eq(documents.id, documentId));
 
     const vectorCount = await ragEngine.upsertDocument({
       companyId: currentCompany.company.id,
@@ -90,6 +123,9 @@ export async function POST(
           ...metadata,
           embeddedAt: new Date().toISOString(),
           vectorCount: vectorCount,
+          currentStep: "embeddings",
+          currentStepProgress: 100,
+          currentStepMessage: `${vectorCount} vecteurs créés et indexés avec succès`,
         },
         updatedAt: new Date(),
       })

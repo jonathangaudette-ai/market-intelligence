@@ -58,6 +58,17 @@ export async function POST(
       );
     }
 
+    // Update progress: Starting extraction
+    await db.update(documents).set({
+      metadata: {
+        ...metadata,
+        currentStep: "extraction",
+        currentStepProgress: 0,
+        currentStepMessage: "Téléchargement du PDF depuis le stockage...",
+      },
+      updatedAt: new Date(),
+    }).where(eq(documents.id, documentId));
+
     // 6. Fetch PDF from Vercel Blob Storage
     const blobResponse = await fetch(blobUrl);
     if (!blobResponse.ok) {
@@ -66,6 +77,17 @@ export async function POST(
 
     const arrayBuffer = await blobResponse.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+
+    // Update progress: Extracting text
+    await db.update(documents).set({
+      metadata: {
+        ...metadata,
+        currentStep: "extraction",
+        currentStepProgress: 50,
+        currentStepMessage: "Extraction du texte du PDF en cours...",
+      },
+      updatedAt: new Date(),
+    }).where(eq(documents.id, documentId));
 
     // 7. Extract text using processPDF
     const processed = await processPDF(buffer);
@@ -80,6 +102,9 @@ export async function POST(
           wordCount: processed.metadata.wordCount,
           extractedText: processed.text,
           extractedAt: new Date().toISOString(),
+          currentStep: "extraction",
+          currentStepProgress: 100,
+          currentStepMessage: `Extraction terminée: ${processed.metadata.pageCount} pages, ${processed.metadata.wordCount} mots`,
         },
         updatedAt: new Date(),
       })

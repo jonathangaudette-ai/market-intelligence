@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stepper, StepContent, Step, StepStatus } from "@/components/ui/stepper";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -32,6 +32,7 @@ interface DocumentUploadWizardProps {
   slug: string;
   onComplete: () => void;
   onCancel: () => void;
+  documentId?: string; // Optional: if provided, wizard loads existing document in view mode
 }
 
 interface StepData {
@@ -74,10 +75,14 @@ export function DocumentUploadWizard({
   slug,
   onComplete,
   onCancel,
+  documentId,
 }: DocumentUploadWizardProps) {
+  // View mode: if documentId is provided, we're viewing an existing document
+  const viewMode = !!documentId;
+
   const [currentStep, setCurrentStep] = useState(0);
   const [stepStatuses, setStepStatuses] = useState<Record<string, StepStatus>>({
-    upload: "in_progress",
+    upload: viewMode ? "pending" : "in_progress",
     extraction: "pending",
     analysis: "pending",
     filtering: "pending",
@@ -89,6 +94,7 @@ export function DocumentUploadWizard({
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [progressMessage, setProgressMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(viewMode);
 
   const updateStepStatus = (stepId: string, status: StepStatus) => {
     setStepStatuses((prev) => ({ ...prev, [stepId]: status }));
@@ -117,7 +123,101 @@ export function DocumentUploadWizard({
     };
   };
 
+  // Load existing document data in view mode
+  useEffect(() => {
+    if (!viewMode || !documentId) return;
+
+    const loadDocumentData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`/api/companies/${slug}/documents/${documentId}/status`);
+
+        if (!response.ok) {
+          throw new Error("Failed to load document");
+        }
+
+        const data = await response.json();
+
+        // Reconstruct step statuses from progress
+        const newStatuses: Record<string, StepStatus> = {
+          upload: data.progress.uploaded ? "completed" : "pending",
+          extraction: data.progress.extracted ? "completed" : "pending",
+          analysis: data.progress.analyzed ? "completed" : "pending",
+          filtering: data.stats.sectionsKept > 0 ? "completed" : "pending",
+          chunking: data.progress.chunked ? "completed" : "pending",
+          embeddings: data.progress.embedded ? "completed" : "pending",
+          finalize: data.progress.finalized ? "completed" : "pending",
+        };
+
+        // If still processing, mark current step as in_progress
+        if (data.status === "processing" && data.progress.currentStep) {
+          newStatuses[data.progress.currentStep] = "in_progress";
+        }
+
+        setStepStatuses(newStatuses);
+
+        // Reconstruct step data (we need to fetch more details from metadata)
+        // For now, we'll reconstruct what we can from the status response
+        const newStepData: StepData = {
+          upload: data.progress.uploaded ? {
+            file: new File([], data.name), // Dummy file
+            documentId: data.documentId,
+          } : undefined,
+          extraction: data.progress.extracted ? {
+            pages: data.stats.pageCount,
+            wordCount: data.stats.wordCount,
+            text: "(Texte extrait - voir document original)",
+          } : undefined,
+          analysis: data.progress.analyzed ? {
+            sections: [], // We'll populate this below if available
+            documentType: data.documentType || "Unknown",
+            confidence: (data.analysisConfidence || 0) / 100,
+          } : undefined,
+          filtering: data.stats.sectionsKept > 0 ? {
+            keptSections: data.stats.sectionsKept,
+            rejectedSections: data.stats.sectionsTotal - data.stats.sectionsKept,
+            sections: [],
+          } : undefined,
+          chunking: data.progress.chunked ? {
+            totalChunks: data.stats.totalChunks,
+            chunks: [],
+          } : undefined,
+          embeddings: data.progress.embedded ? {
+            progress: 100,
+            totalVectors: data.stats.vectorCount,
+          } : undefined,
+        };
+
+        setStepData(newStepData);
+
+        // Set current step to the first incomplete step or last step if all complete
+        const firstIncompleteIndex = STEPS.findIndex(
+          (step) => newStatuses[step.id] !== "completed"
+        );
+        setCurrentStep(firstIncompleteIndex >= 0 ? firstIncompleteIndex : STEPS.length - 1);
+
+      } catch (error) {
+        console.error("Error loading document:", error);
+        setErrorMessage("Erreur lors du chargement du document");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadDocumentData();
+  }, [viewMode, documentId, slug]);
+
   const handleNext = async () => {
+    // In view mode, just navigate to next step without executing
+    if (viewMode) {
+      if (currentStep < STEPS.length - 1) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        onComplete();
+      }
+      return;
+    }
+
     const currentStepId = STEPS[currentStep].id;
 
     // Execute the current step
@@ -396,8 +496,29 @@ export function DocumentUploadWizard({
   const currentStepId = STEPS[currentStep].id;
   const currentStatus = stepStatuses[currentStepId];
 
+  // Show loading state while fetching document data
+  if (isLoading) {
+    return (
+      <div className="mx-auto max-w-6xl p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-teal-600 mx-auto mb-4" />
+          <p className="text-gray-600">Chargement du document...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-6xl p-6">
+      {/* View Mode Indicator */}
+      {viewMode && (
+        <div className="mb-4 rounded-lg bg-blue-50 p-3 border border-blue-200">
+          <p className="text-sm text-blue-800">
+            📄 Mode consultation - Visualisation de l'historique de traitement
+          </p>
+        </div>
+      )}
+
       {/* Stepper */}
       <Stepper
         steps={STEPS}
@@ -448,7 +569,7 @@ export function DocumentUploadWizard({
           onClick={onCancel}
           disabled={isProcessing}
         >
-          Annuler
+          {viewMode ? "Fermer" : "Annuler"}
         </Button>
 
         <div className="flex gap-3">
@@ -456,21 +577,23 @@ export function DocumentUploadWizard({
             <Button
               variant="outline"
               onClick={handlePrevious}
-              disabled={isProcessing}
+              disabled={!viewMode && isProcessing}
             >
               Précédent
             </Button>
           )}
 
-          {currentStatus === "failed" ? (
+          {!viewMode && currentStatus === "failed" ? (
             <Button onClick={handleRetry} disabled={isProcessing}>
               {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Réessayer
             </Button>
           ) : (
-            <Button onClick={handleNext} disabled={isProcessing}>
-              {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {currentStep === STEPS.length - 1 ? "Terminer" : "Suivant"}
+            <Button onClick={handleNext} disabled={!viewMode && isProcessing}>
+              {!viewMode && isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {currentStep === STEPS.length - 1
+                ? (viewMode ? "Fermer" : "Terminer")
+                : "Suivant"}
             </Button>
           )}
         </div>

@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth, getCurrentCompany, hasPermission } from "@/lib/auth/helpers";
-import { ragEngine } from "@/lib/rag/engine";
-import { processPDF } from "@/lib/rag/document-processor";
-import { analyzeDocument, getIndexableContent, getEnrichedMetadata } from "@/lib/rag/intelligent-preprocessor";
 import { db } from "@/db";
-import { documents, competitors, signals } from "@/db/schema";
+import { documents, competitors } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { DocumentProgressTracker } from "@/lib/progress-tracker";
+import { put } from "@vercel/blob";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
@@ -59,7 +56,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       }
     }
 
-    // 6. Create document record
+    // 6. Upload file to Vercel Blob Storage
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const blob = await put(`documents/${currentCompany.company.id}/${Date.now()}-${file.name}`, buffer, {
+      access: 'public',
+      contentType: file.type,
+    });
+
+    // 7. Create document record with blob URL
     const [document] = await db
       .insert(documents)
       .values({
@@ -72,177 +76,21 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         metadata: {
           fileSize: file.size,
           mimeType: file.type,
+          blobUrl: blob.url, // Store blob URL for later processing
         },
       })
       .returning();
 
-    // 7. Process PDF with intelligent analysis
-    // For production, use a queue (BullMQ, Inngest, etc.)
-    try {
-      // Initialize progress tracker
-      const progressTracker = new DocumentProgressTracker(document.id);
-
-      const buffer = Buffer.from(await file.arrayBuffer());
-
-      // 7a. Extract raw text from PDF
-      await progressTracker.updateStep("Extraction du PDF", "in_progress");
-      const processed = await processPDF(buffer);
-      const rawText = processed.text;
-      await progressTracker.updateStep("Extraction du PDF", "completed", `${processed.metadata.pageCount} pages, ${processed.metadata.wordCount} mots`);
-
-      // 7b. ⭐ INTELLIGENT ANALYSIS with Claude Sonnet 4 (thinking)
-      console.log(`[${document.id}] Starting intelligent analysis...`);
-      await progressTracker.updateStep("Analyse intelligente avec Claude", "in_progress");
-      const analysis = await analyzeDocument(rawText, currentCompany.company.id, {
-        fileName: file.name,
-        fileType: "pdf",
-      });
-      console.log(`[${document.id}] Analysis complete. Type: ${analysis.documentType}, Confidence: ${analysis.confidence}`);
-      await progressTracker.updateStep("Analyse intelligente avec Claude", "completed", `Type: ${analysis.documentType}, Confiance: ${Math.round(analysis.confidence * 100)}%`);
-
-      // 7c. Get only indexable content (filtered sections)
-      await progressTracker.updateStep("Filtrage des sections", "in_progress");
-      const indexableContent = getIndexableContent(analysis);
-      console.log(`[${document.id}] Indexable sections: ${analysis.sections.filter(s => s.shouldIndex).length}/${analysis.sections.length}`);
-      await progressTracker.updateStep("Filtrage des sections", "completed", `${analysis.sections.filter(s => s.shouldIndex).length}/${analysis.sections.length} sections indexées`);
-
-      // 7d. Chunk the filtered content
-      await progressTracker.updateStep("Création des chunks", "in_progress");
-      const { chunkText } = await import("@/lib/rag/document-processor");
-      const allChunks = indexableContent.flatMap((content) => chunkText(content));
-      console.log(`[${document.id}] Created ${allChunks.length} chunks from filtered content`);
-      await progressTracker.updateStep("Création des chunks", "completed", `${allChunks.length} chunks créés`);
-
-      // 7e. Get enriched metadata for vector storage
-      const enrichedMetadata = getEnrichedMetadata(analysis);
-
-      // 8. Upsert to RAG with enriched metadata
-      await progressTracker.updateStep("Génération des embeddings", "in_progress");
-      await progressTracker.updateStep("Indexation dans Pinecone", "in_progress");
-      const vectorsCreated = await ragEngine.upsertDocument({
-        companyId: currentCompany.company.id,
-        documentId: document.id,
-        chunks: allChunks,
-        metadata: {
-          documentName: file.name,
-          documentType: analysis.documentType,
-          competitorName: competitorInfo?.name,
-          competitorId: competitorInfo?.id,
-          ...enrichedMetadata, // Spread enriched metadata (competitors, pricing, etc.)
-        },
-      });
-      await progressTracker.updateStep("Génération des embeddings", "completed", `${vectorsCreated} vecteurs créés`);
-      await progressTracker.updateStep("Indexation dans Pinecone", "completed", `${vectorsCreated} vecteurs indexés`);
-
-      // 9. Save detected signals
-      await progressTracker.updateStep("Sauvegarde des signaux", "in_progress");
-      if (analysis.signals && analysis.signals.length > 0) {
-        console.log(`[${document.id}] Saving ${analysis.signals.length} detected signals...`);
-
-        for (const signal of analysis.signals) {
-          // Try to match competitor from relatedEntities
-          let signalCompetitorId = competitorInfo?.id || null;
-
-          if (!signalCompetitorId && signal.relatedEntities.length > 0) {
-            // Try to find competitor by name
-            const possibleCompetitor = await db
-              .select()
-              .from(competitors)
-              .where(eq(competitors.companyId, currentCompany.company.id))
-              .limit(1);
-
-            if (possibleCompetitor.length > 0) {
-              signalCompetitorId = possibleCompetitor[0].id;
-            }
-          }
-
-          await db.insert(signals).values({
-            companyId: currentCompany.company.id,
-            documentId: document.id,
-            competitorId: signalCompetitorId,
-            type: signal.type,
-            severity: signal.severity,
-            summary: signal.summary,
-            details: signal.details,
-            relatedEntities: signal.relatedEntities,
-            status: "new",
-          });
-        }
-        await progressTracker.updateStep("Sauvegarde des signaux", "completed", `${analysis.signals.length} signaux sauvegardés`);
-      } else {
-        await progressTracker.updateStep("Sauvegarde des signaux", "completed", `Aucun signal détecté`);
-      }
-
-      // 10. Update document with complete analysis
-      await progressTracker.updateStep("Finalisation", "in_progress");
-      await db
-        .update(documents)
-        .set({
-          status: "completed",
-          totalChunks: allChunks.length,
-          vectorsCreated: true,
-          documentType: analysis.documentType,
-          analysisCompleted: true,
-          analysisConfidence: Math.round(analysis.confidence * 100),
-          metadata: {
-            // File info
-            fileSize: file.size,
-            mimeType: file.type,
-            pageCount: processed.metadata.pageCount,
-            wordCount: processed.metadata.wordCount,
-
-            // Analysis results
-            sectionsAnalyzed: analysis.sections.length,
-            sectionsIndexed: analysis.sections.filter((s) => s.shouldIndex).length,
-            signalsDetected: analysis.signals.length,
-
-            // Extracted metadata (full DocumentMetadata)
-            ...analysis.metadata,
-            // Override with top-level analysis fields if different
-            language: analysis.language,
-            industry: analysis.industry,
-          },
-        })
-        .where(eq(documents.id, document.id));
-
-      await progressTracker.updateStep("Finalisation", "completed", `Document analysé avec succès`);
-
-      return NextResponse.json({
-        documentId: document.id,
-        name: file.name,
-        status: "completed",
-        chunksCreated: vectorsCreated,
-        analysis: {
-          documentType: analysis.documentType,
-          confidence: analysis.confidence,
-          sectionsAnalyzed: analysis.sections.length,
-          sectionsIndexed: analysis.sections.filter((s) => s.shouldIndex).length,
-          signalsDetected: analysis.signals.length,
-          competitors: analysis.metadata.competitors || [],
-          strategicThemes: analysis.metadata.strategicThemes || [],
-        },
-      });
-    } catch (processingError) {
-      console.error("Document processing error:", processingError);
-
-      // Update document status to failed
-      await db
-        .update(documents)
-        .set({
-          status: "failed",
-          errorMessage: processingError instanceof Error ? processingError.message : "Unknown error",
-        })
-        .where(eq(documents.id, document.id));
-
-      return NextResponse.json(
-        { error: "Failed to process document", details: processingError instanceof Error ? processingError.message : "Unknown error" },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({
+      documentId: document.id,
+      name: file.name,
+      fileSize: file.size,
+      status: "uploaded",
+    });
   } catch (error) {
     console.error("Upload API error:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }

@@ -190,65 +190,155 @@ export function DocumentUploadWizard({
   };
 
   const executeExtractionStep = async () => {
-    // Simulate extraction (API already did it)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    if (!stepData.upload?.documentId) {
+      throw new Error("Document ID manquant");
+    }
 
-    // Mock extraction data for display
+    const response = await fetch(
+      `/api/companies/${slug}/documents/${stepData.upload.documentId}/extract`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Extraction failed");
+    }
+
+    const result = await response.json();
+
     setStepData((prev) => ({
       ...prev,
       extraction: {
-        pages: 45,
-        wordCount: 12543,
-        text: "Document extrait avec succès...",
+        pages: result.pages,
+        wordCount: result.wordCount,
+        text: result.textPreview,
       },
     }));
   };
 
   const executeAnalysisStep = async () => {
-    // Analysis step - show live view
-    // The live view will simulate the analysis
-    await new Promise((resolve) => setTimeout(resolve, 6000)); // 3 sections × 2s
+    if (!stepData.upload?.documentId) {
+      throw new Error("Document ID manquant");
+    }
+
+    const response = await fetch(
+      `/api/companies/${slug}/documents/${stepData.upload.documentId}/analyze`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Analysis failed");
+    }
+
+    const result = await response.json();
+
+    setStepData((prev) => ({
+      ...prev,
+      analysis: {
+        sections: result.sections,
+        documentType: result.documentType,
+        confidence: result.confidence,
+      },
+    }));
   };
 
   const executeFilteringStep = async () => {
-    // Filtering step - show live view
-    // The live view will simulate filtering
-    const sections = stepData.analysis?.sections;
-    if (!sections) {
-      throw new Error("No sections to filter");
+    if (!stepData.upload?.documentId) {
+      throw new Error("Document ID manquant");
     }
-    await new Promise((resolve) => setTimeout(resolve, sections.length * 1500));
+
+    const response = await fetch(
+      `/api/companies/${slug}/documents/${stepData.upload.documentId}/filter`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Filtering failed");
+    }
+
+    const result = await response.json();
+
+    setStepData((prev) => ({
+      ...prev,
+      filtering: {
+        keptSections: result.keptSections,
+        rejectedSections: result.rejectedSections,
+        sections: result.sections,
+      },
+    }));
   };
 
   const executeChunkingStep = async () => {
-    // Simulate chunking (API already did it)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    if (!stepData.upload?.documentId) {
+      throw new Error("Document ID manquant");
+    }
+
+    const response = await fetch(
+      `/api/companies/${slug}/documents/${stepData.upload.documentId}/chunk`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Chunking failed");
+    }
+
+    const result = await response.json();
 
     setStepData((prev) => ({
       ...prev,
       chunking: {
-        totalChunks: 127,
-        chunks: [],
+        totalChunks: result.totalChunks,
+        chunks: result.chunkPreview || [],
       },
     }));
   };
 
   const executeEmbeddingsStep = async () => {
-    // Simulate embeddings (API already did it)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (!stepData.upload?.documentId) {
+      throw new Error("Document ID manquant");
+    }
+
+    const response = await fetch(
+      `/api/companies/${slug}/documents/${stepData.upload.documentId}/embed`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Embedding failed");
+    }
+
+    const result = await response.json();
 
     setStepData((prev) => ({
       ...prev,
       embeddings: {
         progress: 100,
-        totalVectors: 127,
+        totalVectors: result.vectorsCreated,
       },
     }));
   };
 
   const executeFinalizeStep = async () => {
-    // Finalize (API already did it)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (!stepData.upload?.documentId) {
+      throw new Error("Document ID manquant");
+    }
+
+    const response = await fetch(
+      `/api/companies/${slug}/documents/${stepData.upload.documentId}/finalize`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Finalization failed");
+    }
+
+    const result = await response.json();
+    console.log("Document finalized:", result);
   };
 
   const currentStepId = STEPS[currentStep].id;

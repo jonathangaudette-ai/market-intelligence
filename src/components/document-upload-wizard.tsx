@@ -53,7 +53,14 @@ interface StepData {
       title: string;
       type: string;
       relevanceScore: number;
-      preview: string;
+      shouldIndex?: boolean;
+      tags?: string[];
+      content?: string;
+      reasoning?: string;
+      pageNumbers?: number[];
+      confidence?: number;
+      keyTopics?: string[];
+      entities?: string[];
     }>;
     documentType: string;
     confidence: number;
@@ -175,7 +182,14 @@ export function DocumentUploadWizard({
               title: s.title,
               type: s.type,
               relevanceScore: s.relevanceScore,
-              preview: s.preview,
+              shouldIndex: s.shouldIndex,
+              tags: s.tags,
+              content: s.content,
+              reasoning: s.reasoning,
+              pageNumbers: s.pageNumbers,
+              confidence: s.confidence,
+              keyTopics: s.keyTopics,
+              entities: s.entities,
             })),
             documentType: data.documentType || "Unknown",
             confidence: (data.analysisConfidence || 0) / 100,
@@ -771,6 +785,7 @@ function AnalysisStepContent({ data }: { data?: StepData["analysis"] }) {
 
   return (
     <div className="space-y-4">
+      {/* Document Overview */}
       <div className="flex items-center justify-between">
         <div>
           <div className="text-sm text-gray-600">Type de document</div>
@@ -782,22 +797,114 @@ function AnalysisStepContent({ data }: { data?: StepData["analysis"] }) {
         </div>
       </div>
 
+      {/* Sections with complete details */}
       <div>
-        <div className="text-sm font-medium text-gray-700">
-          Sections détectées ({data.sections.length})
+        <div className="text-sm font-medium text-gray-700 mb-3">
+          Sections détectées - Analyse complète ({data.sections.length})
         </div>
-        <div className="mt-2 space-y-2">
+        <div className="mt-2 space-y-4 max-h-96 overflow-y-auto">
           {data.sections.map((section) => (
-            <Card key={section.id} className="p-3">
-              <div className="flex items-start justify-between">
+            <Card key={section.id} className="p-4 border-l-4 border-teal-500">
+              {/* Section Header */}
+              <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
-                  <div className="font-medium">{section.title}</div>
-                  <div className="mt-1 text-xs text-gray-600">{section.preview}</div>
+                  <h4 className="font-semibold text-gray-900 text-base">{section.title}</h4>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant="outline" className="text-xs">
+                      {section.type}
+                    </Badge>
+                    {section.shouldIndex !== undefined && (
+                      <Badge variant={section.shouldIndex ? "default" : "secondary"} className="text-xs">
+                        {section.shouldIndex ? "À indexer" : "Non indexé"}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-                <div className="ml-4 text-sm text-teal-600">
-                  {Math.round(section.relevanceScore * 100)}%
+                <div className="ml-4">
+                  <div className="text-sm text-gray-500">Score</div>
+                  <div className="text-lg font-bold text-teal-600">
+                    {Math.round(section.relevanceScore * 100)}%
+                  </div>
                 </div>
               </div>
+
+              {/* Tags */}
+              {section.tags && section.tags.length > 0 && (
+                <div className="mb-3">
+                  <div className="text-xs font-medium text-gray-600 mb-1">Tags:</div>
+                  <div className="flex flex-wrap gap-1">
+                    {section.tags.map((tag, idx) => (
+                      <span key={idx} className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Key Topics */}
+              {section.keyTopics && section.keyTopics.length > 0 && (
+                <div className="mb-3">
+                  <div className="text-xs font-medium text-gray-600 mb-1">Sujets clés:</div>
+                  <div className="flex flex-wrap gap-1">
+                    {section.keyTopics.map((topic, idx) => (
+                      <span key={idx} className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded">
+                        {topic}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Entities */}
+              {section.entities && section.entities.length > 0 && (
+                <div className="mb-3">
+                  <div className="text-xs font-medium text-gray-600 mb-1">Entités détectées:</div>
+                  <div className="flex flex-wrap gap-1">
+                    {section.entities.map((entity, idx) => (
+                      <span key={idx} className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded">
+                        {entity}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Page Numbers */}
+              {section.pageNumbers && section.pageNumbers.length > 0 && (
+                <div className="mb-3">
+                  <div className="text-xs font-medium text-gray-600 mb-1">
+                    Pages: <span className="font-normal text-gray-700">{section.pageNumbers.join(", ")}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Confidence */}
+              {section.confidence !== undefined && section.confidence !== null && (
+                <div className="mb-3">
+                  <div className="text-xs font-medium text-gray-600">
+                    Confiance section: <span className="font-normal text-gray-700">{Math.round(section.confidence * 100)}%</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Reasoning */}
+              {section.reasoning && (
+                <div className="mb-3 rounded bg-amber-50 p-3 border border-amber-200">
+                  <div className="text-xs font-medium text-amber-800 mb-1">Raisonnement:</div>
+                  <div className="text-xs text-amber-900 whitespace-pre-wrap">{section.reasoning}</div>
+                </div>
+              )}
+
+              {/* Content */}
+              {section.content && (
+                <div className="rounded bg-gray-50 p-3 border border-gray-200">
+                  <div className="text-xs font-medium text-gray-700 mb-2">Contenu complet:</div>
+                  <div className="text-sm text-gray-800 whitespace-pre-wrap max-h-60 overflow-y-auto">
+                    {section.content}
+                  </div>
+                </div>
+              )}
             </Card>
           ))}
         </div>

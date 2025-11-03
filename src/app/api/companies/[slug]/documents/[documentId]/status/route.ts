@@ -81,7 +81,7 @@ export async function GET(
       documentType: document.documentType,
       analysisConfidence: document.analysisConfidence,
 
-      // Analysis sections (for view mode)
+      // Analysis sections (for view mode) - return complete information
       analysis: metadata?.analysis ? {
         sections: metadata.analysis.sections?.map((s: any) => ({
           id: s.id,
@@ -90,7 +90,12 @@ export async function GET(
           relevanceScore: s.relevanceScore,
           shouldIndex: s.shouldIndex,
           tags: s.tags,
-          preview: s.content?.substring(0, 150) || "",
+          content: s.content || "",
+          reasoning: s.reasoning || "",
+          pageNumbers: s.pageNumbers || [],
+          confidence: s.confidence || null,
+          keyTopics: s.keyTopics || [],
+          entities: s.entities || [],
         })) || [],
       } : null,
 

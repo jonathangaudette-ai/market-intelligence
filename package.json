@@ -34,6 +34,7 @@
     "@radix-ui/react-toast": "^1.2.2",
     "@supabase/supabase-js": "^2.45.6",
     "@t3-oss/env-nextjs": "^0.11.1",
+    "@vercel/blob": "^2.0.0",
     "ai": "^4.0.30",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.1",

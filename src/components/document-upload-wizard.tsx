@@ -87,6 +87,7 @@ export function DocumentUploadWizard({
   });
   const [stepData, setStepData] = useState<StepData>({});
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const updateStepStatus = (stepId: string, status: StepStatus) => {
     setStepStatuses((prev) => ({ ...prev, [stepId]: status }));
@@ -135,7 +136,9 @@ export function DocumentUploadWizard({
       }
     } catch (error: any) {
       updateStepStatus(currentStepId, "failed");
-      // Error handling - parent component will show toast
+      const errorMsg = error?.message || "Une erreur est survenue";
+      setErrorMessage(`${STEPS[currentStep].label}: ${errorMsg}`);
+      console.error(`[${currentStepId}] Error:`, error);
     } finally {
       setIsProcessing(false);
     }
@@ -143,6 +146,7 @@ export function DocumentUploadWizard({
 
   const handleRetry = () => {
     const currentStepId = STEPS[currentStep].id;
+    setErrorMessage(null);
     updateStepStatus(currentStepId, "in_progress");
     handleNext();
   };
@@ -362,6 +366,19 @@ export function DocumentUploadWizard({
       >
         {renderStepContent()}
       </StepContent>
+
+      {/* Error Message */}
+      {errorMessage && (
+        <div className="mt-4 rounded-lg bg-red-50 p-4 border border-red-200">
+          <div className="flex items-start">
+            <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
+            <div>
+              <h3 className="text-sm font-medium text-red-800">Erreur</h3>
+              <p className="mt-1 text-sm text-red-700">{errorMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Navigation Buttons */}
       <div className="mt-6 flex items-center justify-between">

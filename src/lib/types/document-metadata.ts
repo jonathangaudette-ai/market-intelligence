@@ -66,6 +66,11 @@ export interface DocumentMetadata {
   analysis?: DocumentAnalysis;
   analyzedAt?: string;
 
+  // Filtering
+  keptSectionIds?: string[];
+  filteringComplete?: boolean;
+  filteredAt?: string;
+
   // Chunking
   chunks?: ChunkMetadata[];
   chunkedAt?: string;

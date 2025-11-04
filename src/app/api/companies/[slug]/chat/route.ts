@@ -14,6 +14,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     const { session, company } = authResult.data;
 
+    // Ensure session is not null (required by requireAuth)
+    if (!session) {
+      return NextResponse.json({ error: "Session required" }, { status: 401 });
+    }
+
     // 2. Parse request body
     const body = await request.json();
     const { message, conversationId, filters } = body;
@@ -45,20 +50,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       activeConversationId = newConversation.id;
     } else {
-      // 4. OPTIMIZED: Load conversation with messages in single query (fixes N+1)
-      const conversation = await db.query.conversations.findFirst({
-        where: eq(conversations.id, activeConversationId),
-        with: {
-          messages: {
-            orderBy: [desc(messages.createdAt)],
-            limit: 10,
-            columns: {
-              role: true,
-              content: true,
-            },
-          },
-        },
-      });
+      // 4. OPTIMIZED: Load conversation with messages (fixes N+1)
+      const [conversation] = await db
+        .select()
+        .from(conversations)
+        .where(eq(conversations.id, activeConversationId))
+        .limit(1);
 
       if (!conversation) {
         return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
@@ -69,7 +66,18 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
       }
 
-      conversationHistory = conversation.messages.reverse(); // Reverse to get chronological order
+      // Load last 10 messages for context
+      const recentMessages = await db
+        .select({
+          role: messages.role,
+          content: messages.content,
+        })
+        .from(messages)
+        .where(eq(messages.conversationId, activeConversationId))
+        .orderBy(desc(messages.createdAt))
+        .limit(10);
+
+      conversationHistory = recentMessages.reverse(); // Reverse to get chronological order
     }
 
     // 5. Query RAG with company isolation

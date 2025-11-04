@@ -94,6 +94,7 @@ export const documents = pgTable("documents", {
   metadata: jsonb("metadata"), // Full analysis metadata (DocumentMetadata type)
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at"), // Soft delete timestamp
 });
 
 // Conversations table

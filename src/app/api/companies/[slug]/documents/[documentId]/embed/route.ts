@@ -71,8 +71,18 @@ export async function POST(
       updatedAt: new Date(),
     }).where(eq(documents.id, documentId));
 
-    // 6. Extract chunk content for embedding
-    const chunkTexts = chunks.map((c: any) => c.content);
+    // 6. Transform chunks to enriched format with metadata
+    const enrichedChunks = chunks.map((c: any) => ({
+      content: c.content,
+      metadata: {
+        sectionId: c.sectionId,
+        sectionTitle: c.sectionTitle,
+        sectionType: c.sectionType,
+        sectionTags: c.sectionTags,
+        sectionRelevanceScore: c.sectionRelevanceScore,
+        sectionConfidence: c.sectionConfidence,
+      },
+    }));
 
     // Update progress: Creating embeddings
     await db.update(documents).set({
@@ -101,14 +111,16 @@ export async function POST(
 
     const vectorCount = await ragEngine.upsertDocument({
       companyId: currentCompany.company.id,
+      companyName: currentCompany.company.name,
       documentId: documentId,
-      chunks: chunkTexts,
+      chunks: enrichedChunks,
       metadata: {
         documentName: document.name,
         documentType: document.documentType || "unknown",
         competitorId: document.competitorId || undefined,
         competitorName: undefined, // Will be populated if needed
         sourceUrl: document.sourceUrl || undefined,
+        createdAt: document.createdAt.toISOString(),
       },
     });
 

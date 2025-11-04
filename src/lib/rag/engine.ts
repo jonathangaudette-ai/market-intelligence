@@ -38,21 +38,36 @@ function getOpenAI() {
 export interface RAGSource {
   text: string;
   source: string;
+  documentId: string;
   competitor?: string;
   relevance: number;
   metadata?: Record<string, any>;
 }
 
+export interface ChunkMetadata {
+  sectionId?: string;
+  sectionTitle?: string;
+  sectionType?: string;
+  sectionTags?: string[];
+  sectionRelevanceScore?: number;
+  sectionConfidence?: number;
+}
+
 export interface UpsertDocumentParams {
   companyId: string;
+  companyName: string;
   documentId: string;
-  chunks: string[];
+  chunks: Array<{
+    content: string;
+    metadata?: ChunkMetadata;
+  }>;
   metadata: {
     documentName: string;
     documentType: string;
     competitorName?: string;
     competitorId?: string;
     sourceUrl?: string;
+    createdAt?: string;
   };
 }
 
@@ -88,29 +103,50 @@ export class MultiTenantRAGEngine {
    * Upsert document chunks with embeddings to Pinecone
    */
   async upsertDocument(params: UpsertDocumentParams): Promise<number> {
-    const { companyId, documentId, chunks, metadata } = params;
+    const { companyId, companyName, documentId, chunks, metadata } = params;
 
     // Generate embeddings for all chunks in parallel
     const embeddingPromises = chunks.map((chunk, idx) =>
       getOpenAI().embeddings
         .create({
           model: "text-embedding-3-large",
-          input: chunk,
+          input: chunk.content,
           dimensions: 1536,
         })
         .then((response) => ({
           id: `${documentId}-chunk-${idx}`,
           values: response.data[0].embedding,
           metadata: {
+            // Core identifiers
             tenant_id: companyId, // ← CRITICAL: Multi-tenant isolation
+            company_name: companyName,
             document_id: documentId,
             document_name: metadata.documentName,
             document_type: metadata.documentType,
+            chunk_index: idx,
+
+            // Document metadata
             ...(metadata.competitorName && { competitor_name: metadata.competitorName }),
             ...(metadata.competitorId && { competitor_id: metadata.competitorId }),
             ...(metadata.sourceUrl && { source_url: metadata.sourceUrl }),
-            text: chunk,
-            chunk_index: idx,
+            ...(metadata.createdAt && { created_at: metadata.createdAt }),
+
+            // Section metadata (from analysis)
+            ...(chunk.metadata?.sectionId && { section_id: chunk.metadata.sectionId }),
+            ...(chunk.metadata?.sectionTitle && { section_title: chunk.metadata.sectionTitle }),
+            ...(chunk.metadata?.sectionType && { section_type: chunk.metadata.sectionType }),
+            ...(chunk.metadata?.sectionTags && chunk.metadata.sectionTags.length > 0 && {
+              section_tags: chunk.metadata.sectionTags
+            }),
+            ...(chunk.metadata?.sectionRelevanceScore !== undefined && {
+              section_relevance_score: chunk.metadata.sectionRelevanceScore
+            }),
+            ...(chunk.metadata?.sectionConfidence !== undefined && {
+              section_confidence: chunk.metadata.sectionConfidence
+            }),
+
+            // Chunk content
+            text: chunk.content,
           },
         }))
     );
@@ -153,6 +189,7 @@ export class MultiTenantRAGEngine {
     return queryResponse.matches.map((match) => ({
       text: (match.metadata?.text as string) || "",
       source: (match.metadata?.document_name as string) || "Unknown",
+      documentId: (match.metadata?.document_id as string) || "",
       competitor: (match.metadata?.competitor_name as string) || undefined,
       relevance: match.score || 0,
       metadata: match.metadata,

@@ -79,6 +79,38 @@ export default function DocumentsPage() {
     }
   }, [slug]);
 
+  // Delete document
+  const handleDelete = async (documentId: string, documentName: string) => {
+    const confirmed = window.confirm(
+      `Êtes-vous sûr de vouloir supprimer "${documentName}" ? Cette action ne peut pas être annulée.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`/api/companies/${slug}/documents/${documentId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to delete document");
+      }
+
+      toast.success("Document supprimé avec succès");
+
+      // Reload documents to reflect the deletion
+      await loadDocuments();
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Erreur lors de la suppression du document"
+      );
+    }
+  };
+
   // Load documents on mount
   useEffect(() => {
     loadDocuments();
@@ -416,7 +448,11 @@ export default function DocumentsPage() {
                                 <Download className="h-4 w-4" />
                               </Button>
                             )}
-                            <Button variant="ghost" size="sm">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDelete(doc.id, doc.name)}
+                            >
                               <Trash2 className="h-4 w-4 text-red-600" />
                             </Button>
                           </div>

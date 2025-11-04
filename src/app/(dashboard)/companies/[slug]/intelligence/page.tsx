@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ type Message = {
   content: string;
   sources?: Array<{
     source: string;
+    documentId: string;
     competitor?: string;
     relevance: number;
   }>;
@@ -78,6 +80,7 @@ export default function IntelligencePage() {
         content: data.answer,
         sources: data.sources?.map((s: any) => ({
           source: s.source,
+          documentId: s.documentId,
           competitor: s.competitor,
           relevance: s.relevance,
         })),
@@ -164,13 +167,14 @@ export default function IntelligencePage() {
                             </p>
                             <div className="space-y-2">
                               {message.sources.map((source, idx) => (
-                                <div
+                                <Link
                                   key={idx}
-                                  className="flex items-start gap-2 text-xs bg-gray-50 p-2 rounded"
+                                  href={`/companies/${slug}/documents/${source.documentId}`}
+                                  className="flex items-start gap-2 text-xs bg-gray-50 p-2 rounded hover:bg-teal-50 hover:border-teal-200 border border-transparent transition-colors cursor-pointer"
                                 >
                                   <FileText className="h-3 w-3 text-teal-600 mt-0.5 flex-shrink-0" />
                                   <div className="flex-1 min-w-0">
-                                    <span className="font-medium text-gray-900">
+                                    <span className="font-medium text-gray-900 hover:text-teal-700 hover:underline">
                                       {source.source}
                                     </span>
                                     {source.competitor && (
@@ -185,7 +189,7 @@ export default function IntelligencePage() {
                                   <Badge variant="outline" className="text-xs">
                                     {Math.round(source.relevance * 100)}%
                                   </Badge>
-                                </div>
+                                </Link>
                               ))}
                             </div>
                           </div>

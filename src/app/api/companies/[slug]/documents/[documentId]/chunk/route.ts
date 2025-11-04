@@ -77,6 +77,9 @@ export async function POST(
       sectionId: string;
       sectionTitle: string;
       sectionType: string;
+      sectionTags?: string[];
+      sectionRelevanceScore?: number;
+      sectionConfidence?: number;
       chunkIndex: number;
       content: string;
       wordCount: number;
@@ -90,6 +93,9 @@ export async function POST(
           sectionId: section.id,
           sectionTitle: section.title,
           sectionType: section.type,
+          sectionTags: section.tags || [],
+          sectionRelevanceScore: section.relevanceScore,
+          sectionConfidence: section.confidence,
           chunkIndex: idx,
           content: chunkContent,
           wordCount: chunkContent.split(/\s+/).length,

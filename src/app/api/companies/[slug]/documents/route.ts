@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth, getCurrentCompany } from "@/lib/auth/helpers";
+import { requireAuth } from "@/lib/auth/middleware";
 import { db } from "@/db";
 import { documents, competitors } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
+import { formatRelativeTime, formatFileSize } from "@/lib/utils/formatting";
+import { parseDocumentMetadata } from "@/lib/types/document-metadata";
 
 /**
  * GET /api/companies/[slug]/documents
@@ -13,30 +15,47 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // 1. Verify authentication
-    const { error: authError, session } = await verifyAuth();
-    if (!session) return authError;
-
-    // 2. Verify company context
-    const currentCompany = await getCurrentCompany();
-    if (!currentCompany) {
-      return NextResponse.json({ error: "No active company" }, { status: 403 });
-    }
-
-    // 3. Verify company slug matches
+    // 1. Verify authentication using middleware
     const { slug } = await params;
-    if (currentCompany.company.slug !== slug) {
-      return NextResponse.json({ error: "Company mismatch" }, { status: 403 });
-    }
+    const authResult = await requireAuth("viewer", slug);
+    if (!authResult.success) return authResult.error;
 
-    // 4. Get query parameters for filtering
+    const { company } = authResult.data;
+
+    // 2. Get query parameters for filtering and pagination
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status"); // completed, processing, failed
+    const status = searchParams.get("status") as "completed" | "processing" | "failed" | "pending" | null;
     const competitorId = searchParams.get("competitorId");
     const documentType = searchParams.get("documentType");
 
-    // 5. Build query
-    let query = db
+    // Pagination parameters
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "50");
+    const offset = (page - 1) * limit;
+
+    // 3. Build WHERE conditions for SQL filtering (OPTIMIZED - no in-memory filtering)
+    const whereConditions = [eq(documents.companyId, company.company.id)];
+
+    if (status) {
+      whereConditions.push(eq(documents.status, status));
+    }
+
+    if (competitorId) {
+      whereConditions.push(eq(documents.competitorId, competitorId));
+    }
+
+    if (documentType) {
+      whereConditions.push(eq(documents.documentType, documentType));
+    }
+
+    // 4. Get total count for pagination
+    const [totalCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(documents)
+      .where(and(...whereConditions));
+
+    // 5. Execute optimized query with SQL-level filtering + pagination
+    const results = await db
       .select({
         // Document fields
         id: documents.id,
@@ -62,32 +81,12 @@ export async function GET(
       })
       .from(documents)
       .leftJoin(competitors, eq(documents.competitorId, competitors.id))
-      .where(eq(documents.companyId, currentCompany.company.id))
-      .orderBy(desc(documents.createdAt));
+      .where(and(...whereConditions))
+      .orderBy(desc(documents.createdAt))
+      .limit(limit)
+      .offset(offset);
 
-    // Apply filters (if needed, add more complex filtering logic here)
-    const results = await query;
-
-    // 6. Filter results in memory (simpler for now)
-    let filteredResults = results;
-
-    if (status) {
-      filteredResults = filteredResults.filter((doc) => doc.status === status);
-    }
-
-    if (competitorId) {
-      filteredResults = filteredResults.filter(
-        (doc) => doc.competitor?.id === competitorId
-      );
-    }
-
-    if (documentType) {
-      filteredResults = filteredResults.filter(
-        (doc) => doc.documentType === documentType
-      );
-    }
-
-    // 7. Calculate stats
+    // 5. Calculate stats from filtered results
     const stats = {
       total: results.length,
       completed: results.filter((d) => d.status === "completed").length,
@@ -96,28 +95,38 @@ export async function GET(
       totalChunks: results.reduce((sum, d) => sum + (d.totalChunks || 0), 0),
     };
 
-    // 8. Transform results to match frontend expectations
-    const transformedDocuments = filteredResults.map((doc) => ({
-      id: doc.id,
-      name: doc.name,
-      type: doc.type as "pdf" | "website" | "linkedin",
-      status: doc.status as "completed" | "processing" | "failed" | "pending",
-      competitor: doc.competitor?.name,
-      competitorId: doc.competitor?.id,
-      uploadedAt: formatRelativeTime(doc.createdAt),
-      chunks: doc.totalChunks || 0,
-      size: (doc.metadata as any)?.fileSize
-        ? formatFileSize((doc.metadata as any).fileSize)
-        : undefined,
-      documentType: doc.documentType,
-      analysisCompleted: doc.analysisCompleted,
-      analysisConfidence: doc.analysisConfidence,
-      errorMessage: doc.errorMessage,
-    }));
+    // 6. Transform results with type-safe metadata parsing
+    const transformedDocuments = results.map((doc) => {
+      const metadata = parseDocumentMetadata(doc.metadata);
+
+      return {
+        id: doc.id,
+        name: doc.name,
+        type: doc.type as "pdf" | "website" | "linkedin",
+        status: doc.status as "completed" | "processing" | "failed" | "pending",
+        competitor: doc.competitor?.name,
+        competitorId: doc.competitor?.id,
+        uploadedAt: formatRelativeTime(doc.createdAt),
+        chunks: doc.totalChunks || 0,
+        size: metadata.fileSize ? formatFileSize(metadata.fileSize) : undefined,
+        documentType: doc.documentType,
+        analysisCompleted: doc.analysisCompleted,
+        analysisConfidence: doc.analysisConfidence,
+        errorMessage: doc.errorMessage,
+      };
+    });
 
     return NextResponse.json({
       documents: transformedDocuments,
       stats,
+      pagination: {
+        page,
+        limit,
+        total: totalCount.count,
+        totalPages: Math.ceil(totalCount.count / limit),
+        hasNext: page < Math.ceil(totalCount.count / limit),
+        hasPrev: page > 1,
+      },
     });
   } catch (error) {
     console.error("Documents API error:", error);
@@ -126,31 +135,4 @@ export async function GET(
       { status: 500 }
     );
   }
-}
-
-// Helper: Format relative time
-function formatRelativeTime(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return "À l'instant";
-  if (diffMins < 60) return `Il y a ${diffMins} minute${diffMins > 1 ? "s" : ""}`;
-  if (diffHours < 24) return `Il y a ${diffHours} heure${diffHours > 1 ? "s" : ""}`;
-  if (diffDays < 7) return `Il y a ${diffDays} jour${diffDays > 1 ? "s" : ""}`;
-  if (diffDays < 30) {
-    const weeks = Math.floor(diffDays / 7);
-    return `Il y a ${weeks} semaine${weeks > 1 ? "s" : ""}`;
-  }
-  const months = Math.floor(diffDays / 30);
-  return `Il y a ${months} mois`;
-}
-
-// Helper: Format file size
-function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }

@@ -1,99 +1,77 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth, getCurrentCompany, hasPermission } from "@/lib/auth/helpers";
+import { requireAuth, requireDocumentAccess, errorResponse } from "@/lib/auth/middleware";
 import { db } from "@/db";
 import { documents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { analyzeDocument } from "@/lib/rag/intelligent-preprocessor";
+import {
+  updateDocumentProgress,
+  updateDocumentMetadata,
+  markDocumentFailed,
+  getDocumentWithMetadata,
+} from "@/lib/db/document-helpers";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string; documentId: string }> }
 ) {
+  const { slug, documentId } = await params;
+
   try {
-    // 1. Verify authentication
-    const { error: authError, session } = await verifyAuth();
-    if (!session) return authError;
+    // 1. OPTIMIZED: Verify authentication using middleware
+    const authResult = await requireAuth("editor", slug);
+    if (!authResult.success) return authResult.error;
 
-    // 2. Verify company context and permissions
-    const currentCompany = await getCurrentCompany();
-    if (!currentCompany) {
-      return NextResponse.json({ error: "No active company" }, { status: 403 });
-    }
+    const { company } = authResult.data;
 
-    // Check permission (editor or admin required)
-    if (!hasPermission(currentCompany.role, "editor")) {
-      return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 });
-    }
+    // 2. OPTIMIZED: Verify document access
+    const docAccessResult = await requireDocumentAccess(documentId, company.company.id);
+    if (!docAccessResult.success) return docAccessResult.error!;
 
-    // 3. Verify company slug matches
-    const { slug, documentId } = await params;
-    if (currentCompany.company.slug !== slug) {
-      return NextResponse.json({ error: "Company mismatch" }, { status: 403 });
-    }
-
-    // 4. Fetch document from database
-    const [document] = await db
-      .select()
-      .from(documents)
-      .where(eq(documents.id, documentId))
-      .limit(1);
-
+    // 3. OPTIMIZED: Fetch document with typed metadata
+    const document = await getDocumentWithMetadata(documentId);
     if (!document) {
-      return NextResponse.json({ error: "Document not found" }, { status: 404 });
+      return errorResponse("DOCUMENT_NOT_FOUND", "Document not found", 404);
     }
 
-    // Verify document belongs to the company
-    if (document.companyId !== currentCompany.company.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-    }
-
-    // 5. Get extracted text from metadata
-    const metadata = document.metadata as any;
-    const extractedText = metadata?.extractedText;
+    const metadata = document.metadata;
+    const extractedText = metadata.extractedText;
 
     if (!extractedText) {
-      return NextResponse.json(
-        { error: "No extracted text found. Please run extraction first." },
-        { status: 400 }
+      return errorResponse(
+        "NO_EXTRACTED_TEXT",
+        "No extracted text found. Please run extraction first.",
+        400
       );
     }
 
-    // 6. Analyze document with Claude Sonnet 4.5
+    // 4. Analyze document with Claude Sonnet 4.5
     console.log(`[analyze] Starting Claude analysis for document ${documentId}`);
 
-    // Update progress: Starting analysis
-    await db.update(documents).set({
-      metadata: {
-        ...metadata,
-        currentStep: "analysis",
-        currentStepProgress: 0,
-        currentStepMessage: "Préparation de l'analyse avec Claude Sonnet 4.5...",
-      },
-      updatedAt: new Date(),
-    }).where(eq(documents.id, documentId));
+    // OPTIMIZED: Single progress update
+    await updateDocumentProgress(
+      documentId,
+      "analysis",
+      0,
+      "Préparation de l'analyse avec Claude Sonnet 4.5..."
+    );
 
     // Update: Analyzing
-    await db.update(documents).set({
-      metadata: {
-        ...metadata,
-        currentStep: "analysis",
-        currentStepProgress: 25,
-        currentStepMessage: `Analyse en cours avec Claude Sonnet 4.5 (${Math.round(extractedText.length / 1000)}K mots)...`,
-      },
-      updatedAt: new Date(),
-    }).where(eq(documents.id, documentId));
-
-    const analysis = await analyzeDocument(
-      extractedText,
-      currentCompany.company.id,
-      {
-        fileName: document.name,
-        fileType: document.type,
-      }
+    await updateDocumentProgress(
+      documentId,
+      "analysis",
+      25,
+      `Analyse en cours avec Claude Sonnet 4.5 (${Math.round(extractedText.length / 1000)}K mots)...`
     );
+
+    const analysis = await analyzeDocument(extractedText, company.company.id, {
+      fileName: document.name,
+      fileType: document.type,
+    });
+
     console.log(`[analyze] Claude analysis completed. Document type: ${analysis.documentType}`);
 
-    // 7. Update document with analysis results
+    // 5. OPTIMIZED: Single update with all analysis results
     await db
       .update(documents)
       .set({
@@ -119,7 +97,6 @@ export async function POST(
               shouldIndex: s.shouldIndex,
               tags: s.tags,
               reasoning: s.reasoning,
-              // Store content in sections for later use
               content: s.content,
             })),
             metadata: analysis.metadata,
@@ -133,7 +110,7 @@ export async function POST(
       })
       .where(eq(documents.id, documentId));
 
-    // 8. Return analysis results for UI display
+    // 6. Return analysis results for UI display
     return NextResponse.json({
       success: true,
       documentType: analysis.documentType,
@@ -150,12 +127,23 @@ export async function POST(
     });
   } catch (error) {
     console.error("Analyze API error:", error);
-    return NextResponse.json(
-      {
-        error: "Internal server error",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
+
+    // OPTIMIZED: Mark document as failed using helper
+    try {
+      await markDocumentFailed(
+        documentId,
+        error instanceof Error ? error.message : "Unknown error",
+        "analysis"
+      );
+    } catch (updateError) {
+      console.error("Failed to mark document as failed:", updateError);
+    }
+
+    return errorResponse(
+      "ANALYSIS_FAILED",
+      "Failed to analyze document",
+      500,
+      error instanceof Error ? error.message : "Unknown error"
     );
   }
 }

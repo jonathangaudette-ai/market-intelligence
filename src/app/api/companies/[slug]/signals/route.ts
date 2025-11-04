@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth/middleware";
 import { db } from "@/db";
 import { signals, documents, competitors } from "@/db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 import { formatRelativeTime } from "@/lib/utils/formatting";
 
 /**
@@ -21,12 +21,16 @@ export async function GET(
 
     const { company } = authResult.data;
 
-    // 2. Get query parameters for filtering
+    // 2. Get query parameters for filtering and pagination
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") as "new" | "reviewed" | "archived" | null;
     const type = searchParams.get("type");
     const severity = searchParams.get("severity") as "low" | "medium" | "high" | null;
+
+    // Pagination parameters
+    const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
+    const offset = (page - 1) * limit;
 
     // 3. Build WHERE conditions for SQL filtering (OPTIMIZED - no in-memory filtering)
     const whereConditions = [eq(signals.companyId, company.company.id)];
@@ -43,7 +47,13 @@ export async function GET(
       whereConditions.push(eq(signals.severity, severity));
     }
 
-    // 4. Execute optimized query with SQL-level filtering
+    // 4. Get total count for pagination
+    const [totalCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(signals)
+      .where(and(...whereConditions));
+
+    // 5. Execute optimized query with SQL-level filtering + pagination
     const results = await db
       .select({
         // Signal fields
@@ -75,7 +85,8 @@ export async function GET(
       .leftJoin(competitors, eq(signals.competitorId, competitors.id))
       .where(and(...whereConditions))
       .orderBy(desc(signals.createdAt))
-      .limit(limit);
+      .limit(limit)
+      .offset(offset);
 
     // 5. Transform results
     const transformedSignals = results.map((signal) => ({
@@ -116,6 +127,14 @@ export async function GET(
     return NextResponse.json({
       signals: transformedSignals,
       stats,
+      pagination: {
+        page,
+        limit,
+        total: totalCount.count,
+        totalPages: Math.ceil(totalCount.count / limit),
+        hasNext: page < Math.ceil(totalCount.count / limit),
+        hasPrev: page > 1,
+      },
     });
   } catch (error) {
     console.error("Signals API error:", error);

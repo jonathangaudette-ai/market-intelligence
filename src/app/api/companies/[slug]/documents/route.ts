@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth/middleware";
 import { db } from "@/db";
 import { documents, competitors } from "@/db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 import { formatRelativeTime, formatFileSize } from "@/lib/utils/formatting";
 import { parseDocumentMetadata } from "@/lib/types/document-metadata";
 
@@ -22,11 +22,16 @@ export async function GET(
 
     const { company } = authResult.data;
 
-    // 2. Get query parameters for filtering
+    // 2. Get query parameters for filtering and pagination
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") as "completed" | "processing" | "failed" | "pending" | null;
     const competitorId = searchParams.get("competitorId");
     const documentType = searchParams.get("documentType");
+
+    // Pagination parameters
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "50");
+    const offset = (page - 1) * limit;
 
     // 3. Build WHERE conditions for SQL filtering (OPTIMIZED - no in-memory filtering)
     const whereConditions = [eq(documents.companyId, company.company.id)];
@@ -43,7 +48,13 @@ export async function GET(
       whereConditions.push(eq(documents.documentType, documentType));
     }
 
-    // 4. Execute optimized query with SQL-level filtering
+    // 4. Get total count for pagination
+    const [totalCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(documents)
+      .where(and(...whereConditions));
+
+    // 5. Execute optimized query with SQL-level filtering + pagination
     const results = await db
       .select({
         // Document fields
@@ -71,7 +82,9 @@ export async function GET(
       .from(documents)
       .leftJoin(competitors, eq(documents.competitorId, competitors.id))
       .where(and(...whereConditions))
-      .orderBy(desc(documents.createdAt));
+      .orderBy(desc(documents.createdAt))
+      .limit(limit)
+      .offset(offset);
 
     // 5. Calculate stats from filtered results
     const stats = {
@@ -106,6 +119,14 @@ export async function GET(
     return NextResponse.json({
       documents: transformedDocuments,
       stats,
+      pagination: {
+        page,
+        limit,
+        total: totalCount.count,
+        totalPages: Math.ceil(totalCount.count / limit),
+        hasNext: page < Math.ceil(totalCount.count / limit),
+        hasPrev: page > 1,
+      },
     });
   } catch (error) {
     console.error("Documents API error:", error);

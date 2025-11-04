@@ -1,79 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth, getCurrentCompany, hasPermission } from "@/lib/auth/helpers";
+import { requireAuth, requireDocumentAccess, errorResponse } from "@/lib/auth/middleware";
 import { db } from "@/db";
 import { documents, signals } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import {
+  updateDocumentMetadata,
+  getDocumentWithMetadata,
+} from "@/lib/db/document-helpers";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string; documentId: string }> }
 ) {
+  const { slug, documentId } = await params;
+
   try {
-    // 1. Verify authentication
-    const { error: authError, session } = await verifyAuth();
-    if (!session) return authError;
+    // 1. OPTIMIZED: Verify authentication using middleware
+    const authResult = await requireAuth("editor", slug);
+    if (!authResult.success) return authResult.error;
 
-    // 2. Verify company context and permissions
-    const currentCompany = await getCurrentCompany();
-    if (!currentCompany) {
-      return NextResponse.json({ error: "No active company" }, { status: 403 });
-    }
+    const { company } = authResult.data;
 
-    // Check permission (editor or admin required)
-    if (!hasPermission(currentCompany.role, "editor")) {
-      return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 });
-    }
+    // 2. OPTIMIZED: Verify document access
+    const docAccessResult = await requireDocumentAccess(documentId, company.company.id);
+    if (!docAccessResult.success) return docAccessResult.error!;
 
-    // 3. Verify company slug matches
-    const { slug, documentId } = await params;
-    if (currentCompany.company.slug !== slug) {
-      return NextResponse.json({ error: "Company mismatch" }, { status: 403 });
-    }
-
-    // 4. Fetch document from database
-    const [document] = await db
-      .select()
-      .from(documents)
-      .where(eq(documents.id, documentId))
-      .limit(1);
-
+    // 3. OPTIMIZED: Fetch document with typed metadata
+    const document = await getDocumentWithMetadata(documentId);
     if (!document) {
-      return NextResponse.json({ error: "Document not found" }, { status: 404 });
+      return errorResponse("DOCUMENT_NOT_FOUND", "Document not found", 404);
     }
 
-    // Verify document belongs to the company
-    if (document.companyId !== currentCompany.company.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-    }
+    const metadata = document.metadata;
+    const analysis = metadata.analysis;
 
-    // 5. Get analysis and signals from metadata
-    const metadata = document.metadata as any;
-    const analysis = metadata?.analysis;
+    // 4. Save signals using transaction for atomicity
+    let signalsSaved = 0;
 
-    if (!analysis || !analysis.signals) {
-      console.log(`[finalize] No signals found for document ${documentId}, skipping signal creation`);
-    } else {
-      // 6. Save detected signals to signals table
+    if (analysis && analysis.signals && analysis.signals.length > 0) {
       console.log(`[finalize] Saving ${analysis.signals.length} signals for document ${documentId}`);
 
-      for (const signal of analysis.signals) {
-        await db.insert(signals).values({
-          companyId: currentCompany.company.id,
-          documentId: documentId,
-          competitorId: document.competitorId || null,
-          type: signal.type,
-          severity: signal.severity,
-          summary: signal.summary,
-          details: signal.details,
-          relatedEntities: signal.relatedEntities,
-          status: "new",
-        });
-      }
+      // OPTIMIZED: Use transaction for batch insert
+      await db.transaction(async (tx) => {
+        for (const signal of analysis.signals) {
+          await tx.insert(signals).values({
+            companyId: company.company.id,
+            documentId: documentId,
+            competitorId: document.competitorId || null,
+            type: signal.type,
+            severity: signal.severity,
+            summary: signal.summary,
+            details: signal.details,
+            relatedEntities: signal.relatedEntities,
+            status: "new",
+          });
+          signalsSaved++;
+        }
+      });
 
-      console.log(`[finalize] Successfully saved ${analysis.signals.length} signals`);
+      console.log(`[finalize] Successfully saved ${signalsSaved} signals`);
+    } else {
+      console.log(`[finalize] No signals found for document ${documentId}, skipping signal creation`);
     }
 
-    // 7. Update document status to completed
+    // 5. OPTIMIZED: Single update to mark as completed
     await db
       .update(documents)
       .set({
@@ -88,22 +78,21 @@ export async function POST(
 
     console.log(`[finalize] Document ${documentId} marked as completed`);
 
-    // 8. Return finalization summary
+    // 6. Return finalization summary
     return NextResponse.json({
       success: true,
       status: "completed",
-      signalsSaved: analysis?.signals?.length || 0,
+      signalsSaved,
       documentType: document.documentType || "unknown",
       totalChunks: document.totalChunks || 0,
     });
   } catch (error) {
     console.error("Finalize API error:", error);
-    return NextResponse.json(
-      {
-        error: "Internal server error",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
+    return errorResponse(
+      "FINALIZATION_FAILED",
+      "Failed to finalize document",
+      500,
+      error instanceof Error ? error.message : "Unknown error"
     );
   }
 }

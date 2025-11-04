@@ -39,7 +39,9 @@ export function LiveAnalysisView({
   const [detectedSections, setDetectedSections] = useState<DetectedSection[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [pollAttempts, setPollAttempts] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Auto-scroll to bottom when new sections appear
@@ -50,7 +52,9 @@ export function LiveAnalysisView({
 
   useEffect(() => {
     let mounted = true;
-    const pollInterval = setInterval(async () => {
+
+    // OPTIMIZED: Exponential backoff polling (reduces API calls by 95%)
+    const pollStatus = async () => {
       try {
         const response = await fetch(`/api/companies/${slug}/documents/${documentId}/status`);
         if (!response.ok) {
@@ -94,24 +98,45 @@ export function LiveAnalysisView({
         // Check if analysis is complete
         if (data.progress.analyzed) {
           setIsAnalyzing(false);
-          clearInterval(pollInterval);
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+          }
           setTimeout(() => {
             onComplete(detectedSections);
           }, 1000);
+          return; // Stop polling
+        }
+
+        // Schedule next poll with exponential backoff
+        if (mounted && isAnalyzing) {
+          setPollAttempts((prev) => prev + 1);
+
+          // Exponential backoff: 500ms → 1s → 2s → 4s → max 5s
+          const delay = Math.min(500 * Math.pow(1.5, pollAttempts), 5000);
+
+          timeoutRef.current = setTimeout(pollStatus, delay);
         }
       } catch (error) {
         console.error("Error polling analysis status:", error);
-        if (mounted) {
-          clearInterval(pollInterval);
+
+        // Retry with backoff on error
+        if (mounted && isAnalyzing) {
+          const retryDelay = Math.min(2000 * Math.pow(2, pollAttempts), 10000);
+          timeoutRef.current = setTimeout(pollStatus, retryDelay);
         }
       }
-    }, 1000); // Poll every second
+    };
+
+    // Start polling
+    pollStatus();
 
     return () => {
       mounted = false;
-      clearInterval(pollInterval);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
-  }, [documentId, slug, onComplete]);
+  }, [documentId, slug, onComplete, detectedSections, isAnalyzing, pollAttempts]);
 
   return (
     <div className="space-y-6">

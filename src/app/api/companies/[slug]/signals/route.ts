@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth, getCurrentCompany } from "@/lib/auth/helpers";
+import { requireAuth } from "@/lib/auth/middleware";
 import { db } from "@/db";
 import { signals, documents, competitors } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
+import { formatRelativeTime } from "@/lib/utils/formatting";
 
 /**
  * GET /api/companies/[slug]/signals
@@ -13,31 +14,37 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // 1. Verify authentication
-    const { error: authError, session } = await verifyAuth();
-    if (!session) return authError;
-
-    // 2. Verify company context
-    const currentCompany = await getCurrentCompany();
-    if (!currentCompany) {
-      return NextResponse.json({ error: "No active company" }, { status: 403 });
-    }
-
-    // 3. Verify company slug matches
+    // 1. Verify authentication using middleware
     const { slug } = await params;
-    if (currentCompany.company.slug !== slug) {
-      return NextResponse.json({ error: "Company mismatch" }, { status: 403 });
-    }
+    const authResult = await requireAuth("viewer", slug);
+    if (!authResult.success) return authResult.error;
 
-    // 4. Get query parameters for filtering
+    const { company } = authResult.data;
+
+    // 2. Get query parameters for filtering
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status"); // new, reviewed, archived
-    const type = searchParams.get("type"); // competitor_mention, price_change, etc.
-    const severity = searchParams.get("severity"); // low, medium, high
+    const status = searchParams.get("status") as "new" | "reviewed" | "archived" | null;
+    const type = searchParams.get("type");
+    const severity = searchParams.get("severity") as "low" | "medium" | "high" | null;
     const limit = parseInt(searchParams.get("limit") || "50");
 
-    // 5. Build query with joins
-    let query = db
+    // 3. Build WHERE conditions for SQL filtering (OPTIMIZED - no in-memory filtering)
+    const whereConditions = [eq(signals.companyId, company.company.id)];
+
+    if (status) {
+      whereConditions.push(eq(signals.status, status));
+    }
+
+    if (type) {
+      whereConditions.push(eq(signals.type, type));
+    }
+
+    if (severity) {
+      whereConditions.push(eq(signals.severity, severity));
+    }
+
+    // 4. Execute optimized query with SQL-level filtering
+    const results = await db
       .select({
         // Signal fields
         id: signals.id,
@@ -66,29 +73,12 @@ export async function GET(
       .from(signals)
       .leftJoin(documents, eq(signals.documentId, documents.id))
       .leftJoin(competitors, eq(signals.competitorId, competitors.id))
-      .where(eq(signals.companyId, currentCompany.company.id))
+      .where(and(...whereConditions))
       .orderBy(desc(signals.createdAt))
       .limit(limit);
 
-    const results = await query;
-
-    // 6. Filter results in memory (simpler for now)
-    let filteredResults = results;
-
-    if (status) {
-      filteredResults = filteredResults.filter((s) => s.status === status);
-    }
-
-    if (type) {
-      filteredResults = filteredResults.filter((s) => s.type === type);
-    }
-
-    if (severity) {
-      filteredResults = filteredResults.filter((s) => s.severity === severity);
-    }
-
-    // 7. Transform results
-    const transformedSignals = filteredResults.map((signal) => ({
+    // 5. Transform results
+    const transformedSignals = results.map((signal) => ({
       id: signal.id,
       type: signal.type,
       severity: signal.severity,
@@ -103,7 +93,7 @@ export async function GET(
       timeAgo: formatRelativeTime(signal.createdAt),
     }));
 
-    // 8. Calculate signal stats
+    // 6. Calculate signal stats (from already filtered results)
     const stats = {
       total: results.length,
       new: results.filter((s) => s.status === "new").length,
@@ -134,24 +124,4 @@ export async function GET(
       { status: 500 }
     );
   }
-}
-
-// Helper: Format relative time
-function formatRelativeTime(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return "À l'instant";
-  if (diffMins < 60) return `Il y a ${diffMins} minute${diffMins > 1 ? "s" : ""}`;
-  if (diffHours < 24) return `Il y a ${diffHours} heure${diffHours > 1 ? "s" : ""}`;
-  if (diffDays < 7) return `Il y a ${diffDays} jour${diffDays > 1 ? "s" : ""}`;
-  if (diffDays < 30) {
-    const weeks = Math.floor(diffDays / 7);
-    return `Il y a ${weeks} semaine${weeks > 1 ? "s" : ""}`;
-  }
-  const months = Math.floor(diffDays / 30);
-  return `Il y a ${months} mois`;
 }

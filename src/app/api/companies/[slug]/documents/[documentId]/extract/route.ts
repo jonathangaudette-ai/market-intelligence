@@ -1,73 +1,65 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth, getCurrentCompany, hasPermission } from "@/lib/auth/helpers";
+import { requireAuth, requireDocumentAccess, errorResponse } from "@/lib/auth/middleware";
 import { db } from "@/db";
 import { documents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { processPDF } from "@/lib/rag/document-processor";
+import {
+  updateDocumentProgress,
+  updateDocumentMetadata,
+  markDocumentFailed,
+  getDocumentWithMetadata,
+} from "@/lib/db/document-helpers";
+import { parseDocumentMetadata } from "@/lib/types/document-metadata";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string; documentId: string }> }
 ) {
+  const { slug, documentId } = await params;
+
   try {
-    // 1. Verify authentication
-    const { error: authError, session } = await verifyAuth();
-    if (!session) return authError;
+    // 1. OPTIMIZED: Verify authentication using middleware
+    const authResult = await requireAuth("editor", slug);
+    if (!authResult.success) return authResult.error;
 
-    // 2. Verify company context and permissions
-    const currentCompany = await getCurrentCompany();
-    if (!currentCompany) {
-      return NextResponse.json({ error: "No active company" }, { status: 403 });
-    }
+    const { company } = authResult.data;
 
-    // Check permission (editor or admin required)
-    if (!hasPermission(currentCompany.role, "editor")) {
-      return NextResponse.json({ error: "Insufficient permissions" }, { status: 403 });
-    }
+    // 2. OPTIMIZED: Verify document access
+    const docAccessResult = await requireDocumentAccess(documentId, company.company.id);
+    if (!docAccessResult.success) return docAccessResult.error!;
 
-    // 3. Verify company slug matches
-    const { slug, documentId } = await params;
-    if (currentCompany.company.slug !== slug) {
-      return NextResponse.json({ error: "Company mismatch" }, { status: 403 });
-    }
-
-    // 4. Fetch document from database
-    const [document] = await db
-      .select()
-      .from(documents)
-      .where(eq(documents.id, documentId))
-      .limit(1);
-
+    // 3. OPTIMIZED: Fetch document with typed metadata
+    const document = await getDocumentWithMetadata(documentId);
     if (!document) {
-      return NextResponse.json({ error: "Document not found" }, { status: 404 });
+      return errorResponse("DOCUMENT_NOT_FOUND", "Document not found", 404);
     }
 
-    // Verify document belongs to the company
-    if (document.companyId !== currentCompany.company.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-    }
+    const metadata = document.metadata;
 
-    // 5. Get blobUrl from metadata
-    const metadata = document.metadata as any;
-    const blobUrl = metadata?.blobUrl;
-
+    // 4. Validate blob URL
+    const blobUrl = metadata.blobUrl;
     if (!blobUrl) {
-      return NextResponse.json(
-        { error: "No blob URL found in document metadata" },
-        { status: 400 }
+      return errorResponse(
+        "NO_BLOB_URL",
+        "No blob URL found in document metadata",
+        400
       );
     }
 
-    // Update progress: Starting extraction
-    await db.update(documents).set({
-      metadata: {
-        ...metadata,
-        currentStep: "extraction",
-        currentStepProgress: 0,
-        currentStepMessage: "Téléchargement du PDF depuis le stockage...",
-      },
-      updatedAt: new Date(),
-    }).where(eq(documents.id, documentId));
+    // Validate blob URL is from Vercel Blob (SECURITY: prevent SSRF)
+    const BLOB_URL_PATTERN = /^https:\/\/[a-z0-9]+\.(?:blob\.vercel-storage\.com|public\.blob\.vercel-storage\.com)/;
+    if (!BLOB_URL_PATTERN.test(blobUrl)) {
+      return errorResponse("INVALID_BLOB_URL", "Invalid blob URL", 400);
+    }
+
+    // 5. OPTIMIZED: Update progress using helper (single DB call)
+    await updateDocumentProgress(
+      documentId,
+      "extraction",
+      0,
+      "Téléchargement du PDF depuis le stockage..."
+    );
 
     // 6. Fetch PDF from Vercel Blob Storage
     const blobResponse = await fetch(blobUrl);
@@ -78,39 +70,29 @@ export async function POST(
     const arrayBuffer = await blobResponse.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Update progress: Extracting text
-    await db.update(documents).set({
-      metadata: {
-        ...metadata,
-        currentStep: "extraction",
-        currentStepProgress: 50,
-        currentStepMessage: "Extraction du texte du PDF en cours...",
-      },
-      updatedAt: new Date(),
-    }).where(eq(documents.id, documentId));
+    // 7. OPTIMIZED: Update progress (single DB call)
+    await updateDocumentProgress(
+      documentId,
+      "extraction",
+      50,
+      "Extraction du texte du PDF en cours..."
+    );
 
-    // 7. Extract text using processPDF
+    // 8. Extract text using processPDF
     const processed = await processPDF(buffer);
 
-    // 8. Update document with extraction results
-    await db
-      .update(documents)
-      .set({
-        metadata: {
-          ...metadata,
-          pageCount: processed.metadata.pageCount,
-          wordCount: processed.metadata.wordCount,
-          extractedText: processed.text,
-          extractedAt: new Date().toISOString(),
-          currentStep: "extraction",
-          currentStepProgress: 100,
-          currentStepMessage: `Extraction terminée: ${processed.metadata.pageCount} pages, ${processed.metadata.wordCount} mots`,
-        },
-        updatedAt: new Date(),
-      })
-      .where(eq(documents.id, documentId));
+    // 9. OPTIMIZED: Update document with extraction results (single DB call)
+    await updateDocumentMetadata(documentId, {
+      pageCount: processed.metadata.pageCount,
+      wordCount: processed.metadata.wordCount,
+      extractedText: processed.text,
+      extractedAt: new Date().toISOString(),
+      currentStep: "extraction",
+      currentStepProgress: 100,
+      currentStepMessage: `Extraction terminée: ${processed.metadata.pageCount} pages, ${processed.metadata.wordCount} mots`,
+    });
 
-    // 9. Return extraction results
+    // 10. Return extraction results
     return NextResponse.json({
       success: true,
       pages: processed.metadata.pageCount,
@@ -119,12 +101,23 @@ export async function POST(
     });
   } catch (error) {
     console.error("Extract API error:", error);
-    return NextResponse.json(
-      {
-        error: "Internal server error",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
+
+    // OPTIMIZED: Mark document as failed using helper
+    try {
+      await markDocumentFailed(
+        documentId,
+        error instanceof Error ? error.message : "Unknown error",
+        "extraction"
+      );
+    } catch (updateError) {
+      console.error("Failed to mark document as failed:", updateError);
+    }
+
+    return errorResponse(
+      "EXTRACTION_FAILED",
+      "Failed to extract text from document",
+      500,
+      error instanceof Error ? error.message : "Unknown error"
     );
   }
 }

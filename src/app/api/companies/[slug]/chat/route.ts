@@ -1,29 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth, getCurrentCompany } from "@/lib/auth/helpers";
+import { requireAuth } from "@/lib/auth/middleware";
 import { ragEngine } from "@/lib/rag/engine";
 import { db } from "@/db";
 import { conversations, messages } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    // 1. Verify authentication
-    const { error: authError, session } = await verifyAuth();
-    if (!session) return authError;
-
-    // 2. Verify company context
-    const currentCompany = await getCurrentCompany();
-    if (!currentCompany) {
-      return NextResponse.json({ error: "No active company" }, { status: 403 });
-    }
-
-    // 3. Verify company slug matches
+    // 1. Verify authentication using middleware
     const { slug } = await params;
-    if (currentCompany.company.slug !== slug) {
-      return NextResponse.json({ error: "Company mismatch" }, { status: 403 });
-    }
+    const authResult = await requireAuth("viewer", slug);
+    if (!authResult.success) return authResult.error;
 
-    // 4. Parse request body
+    const { session, company } = authResult.data;
+
+    // 2. Parse request body
     const body = await request.json();
     const { message, conversationId, filters } = body;
 
@@ -31,43 +22,65 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    // 5. Get or create conversation
+    // Validate message length
+    const MAX_MESSAGE_LENGTH = 10000;
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: "Message too long" }, { status: 400 });
+    }
+
+    // 3. Get or create conversation
     let activeConversationId = conversationId;
+    let conversationHistory: Array<{ role: string; content: string }> = [];
 
     if (!activeConversationId) {
       // Create new conversation
       const [newConversation] = await db
         .insert(conversations)
         .values({
-          companyId: currentCompany.company.id,
+          companyId: company.company.id,
           userId: session.user.id,
           title: message.slice(0, 100), // First message as title
         })
         .returning();
 
       activeConversationId = newConversation.id;
+    } else {
+      // 4. OPTIMIZED: Load conversation with messages in single query (fixes N+1)
+      const conversation = await db.query.conversations.findFirst({
+        where: eq(conversations.id, activeConversationId),
+        with: {
+          messages: {
+            orderBy: [desc(messages.createdAt)],
+            limit: 10,
+            columns: {
+              role: true,
+              content: true,
+            },
+          },
+        },
+      });
+
+      if (!conversation) {
+        return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
+      }
+
+      // Verify conversation belongs to company
+      if (conversation.companyId !== company.company.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+      }
+
+      conversationHistory = conversation.messages.reverse(); // Reverse to get chronological order
     }
 
-    // 6. Get conversation history
-    const conversationHistory = await db
-      .select({
-        role: messages.role,
-        content: messages.content,
-      })
-      .from(messages)
-      .where(eq(messages.conversationId, activeConversationId))
-      .orderBy(messages.createdAt)
-      .limit(10); // Last 10 messages for context
-
-    // 7. Query RAG with company isolation
+    // 5. Query RAG with company isolation
     const result = await ragEngine.chat({
-      companyId: currentCompany.company.id, // ← TENANT ISOLATION
+      companyId: company.company.id, // ← TENANT ISOLATION
       query: message,
       conversationHistory,
       filters,
     });
 
-    // 8. Save user message and assistant response
+    // 6. Save user message and assistant response
     await db.insert(messages).values([
       {
         conversationId: activeConversationId,
@@ -84,7 +97,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       },
     ]);
 
-    // 9. Return response
+    // 7. Return response
     return NextResponse.json({
       answer: result.answer,
       sources: result.sources,

@@ -57,15 +57,50 @@ export async function POST(
       );
     }
 
-    // 6. Separate kept vs rejected sections based on shouldIndex flag
-    const keptSections = analysis.sections.filter((s: any) => s.shouldIndex);
-    const rejectedSections = analysis.sections.filter((s: any) => !s.shouldIndex);
+    // 6. Get validation data from request body
+    const body = await request.json().catch(() => ({}));
+    const {
+      approvedSections = [],
+      excludedSections = [],
+      additionalInterests = "",
+    } = body;
+
+    console.log(
+      `[filter] User validation: ${approvedSections.length} approved, ${excludedSections.length} excluded`
+    );
+
+    // 7. Apply user validation to override AI's shouldIndex flag
+    // If user provided validation data, use it; otherwise fall back to AI's shouldIndex
+    const hasUserValidation = approvedSections.length > 0 || excludedSections.length > 0;
+
+    const sectionsWithUserValidation = analysis.sections.map((section: any) => {
+      if (hasUserValidation) {
+        // User validation overrides AI decision
+        const isApproved = approvedSections.includes(section.id);
+        const isExcluded = excludedSections.includes(section.id);
+        return {
+          ...section,
+          shouldIndex: isApproved && !isExcluded, // Keep if approved AND not excluded
+          userValidated: true,
+        };
+      } else {
+        // No user validation, use AI's decision
+        return {
+          ...section,
+          userValidated: false,
+        };
+      }
+    });
+
+    // 8. Separate kept vs rejected sections
+    const keptSections = sectionsWithUserValidation.filter((s: any) => s.shouldIndex);
+    const rejectedSections = sectionsWithUserValidation.filter((s: any) => !s.shouldIndex);
 
     console.log(
       `[filter] Document ${documentId}: ${keptSections.length} kept, ${rejectedSections.length} rejected`
     );
 
-    // 7. Update metadata with filtering results
+    // 9. Update metadata with filtering results and user validation
     await db
       .update(documents)
       .set({
@@ -73,9 +108,19 @@ export async function POST(
           ...metadata,
           analysis: {
             ...analysis,
+            sections: sectionsWithUserValidation,
             filteringComplete: true,
             filteredAt: new Date().toISOString(),
           },
+          // Store user validation preferences
+          userValidation: hasUserValidation
+            ? {
+                approvedSections,
+                excludedSections,
+                additionalInterests,
+                validatedAt: new Date().toISOString(),
+              }
+            : undefined,
           // Store kept section IDs for later use in chunking
           keptSectionIds: keptSections.map((s: any) => s.id),
         },

@@ -13,8 +13,11 @@ import {
   Scissors,
   Sparkles,
   CheckCircle,
+  CheckCircle2,
   AlertCircle,
   Loader2,
+  ClipboardCheck,
+  X,
 } from "lucide-react";
 import { LiveAnalysisView } from "@/components/live-analysis-view";
 import { LiveFilteringView } from "@/components/live-filtering-view";
@@ -24,6 +27,7 @@ const STEPS: Step[] = [
   { id: "upload", label: "Upload", icon: <Upload className="h-6 w-6" /> },
   { id: "extraction", label: "Extraction", icon: <FileText className="h-6 w-6" /> },
   { id: "analysis", label: "Analyse", icon: <Brain className="h-6 w-6" /> },
+  { id: "validation", label: "Validation", icon: <ClipboardCheck className="h-6 w-6" /> },
   { id: "filtering", label: "Filtrage", icon: <Filter className="h-6 w-6" /> },
   { id: "chunking", label: "Chunking", icon: <Scissors className="h-6 w-6" /> },
   { id: "embeddings", label: "Embeddings", icon: <Sparkles className="h-6 w-6" /> },
@@ -65,6 +69,11 @@ interface StepData {
     documentType: string;
     confidence: number;
   };
+  validation?: {
+    approvedSections: string[];   // Section IDs to keep
+    excludedSections: string[];   // Section IDs to ignore
+    additionalInterests: string;  // Free text from user
+  };
   filtering?: {
     keptSections: number;
     rejectedSections: number;
@@ -94,6 +103,7 @@ export function DocumentUploadWizard({
     upload: "pending",
     extraction: "pending",
     analysis: "pending",
+    validation: "pending",
     filtering: "pending",
     chunking: "pending",
     embeddings: "pending",
@@ -246,6 +256,9 @@ export function DocumentUploadWizard({
         case "analysis":
           await executeAnalysisStep();
           break;
+        case "validation":
+          await executeValidationStep();
+          break;
         case "filtering":
           await executeFilteringStep();
           break;
@@ -397,14 +410,52 @@ export function DocumentUploadWizard({
     }
   };
 
+  const executeValidationStep = async () => {
+    // Validation is a UI-only step - no API call needed
+    // The validation data is collected interactively through ValidationStepContent
+    // and stored in stepData.validation by the component
+
+    // Initialize with default: approve all sections if no validation data exists
+    if (!stepData.validation && stepData.analysis?.sections) {
+      setStepData((prev) => ({
+        ...prev,
+        validation: {
+          approvedSections: stepData.analysis.sections.map(s => s.id),
+          excludedSections: [],
+          additionalInterests: "",
+        },
+      }));
+    }
+
+    // Simulate a small delay for UX consistency
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  };
+
   const executeFilteringStep = async () => {
     if (!stepData.upload?.documentId) {
       throw new Error("Document ID manquant");
     }
 
+    // Prepare validation data to send to the API
+    const validationData = stepData.validation || {
+      approvedSections: stepData.analysis?.sections?.map(s => s.id) || [],
+      excludedSections: [],
+      additionalInterests: "",
+    };
+
     const response = await fetch(
       `/api/companies/${slug}/documents/${stepData.upload.documentId}/filter`,
-      { method: "POST" }
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          approvedSections: validationData.approvedSections,
+          excludedSections: validationData.excludedSections,
+          additionalInterests: validationData.additionalInterests,
+        }),
+      }
     );
 
     if (!response.ok) {
@@ -673,6 +724,20 @@ export function DocumentUploadWizard({
           <AnalysisStepContent data={stepData.analysis} />
         );
 
+      case "validation":
+        return (
+          <ValidationStepContent
+            analysis={stepData.analysis}
+            validation={stepData.validation}
+            onValidate={(validation) => {
+              setStepData((prev) => ({
+                ...prev,
+                validation,
+              }));
+            }}
+          />
+        );
+
       case "filtering":
         return stepStatuses.filtering === "in_progress" ? (
           <LiveFilteringView
@@ -909,6 +974,232 @@ function AnalysisStepContent({ data }: { data?: StepData["analysis"] }) {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function ValidationStepContent({
+  analysis,
+  validation,
+  onValidate,
+}: {
+  analysis?: StepData["analysis"];
+  validation?: StepData["validation"];
+  onValidate: (validation: NonNullable<StepData["validation"]>) => void;
+}) {
+  const [approvedSections, setApprovedSections] = useState<string[]>(
+    validation?.approvedSections || analysis?.sections?.map(s => s.id) || []
+  );
+  const [excludedSections, setExcludedSections] = useState<string[]>(
+    validation?.excludedSections || []
+  );
+  const [additionalInterests, setAdditionalInterests] = useState(
+    validation?.additionalInterests || ""
+  );
+
+  // Update parent state whenever local state changes
+  useEffect(() => {
+    onValidate({
+      approvedSections,
+      excludedSections,
+      additionalInterests,
+    });
+  }, [approvedSections, excludedSections, additionalInterests, onValidate]);
+
+  if (!analysis) {
+    return <div>Aucune analyse disponible...</div>;
+  }
+
+  const toggleSection = (sectionId: string) => {
+    if (approvedSections.includes(sectionId)) {
+      // Remove from approved, add to excluded
+      setApprovedSections(prev => prev.filter(id => id !== sectionId));
+      setExcludedSections(prev => [...prev, sectionId]);
+    } else {
+      // Remove from excluded, add to approved
+      setExcludedSections(prev => prev.filter(id => id !== sectionId));
+      setApprovedSections(prev => [...prev, sectionId]);
+    }
+  };
+
+  const approveAll = () => {
+    setApprovedSections(analysis.sections?.map(s => s.id) || []);
+    setExcludedSections([]);
+  };
+
+  const excludeAll = () => {
+    setApprovedSections([]);
+    setExcludedSections(analysis.sections?.map(s => s.id) || []);
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header with stats */}
+      <div className="rounded-lg bg-gradient-to-r from-teal-50 to-blue-50 p-6 border border-teal-200">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Validation du contenu</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              Claude a analysé le document. Validez les sections à conserver.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={approveAll}
+              className="text-green-700 border-green-300 hover:bg-green-50"
+            >
+              <CheckCircle2 className="h-4 w-4 mr-1" />
+              Tout approuver
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={excludeAll}
+              className="text-red-700 border-red-300 hover:bg-red-50"
+            >
+              <X className="h-4 w-4 mr-1" />
+              Tout exclure
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4">
+          <Card className="p-4">
+            <div className="text-sm text-gray-600">Type de document</div>
+            <div className="mt-1 text-lg font-bold text-teal-700">
+              {analysis.documentType || "N/A"}
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-sm text-gray-600">Confiance</div>
+            <div className="mt-1 text-lg font-bold text-blue-700">
+              {analysis.confidence !== undefined ? Math.round(analysis.confidence * 100) : 0}%
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-sm text-gray-600">Sections approuvées</div>
+            <div className="mt-1 text-lg font-bold text-green-700">
+              {approvedSections.length} / {analysis.sections?.length || 0}
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      {/* Sections list */}
+      {analysis.sections && analysis.sections.length > 0 && (
+        <div>
+          <div className="text-sm font-medium text-gray-700 mb-3">
+            Sections détectées ({analysis.sections.length})
+          </div>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            {analysis.sections.map((section) => {
+              const isApproved = approvedSections.includes(section.id);
+              const isExcluded = excludedSections.includes(section.id);
+
+              return (
+                <Card
+                  key={section.id}
+                  className={`p-4 transition-all ${
+                    isApproved
+                      ? "border-green-400 bg-green-50"
+                      : isExcluded
+                      ? "border-red-300 bg-red-50 opacity-60"
+                      : "border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{section.title}</div>
+                      {section.summary && (
+                        <p className="text-sm text-gray-600 mt-1">{section.summary}</p>
+                      )}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant={isApproved ? "default" : "outline"}
+                      onClick={() => toggleSection(section.id)}
+                      className={
+                        isApproved
+                          ? "bg-green-600 hover:bg-green-700 text-white"
+                          : "border-gray-300 hover:bg-gray-100"
+                      }
+                    >
+                      {isApproved ? (
+                        <>
+                          <CheckCircle2 className="h-4 w-4 mr-1" />
+                          Conserver
+                        </>
+                      ) : (
+                        <>
+                          <X className="h-4 w-4 mr-1" />
+                          Ignorer
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  {/* Relevance score */}
+                  {section.relevanceScore !== undefined && (
+                    <div className="mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="text-xs text-gray-600">Pertinence:</div>
+                        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full ${
+                              section.relevanceScore > 0.7
+                                ? "bg-green-500"
+                                : section.relevanceScore > 0.4
+                                ? "bg-yellow-500"
+                                : "bg-red-500"
+                            }`}
+                            style={{ width: `${section.relevanceScore * 100}%` }}
+                          />
+                        </div>
+                        <div className="text-xs font-medium text-gray-700">
+                          {Math.round(section.relevanceScore * 100)}%
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Keywords */}
+                  {section.keywords && section.keywords.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {section.keywords.map((keyword, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded"
+                        >
+                          {keyword}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Additional interests input */}
+      <Card className="p-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Intérêts additionnels (optionnel)
+        </label>
+        <textarea
+          value={additionalInterests}
+          onChange={(e) => setAdditionalInterests(e.target.value)}
+          placeholder="Décrivez des aspects spécifiques qui vous intéressent dans ce document..."
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+          rows={3}
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          Ces informations aideront Claude à mieux filtrer et organiser le contenu.
+        </p>
+      </Card>
     </div>
   );
 }

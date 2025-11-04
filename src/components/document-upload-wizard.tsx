@@ -420,7 +420,7 @@ export function DocumentUploadWizard({
       setStepData((prev) => ({
         ...prev,
         validation: {
-          approvedSections: stepData.analysis.sections.map(s => s.id),
+          approvedSections: stepData.analysis?.sections?.map(s => s.id) || [],
           excludedSections: [],
           additionalInterests: "",
         },
@@ -1112,8 +1112,8 @@ function ValidationStepContent({
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
                       <div className="font-medium text-gray-900">{section.title}</div>
-                      {section.summary && (
-                        <p className="text-sm text-gray-600 mt-1">{section.summary}</p>
+                      {section.reasoning && (
+                        <p className="text-sm text-gray-600 mt-1">{section.reasoning}</p>
                       )}
                     </div>
                     <Button
@@ -1164,15 +1164,15 @@ function ValidationStepContent({
                     </div>
                   )}
 
-                  {/* Keywords */}
-                  {section.keywords && section.keywords.length > 0 && (
+                  {/* Tags */}
+                  {section.tags && section.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
-                      {section.keywords.map((keyword, idx) => (
+                      {section.tags.map((tag: string, idx: number) => (
                         <span
                           key={idx}
                           className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded"
                         >
-                          {keyword}
+                          {tag}
                         </span>
                       ))}
                     </div>

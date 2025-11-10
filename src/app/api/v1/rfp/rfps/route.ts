@@ -121,8 +121,19 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error('[RFP Upload Error]', error);
+
+    // Return detailed error in development
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorDetails = process.env.NODE_ENV === 'development'
+      ? { stack: error instanceof Error ? error.stack : undefined }
+      : {};
+
     return NextResponse.json(
-      { error: 'Failed to upload RFP. Please try again.' },
+      {
+        error: 'Failed to upload RFP. Please try again.',
+        details: errorMessage,
+        ...errorDetails
+      },
       { status: 500 }
     );
   }

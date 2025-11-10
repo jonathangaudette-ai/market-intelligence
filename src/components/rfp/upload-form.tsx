@@ -60,7 +60,10 @@ export function RFPUploadForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to upload RFP');
+        const errorMessage = data.details
+          ? `${data.error}: ${data.details}`
+          : (data.error || 'Failed to upload RFP');
+        throw new Error(errorMessage);
       }
 
       // Redirect to RFP detail page

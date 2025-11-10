@@ -72,10 +72,10 @@ export async function indexDocument(params: {
 
   // Prepare metadata
   const metadata: RFPVectorMetadata = {
+    ...params.metadata,
     documentId: params.documentId,
     text: params.text,
     createdAt: new Date().toISOString(),
-    ...params.metadata,
   };
 
   // Upsert to Pinecone

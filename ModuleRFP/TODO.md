@@ -182,55 +182,58 @@ export async function generateRFPResponse(question: string, context: string) {
 
 ---
 
-#### TASK-005 : Setup Authentication
+#### TASK-005 : Intégrer avec l'auth Clerk existante
 - **Priorité:** 🔴 P0
-- **Story Points:** 3 SP
+- **Story Points:** 2 SP
 - **Statut:** ⬜ Todo
 - **Assigné à:** [À assigner]
 - **Dépendances:** TASK-001, TASK-002
 
 **Description:**
-Implémenter l'authentification avec NextAuth.js ou Clerk.
+Configurer les routes RFP pour utiliser l'authentification **Clerk déjà configurée** dans la plateforme.
 
 **Critères d'acceptation:**
-- [ ] NextAuth.js ou Clerk configuré
-- [ ] Login/Logout fonctionnel
-- [ ] Session management
-- [ ] Protected routes (middleware)
-- [ ] User table dans DB
+- [ ] Routes RFP protégées avec middleware Clerk existant
+- [ ] Accès au `userId` dans les API routes RFP
+- [ ] Vérifier que les tables RFP référencent correctement `users.id`
+- [ ] Tester l'accès aux pages RFP avec un user connecté
 
-**Commandes (NextAuth):**
-```bash
-npm install next-auth @auth/drizzle-adapter
-```
+**Note:** Clerk est déjà installé et configuré dans la plateforme. Pas besoin de réinstaller.
 
-**Routes protégées:**
-- `/dashboard/*` - Require authentication
-- `/api/*` - Require authentication (except /api/auth)
+**Routes protégées à ajouter:**
+- `/dashboard/rfp/*` - Require authentication
+- `/api/v1/rfp/*` - Require authentication
 
 ---
 
-#### TASK-006 : Setup UI Components (shadcn/ui)
+#### TASK-006 : Vérifier/ajouter composants UI nécessaires
 - **Priorité:** 🔴 P0
-- **Story Points:** 2 SP
+- **Story Points:** 1 SP
 - **Statut:** ⬜ Todo
 - **Assigné à:** [À assigner]
 - **Dépendances:** TASK-001
 
 **Description:**
-Installer et configurer shadcn/ui pour les composants UI.
+Vérifier que les composants shadcn/ui nécessaires au module RFP sont installés (shadcn/ui est **déjà configuré** dans la plateforme).
 
 **Critères d'acceptation:**
-- [ ] shadcn/ui CLI configuré
-- [ ] Components de base installés (Button, Input, Card, etc.)
-- [ ] Thème configuré (dark mode support)
-- [ ] Typography system défini
+- [ ] Vérifier que shadcn/ui est installé (devrait déjà l'être)
+- [ ] Ajouter composants spécifiques au RFP si manquants:
+  - [ ] `data-table` (pour liste de RFPs et questions)
+  - [ ] `rich-text-editor` (Tiptap pour édition de réponses)
+  - [ ] `file-upload` (pour upload de RFP files)
+- [ ] Tester le thème avec les nouveaux composants
 
-**Commandes:**
+**Commandes (seulement si composants manquants):**
 ```bash
-npx shadcn-ui@latest init
-npx shadcn-ui@latest add button input card dialog tabs table
+# Vérifier installation existante
+ls components/ui
+
+# Ajouter seulement composants manquants
+npx shadcn-ui@latest add [component-name]
 ```
+
+**Note:** shadcn/ui est déjà installé dans la plateforme. Ne réinstaller que les composants spécifiques manquants.
 
 ---
 
@@ -620,9 +623,10 @@ export async function generateResponse(question_id: string): Promise<GeneratedRe
     input: question.question_text,
   });
 
-  // 3. Vector search
-  const index = pinecone.Index('rfp-library');
-  const queryResponse = await index.query({
+  // 3. Vector search (utiliser l'index partagé avec namespace)
+  const index = pinecone.index('market-intelligence');
+  const rfpNamespace = index.namespace('rfp-library');
+  const queryResponse = await rfpNamespace.query({
     vector: embedding.data[0].embedding,
     topK: 5,
     includeMetadata: true,
@@ -727,7 +731,10 @@ import { pinecone } from '@/lib/pinecone/client';
 
 async function indexDocuments() {
   const documents = await loadAllDocuments();
-  const index = pinecone.Index('rfp-library');
+
+  // Utiliser l'index partagé avec namespace dédié
+  const index = pinecone.index('market-intelligence');
+  const rfpNamespace = index.namespace('rfp-library');
 
   // Batch embedding
   const batches = chunk(documents, 100);
@@ -749,7 +756,8 @@ async function indexDocuments() {
       },
     }));
 
-    await index.upsert(vectors);
+    // Upsert dans le namespace RFP de l'index partagé
+    await rfpNamespace.upsert(vectors);
   }
 }
 
@@ -1068,13 +1076,13 @@ Créer la documentation utilisateur (user guide).
 
 | Sprint | Story Points | Estimation |
 |--------|--------------|------------|
-| Sprint 0 (Setup) | 15 SP | 1 semaine |
+| Sprint 0 (Intégration) | 9 SP | 3-4 jours |
 | Sprint 1 (Parsing) | 18 SP | 2 semaines |
 | Sprint 2 (RAG) | 15 SP | 2 semaines |
 | Sprint 3 (UI) | 14 SP | 1 semaine |
 | Sprint 4 (Export) | 11 SP | 1 semaine |
 | Sprint 5 (Polish) | 8 SP | 1 semaine |
-| **Total MVP** | **81 SP** | **8 semaines** |
+| **Total MVP** | **75 SP** | **7-8 semaines** |
 
 ---
 

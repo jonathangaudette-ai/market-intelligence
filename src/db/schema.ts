@@ -1,6 +1,7 @@
-import { pgTable, varchar, timestamp, boolean, integer, text, jsonb, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, varchar, timestamp, boolean, integer, text, jsonb, uniqueIndex, uuid as pgUuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
+import { v4 as uuidv4 } from 'uuid';
 
 // Users table
 export const users = pgTable("users", {
@@ -248,7 +249,7 @@ export const signalsRelations = relations(signals, ({ one }) => ({
 
 // RFPs table
 export const rfps = pgTable("rfps", {
-  id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
+  id: pgUuid("id").$defaultFn(() => uuidv4()).primaryKey(),
 
   // Basic information
   title: varchar("title", { length: 500 }).notNull(),
@@ -307,8 +308,8 @@ export const rfps = pgTable("rfps", {
 
 // RFP Questions table
 export const rfpQuestions = pgTable("rfp_questions", {
-  id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
-  rfpId: varchar("rfp_id", { length: 255 })
+  id: pgUuid("id").$defaultFn(() => uuidv4()).primaryKey(),
+  rfpId: pgUuid("rfp_id")
     .notNull()
     .references(() => rfps.id, { onDelete: "cascade" }),
 
@@ -344,8 +345,8 @@ export const rfpQuestions = pgTable("rfp_questions", {
 
 // RFP Responses table
 export const rfpResponses = pgTable("rfp_responses", {
-  id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
-  questionId: varchar("question_id", { length: 255 })
+  id: pgUuid("id").$defaultFn(() => uuidv4()).primaryKey(),
+  questionId: pgUuid("question_id")
     .notNull()
     .references(() => rfpQuestions.id, { onDelete: "cascade" }),
 

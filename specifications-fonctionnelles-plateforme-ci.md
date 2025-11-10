@@ -130,6 +130,7 @@ Activation Utilisateur → Mesure d'Impact → Feedback Loop
 | **M8. Conversational AI Assistant** | Assistant IA type ChatGPT | P1 - Phase 2 |
 | **M9. Impact Analytics** | Mesure ROI et engagement | P0 - MVP |
 | **M10. Collaboration Workspace** | Espace collaboratif équipes | P1 - Phase 2 |
+| **M11. RFP Response Assistant** | Aide IA pour répondre aux appels d'offres | P0 - MVP |
 
 ---
 

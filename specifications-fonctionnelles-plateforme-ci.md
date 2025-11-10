@@ -49,10 +49,10 @@ Notre plateforme se différencie par:
    - Intégration native dans les flux de travail existants
    - Battlecards dynamiques auto-actualisées
 
-4. **Knowledge Graph Relationnel**
-   - Cartographie des écosystèmes compétitifs
+4. **Architecture Simplifiée et Scalable**
+   - Stack technique optimisée (Neon PostgreSQL + Pinecone)
    - Relations entre concurrents, partenaires, investisseurs, technologies
-   - Navigation visuelle des dynamiques de marché
+   - Facilité de déploiement et maintenance réduite
 
 ### 1.3 Personas Cibles
 
@@ -90,7 +90,7 @@ Notre plateforme se différencie par:
                             ↑
 ┌─────────────────────────────────────────────────────────────┐
 │          COUCHE 3: INTELLIGENCE & SYNTHÈSE (AI)             │
-│  LLMs, RAG, Knowledge Graph, Predictive Models              │
+│  LLMs, RAG (Pinecone), Relations, Predictive Models         │
 └─────────────────────────────────────────────────────────────┘
                             ↑
 ┌─────────────────────────────────────────────────────────────┐
@@ -102,15 +102,33 @@ Notre plateforme se différencie par:
 │            COUCHE 1: COLLECTE & INGESTION                   │
 │  Web Scraping AI, APIs, Social Media, Internal Sources      │
 └─────────────────────────────────────────────────────────────┘
+
+STACK DE DONNÉES: Neon PostgreSQL (données structurées) + Pinecone (vectors)
 ```
 
 ### 2.2 Flux de Données Principal
 
 ```
-Sources Externes → AI Scraping → Enrichissement NLP →
-Knowledge Graph → LLM Synthesis → Distribution Intelligente →
+Sources Externes → AI Scraping → Enrichissement NLP → Neon PostgreSQL →
+RAG (Pinecone) → LLM Synthesis → Distribution Intelligente →
 Activation Utilisateur → Mesure d'Impact → Feedback Loop
 ```
+
+### 2.3 Stack Technique Simplifiée
+
+**Base de Données:**
+- **Neon PostgreSQL** - Données structurées, relations, time-series
+- **Pinecone** - Embeddings vectoriels, recherche sémantique, RAG
+
+**Stockage Fichiers (optionnel):**
+- **Vercel Blob / Cloudflare R2** - Screenshots, PDFs (si volume important)
+- **PostgreSQL BYTEA** - Petits fichiers (<1MB) directement dans Neon
+
+**Avantages:**
+- ✅ Architecture simple avec 2 composantes principales
+- ✅ Coûts réduits (~$50-100/mois vs $200+ avec stack complète)
+- ✅ Facilité de déploiement et maintenance
+- ✅ Scalabilité assurée (Neon serverless + Pinecone cloud)
 
 ---
 
@@ -481,7 +499,12 @@ Automatiser la collecte exhaustive de données compétitives et de marché à pa
 
 ### 1.4 Data Storage & Schema
 
-**Database:** PostgreSQL (structured data) + S3 (raw files)
+**Database:** Neon PostgreSQL (serverless, auto-scaling)
+
+**Stockage Fichiers:**
+- **Option 1:** Vercel Blob / Cloudflare R2 (pour volume important de screenshots/PDFs)
+- **Option 2:** PostgreSQL BYTEA (pour petits fichiers <1MB)
+- **Option 3:** Stocker uniquement les URLs externes
 
 **Core Tables:**
 
@@ -502,7 +525,7 @@ data_points (
 -- Web Changes
 web_changes (
   id, competitor_id, url, change_type,
-  screenshot_before, screenshot_after,
+  screenshot_before_url, screenshot_after_url,  -- URLs vers stockage externe ou BYTEA
   html_diff, summary, detected_at
 )
 
@@ -897,32 +920,83 @@ POST /api/v1/analyze/predict - Predictive analysis
 ### 3.1 Objectif
 Créer une base de connaissances relationnelle pour cartographier l'écosystème compétitif.
 
-### 3.2 Architecture du Graph
+**Note:** Ce module est **P1 - Phase 2**. Pour le MVP, les relations basiques seront gérées via PostgreSQL. Neo4j peut être ajouté en Phase 2 si des besoins avancés de graphes émergent.
 
-**Technology:** Neo4j (graph database)
+### 3.2 Architecture Simplifiée (Phase MVP)
 
-**Node Types:**
-- **Company** (competitors, partners, customers)
-- **Person** (executives, employees)
-- **Product** (produits et services)
-- **Technology** (tech stack, APIs, frameworks)
-- **Investor** (VCs, private equity)
-- **Event** (funding, launches, partnerships)
-- **Location** (offices, markets)
-- **Feature** (product features)
+**Technology:** Neon PostgreSQL avec tables relationnelles
 
-**Relationship Types:**
-- COMPETES_WITH
-- PARTNERS_WITH
-- USES_TECHNOLOGY
-- FUNDED_BY
-- ACQUIRED
-- WORKS_AT
-- FORMERLY_WORKED_AT (employee movements)
-- OFFERS (company offers product)
-- INTEGRATES_WITH
-- TARGETS (target market)
-- HAS_OFFICE_IN
+**Approche:** Utiliser des tables de jonction pour les relations au lieu d'une graph database dédiée.
+
+**Entity Types (tables PostgreSQL):**
+- **companies** (competitors, partners, customers)
+- **people** (executives, employees)
+- **products** (produits et services)
+- **technologies** (tech stack, APIs, frameworks)
+- **investors** (VCs, private equity)
+- **events** (funding, launches, partnerships)
+- **locations** (offices, markets)
+- **features** (product features)
+
+**Schema SQL pour Relations:**
+
+```sql
+-- Table centrale de relations (remplace Neo4j)
+CREATE TABLE entity_relationships (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  -- Source entity
+  entity_from_type VARCHAR(50) NOT NULL,  -- 'company', 'person', 'product', etc.
+  entity_from_id UUID NOT NULL,
+
+  -- Relationship type
+  relationship_type VARCHAR(50) NOT NULL,  -- 'COMPETES_WITH', 'PARTNERS_WITH', etc.
+
+  -- Target entity
+  entity_to_type VARCHAR(50) NOT NULL,
+  entity_to_id UUID NOT NULL,
+
+  -- Metadata flexible
+  metadata JSONB DEFAULT '{}',
+  strength DECIMAL(3,2),  -- 0.0 to 1.0 (intensité de la relation)
+
+  -- Audit
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  source_url TEXT,  -- D'où vient cette information
+
+  -- Index pour performance
+  CONSTRAINT unique_relationship UNIQUE (entity_from_type, entity_from_id, relationship_type, entity_to_type, entity_to_id)
+);
+
+-- Index pour requêtes rapides
+CREATE INDEX idx_rel_from ON entity_relationships(entity_from_type, entity_from_id);
+CREATE INDEX idx_rel_to ON entity_relationships(entity_to_type, entity_to_id);
+CREATE INDEX idx_rel_type ON entity_relationships(relationship_type);
+CREATE INDEX idx_rel_metadata ON entity_relationships USING gin(metadata);
+
+-- Table pour entités génériques (si pas de table dédiée)
+CREATE TABLE entities (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  entity_type VARCHAR(50) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  attributes JSONB DEFAULT '{}',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**Types de Relations Supportés:**
+- `COMPETES_WITH` - Relation compétitive
+- `PARTNERS_WITH` - Partenariat
+- `USES_TECHNOLOGY` - Utilise une technologie
+- `FUNDED_BY` - Financé par
+- `ACQUIRED` - Acquis par
+- `WORKS_AT` - Employé travaille chez
+- `FORMERLY_WORKED_AT` - Ancien employé
+- `OFFERS` - Entreprise offre produit
+- `INTEGRATES_WITH` - Intégration entre produits
+- `TARGETS` - Cible un marché
+- `HAS_OFFICE_IN` - Bureau dans un lieu
 
 ### 3.3 Fonctionnalités
 
@@ -962,38 +1036,87 @@ Créer une base de connaissances relationnelle pour cartographier l'écosystème
 
 **Technology:**
 - D3.js pour visualization
-- Neo4j Graph Algorithms pour layout
-- Cypher queries pour data retrieval
+- SQL queries avec CTEs récursives pour traverser le graphe
+- API REST pour récupérer données relationnelles
 
 ---
 
 #### Feature 3.2: Entity Relationship Queries
 
-**Description:** Queries puissantes sur les relations.
+**Description:** Queries puissantes sur les relations via SQL.
 
 **Exemples:**
 
-```cypher
+```sql
 -- Qui sont les anciens employés de nos concurrents qui travaillent maintenant chez nous?
-MATCH (p:Person)-[w:WORKS_AT]->(us:Company {name: "OurCompany"})
-WHERE EXISTS((p)-[:FORMERLY_WORKED_AT]->(:Company)-[:COMPETES_WITH]-(us))
-RETURN p.name, p.former_companies
+SELECT
+  p.name,
+  p.former_companies
+FROM people p
+JOIN entity_relationships er_current
+  ON er_current.entity_from_id = p.id
+  AND er_current.relationship_type = 'WORKS_AT'
+  AND er_current.entity_to_type = 'company'
+JOIN companies our_company
+  ON our_company.id = er_current.entity_to_id
+  AND our_company.name = 'OurCompany'
+WHERE EXISTS (
+  SELECT 1
+  FROM entity_relationships er_former
+  JOIN entity_relationships er_compete
+    ON er_compete.entity_from_id = er_former.entity_to_id
+    AND er_compete.relationship_type = 'COMPETES_WITH'
+  WHERE er_former.entity_from_id = p.id
+    AND er_former.relationship_type = 'FORMERLY_WORKED_AT'
+);
 
 -- Quels VCs ont investi dans plusieurs de nos concurrents?
-MATCH (vc:Investor)-[:FUNDED]->(c:Company)-[:COMPETES_WITH]->(:Company {name: "OurCompany"})
-WITH vc, count(c) as num_competitors
-WHERE num_competitors >= 2
-RETURN vc.name, num_competitors
+SELECT
+  i.name,
+  COUNT(DISTINCT c.id) as num_competitors_funded
+FROM investors i
+JOIN entity_relationships er_funding
+  ON er_funding.entity_from_id = i.id
+  AND er_funding.relationship_type = 'FUNDED_BY'
+  AND er_funding.entity_to_type = 'company'
+JOIN companies c ON c.id = er_funding.entity_to_id
+WHERE EXISTS (
+  SELECT 1
+  FROM entity_relationships er_compete
+  WHERE er_compete.entity_from_id = c.id
+    AND er_compete.relationship_type = 'COMPETES_WITH'
+)
+GROUP BY i.id, i.name
+HAVING COUNT(DISTINCT c.id) >= 2;
 
 -- Quelles technologies sont utilisées par nos concurrents mais pas par nous?
-MATCH (c:Company)-[:COMPETES_WITH]->(:Company {name: "OurCompany"})
-MATCH (c)-[:USES_TECHNOLOGY]->(t:Technology)
-WHERE NOT EXISTS((:Company {name: "OurCompany"})-[:USES_TECHNOLOGY]->(t))
-RETURN t.name, count(c) as num_competitors_using
-ORDER BY num_competitors_using DESC
+SELECT
+  t.name,
+  COUNT(DISTINCT c.id) as num_competitors_using
+FROM technologies t
+JOIN entity_relationships er_tech
+  ON er_tech.entity_to_id = t.id
+  AND er_tech.relationship_type = 'USES_TECHNOLOGY'
+  AND er_tech.entity_from_type = 'company'
+JOIN companies c ON c.id = er_tech.entity_from_id
+WHERE EXISTS (
+  SELECT 1 FROM entity_relationships er_compete
+  WHERE er_compete.entity_from_id = c.id
+    AND er_compete.relationship_type = 'COMPETES_WITH'
+)
+AND NOT EXISTS (
+  SELECT 1
+  FROM entity_relationships er_our_tech
+  JOIN companies our_co ON our_co.name = 'OurCompany'
+  WHERE er_our_tech.entity_from_id = our_co.id
+    AND er_our_tech.entity_to_id = t.id
+    AND er_our_tech.relationship_type = 'USES_TECHNOLOGY'
+)
+GROUP BY t.id, t.name
+ORDER BY num_competitors_using DESC;
 ```
 
-**UI:** Natural language query interface (powered by LLM → Cypher generation)
+**UI:** Natural language query interface (powered by LLM → SQL generation)
 
 ---
 
@@ -1011,7 +1134,7 @@ ORDER BY num_competitors_using DESC
 1. Entity Extraction from text (NER)
 2. Relationship Extraction (using LLM)
 3. Entity Resolution (deduplication)
-4. Graph insertion (Neo4j)
+4. Database insertion (PostgreSQL)
 
 **Example:**
 ```
@@ -1023,10 +1146,25 @@ Extracted:
 - Relationship: Acme PARTNERS_WITH BigCo
 - Relationship: Acme INTEGRATES_WITH BigCo API
 
-Graph Update:
-CREATE (acme:Company {name: "Acme Corp"})
-CREATE (bigco:Company {name: "BigCo"})
-CREATE (acme)-[:PARTNERS_WITH {announced_date: "2025-10-30", source: "news_article_url"}]->(bigco)
+SQL Insert:
+-- Insérer ou récupérer les entreprises
+INSERT INTO companies (name) VALUES ('Acme Corp') ON CONFLICT (name) DO NOTHING RETURNING id;
+INSERT INTO companies (name) VALUES ('BigCo') ON CONFLICT (name) DO NOTHING RETURNING id;
+
+-- Créer la relation
+INSERT INTO entity_relationships (
+  entity_from_type, entity_from_id,
+  relationship_type,
+  entity_to_type, entity_to_id,
+  metadata, source_url
+) VALUES (
+  'company', (SELECT id FROM companies WHERE name = 'Acme Corp'),
+  'PARTNERS_WITH',
+  'company', (SELECT id FROM companies WHERE name = 'BigCo'),
+  '{"announced_date": "2025-10-30"}'::jsonb,
+  'https://news-article-url.com'
+) ON CONFLICT ON CONSTRAINT unique_relationship DO UPDATE
+  SET updated_at = NOW();
 ```
 
 ---
@@ -1036,10 +1174,15 @@ CREATE (acme)-[:PARTNERS_WITH {announced_date: "2025-10-30", source: "news_artic
 ```
 GET  /api/v1/graph/companies - Liste des companies dans graph
 GET  /api/v1/graph/relationships/:type - Relationships d'un type donné
-POST /api/v1/graph/query - Exécuter une Cypher query
-POST /api/v1/graph/nlp-query - Natural language query (convertie en Cypher)
-GET  /api/v1/graph/visualize - Données pour visualization
+POST /api/v1/graph/query - Exécuter une SQL query (avec sécurité)
+POST /api/v1/graph/nlp-query - Natural language query (convertie en SQL via LLM)
+GET  /api/v1/graph/visualize - Données pour visualization (noeuds et edges)
+POST /api/v1/graph/relationships - Créer une nouvelle relation
+DELETE /api/v1/graph/relationships/:id - Supprimer une relation
 ```
+
+**Note sur l'évolution future:**
+Si les besoins en analyses de graphes complexes augmentent (traversée de graphes profonds, algorithmes de graphes avancés), Neo4j pourra être ajouté en Phase 2. PostgreSQL avec CTEs récursives est suffisant pour 80% des cas d'usage relationnel.
 
 ---
 

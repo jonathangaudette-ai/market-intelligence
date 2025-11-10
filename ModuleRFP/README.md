@@ -92,18 +92,23 @@ ModuleRFP/
 
 ## Prérequis techniques
 
+### Infrastructure Partagée (Plateforme CI)
+
+⚠️ **Important:** Ce module fait partie de la **MarketIQ AI Platform** existante. Toute l'infrastructure est déjà configurée et partagée entre les 10 modules de la plateforme.
+
+**Infrastructure existante réutilisée:**
+- ✅ **Neon PostgreSQL** - Base de données principale de la plateforme
+- ✅ **Pinecone** - Vector database partagée (index: `market-intelligence`)
+- ✅ **Anthropic API** - Clé API Claude Sonnet 4.5 configurée
+- ✅ **OpenAI API** - Clés pour GPT-4o et embeddings
+- ✅ **Vercel** - Deployment de la plateforme Next.js
+
 ### Développement local
-- Node.js 20+ ou Python 3.11+
-- PostgreSQL 15+ (ou compte Neon)
+- Node.js 20+ (déjà configuré dans le projet principal)
+- Accès au repository `market-intelligence`
+- Variables d'environnement de la plateforme (voir `.env.example` à la racine)
 - Git
 - VS Code ou IDE préféré
-
-### Comptes requis
-- **Neon** (https://neon.tech) - Database PostgreSQL serverless
-- **Pinecone** (https://pinecone.io) - Vector database
-- **Anthropic** (https://anthropic.com) - Claude API
-- **OpenAI** (https://openai.com) - GPT-4o API
-- **Vercel** (https://vercel.com) - Deployment (optionnel pour dev local)
 
 ## Démarrage rapide
 

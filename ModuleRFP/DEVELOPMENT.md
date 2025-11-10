@@ -4,128 +4,122 @@
 
 ---
 
+## ⚠️ Important: Module Intégré à la Plateforme Existante
+
+Ce module fait partie de la **MarketIQ AI Platform** et s'intègre dans le projet `market-intelligence` existant.
+
+**Infrastructure réutilisée:**
+- Base de données Neon PostgreSQL (déjà configurée)
+- Pinecone vector database (index partagé: `market-intelligence`)
+- APIs Anthropic & OpenAI (clés déjà configurées)
+- Next.js App Router (projet principal existant)
+
+**Ne créez PAS de nouveau projet Next.js.** Travaillez dans le projet existant.
+
+---
+
 ## 🚀 Quick Start
 
 ### Prérequis
 
 Avant de commencer, assurez-vous d'avoir :
 
+- **Accès au repository** : `market-intelligence`
 - **Node.js** 20+ : `node --version`
 - **npm** ou **pnpm** : `npm --version`
 - **Git** : `git --version`
-- **PostgreSQL** client (optionnel) : `psql --version`
+- **Variables d'environnement** : Fichier `.env.local` à la racine du projet
 
-### Setup Initial (30 minutes)
+### Setup Initial (15 minutes)
 
-#### 1. Clone & Install
+#### 1. Vérifier l'accès au projet existant
 
 ```bash
-# Clone le repo
-git clone <repo-url>
-cd market-intelligence/ModuleRFP
+# Vous devez déjà être dans le projet market-intelligence
+cd market-intelligence
 
-# Créer le projet Next.js
-npx create-next-app@latest rfp-assistant \
-  --typescript \
-  --tailwind \
-  --app \
-  --eslint \
-  --src-dir \
-  --import-alias "@/*"
+# Vérifier que le projet Next.js existe
+ls -la  # Devrait voir: package.json, app/, components/, etc.
 
-cd rfp-assistant
-
-# Installer les dépendances
+# Installer les dépendances (si pas déjà fait)
 npm install
-
-# Dev dependencies
-npm install --save-dev \
-  prettier \
-  eslint-config-prettier \
-  @types/node
 ```
 
-#### 2. Configuration des variables d'environnement
+#### 2. Vérifier les variables d'environnement
+
+**Les variables d'environnement sont déjà configurées** dans `.env.local` à la racine du projet.
 
 ```bash
-# Copier le template
-cp .env.example .env.local
-
-# Éditer .env.local
-nano .env.local
+# Vérifier que le fichier existe
+cat .env.local | grep -E "(DATABASE_URL|ANTHROPIC|OPENAI|PINECONE)"
 ```
 
-**.env.local :**
+**Variables utilisées par le Module RFP** (déjà configurées dans la plateforme):
 ```bash
-# Database (Neon)
-DATABASE_URL="postgresql://user:pass@ep-xyz.neon.tech/rfp_db?sslmode=require"
+# Database (Neon) - Base partagée de la plateforme
+DATABASE_URL="postgresql://..."  # ✅ Déjà configuré
 
-# AI APIs
-ANTHROPIC_API_KEY="sk-ant-..."
-OPENAI_API_KEY="sk-..."
+# AI APIs - Clés partagées de la plateforme
+ANTHROPIC_API_KEY="sk-ant-..."   # ✅ Déjà configuré
+OPENAI_API_KEY="sk-..."          # ✅ Déjà configuré
 
-# Vector DB
-PINECONE_API_KEY="..."
-PINECONE_ENVIRONMENT="us-east-1"
-PINECONE_INDEX_NAME="rfp-library"
+# Vector DB - Index partagé "market-intelligence"
+PINECONE_API_KEY="..."           # ✅ Déjà configuré
+PINECONE_INDEX="market-intelligence"  # ✅ Index existant
 
-# Auth (Clerk)
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_..."
-CLERK_SECRET_KEY="sk_test_..."
+# Auth - Système d'auth de la plateforme
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="..."  # ✅ Déjà configuré
+CLERK_SECRET_KEY="..."           # ✅ Déjà configuré
 
-# File Storage (Vercel Blob)
-BLOB_READ_WRITE_TOKEN="..."
+# File Storage - Stockage partagé
+BLOB_READ_WRITE_TOKEN="..."      # ✅ Déjà configuré
 
-# Background Jobs (Inngest)
-INNGEST_EVENT_KEY="..."
-INNGEST_SIGNING_KEY="..."
-
-# App
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+# Background Jobs - Inngest de la plateforme
+INNGEST_EVENT_KEY="..."          # ✅ Déjà configuré
 ```
 
-#### 3. Setup Database (Neon)
+**Aucune nouvelle variable à ajouter!** Tout est déjà configuré.
 
-**Option A : Via console Neon (recommandé)**
-1. Aller sur https://console.neon.tech
-2. Créer un nouveau projet : "rfp-assistant"
-3. Copier le DATABASE_URL
-4. Exécuter le schéma :
+#### 3. Setup Database (Neon) - Ajouter les tables RFP
+
+**La base de données Neon existe déjà** pour la plateforme. Vous devez simplement ajouter les tables du Module RFP.
 
 ```bash
-# Télécharger le schéma
-curl -o schema.sql https://raw.githubusercontent.com/.../schema.sql
+# Naviguer vers le dossier ModuleRFP
+cd ModuleRFP
 
-# Appliquer le schéma
-psql $DATABASE_URL < schema.sql
+# Appliquer le schéma SQL au database existant
+psql $DATABASE_URL -f schema.sql
 ```
 
-**Option B : Via Drizzle ORM**
+**Vérification:**
 ```bash
-npm install drizzle-orm @neondatabase/serverless
-npm install --save-dev drizzle-kit
+# Vérifier que les tables ont été créées
+psql $DATABASE_URL -c "\dt rfp*"
 
-# Générer les migrations
-npx drizzle-kit generate:pg
-
-# Appliquer les migrations
-npx drizzle-kit push:pg
+# Devrait afficher: rfps, rfp_questions, rfp_responses, response_library, etc.
 ```
 
-#### 4. Setup Pinecone
+**Note:** Les tables RFP s'ajoutent au schéma existant de la plateforme sans conflit. Le schéma RFP est conçu pour coexister avec les autres modules.
 
-```bash
-# Installer le client
-npm install @pinecone-database/pinecone
+#### 4. Vérifier Pinecone
+
+**L'index Pinecone existe déjà** pour la plateforme (index: `market-intelligence`).
+
+Le Module RFP **réutilise cet index partagé** avec un namespace dédié:
+
+```typescript
+// lib/pinecone.ts
+import { Pinecone } from '@pinecone-database/pinecone';
+
+const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+const index = pinecone.index('market-intelligence');
+
+// Utiliser un namespace pour le module RFP
+const rfpNamespace = index.namespace('rfp-library');
 ```
 
-Créer l'index via console Pinecone :
-1. https://app.pinecone.io
-2. Create Index
-3. Name: `rfp-library`
-4. Dimensions: `1536`
-5. Metric: `cosine`
-6. Cloud: `AWS` / Region: `us-east-1`
+**Aucune configuration Pinecone supplémentaire nécessaire!**
 
 #### 5. Vérifier l'installation
 

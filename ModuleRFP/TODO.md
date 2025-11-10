@@ -32,53 +32,52 @@ Ce fichier contient toutes les tâches de développement du Module RFP Response 
 
 ---
 
-## 🎯 Sprint 0 : Setup & Infrastructure (Semaine 1)
+## 🎯 Sprint 0 : Intégration Module dans Plateforme Existante (Semaine 1)
+
+### ⚠️ Important: Réutilisation de l'Infrastructure Existante
+
+**Ce sprint ne crée PAS de nouvelle infrastructure.** Le Module RFP s'intègre dans la plateforme MarketIQ AI existante qui dispose déjà de :
+- ✅ Projet Next.js 14 avec App Router
+- ✅ Base de données Neon PostgreSQL
+- ✅ Pinecone index `market-intelligence`
+- ✅ APIs Anthropic & OpenAI configurées
+- ✅ Authentication (Clerk)
+- ✅ File storage (Vercel Blob)
+
+**Focus du Sprint 0:** Connecter le module RFP à l'infrastructure existante.
+
+---
 
 ### Infrastructure & Setup
 
-#### TASK-001 : Setup projet Next.js
+#### TASK-001 : Vérifier l'accès au projet existant
 - **Priorité:** 🔴 P0
-- **Story Points:** 2 SP
+- **Story Points:** 1 SP
 - **Statut:** ⬜ Todo
 - **Assigné à:** [À assigner]
 - **Dépendances:** Aucune
 
 **Description:**
-Initialiser le projet Next.js 14 avec App Router et TypeScript.
+S'assurer d'avoir accès au repository `market-intelligence` et à toute l'infrastructure.
 
 **Critères d'acceptation:**
-- [ ] Projet Next.js 14+ créé
-- [ ] TypeScript configuré (strict mode)
-- [ ] App Router utilisé
-- [ ] ESLint + Prettier configurés
-- [ ] Git repository initialisé
-- [ ] .env.example créé avec toutes les variables
-
-**Fichiers à créer:**
-```
-/app
-  /layout.tsx
-  /page.tsx
-/lib
-  /config.ts
-  /types.ts
-.env.example
-.eslintrc.json
-.prettierrc
-tsconfig.json
-next.config.js
-```
+- [ ] Accès au repository GitHub `market-intelligence`
+- [ ] Variables d'environnement `.env.local` disponibles
+- [ ] Projet Next.js démarre localement (`npm run dev`)
+- [ ] Accès aux consoles: Neon, Pinecone, Anthropic, OpenAI, Vercel
+- [ ] Connexion à la base de données testée
 
 **Commandes:**
 ```bash
-npx create-next-app@latest rfp-assistant --typescript --tailwind --app --eslint
-cd rfp-assistant
-npm install --save-dev prettier eslint-config-prettier
+cd market-intelligence
+npm install
+npm run dev
+# Devrait démarrer sur http://localhost:3000
 ```
 
 ---
 
-#### TASK-002 : Setup Neon PostgreSQL
+#### TASK-002 : Ajouter les tables RFP à Neon (base existante)
 - **Priorité:** 🔴 P0
 - **Story Points:** 2 SP
 - **Statut:** ⬜ Todo
@@ -86,114 +85,100 @@ npm install --save-dev prettier eslint-config-prettier
 - **Dépendances:** TASK-001
 
 **Description:**
-Configurer la base de données Neon PostgreSQL et l'ORM.
+Ajouter les tables du Module RFP à la base de données Neon **existante** de la plateforme.
 
 **Critères d'acceptation:**
-- [ ] Compte Neon créé
-- [ ] Database créée (dev + staging)
-- [ ] Drizzle ORM installé et configuré
-- [ ] Connexion testée
-- [ ] Schéma initial appliqué
+- [ ] Schéma SQL `ModuleRFP/schema.sql` appliqué à la base existante
+- [ ] Tables créées: rfps, rfp_questions, rfp_responses, response_library, etc.
+- [ ] Vues créées: v_rfp_completion, v_library_performance, v_user_rfp_workload
+- [ ] Triggers et fonctions créés
+- [ ] Connexion testée via Drizzle ORM (déjà installé)
 
 **Commandes:**
 ```bash
-npm install drizzle-orm @neondatabase/serverless
-npm install --save-dev drizzle-kit
-# Appliquer le schéma
-psql $DATABASE_URL < schema.sql
-# Ou avec Drizzle
-npx drizzle-kit push:pg
+# Appliquer le schéma RFP à la base existante
+cd ModuleRFP
+psql $DATABASE_URL -f schema.sql
+
+# Vérifier que les tables sont créées
+psql $DATABASE_URL -c "\dt rfp*"
 ```
 
-**Variables d'environnement:**
-```
-DATABASE_URL=postgresql://...@ep-xyz.neon.tech/rfp_db
-```
+**Note:** Les tables RFP coexistent avec les tables existantes des autres modules (competitors, battlecards, etc.).
 
 ---
 
-#### TASK-003 : Setup Pinecone Vector DB
+#### TASK-003 : Configurer namespace Pinecone pour RFP
 - **Priorité:** 🔴 P0
-- **Story Points:** 2 SP
+- **Story Points:** 1 SP
 - **Statut:** ⬜ Todo
 - **Assigné à:** [À assigner]
 - **Dépendances:** TASK-001
 
 **Description:**
-Configurer Pinecone pour la recherche vectorielle (RAG).
+Utiliser l'index Pinecone **existant** `market-intelligence` avec un namespace dédié au module RFP.
 
 **Critères d'acceptation:**
-- [ ] Compte Pinecone créé
-- [ ] Index créé (dimensions: 1536 pour OpenAI embeddings)
-- [ ] Client Pinecone configuré
-- [ ] Test d'insertion/recherche réussi
+- [ ] Vérifier accès à l'index `market-intelligence` existant
+- [ ] Créer helper pour namespace `rfp-library`
+- [ ] Test d'insertion/recherche réussi dans le namespace
+- [ ] Documentation du partage d'index entre modules
 
-**Commandes:**
-```bash
-npm install @pinecone-database/pinecone
-```
-
-**Configuration index:**
+**Configuration (réutilise l'index existant):**
 ```typescript
-// Create index with 1536 dimensions (OpenAI text-embedding-3-large)
-{
-  name: 'rfp-library',
-  dimension: 1536,
-  metric: 'cosine',
-  spec: {
-    serverless: {
-      cloud: 'aws',
-      region: 'us-east-1'
-    }
-  }
+// lib/rfp/pinecone.ts
+import { Pinecone } from '@pinecone-database/pinecone';
+
+// Réutiliser le client Pinecone existant de la plateforme
+const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+
+// Utiliser l'index partagé avec namespace dédié
+const index = pinecone.index('market-intelligence');
+export const rfpNamespace = index.namespace('rfp-library');
+```
+
+**Note:** Pas besoin de créer un nouvel index Pinecone. L'index `market-intelligence` est partagé entre tous les modules via des namespaces.
+
+---
+
+#### TASK-004 : Créer les helpers AI pour Module RFP
+- **Priorité:** 🔴 P0
+- **Story Points:** 2 SP
+- **Statut:** ⬜ Todo
+- **Assigné à:** [À assigner]
+- **Dépendances:** TASK-001
+
+**Description:**
+Créer des helpers spécifiques au Module RFP qui **réutilisent les clients AI existants** de la plateforme.
+
+**Critères d'acceptation:**
+- [ ] Helper `lib/rfp/ai/claude.ts` créé (wrapper des fonctions RFP)
+- [ ] Helper `lib/rfp/ai/embeddings.ts` créé (génération embeddings)
+- [ ] Test d'appel Claude Sonnet 4.5 pour génération de réponse
+- [ ] Test d'appel OpenAI embeddings
+
+**Configuration (réutilise les clients existants):**
+```typescript
+// lib/rfp/ai/claude.ts
+import { anthropic } from '@/lib/ai/anthropic'; // Client existant de la plateforme
+
+export async function generateRFPResponse(question: string, context: string) {
+  const message = await anthropic.messages.create({
+    model: 'claude-sonnet-4-5-20250929',
+    max_tokens: 2000,
+    messages: [
+      {
+        role: 'user',
+        content: `You are an RFP response expert...\n\nQuestion: ${question}\n\nContext: ${context}`
+      }
+    ]
+  });
+
+  return message.content[0].text;
 }
 ```
 
----
-
-#### TASK-004 : Setup AI APIs (Claude + OpenAI)
-- **Priorité:** 🔴 P0
-- **Story Points:** 2 SP
-- **Statut:** ⬜ Todo
-- **Assigné à:** [À assigner]
-- **Dépendances:** TASK-001
-
-**Description:**
-Configurer les clients API pour Claude Sonnet 4.5 et GPT-4o.
-
-**Critères d'acceptation:**
-- [ ] Compte Anthropic créé + API key
-- [ ] Compte OpenAI créé + API key
-- [ ] Clients configurés avec rate limiting
-- [ ] Test d'appel réussi pour chaque API
-
-**Commandes:**
-```bash
-npm install @anthropic-ai/sdk openai
-```
-
-**Configuration:**
-```typescript
-// lib/ai/claude.ts
-import Anthropic from '@anthropic-ai/sdk';
-
-export const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
-// lib/ai/openai.ts
-import OpenAI from 'openai';
-
-export const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-```
-
-**Variables d'environnement:**
-```
-ANTHROPIC_API_KEY=sk-ant-...
-OPENAI_API_KEY=sk-...
-```
+**Note:** Les clés API Anthropic et OpenAI sont déjà configurées dans `.env.local`. Pas besoin de créer de nouveaux comptes.
 
 ---
 

@@ -5,6 +5,23 @@
 
 ---
 
+## ⚠️ Important: Module Intégré à la Plateforme MarketIQ AI
+
+Ce document décrit l'architecture du **Module 11: RFP Response Assistant**, qui fait partie de la **plateforme MarketIQ AI** existante.
+
+**Infrastructure partagée avec les autres modules:**
+- ✅ Base de données Neon PostgreSQL (base commune à tous les modules)
+- ✅ Pinecone index `market-intelligence` (namespace: `rfp-library` pour ce module)
+- ✅ APIs Claude Sonnet 4.5 et OpenAI (clés partagées)
+- ✅ Next.js 14 App Router (projet commun `market-intelligence`)
+- ✅ Authentication Clerk (système d'auth de la plateforme)
+- ✅ File storage Vercel Blob (stockage partagé)
+- ✅ Inngest (background jobs de la plateforme)
+
+**Ce module N'EST PAS un projet standalone.** Il s'intègre dans l'architecture existante.
+
+---
+
 ## Table des Matières
 
 1. [Vue d'ensemble](#1-vue-densemble)

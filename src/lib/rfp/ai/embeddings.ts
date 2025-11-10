@@ -63,7 +63,8 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
 export async function indexDocument(params: {
   documentId: string;
   text: string;
-  metadata: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'createdAt'>;
+  documentType: RFPVectorMetadata['documentType'];
+  metadata?: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'createdAt' | 'documentType'>;
 }): Promise<void> {
   const namespace = getRFPNamespace();
 
@@ -72,10 +73,11 @@ export async function indexDocument(params: {
 
   // Prepare metadata
   const metadata: RFPVectorMetadata = {
-    ...params.metadata,
     documentId: params.documentId,
+    documentType: params.documentType,
     text: params.text,
     createdAt: new Date().toISOString(),
+    ...params.metadata,
   };
 
   // Upsert to Pinecone
@@ -95,7 +97,8 @@ export async function indexDocumentChunks(
   chunks: Array<{
     id: string;
     text: string;
-    metadata: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'createdAt'>;
+    documentType: RFPVectorMetadata['documentType'];
+    metadata?: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'createdAt' | 'documentType'>;
   }>
 ): Promise<void> {
   const namespace = getRFPNamespace();
@@ -110,6 +113,7 @@ export async function indexDocumentChunks(
     values: embeddings[idx],
     metadata: {
       documentId: chunk.id,
+      documentType: chunk.documentType,
       text: chunk.text,
       createdAt: new Date().toISOString(),
       ...chunk.metadata,

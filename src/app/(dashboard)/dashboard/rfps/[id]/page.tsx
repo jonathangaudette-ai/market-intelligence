@@ -8,15 +8,17 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function RFPDetailPage({ params }: PageProps) {
+export default async function RFPDetailPage({ params }: PageProps) {
+  const { id } = await params;
+
   return (
     <div className="container mx-auto py-8">
-      <RFPDetailView rfpId={params.id} />
+      <RFPDetailView rfpId={id} />
     </div>
   );
 }

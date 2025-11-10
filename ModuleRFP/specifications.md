@@ -331,7 +331,7 @@ Critères d'acceptation :
 
 **Étape 2 : Generation (génération de réponse)**
 ```
-1. Construire prompt pour Claude 3.5 Sonnet :
+1. Construire prompt pour Claude Sonnet 4.5 :
    - Question
    - Top-K documents pertinents (context)
    - Guidelines (tone, length, formatting)
@@ -363,7 +363,7 @@ Critères d'acceptation :
 - Alternative responses (2-3 variations)
 
 **Technologies :**
-- **Claude 3.5 Sonnet** (génération de réponse)
+- **Claude Sonnet 4.5** (génération de réponse)
 - **Pinecone** (vector search)
 - **OpenAI embeddings** (text-embedding-3-large)
 
@@ -675,7 +675,7 @@ Competitive Intel enrichment:
 
 ### A. Exemples de prompts pour génération
 
-**Prompt pour génération de réponse (Claude 3.5 Sonnet) :**
+**Prompt pour génération de réponse (Claude Sonnet 4.5) :**
 
 ```
 You are an expert RFP response writer. Generate a professional, accurate response to the following RFP question.

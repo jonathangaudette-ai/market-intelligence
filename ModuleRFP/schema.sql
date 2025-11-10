@@ -3,11 +3,38 @@
 -- Database: Neon PostgreSQL
 -- Version: 1.0
 -- Date: 2025-11-10
+--
+-- NOTES:
+-- - Ce schéma utilise Neon PostgreSQL pour les données structurées
+-- - Les embeddings vectoriels sont stockés dans Pinecone (voir architecture.md)
+-- - La table 'users' est définie dans le schéma principal de la plateforme CI
+-- - Les vecteurs sont référencés par pinecone_vector_id, pas stockés localement
 -- ============================================================================
 
 -- Extensions nécessaires
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pg_trgm"; -- Pour recherche textuelle performante
+
+-- ============================================================================
+-- DÉPENDANCES EXTERNES
+--
+-- Ce schéma fait référence à des tables définies dans le schéma principal:
+-- - users (id, name, email, etc.) - Utilisateurs de la plateforme
+--
+-- Les colonnes suivantes référencent users.id:
+-- - rfps.owner_id
+-- - rfps.assigned_users[] (array)
+-- - rfp_questions.assigned_to
+-- - rfp_responses.created_by, reviewed_by
+-- - response_library.created_by, approved_by
+-- - rfp_comments.created_by
+-- - rfp_exports.exported_by
+-- - rfp_analytics_events.user_id
+--
+-- Note: Les contraintes FOREIGN KEY vers users sont omises pour éviter
+-- les dépendances circulaires. L'intégrité doit être maintenue au niveau
+-- de l'application.
+-- ============================================================================
 
 -- ============================================================================
 -- TABLE: rfps
@@ -212,7 +239,7 @@ CREATE TABLE response_library (
   -- Question pattern (pour matching)
   question_pattern TEXT NOT NULL, -- Question type générique
   question_keywords TEXT[], -- Keywords pour recherche
-  question_embedding VECTOR(1536), -- Embedding pour semantic search (pgvector extension)
+  pinecone_vector_id VARCHAR(255), -- ID du vecteur dans Pinecone pour semantic search
 
   -- Réponse
   response_text TEXT NOT NULL,
@@ -260,10 +287,11 @@ CREATE INDEX idx_response_library_golden ON response_library(is_golden) WHERE is
 CREATE INDEX idx_response_library_keywords ON response_library USING gin(question_keywords);
 CREATE INDEX idx_response_library_tags ON response_library USING gin(tags);
 CREATE INDEX idx_response_library_text_search ON response_library USING gin(to_tsvector('english', question_pattern));
+CREATE INDEX idx_response_library_pinecone_id ON response_library(pinecone_vector_id);
 
--- Note: Pour embeddings, nécessite extension pgvector
--- CREATE EXTENSION IF NOT EXISTS vector;
--- CREATE INDEX idx_response_library_embedding ON response_library USING ivfflat (question_embedding vector_cosine_ops);
+-- Note: Les embeddings vectoriels sont stockés dans Pinecone, pas en PostgreSQL
+-- Le champ pinecone_vector_id référence le vecteur correspondant dans Pinecone
+-- Pour la recherche sémantique, utiliser l'API Pinecone avec le vector ID
 
 -- ============================================================================
 -- TABLE: response_usage_tracking

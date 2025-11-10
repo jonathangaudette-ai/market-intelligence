@@ -8,14 +8,51 @@
 
 ## Table des Matières
 
-1. [Authentification](#authentification)
-2. [RFPs](#rfps)
-3. [Questions](#questions)
-4. [Responses](#responses)
-5. [Library](#library)
-6. [Analytics](#analytics)
-7. [Export](#export)
-8. [Comments](#comments)
+1. [Technical Stack](#technical-stack)
+2. [Authentification](#authentification)
+3. [RFPs](#rfps)
+4. [Questions](#questions)
+5. [Responses](#responses)
+6. [Library](#library)
+7. [Analytics](#analytics)
+8. [Export](#export)
+9. [Comments](#comments)
+
+---
+
+## Technical Stack
+
+### AI & Machine Learning
+
+**LLM pour génération de réponses:**
+- **Primary**: Claude Sonnet 4.5 (Anthropic) - `claude-sonnet-4-5-20250929`
+- **Secondary**: GPT-4o (OpenAI) - pour extraction structurée JSON
+
+**Embeddings:**
+- **Model**: OpenAI `text-embedding-3-large` (1536 dimensions)
+- **Vector Database**: Pinecone (semantic search pour bibliothèque de réponses)
+
+**Background Jobs:**
+- **Infrastructure**: Inngest (parsing de RFPs, génération de réponses)
+- **Polling**: Utiliser les endpoints `/parse-status` pour vérifier le statut
+
+**File Storage:**
+- **Options**: Vercel Blob ou Cloudflare R2
+- **Types supportés**: PDF, DOCX, XLSX (max 50MB)
+
+**Database:**
+- **Primary**: Neon PostgreSQL (données structurées)
+- **Vector DB**: Pinecone (embeddings pour RAG)
+
+### RAG Pipeline (Generate Response)
+
+Quand vous appelez `/questions/:id/generate-response`, voici le processus :
+
+1. **Vectorisation de la question** → OpenAI text-embedding-3-large
+2. **Recherche sémantique** → Pinecone query (top-K documents pertinents)
+3. **Construction du prompt** → Question + Context + Guidelines
+4. **Génération** → Claude Sonnet 4.5 (avec RAG context)
+5. **Post-processing** → Calcul de confidence_score, char_count, etc.
 
 ---
 
@@ -158,6 +195,8 @@ GET /api/v1/rfp/rfps/:id
 ### Create RFP
 
 Crée un nouveau RFP et upload le fichier.
+
+> **Note:** Le fichier est uploadé vers Vercel Blob ou Cloudflare R2. Le parsing est effectué de manière asynchrone via Inngest. Utilisez l'endpoint `/rfps/:id/parse-status` pour suivre la progression.
 
 ```http
 POST /api/v1/rfp/rfps
@@ -435,7 +474,9 @@ Content-Type: application/json
 
 ### Generate Response
 
-Génère automatiquement une réponse via IA.
+Génère automatiquement une réponse via IA (RAG pipeline avec Claude Sonnet 4.5).
+
+> **Note:** Ce endpoint utilise le RAG pipeline décrit dans la section [Technical Stack](#technical-stack). Le processus est asynchrone et peut prendre 5-15 secondes selon la complexité.
 
 ```http
 POST /api/v1/rfp/questions/:id/generate-response
@@ -545,7 +586,9 @@ Content-Type: application/json
 
 ### Search Library
 
-Recherche sémantique dans la bibliothèque de réponses.
+Recherche sémantique dans la bibliothèque de réponses (Pinecone vector search).
+
+> **Note:** Utilise OpenAI text-embedding-3-large pour vectoriser votre query, puis recherche dans Pinecone pour trouver les réponses les plus similaires. Le `similarity_score` est le cosine similarity entre les vecteurs.
 
 ```http
 GET /api/v1/rfp/library/search

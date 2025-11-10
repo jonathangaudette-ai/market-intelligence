@@ -94,7 +94,7 @@ Vector Database: Pinecone
 
 ```
 LLMs:
-├── Primary: Claude 3.5 Sonnet (Anthropic)
+├── Primary: Claude Sonnet 4.5 (Anthropic)
 │   └── Use: Response generation, analysis
 ├── Secondary: GPT-4o (OpenAI)
 │   └── Use: Structured extraction (JSON mode)
@@ -208,7 +208,7 @@ POST /api/rfps/:id/parse
 
 **Technologies :**
 - Pinecone (semantic search)
-- Claude 3.5 Sonnet (generation)
+- Claude Sonnet 4.5 (generation)
 - OpenAI embeddings
 
 **Flow :**
@@ -229,7 +229,7 @@ POST /api/rfps/:id/parse
       - Retrieved context
       - Competitive positioning (from battlecards)
       - Guidelines (tone, length)
-   b) Call Claude 3.5 Sonnet API
+   b) Call Claude Sonnet 4.5 API
    c) Parse response
 
 4. POST-PROCESSING:

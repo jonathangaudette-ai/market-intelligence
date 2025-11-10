@@ -72,30 +72,48 @@ Un assistant IA qui :
 
 - **Database:** Neon PostgreSQL (RFPs, questions, réponses)
 - **Vector DB:** Pinecone (RAG pour génération de réponses)
-- **LLM:** Claude 3.5 Sonnet (analyse + génération)
+- **LLM:** Claude Sonnet 4.5 (analyse + génération)
 - **Parser:** GPT-4o (extraction structurée de questions)
-- **Frontend:** Next.js + React
-- **Backend:** Node.js / Python
+- **Frontend:** Next.js 14+ + React 18+
+- **Backend:** Node.js 20+ (TypeScript) ou Python 3.11+
 
 ## Structure du dossier
 
 ```
 ModuleRFP/
-├── README.md                 # Ce fichier
-├── specifications.md         # Spécifications détaillées
+├── README.md                 # Ce fichier - Vue d'ensemble
+├── specifications.md         # Spécifications détaillées (User Stories, Workflows)
 ├── architecture.md          # Architecture technique détaillée
-├── schema.sql               # Schéma de base de données
-├── api-endpoints.md         # Documentation des APIs
-└── exemples/                # Exemples de RFPs et réponses
+├── schema.sql               # Schéma de base de données PostgreSQL
+├── api-endpoints.md         # Documentation complète des APIs REST
+├── TODO.md                  # Liste des tâches de développement
+└── DEVELOPMENT.md           # Guide de développement
 ```
+
+## Prérequis techniques
+
+### Développement local
+- Node.js 20+ ou Python 3.11+
+- PostgreSQL 15+ (ou compte Neon)
+- Git
+- VS Code ou IDE préféré
+
+### Comptes requis
+- **Neon** (https://neon.tech) - Database PostgreSQL serverless
+- **Pinecone** (https://pinecone.io) - Vector database
+- **Anthropic** (https://anthropic.com) - Claude API
+- **OpenAI** (https://openai.com) - GPT-4o API
+- **Vercel** (https://vercel.com) - Deployment (optionnel pour dev local)
 
 ## Démarrage rapide
 
-### Phase 1 - MVP (P0)
-1. ✅ Upload et parsing de RFPs (PDF/DOCX)
-2. ✅ Génération automatique de réponses
-3. ✅ Interface de review et édition
-4. ✅ Export vers Word/PDF
+### Phase 1 - MVP (P0) - En cours
+1. ⬜ Upload et parsing de RFPs (PDF/DOCX)
+2. ⬜ Génération automatique de réponses (RAG)
+3. ⬜ Interface de review et édition
+4. ⬜ Export vers Word/PDF
+
+**Voir [TODO.md](./TODO.md) pour la liste détaillée des tâches**
 
 ### Phase 2 (P1)
 - Bibliothèque de réponses réutilisables

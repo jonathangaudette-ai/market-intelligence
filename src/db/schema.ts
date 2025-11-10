@@ -241,3 +241,185 @@ export const signalsRelations = relations(signals, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+// ============================================================================
+// RFP MODULE TABLES
+// ============================================================================
+
+// RFPs table
+export const rfps = pgTable("rfps", {
+  id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
+
+  // Basic information
+  title: varchar("title", { length: 500 }).notNull(),
+  clientName: varchar("client_name", { length: 255 }).notNull(),
+  clientIndustry: varchar("client_industry", { length: 100 }),
+
+  // Original file
+  originalFilename: varchar("original_filename", { length: 255 }),
+  originalFileUrl: text("original_file_url"),
+  fileSizeBytes: integer("file_size_bytes"),
+  fileType: varchar("file_type", { length: 50 }),
+
+  // Parsing status
+  parsingStatus: varchar("parsing_status", { length: 50 }).default("pending"), // pending, processing, completed, failed
+  parsingError: text("parsing_error"),
+  parsedAt: timestamp("parsed_at"),
+
+  // RFP metadata
+  submissionDeadline: timestamp("submission_deadline"),
+  clientContactName: varchar("client_contact_name", { length: 255 }),
+  clientContactEmail: varchar("client_contact_email", { length: 255 }),
+  estimatedDealValue: integer("estimated_deal_value"),
+
+  // Known competitors
+  knownCompetitors: jsonb("known_competitors"), // Array of competitor names
+
+  // Status
+  status: varchar("status", { length: 50 }).default("draft"), // draft, in_progress, in_review, approved, submitted, won, lost
+  completionPercentage: integer("completion_percentage").default(0), // 0-100
+
+  // Result
+  result: varchar("result", { length: 50 }), // won, lost, no_decision
+  resultCompetitor: varchar("result_competitor", { length: 255 }),
+  resultNotes: text("result_notes"),
+  resultRecordedAt: timestamp("result_recorded_at"),
+
+  // Ownership & Collaboration
+  ownerId: varchar("owner_id", { length: 255 })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  assignedUsers: jsonb("assigned_users"), // Array of user IDs
+
+  // Company association
+  companyId: varchar("company_id", { length: 255 })
+    .notNull()
+    .references(() => companies.id, { onDelete: "cascade" }),
+
+  // Audit
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  submittedAt: timestamp("submitted_at"),
+
+  // Metadata
+  metadata: jsonb("metadata"),
+});
+
+// RFP Questions table
+export const rfpQuestions = pgTable("rfp_questions", {
+  id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
+  rfpId: varchar("rfp_id", { length: 255 })
+    .notNull()
+    .references(() => rfps.id, { onDelete: "cascade" }),
+
+  // Question details
+  sectionTitle: varchar("section_title", { length: 500 }),
+  questionNumber: varchar("question_number", { length: 50 }),
+  questionText: text("question_text").notNull(),
+  requiresAttachment: boolean("requires_attachment").default(false),
+  wordLimit: integer("word_limit"),
+
+  // Categorization
+  category: varchar("category", { length: 100 }), // technical, pricing, company_info, etc.
+  tags: jsonb("tags"), // Array of tags
+  difficulty: varchar("difficulty", { length: 20 }), // easy, medium, hard
+  estimatedMinutes: integer("estimated_minutes"),
+
+  // Status
+  status: varchar("status", { length: 50 }).default("pending"), // pending, in_progress, completed, reviewed
+  assignedTo: varchar("assigned_to", { length: 255 }).references(() => users.id, {
+    onDelete: "set null",
+  }),
+
+  // Response
+  hasResponse: boolean("has_response").default(false),
+  responseQuality: integer("response_quality"), // 1-5 rating
+
+  // Audit
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+
+  metadata: jsonb("metadata"),
+});
+
+// RFP Responses table
+export const rfpResponses = pgTable("rfp_responses", {
+  id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
+  questionId: varchar("question_id", { length: 255 })
+    .notNull()
+    .references(() => rfpQuestions.id, { onDelete: "cascade" }),
+
+  // Response content
+  responseText: text("response_text").notNull(),
+  responseHtml: text("response_html"), // Formatted version
+  wordCount: integer("word_count"),
+
+  // Generation metadata
+  wasAiGenerated: boolean("was_ai_generated").default(false),
+  aiModel: varchar("ai_model", { length: 100 }),
+  sourcesUsed: jsonb("sources_used"), // Array of source references
+  confidenceScore: integer("confidence_score"), // 0-100
+
+  // Editing history
+  version: integer("version").default(1),
+  previousVersionId: varchar("previous_version_id", { length: 255 }),
+
+  // Review status
+  status: varchar("status", { length: 50 }).default("draft"), // draft, in_review, approved
+  reviewedBy: varchar("reviewed_by", { length: 255 }).references(() => users.id, {
+    onDelete: "set null",
+  }),
+  reviewedAt: timestamp("reviewed_at"),
+  reviewNotes: text("review_notes"),
+
+  // Authorship
+  createdBy: varchar("created_by", { length: 255 })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+
+  // Audit
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+
+  metadata: jsonb("metadata"),
+});
+
+// RFP Relations
+export const rfpsRelations = relations(rfps, ({ one, many }) => ({
+  company: one(companies, {
+    fields: [rfps.companyId],
+    references: [companies.id],
+  }),
+  owner: one(users, {
+    fields: [rfps.ownerId],
+    references: [users.id],
+  }),
+  questions: many(rfpQuestions),
+}));
+
+export const rfpQuestionsRelations = relations(rfpQuestions, ({ one, many }) => ({
+  rfp: one(rfps, {
+    fields: [rfpQuestions.rfpId],
+    references: [rfps.id],
+  }),
+  assignedUser: one(users, {
+    fields: [rfpQuestions.assignedTo],
+    references: [users.id],
+  }),
+  responses: many(rfpResponses),
+}));
+
+export const rfpResponsesRelations = relations(rfpResponses, ({ one }) => ({
+  question: one(rfpQuestions, {
+    fields: [rfpResponses.questionId],
+    references: [rfpQuestions.id],
+  }),
+  createdByUser: one(users, {
+    fields: [rfpResponses.createdBy],
+    references: [users.id],
+  }),
+  reviewedByUser: one(users, {
+    fields: [rfpResponses.reviewedBy],
+    references: [users.id],
+  }),
+}));

@@ -124,15 +124,6 @@ export default function LoginPage() {
                 {loading ? "Connexion..." : "Se connecter"}
               </Button>
             </form>
-
-            {/* Demo Credentials */}
-            <div className="mt-6 p-4 bg-teal-50 border border-teal-200 rounded-lg">
-              <p className="text-sm font-semibold text-teal-900 mb-2">Identifiants de démo:</p>
-              <div className="text-sm text-teal-700 space-y-1">
-                <p><span className="font-medium">Email:</span> admin@example.com</p>
-                <p><span className="font-medium">Mot de passe:</span> password123</p>
-              </div>
-            </div>
           </CardContent>
         </Card>
 

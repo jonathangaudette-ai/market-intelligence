@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,12 +18,79 @@ import {
   Trash2,
   Check,
   X,
+  Zap,
+  Clock,
+  DollarSign,
+  Star,
+  Loader2,
 } from "lucide-react";
+import { AI_MODELS, AI_MODEL_METADATA, type AIModelId } from "@/types/company";
 
 type Tab = "general" | "team" | "integrations" | "notifications" | "security";
 
 export default function SettingsPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+
   const [activeTab, setActiveTab] = useState<Tab>("general");
+
+  // AI Model settings state
+  const [aiModel, setAiModel] = useState<AIModelId>(AI_MODELS.SONNET_4_5);
+  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsError, setSettingsError] = useState<string | null>(null);
+  const [settingsSuccess, setSettingsSuccess] = useState(false);
+
+  // Load current settings
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        setIsLoadingSettings(true);
+        const response = await fetch(`/api/companies/${slug}/settings`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.settings?.aiModel) {
+            setAiModel(data.settings.aiModel);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+      } finally {
+        setIsLoadingSettings(false);
+      }
+    }
+
+    if (slug) {
+      loadSettings();
+    }
+  }, [slug]);
+
+  // Save AI model settings
+  const handleSaveAIModel = async () => {
+    try {
+      setIsSavingSettings(true);
+      setSettingsError(null);
+      setSettingsSuccess(false);
+
+      const response = await fetch(`/api/companies/${slug}/settings`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ aiModel }),
+      });
+
+      if (response.ok) {
+        setSettingsSuccess(true);
+        setTimeout(() => setSettingsSuccess(false), 3000);
+      } else {
+        const error = await response.json();
+        setSettingsError(error.error || 'Échec de la sauvegarde');
+      }
+    } catch (error) {
+      setSettingsError('Échec de la sauvegarde des paramètres');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
 
   const tabs = [
     { id: "general" as Tab, label: "Général", icon: Building2 },
@@ -188,6 +256,122 @@ export default function SettingsPage() {
                       <Button variant="outline">Annuler</Button>
                       <Button>Enregistrer les modifications</Button>
                     </div>
+                  </CardContent>
+                </Card>
+
+                {/* AI Configuration Card */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Configuration IA</CardTitle>
+                    <CardDescription>
+                      Sélectionnez le modèle d'IA pour la génération de réponses RFP
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {isLoadingSettings ? (
+                      <div className="flex items-center justify-center py-8">
+                        <Loader2 className="h-6 w-6 animate-spin text-teal-600" />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="space-y-4">
+                          {Object.values(AI_MODELS).map((modelId) => {
+                            const metadata = AI_MODEL_METADATA[modelId];
+                            const isSelected = aiModel === modelId;
+
+                            return (
+                              <div
+                                key={modelId}
+                                onClick={() => setAiModel(modelId)}
+                                className={`
+                                  relative p-4 border-2 rounded-lg cursor-pointer transition-all
+                                  ${
+                                    isSelected
+                                      ? 'border-teal-500 bg-teal-50'
+                                      : 'border-gray-200 hover:border-teal-300'
+                                  }
+                                `}
+                              >
+                                {isSelected && (
+                                  <div className="absolute top-3 right-3">
+                                    <div className="bg-teal-600 text-white rounded-full p-1">
+                                      <Check className="h-3 w-3" />
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="space-y-3">
+                                  <div>
+                                    <h4 className="text-sm font-semibold text-gray-900">
+                                      {metadata.name}
+                                    </h4>
+                                    <p className="text-xs text-gray-600 mt-1">
+                                      {metadata.description}
+                                    </p>
+                                  </div>
+                                  <div className="flex gap-3">
+                                    <div className="flex items-center gap-1.5">
+                                      <Clock className="h-3.5 w-3.5 text-gray-500" />
+                                      <span className="text-xs text-gray-600">
+                                        {metadata.speed === 'fast' ? 'Rapide' : 'Équilibré'}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <DollarSign className="h-3.5 w-3.5 text-gray-500" />
+                                      <span className="text-xs text-gray-600">
+                                        Coût {metadata.cost === 'low' ? 'faible' : 'moyen'}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <Star className="h-3.5 w-3.5 text-gray-500" />
+                                      <span className="text-xs text-gray-600">
+                                        Qualité {metadata.quality === 'good' ? 'bonne' : 'excellente'}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Status messages */}
+                        {settingsError && (
+                          <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                            <p className="text-sm text-red-700">{settingsError}</p>
+                          </div>
+                        )}
+
+                        {settingsSuccess && (
+                          <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                            <p className="text-sm text-green-700 flex items-center gap-2">
+                              <Check className="h-4 w-4" />
+                              Paramètres enregistrés avec succès
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Save button */}
+                        <div className="flex justify-end pt-2">
+                          <Button
+                            onClick={handleSaveAIModel}
+                            disabled={isSavingSettings}
+                            className="gap-2"
+                          >
+                            {isSavingSettings ? (
+                              <>
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Enregistrement...
+                              </>
+                            ) : (
+                              <>
+                                <Zap className="h-4 w-4" />
+                                Enregistrer
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </CardContent>
                 </Card>
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { rfpQuestions, rfpResponses, rfps } from '@/db/schema';
+import { rfpQuestions, rfpResponses, rfps, companies } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
 import { getCurrentCompany } from '@/lib/auth/helpers';
@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { Pinecone } from '@pinecone-database/pinecone';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
+import { getAIModelOrDefault, type CompanySettings } from '@/types/company';
 
 const GenerateRequestSchema = z.object({
   mode: z.enum(['standard', 'with_context', 'manual']).default('with_context'),
@@ -79,21 +80,32 @@ export async function POST(
       return NextResponse.json({ error: 'Question not found' }, { status: 404 });
     }
 
-    // Verify user has access to the RFP
-    const [rfp] = await db
+    // Verify user has access to the RFP and get company settings
+    const rfpWithCompany = await db
       .select({
-        id: rfps.id,
-        companyId: rfps.companyId,
-        title: rfps.title,
-        clientName: rfps.clientName,
-        clientIndustry: rfps.clientIndustry,
-        extractedText: rfps.extractedText,
-        manualEnrichment: rfps.manualEnrichment,
-        linkedinEnrichment: rfps.linkedinEnrichment,
+        rfp: {
+          id: rfps.id,
+          companyId: rfps.companyId,
+          title: rfps.title,
+          clientName: rfps.clientName,
+          clientIndustry: rfps.clientIndustry,
+          extractedText: rfps.extractedText,
+          manualEnrichment: rfps.manualEnrichment,
+          linkedinEnrichment: rfps.linkedinEnrichment,
+        },
+        companySettings: companies.settings,
       })
       .from(rfps)
+      .innerJoin(companies, eq(companies.id, rfps.companyId))
       .where(eq(rfps.id, question.rfpId))
       .limit(1);
+
+    if (!rfpWithCompany || rfpWithCompany.length === 0) {
+      return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
+    }
+
+    const rfp = rfpWithCompany[0].rfp;
+    const companySettings = rfpWithCompany[0].companySettings as CompanySettings | null;
 
     if (!rfp) {
       return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
@@ -108,6 +120,10 @@ export async function POST(
     if (rfp.companyId !== companyContext.company.id) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
+
+    // Get AI model from company settings (defaults to Sonnet 4.5)
+    const aiModel = getAIModelOrDefault(companySettings);
+    console.log(`[Generate Response] Using AI model: ${aiModel}`);
 
     // Step 1: Generate embedding for the question
     console.log(`[Generate Response] Generating embedding for question: ${questionId}`);
@@ -188,14 +204,15 @@ RFP CONTEXT:
       contextSources.push('manual');
     }
 
-    // Step 4: Generate response using Claude Sonnet 4.5
-    console.log(`[Generate Response] Generating response with Claude Sonnet 4.5...`);
+    // Step 4: Generate response using Claude
+    console.log(`[Generate Response] Generating response with ${aiModel}...`);
     const responseText = await generateResponseWithClaude(
       question.questionText,
       contextText,
       question.wordLimit,
       question.category || 'general',
-      mode
+      mode,
+      aiModel
     );
 
     console.log(`[Generate Response] Response generated (${responseText.length} chars)`);
@@ -217,7 +234,7 @@ RFP CONTEXT:
         version: 1,
         createdBy: session.user.id,
         wasAiGenerated: true,
-        aiModel: 'claude-sonnet-4.5',
+        aiModel,
         status: 'draft',
       })
       .returning();
@@ -241,7 +258,7 @@ RFP CONTEXT:
         wordCount: savedResponse.wordCount,
         version: savedResponse.version,
         wasAiGenerated: true,
-        aiModel: 'claude-sonnet-4.5',
+        aiModel,
         createdAt: savedResponse.createdAt,
       },
       metadata: {
@@ -306,14 +323,15 @@ async function retrieveRelevantDocs(
 }
 
 /**
- * Generate response using Claude Sonnet 4.5
+ * Generate response using Claude
  */
 async function generateResponseWithClaude(
   questionText: string,
   contextText: string,
   wordLimit: number | null,
   category: string,
-  mode: 'standard' | 'with_context' | 'manual'
+  mode: 'standard' | 'with_context' | 'manual',
+  aiModel: string
 ): Promise<string> {
   const wordLimitText = wordLimit ? `Maximum ${wordLimit} words.` : 'No strict word limit, but be concise.';
 
@@ -353,7 +371,7 @@ ${questionText}
 Please generate a professional RFP response based on the context provided above.`;
 
   const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: aiModel,
     max_tokens: wordLimit ? wordLimit * 8 : 4000, // Approximate tokens from words
     temperature: 0.3, // Lower temperature for more factual, consistent responses
     system: systemPrompt,

@@ -155,7 +155,7 @@ export async function POST(
       const extractedQuestions = await extractQuestionsInBatches(
         parsedDoc.text,
         {
-          onProgress: async (current, total, questionsFound) => {
+          onProgress: async (current, total, questionsFound, newQuestions) => {
             // Update progress in database (including total on first call)
             await db
               .update(rfps)
@@ -167,9 +167,9 @@ export async function POST(
               })
               .where(eq(rfps.id, id));
 
-            console.log(`[RFP ${id}] Progress: ${current}/${total} batches, ${questionsFound} questions extracted`);
+            console.log(`[RFP ${id}] Progress: ${current}/${total} batches, ${questionsFound} questions extracted (${newQuestions.length} in this batch)`);
 
-            // Log: Batch progress
+            // Log: Batch progress with newly extracted questions for real-time preview
             await addParsingLog(
               id,
               'progress',
@@ -179,6 +179,7 @@ export async function POST(
                 batchNumber: current,
                 totalBatches: total,
                 questionsFound: questionsFound,
+                questions: newQuestions, // Include actual questions for real-time preview
               }
             );
           }

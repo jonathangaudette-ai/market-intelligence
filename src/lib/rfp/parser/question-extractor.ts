@@ -166,7 +166,12 @@ Return ONLY a valid JSON array of questions, no additional text.`;
 }
 
 export interface ProgressCallback {
-  (current: number, total: number, questionsExtracted: number): Promise<void>;
+  (
+    current: number,
+    total: number,
+    questionsExtracted: number,
+    newQuestions: ExtractedQuestion[]
+  ): Promise<void>;
 }
 
 /**
@@ -213,9 +218,9 @@ export async function extractQuestionsInBatches(
       const questions = await extractQuestions(batches[i]);
       allQuestions.push(...questions);
 
-      // Report progress
+      // Report progress with newly extracted questions from this batch
       if (options?.onProgress) {
-        await options.onProgress(i + 1, batches.length, allQuestions.length);
+        await options.onProgress(i + 1, batches.length, allQuestions.length, questions);
       }
 
       // Add delay between batches to avoid rate limiting (optimized for speed)

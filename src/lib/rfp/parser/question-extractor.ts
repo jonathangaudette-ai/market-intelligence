@@ -218,10 +218,10 @@ export async function extractQuestionsInBatches(
         await options.onProgress(i + 1, batches.length, allQuestions.length);
       }
 
-      // Add delay between batches (only if multiple batches)
+      // Add delay between batches to avoid rate limiting (optimized for speed)
       if (i < batches.length - 1) {
-        console.log('Waiting 2 seconds before next batch...');
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        console.log('Waiting 500ms before next batch...');
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
     } catch (error) {
       console.error(`Error processing batch ${i + 1}:`, error);

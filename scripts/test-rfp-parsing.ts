@@ -6,7 +6,7 @@ async function testParsing() {
   const dbUrl = process.env.DATABASE_URL!.replace('&channel_binding=require', '');
   const sql = postgres(dbUrl, { ssl: 'require' });
 
-  const rfpId = 'fefb1fb3-5057-4128-958f-c157c163d3e2';
+  const rfpId = process.argv[2] || '24e6302c-bba9-4f65-95e6-0f18627a9da2';
 
   try {
     console.log('🔍 Fetching RFP from database...\n');
@@ -48,8 +48,13 @@ async function testParsing() {
 
     // Extract questions
     console.log('🤖 Extracting questions with GPT-5...');
-    const extractedQuestions = await extractQuestionsInBatches(parsedDoc.text);
-    console.log(`✅ Extracted ${extractedQuestions.length} raw questions\n`);
+    console.log('   This will show detailed logs from GPT-5 API...\n');
+    const extractedQuestions = await extractQuestionsInBatches(parsedDoc.text, {
+      onProgress: async (current, total, questionsFound) => {
+        console.log(`   📊 Progress: Batch ${current}/${total} - ${questionsFound} questions found so far`);
+      }
+    });
+    console.log(`\n✅ Extracted ${extractedQuestions.length} raw questions\n`);
 
     // Validate
     const validQuestions = validateQuestions(extractedQuestions);

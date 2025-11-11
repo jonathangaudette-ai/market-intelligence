@@ -7,6 +7,9 @@ import { parseDocument } from '@/lib/rfp/parser/parser-service';
 import { extractQuestionsInBatches, validateQuestions } from '@/lib/rfp/parser/question-extractor';
 import { categorizeQuestion } from '@/lib/rfp/ai/claude';
 
+// Increase timeout to 5 minutes for large RFP documents (requires Vercel Pro plan)
+export const maxDuration = 300;
+
 /**
  * POST /api/v1/rfp/rfps/[id]/parse
  * Parse an uploaded RFP and extract questions
@@ -181,8 +184,8 @@ export async function POST(
             console.log(`[RFP ${id}] Categorized ${i + 1}/${validQuestions.length} questions`);
           }
 
-          // Increased delay to avoid rate limits (500ms instead of 100ms)
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          // Optimized delay for speed while avoiding rate limits (100ms)
+          await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
           console.error(`[RFP ${id}] Error processing question ${i + 1}:`, error);
 

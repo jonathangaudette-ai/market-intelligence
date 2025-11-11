@@ -22,11 +22,19 @@ interface ParsingProgressProps {
 }
 
 const STAGE_LABELS: Record<string, string> = {
-  downloading: 'Téléchargement du document...',
-  parsing: 'Analyse du document PDF...',
-  extracting: 'Extraction des questions avec GPT-5...',
-  categorizing: 'Catégorisation des questions...',
-  saving: 'Sauvegarde des questions...',
+  downloading: 'Téléchargement du document depuis le stockage...',
+  parsing: 'Analyse du document PDF (extraction du texte)...',
+  extracting: 'Extraction des questions avec GPT-5 (traitement par batch)...',
+  categorizing: 'Catégorisation intelligente des questions avec Claude...',
+  saving: 'Sauvegarde finale des questions dans la base de données...',
+};
+
+const STAGE_DESCRIPTIONS: Record<string, string> = {
+  downloading: 'Récupération du fichier PDF depuis Vercel Blob Storage',
+  parsing: 'Extraction du texte brut du PDF (~209k caractères pour ce document)',
+  extracting: 'GPT-5 analyse le document par sections de 30k caractères pour identifier les questions',
+  categorizing: 'Claude 3.5 Sonnet catégorise chaque question (difficulté, tags, estimation temps)',
+  saving: 'Enregistrement de toutes les questions avec leurs métadonnées',
 };
 
 export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressProps) {
@@ -108,10 +116,44 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Status message */}
+        {/* Status message with detailed info */}
         {progress.status === 'processing' && progress.stage && (
-          <div className="text-sm text-gray-600">
-            {STAGE_LABELS[progress.stage] || progress.stage}
+          <div className="space-y-3">
+            {/* Current stage */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="flex items-start gap-2">
+                <Loader2 className="h-4 w-4 animate-spin text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-blue-900">
+                    {STAGE_LABELS[progress.stage] || progress.stage}
+                  </p>
+                  <p className="text-xs text-blue-700 mt-1">
+                    {STAGE_DESCRIPTIONS[progress.stage] || ''}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Detailed progress metrics */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gray-50 rounded-lg p-3">
+                <p className="text-xs text-gray-500 mb-1">Progression</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {progress.stage === 'extracting'
+                    ? `${progress.progressCurrent}/${progress.progressTotal} batches`
+                    : progress.stage === 'categorizing'
+                    ? `${progress.progressCurrent}/${progress.progressTotal} questions`
+                    : `${progress.progressPercentage}%`
+                  }
+                </p>
+              </div>
+              <div className="bg-green-50 rounded-lg p-3">
+                <p className="text-xs text-green-700 mb-1">Questions trouvées</p>
+                <p className="text-lg font-semibold text-green-900">
+                  {progress.questionsExtracted}
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
@@ -121,14 +163,13 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
             <Progress value={progress.progressPercentage} className="h-2" />
             <div className="flex justify-between text-xs text-gray-500">
               <span>
-                {progress.stage === 'extracting'
-                  ? `Batch ${progress.progressCurrent} / ${progress.progressTotal}`
-                  : progress.stage === 'categorizing'
-                  ? `Question ${progress.progressCurrent} / ${progress.progressTotal}`
-                  : `${progress.progressPercentage}%`
-                }
+                {progress.progressPercentage}% complété
               </span>
-              <span>{progress.questionsExtracted} questions extraites</span>
+              <span>
+                {progress.stage === 'extracting' && 'GPT-5 en traitement...'}
+                {progress.stage === 'categorizing' && 'Claude en traitement...'}
+                {progress.stage === 'parsing' && 'Extraction PDF...'}
+              </span>
             </div>
           </div>
         )}

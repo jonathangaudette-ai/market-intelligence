@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 import { db } from '@/db';
 import { rfps } from '@/db/schema';
-import { requireRFPAuthWithSlug } from '@/lib/rfp/auth';
+import { requireRFPAuth, requireRFPAuthWithSlug } from '@/lib/rfp/auth';
 import { eq, and, desc } from 'drizzle-orm';
 
 /**
@@ -161,8 +161,8 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    // 1. Authentication (falls back to cookie-based auth)
-    const authResult = await requireRFPAuthWithSlug();
+    // 1. Authentication (cookie-based for backward compatibility)
+    const authResult = await requireRFPAuth();
     if (authResult.error) return authResult.error;
 
     const { company } = authResult;

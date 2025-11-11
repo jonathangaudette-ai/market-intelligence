@@ -290,6 +290,30 @@ export const rfps = pgTable("rfps", {
   // Known competitors
   knownCompetitors: jsonb("known_competitors"), // Array of competitor names
 
+  // Enrichment data for AI context
+  extractedText: text("extracted_text"), // Full text extracted from PDF for RAG context
+  manualEnrichment: jsonb("manual_enrichment").$type<{
+    clientBackground?: string;
+    keyNeeds?: string;
+    constraints?: string;
+    relationships?: string;
+    customNotes?: string;
+    lastUpdatedAt?: string;
+    lastUpdatedBy?: string;
+  }>(), // Manual context notes about the client/RFP
+  linkedinEnrichment: jsonb("linkedin_enrichment").$type<{
+    companyName?: string;
+    companyUrl?: string;
+    employeeCount?: string;
+    industry?: string;
+    specialties?: string[];
+    description?: string;
+    headquarters?: string;
+    founded?: string;
+    fetchedAt?: string;
+    source?: 'proxycurl' | 'manual';
+  }>(), // LinkedIn/Proxycurl company data
+
   // Status
   status: varchar("status", { length: 50 }).default("draft"), // draft, in_progress, in_review, approved, submitted, won, lost
   completionPercentage: integer("completion_percentage").default(0), // 0-100

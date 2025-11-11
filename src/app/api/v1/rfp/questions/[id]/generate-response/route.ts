@@ -86,6 +86,9 @@ export async function POST(
         title: rfps.title,
         clientName: rfps.clientName,
         clientIndustry: rfps.clientIndustry,
+        extractedText: rfps.extractedText,
+        manualEnrichment: rfps.manualEnrichment,
+        linkedinEnrichment: rfps.linkedinEnrichment,
       })
       .from(rfps)
       .where(eq(rfps.id, question.rfpId))
@@ -123,21 +126,52 @@ export async function POST(
         .join('\n\n---\n\n');
       contextSources.push('knowledge_base');
     } else if (mode === 'with_context') {
-      // With context: All docs + RFP metadata + client info
+      // With context: All docs + RFP metadata + LinkedIn + Manual enrichment
       const allDocsText = relevantDocs.map(doc => doc.text).join('\n\n---\n\n');
 
-      const rfpMetadata = `
+      // Build RFP metadata section
+      let rfpMetadata = `
 RFP CONTEXT:
 - Client: ${rfp.clientName}
 - Industry: ${rfp.clientIndustry || 'Not specified'}
 - RFP Title: ${rfp.title}
       `.trim();
 
+      // Add LinkedIn enrichment if available
+      if (rfp.linkedinEnrichment) {
+        const linkedin = rfp.linkedinEnrichment as any;
+        rfpMetadata += `\n\nLINKEDIN COMPANY DATA:`;
+        if (linkedin.description) rfpMetadata += `\n- Description: ${linkedin.description}`;
+        if (linkedin.employeeCount) rfpMetadata += `\n- Employee Count: ${linkedin.employeeCount}`;
+        if (linkedin.headquarters) rfpMetadata += `\n- Headquarters: ${linkedin.headquarters}`;
+        if (linkedin.founded) rfpMetadata += `\n- Founded: ${linkedin.founded}`;
+        if (linkedin.specialties && Array.isArray(linkedin.specialties)) {
+          rfpMetadata += `\n- Specialties: ${linkedin.specialties.join(', ')}`;
+        }
+        contextSources.push('linkedin');
+      }
+
+      // Add manual enrichment if available
+      if (rfp.manualEnrichment) {
+        const manual = rfp.manualEnrichment as any;
+        rfpMetadata += `\n\nMANUAL ENRICHMENT NOTES:`;
+        if (manual.clientBackground) rfpMetadata += `\n- Client Background: ${manual.clientBackground}`;
+        if (manual.keyNeeds) rfpMetadata += `\n- Key Needs: ${manual.keyNeeds}`;
+        if (manual.constraints) rfpMetadata += `\n- Constraints: ${manual.constraints}`;
+        if (manual.relationships) rfpMetadata += `\n- Relationships: ${manual.relationships}`;
+        if (manual.customNotes) rfpMetadata += `\n- Custom Notes: ${manual.customNotes}`;
+        contextSources.push('manual_enrichment');
+      }
+
+      // Add extracted RFP text if available (limited to 3000 chars)
+      if (rfp.extractedText) {
+        const extractPreview = rfp.extractedText.substring(0, 3000);
+        rfpMetadata += `\n\nRFP DOCUMENT EXTRACT:\n${extractPreview}${rfp.extractedText.length > 3000 ? '...' : ''}`;
+        contextSources.push('rfp_extract');
+      }
+
       contextText = `${rfpMetadata}\n\n---\n\nKNOWLEDGE BASE:\n\n${allDocsText}`;
       contextSources.push('knowledge_base', 'rfp_metadata');
-
-      // TODO: Add LinkedIn enrichment data
-      // TODO: Add manual enrichment data from form
     } else if (mode === 'manual') {
       // Manual: Only custom context provided by user
       contextText = customContext || '';

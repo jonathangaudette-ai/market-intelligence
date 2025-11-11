@@ -15,6 +15,13 @@
       "when": 1762206565341,
       "tag": "0001_kind_xorn",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762884498241,
+      "tag": "0002_fearless_sentry",
+      "breakpoints": true
     }
   ]
 }

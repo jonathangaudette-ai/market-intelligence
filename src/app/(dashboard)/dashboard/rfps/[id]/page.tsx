@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, DollarSign, Building2, FileText, ArrowLeft, ArrowRight, CheckCircle2, Circle } from 'lucide-react';
 import Link from 'next/link';
 import { StartParsingButton } from '@/components/rfp/start-parsing-button';
+import { EnrichmentForm } from '@/components/rfp/enrichment-form';
 
 interface RFPDetailPageProps {
   params: Promise<{ id: string }>;
@@ -335,6 +336,14 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
           </Card>
         </div>
       )}
+
+      {/* Manual Enrichment Form - Full width */}
+      <div className="mt-6">
+        <EnrichmentForm
+          rfpId={id}
+          initialData={rfp.manualEnrichment as any}
+        />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Building2, MessageSquare, FileText, Users, Settings, LogOut, Menu, X, LayoutDashboard, FileCheck } from "lucide-react";
@@ -21,6 +21,18 @@ export default function DashboardLayout({
   const params = useParams();
   const pathname = usePathname();
   const slug = params.slug as string || 'demo-company';
+
+  // Auto-set active company when navigating to company pages
+  useEffect(() => {
+    if (slug && slug !== 'demo-company') {
+      // Set the active company cookie when visiting company pages
+      fetch(`/api/companies/${slug}/set-active`, {
+        method: 'POST',
+      }).catch((error) => {
+        console.error('Failed to set active company:', error);
+      });
+    }
+  }, [slug]);
 
   // Navigation items with dynamic company slug
   const navigation = [

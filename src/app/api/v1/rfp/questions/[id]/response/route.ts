@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { rfpQuestions, rfpResponses, rfps } from '@/db/schema';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, count } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
 import { z } from 'zod';
 
@@ -203,14 +203,14 @@ async function updateRFPCompletionPercentage(rfpId: string) {
   // Get total questions and questions with responses
   const [stats] = await db
     .select({
-      total: db.$count(rfpQuestions.id),
+      total: count(),
     })
     .from(rfpQuestions)
     .where(eq(rfpQuestions.rfpId, rfpId));
 
   const [withResponses] = await db
     .select({
-      count: db.$count(rfpQuestions.id),
+      count: count(),
     })
     .from(rfpQuestions)
     .where(

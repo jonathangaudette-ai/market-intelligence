@@ -99,22 +99,31 @@ Return ONLY a valid JSON array of questions, no additional text.`;
     }
 
     console.log('[Question Extractor] Received response from GPT-5');
+    console.log('[Response Details] Model:', response.model);
+    console.log('[Response Details] Finish reason:', response.choices[0]?.finish_reason);
 
     const content = response.choices[0]?.message?.content;
     if (!content) {
       console.error('[Question Extractor] No content in response');
+      console.error('[Response Object]', JSON.stringify(response, null, 2));
       throw new Error('No response from GPT-5');
     }
 
     console.log('[Question Extractor] Parsing JSON response...');
+    console.log('[Content Length]', content.length, 'characters');
+    console.log('[Content Preview]', content.substring(0, 200));
 
     let parsed;
     try {
       parsed = JSON.parse(content);
     } catch (parseError) {
-      // Log the raw response for debugging
+      // Log the FULL raw response for debugging
       console.error('[JSON Parse Error in Question Extraction]', parseError);
-      console.error('[Raw Response]', content.substring(0, 500));
+      console.error('[Full Raw Response - First 1000 chars]', content.substring(0, 1000));
+      console.error('[Full Raw Response - Last 200 chars]', content.substring(Math.max(0, content.length - 200)));
+      console.error('[Content starts with]', content.substring(0, 50));
+      console.error('[Response finish_reason]', response.choices[0]?.finish_reason);
+      console.error('[Response model]', response.model);
 
       // Return empty array instead of crashing
       console.warn('[Question Extractor] Failed to parse JSON, returning empty array');

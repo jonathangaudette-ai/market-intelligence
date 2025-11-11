@@ -67,6 +67,9 @@ ${text.substring(0, 12000)} ${text.length > 12000 ? '...[truncated]' : ''}
 Return ONLY a valid JSON array of questions, no additional text.`;
 
   try {
+    console.log('[Question Extractor] Calling GPT-5 API...');
+    console.log('[Question Extractor] Text length:', text.length);
+
     const response = await openai.chat.completions.create({
       model: 'gpt-5', // Upgraded from gpt-4o to GPT-5 (Aug 2025)
       messages: [
@@ -84,11 +87,15 @@ Return ONLY a valid JSON array of questions, no additional text.`;
       max_tokens: 4000,
     });
 
+    console.log('[Question Extractor] Received response from GPT-5');
+
     const content = response.choices[0]?.message?.content;
     if (!content) {
-      throw new Error('No response from GPT-4o');
+      console.error('[Question Extractor] No content in response');
+      throw new Error('No response from GPT-5');
     }
 
+    console.log('[Question Extractor] Parsing JSON response...');
     const parsed = JSON.parse(content);
 
     // Handle both {questions: [...]} and [...] formats
@@ -96,9 +103,14 @@ Return ONLY a valid JSON array of questions, no additional text.`;
       ? parsed
       : parsed.questions || [];
 
+    console.log(`[Question Extractor] Extracted ${questions.length} questions`);
     return questions;
   } catch (error) {
     console.error('[Question Extraction Error]', error);
+    if (error instanceof Error) {
+      console.error('[Question Extraction Error] Message:', error.message);
+      console.error('[Question Extraction Error] Stack:', error.stack);
+    }
     throw new Error(
       `Failed to extract questions: ${error instanceof Error ? error.message : 'Unknown error'}`
     );

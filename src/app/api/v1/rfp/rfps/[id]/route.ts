@@ -6,7 +6,7 @@ import { requireRFPAuth } from '@/lib/rfp/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
@@ -14,7 +14,7 @@ export async function GET(
     if (authResult.error) return authResult.error;
 
     const { company } = authResult;
-    const rfpId = params.id;
+    const { id: rfpId } = await params;
 
     // Fetch RFP with questions
     const rfp = await db.query.rfps.findFirst({

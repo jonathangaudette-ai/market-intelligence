@@ -144,8 +144,8 @@ RFP CONTEXT:
       contextSources.push('manual');
     }
 
-    // Step 4: Generate response using Claude 3.5 Sonnet
-    console.log(`[Generate Response] Generating response with Claude 3.5 Sonnet...`);
+    // Step 4: Generate response using Claude Sonnet 4.5
+    console.log(`[Generate Response] Generating response with Claude Sonnet 4.5...`);
     const responseText = await generateResponseWithClaude(
       question.questionText,
       contextText,
@@ -173,7 +173,7 @@ RFP CONTEXT:
         version: 1,
         createdBy: session.user.id,
         wasAiGenerated: true,
-        aiModel: 'claude-3.5-sonnet',
+        aiModel: 'claude-sonnet-4.5',
         status: 'draft',
       })
       .returning();
@@ -197,7 +197,7 @@ RFP CONTEXT:
         wordCount: savedResponse.wordCount,
         version: savedResponse.version,
         wasAiGenerated: true,
-        aiModel: 'claude-3.5-sonnet',
+        aiModel: 'claude-sonnet-4.5',
         createdAt: savedResponse.createdAt,
       },
       metadata: {
@@ -258,7 +258,7 @@ async function retrieveRelevantDocs(
 }
 
 /**
- * Generate response using Claude 3.5 Sonnet
+ * Generate response using Claude Sonnet 4.5
  */
 async function generateResponseWithClaude(
   questionText: string,
@@ -305,7 +305,7 @@ ${questionText}
 Please generate a professional RFP response based on the context provided above.`;
 
   const response = await anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: wordLimit ? wordLimit * 8 : 4000, // Approximate tokens from words
     temperature: 0.3, // Lower temperature for more factual, consistent responses
     system: systemPrompt,

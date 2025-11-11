@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { companies, companyMembers } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth/config";
+import { isSuperAdmin } from "@/lib/auth/helpers";
 
 export async function POST(
   request: NextRequest,
@@ -29,21 +30,26 @@ export async function POST(
       return NextResponse.json({ error: "Company not found" }, { status: 404 });
     }
 
-    // Verify user has access to this company
-    const [membership] = await db
-      .select()
-      .from(companyMembers)
-      .where(
-        and(
-          eq(companyMembers.userId, session.user.id),
-          eq(companyMembers.companyId, company.id)
-        )
-      )
-      .limit(1);
+    // Verify user has access to this company (super admins bypass this check)
+    const isSuper = await isSuperAdmin();
 
-    if (!membership) {
-      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    if (!isSuper) {
+      const [membership] = await db
+        .select()
+        .from(companyMembers)
+        .where(
+          and(
+            eq(companyMembers.userId, session.user.id),
+            eq(companyMembers.companyId, company.id)
+          )
+        )
+        .limit(1);
+
+      if (!membership) {
+        return NextResponse.json({ error: "Access denied" }, { status: 403 });
+      }
     }
+    // Super admins can access any company
 
     // Set active company cookie
     const cookieStore = await cookies();

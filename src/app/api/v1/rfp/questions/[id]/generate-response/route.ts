@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { rfpQuestions, rfpResponses, rfps } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
+import { getCurrentCompany } from '@/lib/auth/helpers';
 import { z } from 'zod';
 import { Pinecone } from '@pinecone-database/pinecone';
 import OpenAI from 'openai';
@@ -98,18 +99,27 @@ export async function POST(
       return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
     }
 
-    // TODO: Verify user is member of company (for now, skip this check)
+    // Verify user is member of company
+    const companyContext = await getCurrentCompany();
+    if (!companyContext) {
+      return NextResponse.json({ error: 'No active company' }, { status: 403 });
+    }
+
+    if (rfp.companyId !== companyContext.company.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+    }
 
     // Step 1: Generate embedding for the question
     console.log(`[Generate Response] Generating embedding for question: ${questionId}`);
     const queryEmbedding = await generateEmbedding(question.questionText);
 
-    // Step 2: Retrieve relevant context from Pinecone
-    console.log(`[Generate Response] Searching Pinecone for relevant documents...`);
+    // Step 2: Retrieve relevant context from Pinecone (filtered by company)
+    console.log(`[Generate Response] Searching Pinecone for relevant documents (company: ${rfp.companyId})...`);
     const relevantDocs = await retrieveRelevantDocs(
       queryEmbedding,
       question.category || 'general',
-      depth
+      depth,
+      rfp.companyId
     );
 
     console.log(`[Generate Response] Found ${relevantDocs.length} relevant documents`);
@@ -265,12 +275,13 @@ async function generateEmbedding(text: string): Promise<number[]> {
 }
 
 /**
- * Retrieve relevant documents from Pinecone
+ * Retrieve relevant documents from Pinecone (filtered by company for multi-tenant isolation)
  */
 async function retrieveRelevantDocs(
   queryEmbedding: number[],
   category: string,
-  depth: 'basic' | 'advanced'
+  depth: 'basic' | 'advanced',
+  companyId: string
 ): Promise<Array<{ text: string; category: string; title: string; score: number }>> {
   const index = pinecone.index(INDEX_NAME);
 
@@ -281,6 +292,9 @@ async function retrieveRelevantDocs(
     vector: queryEmbedding,
     topK,
     includeMetadata: true,
+    filter: {
+      companyId: { $eq: companyId },
+    },
   });
 
   return results.matches.map(match => ({

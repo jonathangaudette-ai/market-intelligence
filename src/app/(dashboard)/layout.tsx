@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, MessageSquare, FileText, Users, Settings, ChevronDown, LogOut, Menu, X, LayoutDashboard, FileCheck } from "lucide-react";
+import { Building2, MessageSquare, FileText, Users, Settings, LogOut, Menu, X, LayoutDashboard, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CompanyProvider } from "@/components/company-provider";
+import { CompanySwitcher } from "@/components/company-switcher";
+import { SuperAdminBadge } from "@/components/super-admin-badge";
+import { useSession } from "@/hooks/use-session";
 
 const navigation = [
   { name: "Dashboard", href: "/companies/demo-company/dashboard", icon: LayoutDashboard, current: false },
@@ -21,6 +24,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user } = useSession();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -53,21 +57,8 @@ export default function DashboardLayout({
           </button>
         </div>
 
-        {/* Company Selector */}
-        <div className="p-4 border-b border-gray-200">
-          <button className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-teal-100 rounded flex items-center justify-center">
-                <Building2 className="h-4 w-4 text-teal-600" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-medium text-gray-900">Demo Company</p>
-                <p className="text-xs text-gray-500">Admin</p>
-              </div>
-            </div>
-            <ChevronDown className="h-4 w-4 text-gray-400" />
-          </button>
-        </div>
+        {/* Company Switcher */}
+        <CompanySwitcher currentUser={user || undefined} />
 
         {/* Navigation */}
         <nav className="p-4 space-y-1">
@@ -111,11 +102,18 @@ export default function DashboardLayout({
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-              <span className="text-sm font-medium text-gray-600">AD</span>
+              <span className="text-sm font-medium text-gray-600">
+                {user?.name?.[0]?.toUpperCase() || 'U'}
+              </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">Admin User</p>
-              <p className="text-xs text-gray-500 truncate">admin@example.com</p>
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {user?.name || 'Utilisateur'}
+              </p>
+              <p className="text-xs text-gray-500 truncate">
+                {user?.email || ''}
+              </p>
+              {user?.isSuperAdmin && <SuperAdminBadge />}
             </div>
             <button className="text-gray-400 hover:text-gray-600">
               <LogOut className="h-4 w-4" />

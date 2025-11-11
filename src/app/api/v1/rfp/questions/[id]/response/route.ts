@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { rfpQuestions, rfpResponses, rfps } from '@/db/schema';
 import { eq, and, desc, count } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
+import { getCurrentCompany } from '@/lib/auth/helpers';
 import { z } from 'zod';
 
 const ResponseSchema = z.object({
@@ -67,8 +68,15 @@ export async function POST(
       return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
     }
 
-    // TODO: Verify user is member of company (for now, skip this check)
-    // In production, add company membership verification here
+    // Verify user is member of company
+    const companyContext = await getCurrentCompany();
+    if (!companyContext) {
+      return NextResponse.json({ error: 'No active company' }, { status: 403 });
+    }
+
+    if (rfp.companyId !== companyContext.company.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+    }
 
     // Check if there's an existing response
     const [existingResponse] = await db
@@ -172,6 +180,27 @@ export async function GET(
 
     if (!question) {
       return NextResponse.json({ error: 'Question not found' }, { status: 404 });
+    }
+
+    // Verify user has access to the RFP
+    const [rfp] = await db
+      .select({ id: rfps.id, companyId: rfps.companyId })
+      .from(rfps)
+      .where(eq(rfps.id, question.rfpId))
+      .limit(1);
+
+    if (!rfp) {
+      return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
+    }
+
+    // Verify user is member of company
+    const companyContext = await getCurrentCompany();
+    if (!companyContext) {
+      return NextResponse.json({ error: 'No active company' }, { status: 403 });
+    }
+
+    if (rfp.companyId !== companyContext.company.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
     // Get latest response

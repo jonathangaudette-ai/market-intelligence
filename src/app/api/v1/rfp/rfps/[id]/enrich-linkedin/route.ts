@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { rfps } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
+import { getCurrentCompany } from '@/lib/auth/helpers';
 
 /**
  * POST /api/v1/rfp/rfps/[id]/enrich-linkedin
@@ -36,7 +37,15 @@ export async function POST(
       return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
     }
 
-    // TODO: Verify user is member of company
+    // Verify user is member of company
+    const companyContext = await getCurrentCompany();
+    if (!companyContext) {
+      return NextResponse.json({ error: 'No active company' }, { status: 403 });
+    }
+
+    if (rfp.companyId !== companyContext.company.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+    }
 
     // Check if Proxycurl API key is configured
     if (!process.env.PROXYCURL_API_KEY) {

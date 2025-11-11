@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { rfps } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
+import { getCurrentCompany } from '@/lib/auth/helpers';
 import { z } from 'zod';
 
 const EnrichmentSchema = z.object({
@@ -54,7 +55,15 @@ export async function POST(
       return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
     }
 
-    // TODO: Verify user is member of company (for now, skip this check)
+    // Verify user is member of company
+    const companyContext = await getCurrentCompany();
+    if (!companyContext) {
+      return NextResponse.json({ error: 'No active company' }, { status: 403 });
+    }
+
+    if (rfp.companyId !== companyContext.company.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+    }
 
     // Update RFP with enrichment data
     const [updatedRfp] = await db
@@ -106,6 +115,7 @@ export async function GET(
     // Get RFP enrichment data
     const [rfp] = await db
       .select({
+        companyId: rfps.companyId,
         manualEnrichment: rfps.manualEnrichment,
         linkedinEnrichment: rfps.linkedinEnrichment,
       })
@@ -115,6 +125,16 @@ export async function GET(
 
     if (!rfp) {
       return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
+    }
+
+    // Verify user is member of company
+    const companyContext = await getCurrentCompany();
+    if (!companyContext) {
+      return NextResponse.json({ error: 'No active company' }, { status: 403 });
+    }
+
+    if (rfp.companyId !== companyContext.company.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
     return NextResponse.json({

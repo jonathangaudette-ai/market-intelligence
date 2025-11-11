@@ -14,7 +14,7 @@ import { StartParsingButton } from '@/components/rfp/start-parsing-button';
 import { EnrichmentForm } from '@/components/rfp/enrichment-form';
 
 interface RFPDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: RFPDetailPageProps): Promise<Metadata> {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: RFPDetailPageProps): Promise<
 }
 
 export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
-  const { id } = await params;
+  const { id, slug } = await params;
 
   // Get authenticated user
   const session = await auth();
@@ -93,7 +93,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
     <div className="container mx-auto py-8 max-w-6xl">
       {/* Header */}
       <div className="mb-6">
-        <Link href="/dashboard/rfps">
+        <Link href={`/companies/${slug}/rfps`}>
           <Button variant="ghost" size="sm" className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour aux RFPs
@@ -324,7 +324,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                   <p className="text-sm text-gray-600 mb-4 text-center">
                     Accédez à l'interface de réponse avec filtres et éditeur de texte
                   </p>
-                  <Link href={`/dashboard/rfps/${id}/questions`} className="w-full">
+                  <Link href={`/companies/${slug}/rfps/${id}/questions`} className="w-full">
                     <Button className="w-full" size="lg">
                       Commencer
                       <ArrowRight className="h-4 w-4 ml-2" />

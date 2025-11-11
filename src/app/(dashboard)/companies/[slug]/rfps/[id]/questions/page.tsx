@@ -10,7 +10,7 @@ import { ArrowLeft, FileText } from 'lucide-react';
 import Link from 'next/link';
 
 interface QuestionsPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: QuestionsPageProps): Promise<Metadata> {
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: QuestionsPageProps): Promise<
 }
 
 export default async function QuestionsPage({ params }: QuestionsPageProps) {
-  const { id } = await params;
+  const { id, slug } = await params;
 
   // Get authenticated user
   const session = await auth();
@@ -45,14 +45,14 @@ export default async function QuestionsPage({ params }: QuestionsPageProps) {
 
   // Verify parsing is completed
   if (rfp.parsingStatus !== 'completed') {
-    redirect(`/dashboard/rfps/${id}`);
+    redirect(`/companies/${slug}/rfps/${id}`);
   }
 
   return (
     <div className="container mx-auto py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-6">
-        <Link href={`/dashboard/rfps/${id}`}>
+        <Link href={`/companies/${slug}/rfps/${id}`}>
           <Button variant="ghost" size="sm" className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour au RFP

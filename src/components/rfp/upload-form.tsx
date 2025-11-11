@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FileDropzone } from './file-dropzone';
 import { Button } from '@/components/ui/button';
@@ -8,8 +8,13 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
-export function RFPUploadForm() {
+export function RFPUploadForm({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const router = useRouter();
+  const [slug, setSlug] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -20,6 +25,11 @@ export function RFPUploadForm() {
     submissionDeadline: '',
     estimatedDealValue: '',
   });
+
+  // Extract slug from params
+  useEffect(() => {
+    params.then(p => setSlug(p.slug));
+  }, [params]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +77,7 @@ export function RFPUploadForm() {
       }
 
       // Redirect to RFP detail page
-      router.push(`/dashboard/rfps/${data.rfp.id}`);
+      router.push(`/companies/${slug}/rfps/${data.rfp.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

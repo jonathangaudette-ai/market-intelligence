@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   description: 'Upload a new RFP document for processing',
 };
 
-export default function NewRFPPage() {
+export default function NewRFPPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   return (
     <div className="container mx-auto py-8 max-w-4xl">
       <div className="mb-8">
@@ -16,7 +20,7 @@ export default function NewRFPPage() {
         </p>
       </div>
 
-      <RFPUploadForm />
+      <RFPUploadForm params={params} />
     </div>
   );
 }

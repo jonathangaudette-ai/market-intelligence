@@ -7,8 +7,9 @@ import { parseDocument } from '@/lib/rfp/parser/parser-service';
 import { extractQuestionsInBatches, validateQuestions } from '@/lib/rfp/parser/question-extractor';
 import { categorizeQuestion } from '@/lib/rfp/ai/claude';
 
-// Increase timeout to 5 minutes for large RFP documents (requires Vercel Pro plan)
-export const maxDuration = 300;
+// Increase timeout to 13 minutes for large RFP documents (requires Vercel Pro + Fluid Compute)
+// With Fluid Compute: Pro plan can go up to 800s (13 min)
+export const maxDuration = 800;
 
 /**
  * POST /api/v1/rfp/rfps/[id]/parse

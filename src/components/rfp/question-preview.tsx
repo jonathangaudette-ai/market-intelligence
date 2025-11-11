@@ -52,11 +52,10 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
       }
     });
 
-    // Sort by timestamp (most recent first) and limit
+    // Sort by timestamp (most recent first) - NO LIMIT, show all questions
     return allQuestions
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-      .slice(0, maxQuestions);
-  }, [logs, maxQuestions]);
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }, [logs]);
 
   const totalQuestions = useMemo(() => {
     return logs.reduce((sum, log) => {
@@ -101,7 +100,7 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+        <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
           {questions.map((question, index) => (
             <div
               key={index}
@@ -128,11 +127,9 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
                 )}
               </div>
 
-              {/* Question text */}
-              <p className="text-sm text-gray-900 leading-relaxed">
-                {question.questionText.length > 200
-                  ? `${question.questionText.substring(0, 200)}...`
-                  : question.questionText}
+              {/* Question text - FULL TEXT, no truncation */}
+              <p className="text-sm text-gray-900 leading-relaxed whitespace-pre-wrap">
+                {question.questionText}
               </p>
 
               {/* Footer */}
@@ -153,16 +150,6 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
             </div>
           ))}
         </div>
-
-        {/* Show more indicator */}
-        {totalQuestions > maxQuestions && (
-          <div className="mt-3 pt-3 border-t border-gray-200 text-center">
-            <p className="text-xs text-gray-500">
-              +{totalQuestions - maxQuestions} autre{totalQuestions - maxQuestions > 1 ? 's' : ''} question
-              {totalQuestions - maxQuestions > 1 ? 's' : ''}
-            </p>
-          </div>
-        )}
       </CardContent>
     </Card>
   );

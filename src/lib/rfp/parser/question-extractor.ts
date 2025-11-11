@@ -96,7 +96,19 @@ Return ONLY a valid JSON array of questions, no additional text.`;
     }
 
     console.log('[Question Extractor] Parsing JSON response...');
-    const parsed = JSON.parse(content);
+
+    let parsed;
+    try {
+      parsed = JSON.parse(content);
+    } catch (parseError) {
+      // Log the raw response for debugging
+      console.error('[JSON Parse Error in Question Extraction]', parseError);
+      console.error('[Raw Response]', content.substring(0, 500));
+
+      // Return empty array instead of crashing
+      console.warn('[Question Extractor] Failed to parse JSON, returning empty array');
+      return [];
+    }
 
     // Handle both {questions: [...]} and [...] formats
     const questions: ExtractedQuestion[] = Array.isArray(parsed)
@@ -111,9 +123,10 @@ Return ONLY a valid JSON array of questions, no additional text.`;
       console.error('[Question Extraction Error] Message:', error.message);
       console.error('[Question Extraction Error] Stack:', error.stack);
     }
-    throw new Error(
-      `Failed to extract questions: ${error instanceof Error ? error.message : 'Unknown error'}`
-    );
+
+    // Return empty array instead of throwing - allows processing to continue
+    console.warn('[Question Extractor] Returning empty array due to error');
+    return [];
   }
 }
 

@@ -5,6 +5,7 @@ import { rfps } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
 import { ParsingProgress } from '@/components/rfp/parsing-progress';
+import { QuestionList } from '@/components/rfp/question-list';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -242,6 +243,13 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
           </Card>
         </div>
       </div>
+
+      {/* Questions List - Full width */}
+      {rfp.parsingStatus === 'completed' && (
+        <div className="mt-6">
+          <QuestionList rfpId={id} />
+        </div>
+      )}
     </div>
   );
 }

@@ -38,7 +38,7 @@ export default function DashboardLayout({
   const navigation = [
     { name: "Dashboard", href: `/companies/${slug}/dashboard`, icon: LayoutDashboard },
     { name: "Intelligence", href: `/companies/${slug}/intelligence`, icon: MessageSquare },
-    { name: "RFP Assistant", href: `/dashboard/rfps`, icon: FileCheck },
+    { name: "RFP Assistant", href: `/companies/${slug}/rfps`, icon: FileCheck },
     { name: "Concurrents", href: `/companies/${slug}/competitors`, icon: Users },
     { name: "Documents", href: `/companies/${slug}/documents`, icon: FileText },
     { name: "Paramètres", href: `/companies/${slug}/settings`, icon: Settings },

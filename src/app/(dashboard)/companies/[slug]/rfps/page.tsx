@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
-import { rfps } from '@/db/schema';
-import { desc, eq } from 'drizzle-orm';
+import { rfps, companies, companyMembers } from '@/db/schema';
+import { desc, eq, and } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
-import { getCurrentCompany } from '@/lib/auth/helpers';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,24 +15,53 @@ export const metadata: Metadata = {
   description: 'Manage your RFP responses with AI assistance',
 };
 
-export default async function RFPsListPage() {
+export default async function RFPsListPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   // Get authenticated user
   const session = await auth();
   if (!session?.user) {
     redirect('/login');
   }
 
-  // Get company context
-  const companyContext = await getCurrentCompany();
-  if (!companyContext) {
-    redirect('/companies');
+  const { slug } = await params;
+
+  // Get company by slug
+  const [company] = await db
+    .select()
+    .from(companies)
+    .where(and(eq(companies.slug, slug), eq(companies.isActive, true)))
+    .limit(1);
+
+  if (!company) {
+    redirect('/login');
+  }
+
+  // Verify user has access (unless super admin)
+  if (!session.user.isSuperAdmin) {
+    const [membership] = await db
+      .select()
+      .from(companyMembers)
+      .where(
+        and(
+          eq(companyMembers.userId, session.user.id),
+          eq(companyMembers.companyId, company.id)
+        )
+      )
+      .limit(1);
+
+    if (!membership) {
+      redirect('/login');
+    }
   }
 
   // Fetch RFPs for this company
   const userRfps = await db
     .select()
     .from(rfps)
-    .where(eq(rfps.companyId, companyContext.company.id))
+    .where(eq(rfps.companyId, company.id))
     .orderBy(desc(rfps.createdAt));
 
   // Format date helper
@@ -106,7 +134,7 @@ export default async function RFPsListPage() {
             Gérez vos appels d'offres avec l'aide de l'IA
           </p>
         </div>
-        <Link href="/dashboard/rfps/new">
+        <Link href={`/companies/${slug}/rfps/new`}>
           <Button size="lg">
             <Plus className="h-5 w-5 mr-2" />
             Nouveau RFP
@@ -178,7 +206,7 @@ export default async function RFPsListPage() {
             <p className="text-gray-500 mb-6">
               Commencez par créer votre premier RFP pour profiter de l'assistance IA
             </p>
-            <Link href="/dashboard/rfps/new">
+            <Link href={`/companies/${slug}/rfps/new`}>
               <Button>
                 <Plus className="h-5 w-5 mr-2" />
                 Créer mon premier RFP
@@ -189,7 +217,7 @@ export default async function RFPsListPage() {
       ) : (
         <div className="space-y-4">
           {userRfps.map((rfp) => (
-            <Link key={rfp.id} href={`/dashboard/rfps/${rfp.id}`}>
+            <Link key={rfp.id} href={`/companies/${slug}/rfps/${rfp.id}`}>
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">

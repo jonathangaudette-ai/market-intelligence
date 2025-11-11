@@ -70,22 +70,33 @@ Return ONLY a valid JSON array of questions, no additional text.`;
     console.log('[Question Extractor] Calling GPT-5 API...');
     console.log('[Question Extractor] Text length:', text.length);
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-5', // Upgraded from gpt-4o to GPT-5 (Aug 2025)
-      messages: [
-        {
-          role: 'system',
-          content: systemPrompt,
-        },
-        {
-          role: 'user',
-          content: userPrompt,
-        },
-      ],
-      response_format: { type: 'json_object' },
-      // GPT-5 only supports temperature=1 (default), omit the parameter
-      max_completion_tokens: 16000, // GPT-5 needs high limit for reasoning_tokens + output tokens
-    });
+    let response;
+    try {
+      response = await openai.chat.completions.create({
+        model: 'gpt-5', // Upgraded from gpt-4o to GPT-5 (Aug 2025)
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt,
+          },
+          {
+            role: 'user',
+            content: userPrompt,
+          },
+        ],
+        response_format: { type: 'json_object' },
+        // GPT-5 only supports temperature=1 (default), omit the parameter
+        max_completion_tokens: 16000, // GPT-5 needs high limit for reasoning_tokens + output tokens
+      });
+    } catch (apiError: any) {
+      console.error('[GPT-5 API Error]', apiError.message);
+      console.error('[GPT-5 API Error] Status:', apiError.status);
+      console.error('[GPT-5 API Error] Type:', apiError.type);
+      console.error('[GPT-5 API Error] Full error:', JSON.stringify(apiError, null, 2));
+
+      // Return empty array on API errors
+      return [];
+    }
 
     console.log('[Question Extractor] Received response from GPT-5');
 

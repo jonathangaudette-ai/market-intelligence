@@ -88,7 +88,7 @@ export async function categorizeQuestion(question: string): Promise<{
 
   const systemPrompt = `You are an RFP question analyzer. Categorize questions and provide metadata about them.
 
-Return your response in this exact JSON format:
+Return your response in this exact JSON format (no additional text):
 {
   "category": "one of: technical, pricing, company_info, case_study, compliance, implementation, support, security, legal",
   "tags": ["array", "of", "relevant", "tags"],
@@ -96,25 +96,54 @@ Return your response in this exact JSON format:
   "estimatedMinutes": number (estimate time to answer: 5-60 minutes)
 }`;
 
-  const message = await anthropic.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 500,
-    temperature: 0.3,
-    system: systemPrompt,
-    messages: [
-      {
-        role: 'user',
-        content: `Categorize this RFP question:\n\n${question}`,
-      },
-    ],
-  });
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 500,
+      temperature: 0.3,
+      system: systemPrompt,
+      messages: [
+        {
+          role: 'user',
+          content: `Categorize this RFP question:\n\n${question}`,
+        },
+      ],
+    });
 
-  const response = message.content[0];
-  if (response.type !== 'text') {
-    throw new Error('Unexpected response type from Claude');
+    const response = message.content[0];
+    if (response.type !== 'text') {
+      throw new Error('Unexpected response type from Claude');
+    }
+
+    // Extract JSON from response (handle cases where Claude adds extra text)
+    let jsonText = response.text.trim();
+
+    // Try to find JSON object in the response
+    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      jsonText = jsonMatch[0];
+    }
+
+    const parsed = JSON.parse(jsonText);
+
+    // Validate required fields
+    if (!parsed.category || !parsed.tags || !parsed.difficulty || !parsed.estimatedMinutes) {
+      throw new Error('Missing required fields in categorization response');
+    }
+
+    return parsed;
+  } catch (error) {
+    console.error('[Categorization Error]', error);
+    console.error('[Question]', question.substring(0, 200));
+
+    // Return default categorization on error
+    return {
+      category: 'company_info',
+      tags: ['uncategorized'],
+      difficulty: 'medium',
+      estimatedMinutes: 15,
+    };
   }
-
-  return JSON.parse(response.text);
 }
 
 /**

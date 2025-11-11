@@ -90,16 +90,13 @@ export async function POST(
       // 7. Extract questions using GPT-5
       console.log(`[RFP ${id}] Extracting questions...`);
 
-      // Calculate total batches
-      const batchSize = 10000;
-      const totalBatches = Math.ceil(parsedDoc.text.length / batchSize);
-
-      // Update to extracting stage
+      // Update to extracting stage (total will be set by first progress callback)
       await db
         .update(rfps)
         .set({
           parsingStage: 'extracting',
-          parsingProgressTotal: totalBatches,
+          parsingProgressCurrent: 0,
+          parsingProgressTotal: 0,
           updatedAt: new Date(),
         })
         .where(eq(rfps.id, id));
@@ -108,11 +105,12 @@ export async function POST(
         parsedDoc.text,
         {
           onProgress: async (current, total, questionsFound) => {
-            // Update progress in database
+            // Update progress in database (including total on first call)
             await db
               .update(rfps)
               .set({
                 parsingProgressCurrent: current,
+                parsingProgressTotal: total,
                 questionsExtracted: questionsFound,
                 updatedAt: new Date(),
               })

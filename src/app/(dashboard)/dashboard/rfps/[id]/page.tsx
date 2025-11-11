@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import { db } from '@/db';
 import { rfps } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/auth/config';
 import { ParsingProgress } from '@/components/rfp/parsing-progress';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

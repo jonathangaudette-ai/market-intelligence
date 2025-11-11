@@ -19,8 +19,27 @@ import {
   Redo,
   Save,
   Loader2,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 interface ResponseEditorProps {
   questionId: string;
@@ -42,6 +61,14 @@ export function ResponseEditor({
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  // AI Generation state
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generateMode, setGenerateMode] = useState<'standard' | 'with_context' | 'manual'>('with_context');
+  const [generateDepth, setGenerateDepth] = useState<'basic' | 'advanced'>('basic');
+  const [customContext, setCustomContext] = useState('');
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -121,6 +148,49 @@ export function ResponseEditor({
     handleSave();
   };
 
+  const handleGenerateWithAI = useCallback(async () => {
+    if (!editor || isGenerating) return;
+
+    setIsGenerating(true);
+    setGenerateError(null);
+
+    try {
+      // Call API to generate response
+      const response = await fetch(`/api/v1/rfp/questions/${questionId}/generate-response`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          mode: generateMode,
+          depth: generateDepth,
+          customContext: generateMode === 'manual' ? customContext : undefined,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate response');
+      }
+
+      const data = await response.json();
+
+      // Set generated content in editor
+      editor.commands.setContent(data.response.responseHtml);
+
+      // Close dialog
+      setIsAIDialogOpen(false);
+
+      // Trigger save
+      setLastSaved(new Date());
+    } catch (error) {
+      console.error('Failed to generate response:', error);
+      setGenerateError(error instanceof Error ? error.message : 'Failed to generate response');
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [editor, questionId, generateMode, generateDepth, customContext, isGenerating]);
+
   if (!editor) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -161,6 +231,138 @@ export function ResponseEditor({
                 Erreur: {saveError}
               </div>
             )}
+
+            {/* AI Generate button with dialog */}
+            <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="default"
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  disabled={isGenerating}
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Générer avec IA
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Générer une réponse avec l'IA</DialogTitle>
+                  <DialogDescription>
+                    Choisissez le mode de génération et les options pour créer une réponse assistée par IA.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-6 py-4">
+                  {/* Mode selection */}
+                  <div className="space-y-2">
+                    <Label htmlFor="mode">Mode de génération</Label>
+                    <Select
+                      value={generateMode}
+                      onValueChange={(value) => setGenerateMode(value as typeof generateMode)}
+                    >
+                      <SelectTrigger id="mode">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="standard">
+                          Standard (docs produit uniquement)
+                        </SelectItem>
+                        <SelectItem value="with_context">
+                          Avec contexte client (recommandé)
+                        </SelectItem>
+                        <SelectItem value="manual">
+                          Manuel (contexte personnalisé)
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm text-gray-500">
+                      {generateMode === 'standard' && 'Utilise uniquement les documents produit et entreprise'}
+                      {generateMode === 'with_context' && 'Enrichit avec les informations du client et du RFP'}
+                      {generateMode === 'manual' && 'Permet de fournir votre propre contexte personnalisé'}
+                    </p>
+                  </div>
+
+                  {/* Depth selection */}
+                  <div className="space-y-2">
+                    <Label htmlFor="depth">Profondeur de recherche</Label>
+                    <Select
+                      value={generateDepth}
+                      onValueChange={(value) => setGenerateDepth(value as typeof generateDepth)}
+                    >
+                      <SelectTrigger id="depth">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="basic">
+                          Basique (5 documents)
+                        </SelectItem>
+                        <SelectItem value="advanced">
+                          Avancée (10 documents)
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm text-gray-500">
+                      Plus de documents = réponse plus complète mais génération plus lente
+                    </p>
+                  </div>
+
+                  {/* Custom context textarea (only for manual mode) */}
+                  {generateMode === 'manual' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="context">Contexte personnalisé</Label>
+                      <Textarea
+                        id="context"
+                        value={customContext}
+                        onChange={(e) => setCustomContext(e.target.value)}
+                        placeholder="Entrez le contexte que l'IA doit utiliser pour générer la réponse..."
+                        rows={6}
+                        className="resize-none"
+                      />
+                      <p className="text-sm text-gray-500">
+                        Fournissez toutes les informations pertinentes pour cette question
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Error display */}
+                  {generateError && (
+                    <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                      <p className="text-sm text-red-700">
+                        ❌ Erreur: {generateError}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsAIDialogOpen(false)}
+                    disabled={isGenerating}
+                  >
+                    Annuler
+                  </Button>
+                  <Button
+                    onClick={handleGenerateWithAI}
+                    disabled={isGenerating || (generateMode === 'manual' && !customContext.trim())}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Génération en cours...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Générer
+                      </>
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
 
             {/* Manual save button */}
             <Button

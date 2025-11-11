@@ -124,14 +124,21 @@ Return your response in this exact JSON format (no additional text):
       jsonText = jsonMatch[0];
     }
 
-    const parsed = JSON.parse(jsonText);
+    try {
+      const parsed = JSON.parse(jsonText);
 
-    // Validate required fields
-    if (!parsed.category || !parsed.tags || !parsed.difficulty || !parsed.estimatedMinutes) {
-      throw new Error('Missing required fields in categorization response');
+      // Validate required fields
+      if (!parsed.category || !parsed.tags || !parsed.difficulty || !parsed.estimatedMinutes) {
+        throw new Error('Missing required fields in categorization response');
+      }
+
+      return parsed;
+    } catch (parseError) {
+      // Log the raw response for debugging
+      console.error('[JSON Parse Error]', parseError);
+      console.error('[Raw Response]', response.text.substring(0, 500));
+      throw parseError;
     }
-
-    return parsed;
   } catch (error) {
     console.error('[Categorization Error]', error);
     console.error('[Question]', question.substring(0, 200));

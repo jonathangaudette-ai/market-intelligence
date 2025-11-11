@@ -146,7 +146,7 @@ export async function POST(
         const question = validQuestions[i];
 
         try {
-          // Categorize question using Claude
+          // Categorize question using Claude (with fallback to default)
           const categorization = await categorizeQuestion(question.questionText);
 
           // Save to database
@@ -183,11 +183,35 @@ export async function POST(
             console.log(`[RFP ${id}] Categorized ${i + 1}/${validQuestions.length} questions`);
           }
 
-          // Small delay to avoid rate limits
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          // Increased delay to avoid rate limits (500ms instead of 100ms)
+          await new Promise((resolve) => setTimeout(resolve, 500));
         } catch (error) {
-          console.error(`[RFP ${id}] Error processing question:`, error);
-          // Continue with other questions
+          console.error(`[RFP ${id}] Error processing question ${i + 1}:`, error);
+
+          // Save question with default categorization if categorization fails completely
+          try {
+            const [saved] = await db
+              .insert(rfpQuestions)
+              .values({
+                rfpId: id,
+                sectionTitle: question.sectionTitle,
+                questionNumber: question.questionNumber,
+                questionText: question.questionText,
+                requiresAttachment: question.requiresAttachment || false,
+                wordLimit: question.wordLimit,
+                category: 'company_info',
+                tags: ['uncategorized'],
+                difficulty: 'medium',
+                estimatedMinutes: 15,
+                status: 'pending',
+                hasResponse: false,
+              })
+              .returning();
+
+            savedQuestions.push(saved);
+          } catch (dbError) {
+            console.error(`[RFP ${id}] Failed to save question ${i + 1} even with default values:`, dbError);
+          }
         }
       }
 

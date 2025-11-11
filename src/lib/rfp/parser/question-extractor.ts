@@ -68,7 +68,7 @@ Return ONLY a valid JSON array of questions, no additional text.`;
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-5', // Upgraded from gpt-4o to GPT-5 (Aug 2025)
+      model: 'gpt-4o', // Using GPT-4o for question extraction
       messages: [
         {
           role: 'system',

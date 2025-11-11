@@ -135,6 +135,9 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
           {progress.status === 'processing' && (
             <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
           )}
+          {progress.status === 'extracted' && (
+            <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+          )}
           {progress.status === 'completed' && (
             <CheckCircle2 className="h-5 w-5 text-green-600" />
           )}
@@ -146,6 +149,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
           )}
 
           {progress.status === 'processing' && 'Analyse en cours...'}
+          {progress.status === 'extracted' && 'Préparation de la catégorisation...'}
           {progress.status === 'completed' && 'Analyse terminée'}
           {progress.status === 'failed' && 'Échec de l\'analyse'}
           {progress.status === 'pending' && 'En attente'}
@@ -153,7 +157,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Status message with detailed info */}
-        {progress.status === 'processing' && progress.stage && (
+        {(progress.status === 'processing' || progress.status === 'extracted') && progress.stage && (
           <div className="space-y-3">
             {/* Current stage */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
@@ -179,6 +183,8 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
                     ? `${progress.progressCurrent}/${progress.progressTotal} batches`
                     : progress.stage === 'categorizing'
                     ? `${progress.progressCurrent}/${progress.progressTotal} questions`
+                    : progress.stage === 'extracted'
+                    ? 'Démarrage...'
                     : `${progress.progressPercentage}%`
                   }
                 </p>
@@ -194,7 +200,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
         )}
 
         {/* Progress bar */}
-        {progress.status === 'processing' && (
+        {(progress.status === 'processing' || progress.status === 'extracted') && (
           <div className="space-y-2">
             <Progress value={progress.progressPercentage} className="h-2" />
             <div className="flex justify-between text-xs text-gray-500">
@@ -203,6 +209,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
               </span>
               <span>
                 {progress.stage === 'extracting' && 'GPT-5 en traitement...'}
+                {progress.stage === 'extracted' && 'Lancement de la catégorisation...'}
                 {progress.stage === 'categorizing' && 'Claude en traitement...'}
                 {progress.stage === 'parsing' && 'Extraction PDF...'}
               </span>

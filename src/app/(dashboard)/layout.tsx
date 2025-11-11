@@ -22,17 +22,8 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const slug = params.slug as string || 'demo-company';
 
-  // Auto-set active company when navigating to company pages
-  useEffect(() => {
-    if (slug && slug !== 'demo-company') {
-      // Set the active company cookie when visiting company pages
-      fetch(`/api/companies/${slug}/set-active`, {
-        method: 'POST',
-      }).catch((error) => {
-        console.error('Failed to set active company:', error);
-      });
-    }
-  }, [slug]);
+  // Note: No longer using cookies for company context
+  // All APIs now extract company from slug in URL (via referer header)
 
   // Navigation items with dynamic company slug
   const navigation = [

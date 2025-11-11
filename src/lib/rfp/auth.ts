@@ -194,7 +194,43 @@ export async function requireRFPAuth() {
     };
   }
 
-  const company = await getCurrentCompany();
+  // Try cookie first
+  let company = await getCurrentCompany();
+
+  // If no cookie, try to extract slug from referer header
+  if (!company) {
+    const { headers } = await import('next/headers');
+    const headersList = await headers();
+    const referer = headersList.get('referer');
+
+    if (referer) {
+      // Extract slug from URL like /companies/my-company/rfps/...
+      const match = referer.match(/\/companies\/([^\/]+)\//);
+      if (match && match[1]) {
+        const slug = match[1];
+        console.log('[requireRFPAuth] No cookie, extracted slug from referer:', slug);
+
+        // Get company by slug
+        const companyContext = await getCompanyBySlug(slug);
+        if (companyContext) {
+          return {
+            error: null,
+            user: {
+              id: session.user.id,
+              email: session.user.email!,
+              name: session.user.name || null,
+              isSuperAdmin: session.user.isSuperAdmin,
+            },
+            company: {
+              id: companyContext.company.id,
+              name: companyContext.company.name,
+              role: companyContext.role,
+            },
+          };
+        }
+      }
+    }
+  }
 
   if (!company) {
     return {

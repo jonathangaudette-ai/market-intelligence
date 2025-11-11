@@ -16,15 +16,12 @@ export async function GET(
     const { company } = authResult;
     const { id: rfpId } = await params;
 
-    // Fetch RFP with questions
-    const rfp = await db.query.rfps.findFirst({
-      where: eq(rfps.id, rfpId),
-      with: {
-        questions: {
-          orderBy: (questions, { asc }) => [asc(questions.questionNumber)],
-        },
-      },
-    });
+    // Fetch RFP
+    const [rfp] = await db
+      .select()
+      .from(rfps)
+      .where(eq(rfps.id, rfpId))
+      .limit(1);
 
     if (!rfp) {
       return NextResponse.json(
@@ -41,7 +38,17 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(rfp);
+    // Fetch questions for this RFP
+    const questions = await db
+      .select()
+      .from(rfpQuestions)
+      .where(eq(rfpQuestions.rfpId, rfpId))
+      .orderBy(rfpQuestions.questionNumber);
+
+    return NextResponse.json({
+      ...rfp,
+      questions,
+    });
   } catch (error) {
     console.error('[GET RFP Error]', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';

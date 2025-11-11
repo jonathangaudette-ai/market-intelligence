@@ -136,6 +136,7 @@ export interface ProgressCallback {
 
 /**
  * Extract questions in batches for large documents
+ * Optimized to use fewer, larger batches to avoid rate limiting
  */
 export async function extractQuestionsInBatches(
   text: string,
@@ -144,17 +145,29 @@ export async function extractQuestionsInBatches(
     onProgress?: ProgressCallback;
   }
 ): Promise<ExtractedQuestion[]> {
-  const batchSize = options?.batchSize || 10000;
-  const batches: string[] = [];
-  let currentIndex = 0;
+  // Smart batch sizing:
+  // - Documents < 100k chars: Process all at once
+  // - Documents >= 100k chars: Use 30k batches instead of 10k
+  const MAX_SINGLE_REQUEST = 100000; // ~25k tokens
+  const LARGE_BATCH_SIZE = 30000; // ~7.5k tokens per batch
 
-  // Split text into batches
-  while (currentIndex < text.length) {
-    batches.push(text.substring(currentIndex, currentIndex + batchSize));
-    currentIndex += batchSize;
+  let batches: string[] = [];
+
+  if (text.length < MAX_SINGLE_REQUEST) {
+    // Process entire document in one request
+    console.log(`Document size: ${text.length} chars - processing in single request`);
+    batches = [text];
+  } else {
+    // Split into larger batches (30k instead of 10k)
+    console.log(`Document size: ${text.length} chars - splitting into 30k batches`);
+    let currentIndex = 0;
+    while (currentIndex < text.length) {
+      batches.push(text.substring(currentIndex, currentIndex + LARGE_BATCH_SIZE));
+      currentIndex += LARGE_BATCH_SIZE;
+    }
   }
 
-  console.log(`Processing ${batches.length} batches for question extraction`);
+  console.log(`Processing ${batches.length} batch${batches.length > 1 ? 'es' : ''} for question extraction`);
 
   const allQuestions: ExtractedQuestion[] = [];
 
@@ -170,9 +183,10 @@ export async function extractQuestionsInBatches(
         await options.onProgress(i + 1, batches.length, allQuestions.length);
       }
 
-      // Add a small delay to avoid rate limits
+      // Add delay between batches (only if multiple batches)
       if (i < batches.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log('Waiting 2 seconds before next batch...');
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
     } catch (error) {
       console.error(`Error processing batch ${i + 1}:`, error);
@@ -189,6 +203,7 @@ export async function extractQuestionsInBatches(
       )
   );
 
+  console.log(`Total unique questions after deduplication: ${uniqueQuestions.length}`);
   return uniqueQuestions;
 }
 

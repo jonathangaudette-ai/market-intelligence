@@ -117,13 +117,21 @@ Return ONLY a valid JSON array of questions, no additional text.`;
   }
 }
 
+export interface ProgressCallback {
+  (current: number, total: number, questionsExtracted: number): Promise<void>;
+}
+
 /**
  * Extract questions in batches for large documents
  */
 export async function extractQuestionsInBatches(
   text: string,
-  batchSize: number = 10000
+  options?: {
+    batchSize?: number;
+    onProgress?: ProgressCallback;
+  }
 ): Promise<ExtractedQuestion[]> {
+  const batchSize = options?.batchSize || 10000;
   const batches: string[] = [];
   let currentIndex = 0;
 
@@ -143,6 +151,11 @@ export async function extractQuestionsInBatches(
     try {
       const questions = await extractQuestions(batches[i]);
       allQuestions.push(...questions);
+
+      // Report progress
+      if (options?.onProgress) {
+        await options.onProgress(i + 1, batches.length, allQuestions.length);
+      }
 
       // Add a small delay to avoid rate limits
       if (i < batches.length - 1) {

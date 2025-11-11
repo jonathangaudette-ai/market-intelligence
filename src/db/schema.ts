@@ -267,6 +267,12 @@ export const rfps = pgTable("rfps", {
   parsingError: text("parsing_error"),
   parsedAt: timestamp("parsed_at"),
 
+  // Parsing progress tracking
+  parsingStage: varchar("parsing_stage", { length: 50 }), // downloading, parsing, extracting, categorizing, saving
+  parsingProgressCurrent: integer("parsing_progress_current").default(0), // Current batch/step number
+  parsingProgressTotal: integer("parsing_progress_total").default(0), // Total batches/steps
+  questionsExtracted: integer("questions_extracted").default(0), // Number of questions found so far
+
   // RFP metadata
   submissionDeadline: timestamp("submission_deadline"),
   clientContactName: varchar("client_contact_name", { length: 255 }),

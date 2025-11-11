@@ -54,11 +54,15 @@ export async function POST(
       );
     }
 
-    // 5. Update status to processing
+    // 5. Update status to processing - downloading stage
     await db
       .update(rfps)
       .set({
         parsingStatus: 'processing',
+        parsingStage: 'downloading',
+        parsingProgressCurrent: 0,
+        parsingProgressTotal: 0,
+        questionsExtracted: 0,
         updatedAt: new Date(),
       })
       .where(eq(rfps.id, id));
@@ -66,6 +70,16 @@ export async function POST(
     try {
       // 6. Parse document
       console.log(`[RFP ${id}] Starting parsing...`);
+
+      // Update to parsing stage
+      await db
+        .update(rfps)
+        .set({
+          parsingStage: 'parsing',
+          updatedAt: new Date(),
+        })
+        .where(eq(rfps.id, id));
+
       const parsedDoc = await parseDocument(
         rfp.originalFileUrl!,
         rfp.fileType!
@@ -73,10 +87,40 @@ export async function POST(
 
       console.log(`[RFP ${id}] Document parsed, extracted ${parsedDoc.text.length} characters`);
 
-      // 7. Extract questions using GPT-4o
+      // 7. Extract questions using GPT-5
       console.log(`[RFP ${id}] Extracting questions...`);
+
+      // Calculate total batches
+      const batchSize = 10000;
+      const totalBatches = Math.ceil(parsedDoc.text.length / batchSize);
+
+      // Update to extracting stage
+      await db
+        .update(rfps)
+        .set({
+          parsingStage: 'extracting',
+          parsingProgressTotal: totalBatches,
+          updatedAt: new Date(),
+        })
+        .where(eq(rfps.id, id));
+
       const extractedQuestions = await extractQuestionsInBatches(
-        parsedDoc.text
+        parsedDoc.text,
+        {
+          onProgress: async (current, total, questionsFound) => {
+            // Update progress in database
+            await db
+              .update(rfps)
+              .set({
+                parsingProgressCurrent: current,
+                questionsExtracted: questionsFound,
+                updatedAt: new Date(),
+              })
+              .where(eq(rfps.id, id));
+
+            console.log(`[RFP ${id}] Progress: ${current}/${total} batches, ${questionsFound} questions extracted`);
+          }
+        }
       );
 
       const validQuestions = validateQuestions(extractedQuestions);
@@ -85,9 +129,22 @@ export async function POST(
       // 8. Categorize questions and save to database
       console.log(`[RFP ${id}] Categorizing and saving questions...`);
 
+      // Update to categorizing stage
+      await db
+        .update(rfps)
+        .set({
+          parsingStage: 'categorizing',
+          parsingProgressCurrent: 0,
+          parsingProgressTotal: validQuestions.length,
+          updatedAt: new Date(),
+        })
+        .where(eq(rfps.id, id));
+
       const savedQuestions = [];
 
-      for (const question of validQuestions) {
+      for (let i = 0; i < validQuestions.length; i++) {
+        const question = validQuestions[i];
+
         try {
           // Categorize question using Claude
           const categorization = await categorizeQuestion(question.questionText);
@@ -112,6 +169,19 @@ export async function POST(
             .returning();
 
           savedQuestions.push(saved);
+
+          // Update progress every 5 questions
+          if (i % 5 === 0 || i === validQuestions.length - 1) {
+            await db
+              .update(rfps)
+              .set({
+                parsingProgressCurrent: i + 1,
+                updatedAt: new Date(),
+              })
+              .where(eq(rfps.id, id));
+
+            console.log(`[RFP ${id}] Categorized ${i + 1}/${validQuestions.length} questions`);
+          }
 
           // Small delay to avoid rate limits
           await new Promise((resolve) => setTimeout(resolve, 100));

@@ -4,6 +4,17 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Loader2, CheckCircle2, XCircle, FileText } from 'lucide-react';
+import { BatchChart } from './batch-chart';
+import { EventTimeline } from './event-timeline';
+import { QuestionPreview } from './question-preview';
+
+interface LogEvent {
+  timestamp: string;
+  type: 'info' | 'success' | 'error' | 'progress';
+  stage: string;
+  message: string;
+  metadata?: Record<string, any>;
+}
 
 interface ParsingProgressData {
   status: string; // pending, processing, completed, failed
@@ -13,6 +24,7 @@ interface ParsingProgressData {
   progressPercentage: number;
   questionsExtracted: number;
   error?: string;
+  logs: LogEvent[];
 }
 
 interface ParsingProgressProps {
@@ -93,6 +105,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
   }
 
   return (
+    <>
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -231,5 +244,32 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
         )}
       </CardContent>
     </Card>
+
+    {/* Advanced visualizations - Only show if logs exist */}
+    {progress.logs && progress.logs.length > 0 && (
+      <div className="mt-6 space-y-6">
+        {/* Title section */}
+        <div className="flex items-center gap-2">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+          <h3 className="text-sm font-medium text-gray-600 px-3">
+            Détails de l'analyse en temps réel
+          </h3>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+        </div>
+
+        {/* Charts and visualizations grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Batch Chart - Left column */}
+          <BatchChart logs={progress.logs} />
+
+          {/* Event Timeline - Right column */}
+          <EventTimeline logs={progress.logs} maxEvents={10} />
+        </div>
+
+        {/* Question Preview - Full width */}
+        <QuestionPreview logs={progress.logs} maxQuestions={5} />
+      </div>
+    )}
+    </>
   );
 }

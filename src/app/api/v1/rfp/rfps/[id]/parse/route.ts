@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { rfps, rfpQuestions } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { requireRFPAuth } from '@/lib/rfp/auth';
 import { parseDocument } from '@/lib/rfp/parser/parser-service';
 import { extractQuestionsInBatches, validateQuestions } from '@/lib/rfp/parser/question-extractor';
@@ -10,6 +10,32 @@ import { categorizeQuestion } from '@/lib/rfp/ai/claude';
 // Increase timeout to 13 minutes for large RFP documents (requires Vercel Pro + Fluid Compute)
 // With Fluid Compute: Pro plan can go up to 800s (13 min)
 export const maxDuration = 800;
+
+/**
+ * Helper function to add a log event to the parsing_logs column
+ */
+async function addParsingLog(
+  rfpId: string,
+  type: 'info' | 'success' | 'error' | 'progress',
+  stage: string,
+  message: string,
+  metadata?: Record<string, any>
+) {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    type,
+    stage,
+    message,
+    metadata,
+  };
+
+  await db.execute(sql`
+    UPDATE rfps
+    SET parsing_logs = COALESCE(parsing_logs, '[]'::jsonb) || ${JSON.stringify(logEntry)}::jsonb,
+        updated_at = NOW()
+    WHERE id = ${rfpId}
+  `);
+}
 
 /**
  * POST /api/v1/rfp/rfps/[id]/parse
@@ -67,9 +93,16 @@ export async function POST(
         parsingProgressCurrent: 0,
         parsingProgressTotal: 0,
         questionsExtracted: 0,
+        parsingLogs: [], // Reset logs
         updatedAt: new Date(),
       })
       .where(eq(rfps.id, id));
+
+    // Log: Start downloading
+    await addParsingLog(id, 'info', 'downloading', 'Téléchargement du document PDF depuis Vercel Blob Storage', {
+      fileUrl: rfp.originalFileUrl,
+      fileType: rfp.fileType,
+    });
 
     try {
       // 6. Parse document
@@ -84,12 +117,21 @@ export async function POST(
         })
         .where(eq(rfps.id, id));
 
+      // Log: Start parsing
+      await addParsingLog(id, 'info', 'parsing', 'Extraction du texte du document PDF en cours...');
+
       const parsedDoc = await parseDocument(
         rfp.originalFileUrl!,
         rfp.fileType!
       );
 
       console.log(`[RFP ${id}] Document parsed, extracted ${parsedDoc.text.length} characters`);
+
+      // Log: Parsing completed
+      await addParsingLog(id, 'success', 'parsing', `Document PDF analysé avec succès`, {
+        characterCount: parsedDoc.text.length,
+        pageCount: parsedDoc.metadata?.pageCount,
+      });
 
       // 7. Extract questions using GPT-5
       console.log(`[RFP ${id}] Extracting questions...`);
@@ -104,6 +146,11 @@ export async function POST(
           updatedAt: new Date(),
         })
         .where(eq(rfps.id, id));
+
+      // Log: Start extraction
+      await addParsingLog(id, 'info', 'extracting', 'Extraction des questions avec GPT-5 démarrée', {
+        textLength: parsedDoc.text.length,
+      });
 
       const extractedQuestions = await extractQuestionsInBatches(
         parsedDoc.text,
@@ -121,12 +168,31 @@ export async function POST(
               .where(eq(rfps.id, id));
 
             console.log(`[RFP ${id}] Progress: ${current}/${total} batches, ${questionsFound} questions extracted`);
+
+            // Log: Batch progress
+            await addParsingLog(
+              id,
+              'progress',
+              'extracting',
+              `Batch ${current}/${total} traité`,
+              {
+                batchNumber: current,
+                totalBatches: total,
+                questionsFound: questionsFound,
+              }
+            );
           }
         }
       );
 
       const validQuestions = validateQuestions(extractedQuestions);
       console.log(`[RFP ${id}] Extracted ${validQuestions.length} questions`);
+
+      // Log: Extraction completed
+      await addParsingLog(id, 'success', 'extracting', `Extraction terminée: ${validQuestions.length} questions trouvées`, {
+        totalQuestions: validQuestions.length,
+        rawQuestions: extractedQuestions.length,
+      });
 
       // 8. Categorize questions and save to database
       console.log(`[RFP ${id}] Categorizing and saving questions...`);
@@ -141,6 +207,9 @@ export async function POST(
           updatedAt: new Date(),
         })
         .where(eq(rfps.id, id));
+
+      // Log: Start categorization
+      await addParsingLog(id, 'info', 'categorizing', `Catégorisation de ${validQuestions.length} questions avec Claude démarrée`);
 
       const savedQuestions = [];
 
@@ -230,6 +299,12 @@ export async function POST(
 
       console.log(`[RFP ${id}] Parsing completed successfully`);
 
+      // Log: Parsing completed
+      await addParsingLog(id, 'success', 'completed', `✅ Analyse terminée avec succès: ${savedQuestions.length} questions extraites et catégorisées`, {
+        totalQuestions: savedQuestions.length,
+        duration: 'calculated_client_side',
+      });
+
       return NextResponse.json({
         message: 'RFP parsed successfully',
         questionsExtracted: savedQuestions.length,
@@ -241,6 +316,18 @@ export async function POST(
         })),
       });
     } catch (parsingError) {
+      // Log: Error
+      await addParsingLog(
+        id,
+        'error',
+        'error',
+        `❌ Erreur lors de l'analyse: ${parsingError instanceof Error ? parsingError.message : 'Erreur inconnue'}`,
+        {
+          error: parsingError instanceof Error ? parsingError.message : 'Unknown error',
+          stack: parsingError instanceof Error ? parsingError.stack : undefined,
+        }
+      );
+
       // Update RFP with error
       await db
         .update(rfps)

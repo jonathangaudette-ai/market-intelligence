@@ -31,6 +31,7 @@ export async function GET(
         parsingProgressTotal: rfps.parsingProgressTotal,
         questionsExtracted: rfps.questionsExtracted,
         parsingError: rfps.parsingError,
+        parsingLogs: rfps.parsingLogs,
       })
       .from(rfps)
       .where(eq(rfps.id, id))
@@ -67,6 +68,7 @@ export async function GET(
       progressPercentage,
       questionsExtracted: rfp.questionsExtracted || 0,
       error: rfp.parsingError,
+      logs: rfp.parsingLogs || [],
     });
   } catch (error) {
     console.error('[RFP Progress Error]', error);

@@ -272,6 +272,13 @@ export const rfps = pgTable("rfps", {
   parsingProgressCurrent: integer("parsing_progress_current").default(0), // Current batch/step number
   parsingProgressTotal: integer("parsing_progress_total").default(0), // Total batches/steps
   questionsExtracted: integer("questions_extracted").default(0), // Number of questions found so far
+  parsingLogs: jsonb("parsing_logs").$type<Array<{
+    timestamp: string;
+    type: 'info' | 'success' | 'error' | 'progress';
+    stage: string;
+    message: string;
+    metadata?: Record<string, any>;
+  }>>().default([]), // Detailed parsing event logs for advanced UI
 
   // RFP metadata
   submissionDeadline: timestamp("submission_deadline"),

@@ -91,6 +91,7 @@ export async function POST(
     await db
       .update(rfps)
       .set({
+        parsingStatus: 'processing', // IMPORTANT: Change status to prevent duplicate calls
         parsingStage: 'categorizing',
         parsingProgressCurrent: 0,
         parsingProgressTotal: extractedQuestions.length,

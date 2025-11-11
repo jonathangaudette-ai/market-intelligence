@@ -195,163 +195,34 @@ export async function POST(
         rawQuestions: extractedQuestions.length,
       });
 
-      // 8. Categorize questions and save to database
-      console.log(`[RFP ${id}] Categorizing and saving questions...`);
+      // 8. Save extracted questions and mark as "extracted" (categorization will be done in separate request)
+      console.log(`[RFP ${id}] Saving extracted questions for categorization...`);
 
-      // Update to categorizing stage
+      // 8. Save extracted questions for categorization (done in separate request)
       await db
         .update(rfps)
         .set({
-          parsingStage: 'categorizing',
-          parsingProgressCurrent: 0,
-          parsingProgressTotal: validQuestions.length,
-          updatedAt: new Date(),
-        })
-        .where(eq(rfps.id, id));
-
-      // Log: Start categorization
-      await addParsingLog(id, 'info', 'categorizing', `Catégorisation de ${validQuestions.length} questions avec Claude démarrée`);
-
-      const savedQuestions = [];
-      const BATCH_SIZE = 10; // Process 10 questions per API call
-
-      // Process questions in batches for 90% faster categorization
-      for (let batchStart = 0; batchStart < validQuestions.length; batchStart += BATCH_SIZE) {
-        const batchEnd = Math.min(batchStart + BATCH_SIZE, validQuestions.length);
-        const batch = validQuestions.slice(batchStart, batchEnd);
-
-        try {
-          console.log(`[RFP ${id}] Categorizing batch ${Math.floor(batchStart / BATCH_SIZE) + 1}/${Math.ceil(validQuestions.length / BATCH_SIZE)} (questions ${batchStart + 1}-${batchEnd})`);
-
-          // Categorize entire batch with ONE API call
-          const categorizations = await categorizeQuestionsBatch(
-            batch.map((q, idx) => ({
-              questionText: q.questionText,
-              index: idx
-            }))
-          );
-
-          // Save all questions in this batch
-          for (let i = 0; i < batch.length; i++) {
-            const question = batch[i];
-            const categorization = categorizations[i];
-
-            try {
-              const [saved] = await db
-                .insert(rfpQuestions)
-                .values({
-                  rfpId: id,
-                  sectionTitle: question.sectionTitle,
-                  questionNumber: question.questionNumber,
-                  questionText: question.questionText,
-                  requiresAttachment: question.requiresAttachment || false,
-                  wordLimit: question.wordLimit,
-                  category: categorization.category,
-                  tags: categorization.tags,
-                  difficulty: categorization.difficulty,
-                  estimatedMinutes: categorization.estimatedMinutes,
-                  status: 'pending',
-                  hasResponse: false,
-                })
-                .returning();
-
-              savedQuestions.push(saved);
-            } catch (dbError) {
-              console.error(`[RFP ${id}] Failed to save question ${batchStart + i + 1}:`, dbError);
-            }
-          }
-
-          // Update progress after each batch
-          await db
-            .update(rfps)
-            .set({
-              parsingProgressCurrent: batchEnd,
-              updatedAt: new Date(),
-            })
-            .where(eq(rfps.id, id));
-
-          console.log(`[RFP ${id}] Batch complete: ${batchEnd}/${validQuestions.length} questions categorized`);
-
-          // Log batch progress
-          await addParsingLog(
-            id,
-            'progress',
-            'categorizing',
-            `Batch ${Math.floor(batchStart / BATCH_SIZE) + 1}/${Math.ceil(validQuestions.length / BATCH_SIZE)} catégorisé`,
-            {
-              batchNumber: Math.floor(batchStart / BATCH_SIZE) + 1,
-              totalBatches: Math.ceil(validQuestions.length / BATCH_SIZE),
-              questionsInBatch: batch.length,
-              totalCategorized: batchEnd,
-            }
-          );
-
-          // Small delay between batches to avoid rate limits
-          if (batchEnd < validQuestions.length) {
-            await new Promise((resolve) => setTimeout(resolve, 200));
-          }
-        } catch (error) {
-          console.error(`[RFP ${id}] Error processing batch ${batchStart}-${batchEnd}:`, error);
-
-          // Fallback: save all questions in this batch with default categorization
-          for (let i = 0; i < batch.length; i++) {
-            const question = batch[i];
-
-            try {
-              const [saved] = await db
-                .insert(rfpQuestions)
-                .values({
-                  rfpId: id,
-                  sectionTitle: question.sectionTitle,
-                  questionNumber: question.questionNumber,
-                  questionText: question.questionText,
-                  requiresAttachment: question.requiresAttachment || false,
-                  wordLimit: question.wordLimit,
-                  category: 'company_info',
-                  tags: ['uncategorized'],
-                  difficulty: 'medium',
-                  estimatedMinutes: 15,
-                  status: 'pending',
-                  hasResponse: false,
-                })
-                .returning();
-
-              savedQuestions.push(saved);
-            } catch (dbError) {
-              console.error(`[RFP ${id}] Failed to save question ${batchStart + i + 1} even with default values:`, dbError);
-            }
-          }
-        }
-      }
-
-      // 9. Update RFP status
-      await db
-        .update(rfps)
-        .set({
-          parsingStatus: 'completed',
+          parsingStatus: 'extracted',
+          parsingStage: 'extracted',
+          extractedQuestions: validQuestions as any, // Store questions temporarily
           parsedAt: new Date(),
-          completionPercentage: 0, // No answers yet
           updatedAt: new Date(),
         })
         .where(eq(rfps.id, id));
 
-      console.log(`[RFP ${id}] Parsing completed successfully`);
+      console.log(`[RFP ${id}] Extraction phase completed successfully`);
 
-      // Log: Parsing completed
-      await addParsingLog(id, 'success', 'completed', `✅ Analyse terminée avec succès: ${savedQuestions.length} questions extraites et catégorisées`, {
-        totalQuestions: savedQuestions.length,
-        duration: 'calculated_client_side',
+      // Log: Extraction phase completed
+      await addParsingLog(id, 'success', 'extracted', `✅ Extraction terminée: ${validQuestions.length} questions prêtes pour la catégorisation`, {
+        totalQuestions: validQuestions.length,
+        nextStep: 'categorization',
       });
 
       return NextResponse.json({
-        message: 'RFP parsed successfully',
-        questionsExtracted: savedQuestions.length,
-        questions: savedQuestions.map((q) => ({
-          id: q.id,
-          questionText: q.questionText,
-          category: q.category,
-          difficulty: q.difficulty,
-        })),
+        message: 'RFP extraction completed successfully',
+        status: 'extracted',
+        questionsExtracted: validQuestions.length,
+        nextStep: 'Please call POST /categorize to complete the analysis',
       });
     } catch (parsingError) {
       // Log: Error

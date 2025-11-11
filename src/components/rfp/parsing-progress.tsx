@@ -17,8 +17,8 @@ interface LogEvent {
 }
 
 interface ParsingProgressData {
-  status: string; // pending, processing, completed, failed
-  stage?: string; // downloading, parsing, extracting, categorizing, saving
+  status: string; // pending, processing, extracted, completed, failed
+  stage?: string; // downloading, parsing, extracting, extracted, categorizing, saving
   progressCurrent: number;
   progressTotal: number;
   progressPercentage: number;
@@ -37,6 +37,7 @@ const STAGE_LABELS: Record<string, string> = {
   downloading: 'Téléchargement du document depuis le stockage...',
   parsing: 'Analyse du document PDF (extraction du texte)...',
   extracting: 'Extraction des questions avec GPT-5 (traitement par batch)...',
+  extracted: 'Préparation de la phase de catégorisation...',
   categorizing: 'Catégorisation intelligente des questions avec Claude...',
   saving: 'Sauvegarde finale des questions dans la base de données...',
 };
@@ -45,6 +46,7 @@ const STAGE_DESCRIPTIONS: Record<string, string> = {
   downloading: 'Récupération du fichier PDF depuis Vercel Blob Storage',
   parsing: 'Extraction du texte brut du PDF (~209k caractères pour ce document)',
   extracting: 'GPT-5 analyse le document par sections de 30k caractères pour identifier les questions',
+  extracted: 'Questions extraites avec succès - lancement automatique de la catégorisation',
   categorizing: 'Claude Sonnet 4.5 catégorise chaque question (difficulté, tags, estimation temps)',
   saving: 'Enregistrement de toutes les questions avec leurs métadonnées',
 };
@@ -67,8 +69,29 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
 
         setProgress(data);
 
+        // If extraction completed, automatically start categorization
+        if (data.status === 'extracted') {
+          console.log('[RFP] Extraction completed, starting categorization phase...');
+          try {
+            const categorizeResponse = await fetch(`/api/v1/rfp/rfps/${rfpId}/categorize`, {
+              method: 'POST',
+            });
+
+            if (!categorizeResponse.ok) {
+              const errorData = await categorizeResponse.json();
+              throw new Error(errorData.error || 'Failed to start categorization');
+            }
+
+            console.log('[RFP] Categorization started successfully');
+            // Continue polling to track categorization progress
+          } catch (error) {
+            console.error('Error starting categorization:', error);
+            onError?.(error instanceof Error ? error.message : 'Failed to start categorization');
+            setIsPolling(false);
+          }
+        }
         // Stop polling if completed or failed
-        if (data.status === 'completed') {
+        else if (data.status === 'completed') {
           setIsPolling(false);
           onComplete?.();
         } else if (data.status === 'failed') {

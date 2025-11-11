@@ -263,7 +263,7 @@ export const rfps = pgTable("rfps", {
   fileType: varchar("file_type", { length: 50 }),
 
   // Parsing status
-  parsingStatus: varchar("parsing_status", { length: 50 }).default("pending"), // pending, processing, completed, failed
+  parsingStatus: varchar("parsing_status", { length: 50 }).default("pending"), // pending, processing, extracted, completed, failed
   parsingError: text("parsing_error"),
   parsedAt: timestamp("parsed_at"),
 
@@ -279,6 +279,7 @@ export const rfps = pgTable("rfps", {
     message: string;
     metadata?: Record<string, any>;
   }>>().default([]), // Detailed parsing event logs for advanced UI
+  extractedQuestions: jsonb("extracted_questions"), // Temporary storage for extracted questions before categorization
 
   // RFP metadata
   submissionDeadline: timestamp("submission_deadline"),

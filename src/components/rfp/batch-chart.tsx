@@ -55,7 +55,7 @@ export function BatchChart({ logs }: BatchChartProps) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-blue-600" />
+            <TrendingUp className="h-4 w-4 text-teal-600" />
             Questions par Batch GPT-5
           </CardTitle>
         </CardHeader>
@@ -77,24 +77,24 @@ export function BatchChart({ logs }: BatchChartProps) {
     <Card>
       <CardHeader>
         <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-blue-600" />
+          <TrendingUp className="h-4 w-4 text-teal-600" />
           Questions par Batch GPT-5
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {/* Statistics */}
         <div className="grid grid-cols-3 gap-2 text-xs">
-          <div className="bg-blue-50 rounded p-2">
-            <p className="text-blue-600 font-medium">{totalQuestions}</p>
-            <p className="text-blue-700">Total</p>
+          <div className="bg-teal-100 rounded p-2">
+            <p className="text-teal-600 font-medium">{totalQuestions}</p>
+            <p className="text-teal-700">Total</p>
           </div>
           <div className="bg-green-50 rounded p-2">
             <p className="text-green-600 font-medium">{maxBatch}</p>
             <p className="text-green-700">Max/batch</p>
           </div>
-          <div className="bg-purple-50 rounded p-2">
-            <p className="text-purple-600 font-medium">{avgQuestions}</p>
-            <p className="text-purple-700">Moyenne</p>
+          <div className="bg-gray-50 rounded p-2">
+            <p className="text-gray-600 font-medium">{avgQuestions}</p>
+            <p className="text-gray-700">Moyenne</p>
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export function BatchChart({ logs }: BatchChartProps) {
               {batchData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={entry.questionsFound === maxBatch ? '#3b82f6' : '#93c5fd'}
+                  fill={entry.questionsFound === maxBatch ? '#0d9488' : '#5eead4'}
                 />
               ))}
             </Bar>
@@ -132,11 +132,11 @@ export function BatchChart({ logs }: BatchChartProps) {
         {/* Legend */}
         <div className="flex items-center justify-center gap-4 text-xs">
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded bg-blue-500" />
+            <div className="w-3 h-3 rounded bg-teal-600" />
             <span className="text-gray-600">Batch max</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded bg-blue-300" />
+            <div className="w-3 h-3 rounded bg-teal-300" />
             <span className="text-gray-600">Autres batches</span>
           </div>
         </div>

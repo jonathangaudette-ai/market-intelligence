@@ -45,7 +45,7 @@ const STAGE_DESCRIPTIONS: Record<string, string> = {
   downloading: 'Récupération du fichier PDF depuis Vercel Blob Storage',
   parsing: 'Extraction du texte brut du PDF (~209k caractères pour ce document)',
   extracting: 'GPT-5 analyse le document par sections de 30k caractères pour identifier les questions',
-  categorizing: 'Claude 3.5 Sonnet catégorise chaque question (difficulté, tags, estimation temps)',
+  categorizing: 'Claude Sonnet 4.5 catégorise chaque question (difficulté, tags, estimation temps)',
   saving: 'Enregistrement de toutes les questions avec leurs métadonnées',
 };
 

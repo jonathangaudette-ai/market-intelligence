@@ -74,7 +74,7 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <FileQuestion className="h-4 w-4 text-purple-600" />
+            <FileQuestion className="h-4 w-4 text-teal-600" />
             Aperçu des Questions
           </CardTitle>
         </CardHeader>
@@ -93,7 +93,7 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
     <Card>
       <CardHeader>
         <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <FileQuestion className="h-4 w-4 text-purple-600" />
+          <FileQuestion className="h-4 w-4 text-teal-600" />
           Aperçu des Questions
           <span className="text-xs font-normal text-gray-500 ml-auto">
             ({totalQuestions} trouvée{totalQuestions > 1 ? 's' : ''})
@@ -105,11 +105,11 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
           {questions.map((question, index) => (
             <div
               key={index}
-              className="relative bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-3 hover:shadow-md transition-shadow"
+              className="relative bg-gradient-to-r from-teal-50 to-teal-100 border border-teal-200 rounded-lg p-3 hover:shadow-md transition-shadow"
             >
               {/* New badge for first 3 items */}
               {index < 3 && (
-                <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
+                <div className="absolute -top-2 -right-2 bg-teal-600 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
                   NEW
                 </div>
               )}
@@ -117,12 +117,12 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
               {/* Question header */}
               <div className="flex items-start gap-2 mb-2">
                 {question.questionNumber && (
-                  <span className="flex-shrink-0 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">
+                  <span className="flex-shrink-0 bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded">
                     {question.questionNumber}
                   </span>
                 )}
                 {question.sectionTitle && (
-                  <span className="text-xs text-purple-700 bg-purple-100 px-2 py-1 rounded truncate">
+                  <span className="text-xs text-teal-700 bg-teal-100 px-2 py-1 rounded truncate">
                     {question.sectionTitle}
                   </span>
                 )}
@@ -136,9 +136,9 @@ export function QuestionPreview({ logs, maxQuestions = 5 }: QuestionPreviewProps
               </p>
 
               {/* Footer */}
-              <div className="flex items-center justify-between mt-2 pt-2 border-t border-purple-100">
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-teal-100">
                 {question.wordLimit && (
-                  <span className="text-xs text-purple-600">
+                  <span className="text-xs text-teal-600">
                     Limite: {question.wordLimit} mots
                   </span>
                 )}

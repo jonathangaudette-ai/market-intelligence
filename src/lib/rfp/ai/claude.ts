@@ -154,6 +154,123 @@ Return your response in this exact JSON format (no additional text):
 }
 
 /**
+ * Categorize multiple RFP questions in a single batch (much faster!)
+ * Reduces API calls by ~90% compared to individual categorization
+ */
+export async function categorizeQuestionsBatch(
+  questions: Array<{ questionText: string; index: number }>
+): Promise<Array<{
+  category: string;
+  tags: string[];
+  difficulty: 'easy' | 'medium' | 'hard';
+  estimatedMinutes: number;
+}>> {
+  const anthropic = getAnthropic();
+
+  const systemPrompt = `You are an RFP question analyzer. Categorize multiple questions and provide metadata about each.
+
+For EACH question, return categorization in this JSON array format:
+[
+  {
+    "category": "one of: technical, pricing, company_info, case_study, compliance, implementation, support, security, legal",
+    "tags": ["array", "of", "relevant", "tags"],
+    "difficulty": "easy | medium | hard",
+    "estimatedMinutes": number (estimate time to answer: 5-60 minutes)
+  },
+  ...
+]
+
+Return ONLY the JSON array, no additional text. The array must have the same length as the input questions.`;
+
+  // Format questions for the prompt
+  const questionsText = questions
+    .map((q, i) => `Question ${i + 1}:\n${q.questionText}`)
+    .join('\n\n---\n\n');
+
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 4000, // Higher limit for batch responses
+      temperature: 0.3,
+      system: systemPrompt,
+      messages: [
+        {
+          role: 'user',
+          content: `Categorize these ${questions.length} RFP questions:\n\n${questionsText}`,
+        },
+      ],
+    });
+
+    const response = message.content[0];
+    if (response.type !== 'text') {
+      throw new Error('Unexpected response type from Claude');
+    }
+
+    // Extract JSON array from response
+    let jsonText = response.text.trim();
+
+    // Try to find JSON array in the response
+    const jsonMatch = jsonText.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      jsonText = jsonMatch[0];
+    }
+
+    try {
+      const parsed = JSON.parse(jsonText);
+
+      // Validate it's an array with correct length
+      if (!Array.isArray(parsed)) {
+        throw new Error('Response is not an array');
+      }
+
+      if (parsed.length !== questions.length) {
+        console.warn(`[Batch Categorization] Expected ${questions.length} results, got ${parsed.length}`);
+      }
+
+      // Validate each item has required fields, fill missing with defaults
+      const results = parsed.map((item, index) => {
+        if (!item.category || !item.tags || !item.difficulty || !item.estimatedMinutes) {
+          console.warn(`[Batch Categorization] Missing fields for question ${index + 1}, using defaults`);
+          return {
+            category: 'company_info',
+            tags: ['uncategorized'],
+            difficulty: 'medium' as const,
+            estimatedMinutes: 15,
+          };
+        }
+        return item;
+      });
+
+      // If we got fewer results than questions, pad with defaults
+      while (results.length < questions.length) {
+        results.push({
+          category: 'company_info',
+          tags: ['uncategorized'],
+          difficulty: 'medium',
+          estimatedMinutes: 15,
+        });
+      }
+
+      return results;
+    } catch (parseError) {
+      console.error('[Batch Categorization JSON Parse Error]', parseError);
+      console.error('[Raw Response]', response.text.substring(0, 1000));
+      throw parseError;
+    }
+  } catch (error) {
+    console.error('[Batch Categorization Error]', error);
+
+    // Return default categorization for all questions
+    return questions.map(() => ({
+      category: 'company_info',
+      tags: ['uncategorized'],
+      difficulty: 'medium',
+      estimatedMinutes: 15,
+    }));
+  }
+}
+
+/**
  * Extract questions from an RFP document using GPT-4o (better at structured extraction)
  * Note: Using GPT-4o instead of Claude as it's better at structured extraction tasks
  */

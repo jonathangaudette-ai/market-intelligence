@@ -28,11 +28,11 @@ const STAGE_ICONS: Record<string, React.ReactNode> = {
 const TYPE_STYLES = {
   info: {
     icon: <Info className="h-4 w-4" />,
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    text: 'text-blue-900',
-    iconColor: 'text-blue-600',
-    dot: 'bg-blue-400',
+    bg: 'bg-teal-50',
+    border: 'border-teal-200',
+    text: 'text-teal-900',
+    iconColor: 'text-teal-600',
+    dot: 'bg-teal-400',
   },
   success: {
     icon: <CheckCircle2 className="h-4 w-4" />,

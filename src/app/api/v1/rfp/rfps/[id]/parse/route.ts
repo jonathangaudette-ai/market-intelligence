@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import { requireRFPAuth } from '@/lib/rfp/auth';
 import { parseDocument } from '@/lib/rfp/parser/parser-service';
 import { extractQuestionsInBatches, validateQuestions } from '@/lib/rfp/parser/question-extractor';
-import { categorizeQuestion } from '@/lib/rfp/ai/claude';
+import { categorizeQuestionsBatch } from '@/lib/rfp/ai/claude';
 
 // Increase timeout to 13 minutes for large RFP documents (requires Vercel Pro + Fluid Compute)
 // With Fluid Compute: Pro plan can go up to 800s (13 min)
@@ -212,76 +212,113 @@ export async function POST(
       await addParsingLog(id, 'info', 'categorizing', `Catégorisation de ${validQuestions.length} questions avec Claude démarrée`);
 
       const savedQuestions = [];
+      const BATCH_SIZE = 10; // Process 10 questions per API call
 
-      for (let i = 0; i < validQuestions.length; i++) {
-        const question = validQuestions[i];
+      // Process questions in batches for 90% faster categorization
+      for (let batchStart = 0; batchStart < validQuestions.length; batchStart += BATCH_SIZE) {
+        const batchEnd = Math.min(batchStart + BATCH_SIZE, validQuestions.length);
+        const batch = validQuestions.slice(batchStart, batchEnd);
 
         try {
-          // Categorize question using Claude (with fallback to default)
-          const categorization = await categorizeQuestion(question.questionText);
+          console.log(`[RFP ${id}] Categorizing batch ${Math.floor(batchStart / BATCH_SIZE) + 1}/${Math.ceil(validQuestions.length / BATCH_SIZE)} (questions ${batchStart + 1}-${batchEnd})`);
 
-          // Save to database
-          const [saved] = await db
-            .insert(rfpQuestions)
-            .values({
-              rfpId: id,
-              sectionTitle: question.sectionTitle,
-              questionNumber: question.questionNumber,
-              questionText: question.questionText,
-              requiresAttachment: question.requiresAttachment || false,
-              wordLimit: question.wordLimit,
-              category: categorization.category,
-              tags: categorization.tags,
-              difficulty: categorization.difficulty,
-              estimatedMinutes: categorization.estimatedMinutes,
-              status: 'pending',
-              hasResponse: false,
-            })
-            .returning();
+          // Categorize entire batch with ONE API call
+          const categorizations = await categorizeQuestionsBatch(
+            batch.map((q, idx) => ({
+              questionText: q.questionText,
+              index: idx
+            }))
+          );
 
-          savedQuestions.push(saved);
+          // Save all questions in this batch
+          for (let i = 0; i < batch.length; i++) {
+            const question = batch[i];
+            const categorization = categorizations[i];
 
-          // Update progress every 5 questions
-          if (i % 5 === 0 || i === validQuestions.length - 1) {
-            await db
-              .update(rfps)
-              .set({
-                parsingProgressCurrent: i + 1,
-                updatedAt: new Date(),
-              })
-              .where(eq(rfps.id, id));
+            try {
+              const [saved] = await db
+                .insert(rfpQuestions)
+                .values({
+                  rfpId: id,
+                  sectionTitle: question.sectionTitle,
+                  questionNumber: question.questionNumber,
+                  questionText: question.questionText,
+                  requiresAttachment: question.requiresAttachment || false,
+                  wordLimit: question.wordLimit,
+                  category: categorization.category,
+                  tags: categorization.tags,
+                  difficulty: categorization.difficulty,
+                  estimatedMinutes: categorization.estimatedMinutes,
+                  status: 'pending',
+                  hasResponse: false,
+                })
+                .returning();
 
-            console.log(`[RFP ${id}] Categorized ${i + 1}/${validQuestions.length} questions`);
+              savedQuestions.push(saved);
+            } catch (dbError) {
+              console.error(`[RFP ${id}] Failed to save question ${batchStart + i + 1}:`, dbError);
+            }
           }
 
-          // Optimized delay for speed while avoiding rate limits (100ms)
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          // Update progress after each batch
+          await db
+            .update(rfps)
+            .set({
+              parsingProgressCurrent: batchEnd,
+              updatedAt: new Date(),
+            })
+            .where(eq(rfps.id, id));
+
+          console.log(`[RFP ${id}] Batch complete: ${batchEnd}/${validQuestions.length} questions categorized`);
+
+          // Log batch progress
+          await addParsingLog(
+            id,
+            'progress',
+            'categorizing',
+            `Batch ${Math.floor(batchStart / BATCH_SIZE) + 1}/${Math.ceil(validQuestions.length / BATCH_SIZE)} catégorisé`,
+            {
+              batchNumber: Math.floor(batchStart / BATCH_SIZE) + 1,
+              totalBatches: Math.ceil(validQuestions.length / BATCH_SIZE),
+              questionsInBatch: batch.length,
+              totalCategorized: batchEnd,
+            }
+          );
+
+          // Small delay between batches to avoid rate limits
+          if (batchEnd < validQuestions.length) {
+            await new Promise((resolve) => setTimeout(resolve, 200));
+          }
         } catch (error) {
-          console.error(`[RFP ${id}] Error processing question ${i + 1}:`, error);
+          console.error(`[RFP ${id}] Error processing batch ${batchStart}-${batchEnd}:`, error);
 
-          // Save question with default categorization if categorization fails completely
-          try {
-            const [saved] = await db
-              .insert(rfpQuestions)
-              .values({
-                rfpId: id,
-                sectionTitle: question.sectionTitle,
-                questionNumber: question.questionNumber,
-                questionText: question.questionText,
-                requiresAttachment: question.requiresAttachment || false,
-                wordLimit: question.wordLimit,
-                category: 'company_info',
-                tags: ['uncategorized'],
-                difficulty: 'medium',
-                estimatedMinutes: 15,
-                status: 'pending',
-                hasResponse: false,
-              })
-              .returning();
+          // Fallback: save all questions in this batch with default categorization
+          for (let i = 0; i < batch.length; i++) {
+            const question = batch[i];
 
-            savedQuestions.push(saved);
-          } catch (dbError) {
-            console.error(`[RFP ${id}] Failed to save question ${i + 1} even with default values:`, dbError);
+            try {
+              const [saved] = await db
+                .insert(rfpQuestions)
+                .values({
+                  rfpId: id,
+                  sectionTitle: question.sectionTitle,
+                  questionNumber: question.questionNumber,
+                  questionText: question.questionText,
+                  requiresAttachment: question.requiresAttachment || false,
+                  wordLimit: question.wordLimit,
+                  category: 'company_info',
+                  tags: ['uncategorized'],
+                  difficulty: 'medium',
+                  estimatedMinutes: 15,
+                  status: 'pending',
+                  hasResponse: false,
+                })
+                .returning();
+
+              savedQuestions.push(saved);
+            } catch (dbError) {
+              console.error(`[RFP ${id}] Failed to save question ${batchStart + i + 1} even with default values:`, dbError);
+            }
           }
         }
       }

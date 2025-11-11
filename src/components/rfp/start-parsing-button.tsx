@@ -23,15 +23,40 @@ export function StartParsingButton({ rfpId }: StartParsingButtonProps) {
         method: 'POST',
       });
 
-      const data = await response.json();
-
+      // Check if response is OK first (status 200-299)
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to start parsing');
+        // Try to parse error as JSON, fallback to text
+        let errorMessage = 'Failed to start parsing';
+
+        try {
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorData.details || errorMessage;
+          } else {
+            // Non-JSON error (HTML, text, etc.)
+            const errorText = await response.text();
+            errorMessage = `Server error (${response.status}): ${errorText.substring(0, 200)}`;
+          }
+        } catch (parseError) {
+          // If parsing error response fails, use status text
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      // Only parse JSON if response is OK (validation)
+      try {
+        await response.json();
+      } catch (jsonError) {
+        throw new Error('Invalid JSON response from server');
       }
 
       // Refresh the page to show progress
       router.refresh();
     } catch (err) {
+      console.error('[Start Parsing Error]', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
       setIsStarting(false);
     }

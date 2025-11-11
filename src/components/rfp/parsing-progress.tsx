@@ -155,15 +155,18 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
-              <div>
+              <div className="flex-1">
                 <p className="font-medium text-red-900">
                   L'analyse a échoué
                 </p>
                 {progress.error && (
-                  <p className="text-sm text-red-700 mt-1">
+                  <p className="text-sm text-red-700 mt-1 whitespace-pre-wrap break-words">
                     {progress.error}
                   </p>
                 )}
+                <p className="text-xs text-red-600 mt-2">
+                  Essayez de recharger la page et de redémarrer l'analyse
+                </p>
               </div>
             </div>
           </div>

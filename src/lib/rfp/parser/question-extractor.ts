@@ -111,19 +111,34 @@ Return ONLY a valid JSON array of questions, no additional text.`;
 
     console.log('[Question Extractor] Parsing JSON response...');
     console.log('[Content Length]', content.length, 'characters');
-    console.log('[Content Preview]', content.substring(0, 200));
+    console.log('[Content Preview - First 300]', content.substring(0, 300));
+    console.log('[Content Preview - Last 300]', content.substring(Math.max(0, content.length - 300)));
 
     let parsed;
     try {
       parsed = JSON.parse(content);
     } catch (parseError) {
-      // Log the FULL raw response for debugging
-      console.error('[JSON Parse Error in Question Extraction]', parseError);
-      console.error('[Full Raw Response - First 1000 chars]', content.substring(0, 1000));
-      console.error('[Full Raw Response - Last 200 chars]', content.substring(Math.max(0, content.length - 200)));
-      console.error('[Content starts with]', content.substring(0, 50));
-      console.error('[Response finish_reason]', response.choices[0]?.finish_reason);
-      console.error('[Response model]', response.model);
+      // Log the FULL raw response for debugging JSON parsing issues
+      console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.error('[JSON Parse Error in Question Extraction]');
+      console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.error('[Error Message]', parseError instanceof Error ? parseError.message : parseError);
+      console.error('[Response Model]', response.model);
+      console.error('[Finish Reason]', response.choices[0]?.finish_reason);
+      console.error('[Content Type]', typeof content);
+      console.error('[Content Length]', content.length);
+      console.error('[First 500 chars]', content.substring(0, 500));
+      console.error('[Last 500 chars]', content.substring(Math.max(0, content.length - 500)));
+
+      // Check if content contains common JSON issues
+      if (content.includes('```json')) {
+        console.error('[Issue Detected] Response contains markdown code block markers - GPT-5 may be ignoring response_format');
+      }
+      if (content.startsWith('An error o')) {
+        console.error('[Issue Detected] Response starts with error message text');
+      }
+
+      console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
       // Return empty array instead of crashing
       console.warn('[Question Extractor] Failed to parse JSON, returning empty array');

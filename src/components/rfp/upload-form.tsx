@@ -35,6 +35,12 @@ export function RFPUploadForm({
     e.preventDefault();
     setError(null);
 
+    // Validate slug is loaded
+    if (!slug) {
+      setError('Company context not loaded. Please wait a moment and try again.');
+      return;
+    }
+
     if (!file) {
       setError('Please select a file');
       return;
@@ -48,15 +54,17 @@ export function RFPUploadForm({
     setIsSubmitting(true);
 
     try {
+      // Debug logging
+      console.log('[RFP Upload] Starting upload with slug:', slug);
+
       const formDataToSend = new FormData();
       formDataToSend.append('file', file);
       formDataToSend.append('title', formData.title);
       formDataToSend.append('clientName', formData.clientName);
 
       // Add company slug for server-side auth
-      if (slug) {
-        formDataToSend.append('companySlug', slug);
-      }
+      formDataToSend.append('companySlug', slug);
+      console.log('[RFP Upload] FormData companySlug:', formDataToSend.get('companySlug'));
 
       if (formData.clientIndustry) {
         formDataToSend.append('clientIndustry', formData.clientIndustry);

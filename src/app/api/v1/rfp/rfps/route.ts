@@ -21,8 +21,23 @@ export async function POST(request: NextRequest) {
     const submissionDeadline = formData.get('submissionDeadline') as string | null;
     const estimatedDealValue = formData.get('estimatedDealValue') as string | null;
 
+    // Debug logging
+    console.log('[RFP API] POST request received');
+    console.log('[RFP API] companySlug from FormData:', companySlug);
+    console.log('[RFP API] title:', title);
+    console.log('[RFP API] clientName:', clientName);
+
     // 2. Authentication (using slug if provided, falls back to cookie)
     const authResult = await requireRFPAuthWithSlug(companySlug);
+
+    console.log('[RFP API] Auth result:', {
+      hasError: !!authResult.error,
+      hasUser: !!authResult.user,
+      hasCompany: !!authResult.company,
+      companyId: authResult.company?.id,
+      companyName: authResult.company?.name,
+    });
+
     if (authResult.error) return authResult.error;
 
     const { user, company } = authResult;

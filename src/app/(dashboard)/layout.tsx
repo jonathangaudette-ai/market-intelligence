@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useParams, usePathname } from "next/navigation";
+import Link from "next/link";
 import { Building2, MessageSquare, FileText, Users, Settings, LogOut, Menu, X, LayoutDashboard, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,15 +11,6 @@ import { CompanySwitcher } from "@/components/company-switcher";
 import { SuperAdminBadge } from "@/components/super-admin-badge";
 import { useSession } from "@/hooks/use-session";
 
-const navigation = [
-  { name: "Dashboard", href: "/companies/demo-company/dashboard", icon: LayoutDashboard, current: false },
-  { name: "Intelligence", href: "/companies/demo-company/intelligence", icon: MessageSquare, current: true },
-  { name: "RFP Assistant", href: "/dashboard/rfps", icon: FileCheck, current: false },
-  { name: "Concurrents", href: "/companies/demo-company/competitors", icon: Users, current: false },
-  { name: "Documents", href: "/companies/demo-company/documents", icon: FileText, current: false },
-  { name: "Paramètres", href: "/companies/demo-company/settings", icon: Settings, current: false },
-];
-
 export default function DashboardLayout({
   children,
 }: {
@@ -25,6 +18,19 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useSession();
+  const params = useParams();
+  const pathname = usePathname();
+  const slug = params.slug as string || 'demo-company';
+
+  // Navigation items with dynamic company slug
+  const navigation = [
+    { name: "Dashboard", href: `/companies/${slug}/dashboard`, icon: LayoutDashboard },
+    { name: "Intelligence", href: `/companies/${slug}/intelligence`, icon: MessageSquare },
+    { name: "RFP Assistant", href: `/dashboard/rfps`, icon: FileCheck },
+    { name: "Concurrents", href: `/companies/${slug}/competitors`, icon: Users },
+    { name: "Documents", href: `/companies/${slug}/documents`, icon: FileText },
+    { name: "Paramètres", href: `/companies/${slug}/settings`, icon: Settings },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -64,13 +70,14 @@ export default function DashboardLayout({
         <nav className="p-4 space-y-1">
           {navigation.map((item) => {
             const Icon = item.icon;
+            const isActive = pathname === item.href;
             return (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className={`
                   flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                  ${item.current
+                  ${isActive
                     ? 'bg-teal-50 text-teal-700'
                     : 'text-gray-700 hover:bg-gray-100'
                   }
@@ -78,7 +85,7 @@ export default function DashboardLayout({
               >
                 <Icon className="h-5 w-5" />
                 {item.name}
-              </a>
+              </Link>
             );
           })}
         </nav>

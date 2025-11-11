@@ -62,10 +62,6 @@ export function RFPUploadForm({
       formDataToSend.append('title', formData.title);
       formDataToSend.append('clientName', formData.clientName);
 
-      // Add company slug for server-side auth
-      formDataToSend.append('companySlug', slug);
-      console.log('[RFP Upload] FormData companySlug:', formDataToSend.get('companySlug'));
-
       if (formData.clientIndustry) {
         formDataToSend.append('clientIndustry', formData.clientIndustry);
       }
@@ -76,7 +72,7 @@ export function RFPUploadForm({
         formDataToSend.append('estimatedDealValue', formData.estimatedDealValue);
       }
 
-      const response = await fetch('/api/v1/rfp/rfps', {
+      const response = await fetch(`/api/companies/${slug}/rfps`, {
         method: 'POST',
         body: formDataToSend,
       });

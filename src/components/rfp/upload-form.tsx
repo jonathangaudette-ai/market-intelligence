@@ -52,6 +52,12 @@ export function RFPUploadForm({
       formDataToSend.append('file', file);
       formDataToSend.append('title', formData.title);
       formDataToSend.append('clientName', formData.clientName);
+
+      // Add company slug for server-side auth
+      if (slug) {
+        formDataToSend.append('companySlug', slug);
+      }
+
       if (formData.clientIndustry) {
         formDataToSend.append('clientIndustry', formData.clientIndustry);
       }

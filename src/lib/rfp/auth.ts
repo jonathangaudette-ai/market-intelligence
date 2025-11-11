@@ -221,6 +221,155 @@ export async function requireRFPAuth() {
 }
 
 /**
+ * Get company by slug and verify user access
+ * Returns company data if user has access, null otherwise
+ */
+export async function getCompanyBySlug(slug: string) {
+  const { db } = await import('@/db');
+  const { companies, companyMembers } = await import('@/db/schema');
+  const { eq, and } = await import('drizzle-orm');
+
+  const session = await auth();
+  if (!session?.user) {
+    return null;
+  }
+
+  // Find company by slug
+  const [company] = await db
+    .select()
+    .from(companies)
+    .where(and(
+      eq(companies.slug, slug),
+      eq(companies.isActive, true)
+    ))
+    .limit(1);
+
+  if (!company) {
+    return null;
+  }
+
+  // Super admins can access any company
+  if (session.user.isSuperAdmin) {
+    return {
+      company,
+      role: 'admin' as const,
+      userId: session.user.id,
+    };
+  }
+
+  // Verify user has access to this company
+  const [membership] = await db
+    .select({
+      role: companyMembers.role,
+    })
+    .from(companyMembers)
+    .where(
+      and(
+        eq(companyMembers.userId, session.user.id),
+        eq(companyMembers.companyId, company.id)
+      )
+    )
+    .limit(1);
+
+  if (!membership) {
+    return null;
+  }
+
+  return {
+    company,
+    role: membership.role,
+    userId: session.user.id,
+  };
+}
+
+/**
+ * Middleware helper to protect RFP API routes with optional slug-based auth
+ * Accepts an optional company slug parameter. If provided, will validate access
+ * to that specific company. Otherwise falls back to cookie-based getCurrentCompany()
+ *
+ * Usage in API routes:
+ *
+ * ```ts
+ * export async function POST(request: Request) {
+ *   const formData = await request.formData();
+ *   const companySlug = formData.get('companySlug') as string | null;
+ *
+ *   const authResult = await requireRFPAuthWithSlug(companySlug);
+ *   if (authResult.error) return authResult.error;
+ *
+ *   // Continue with authenticated request
+ *   const { user, company } = authResult;
+ *   // ...
+ * }
+ * ```
+ */
+export async function requireRFPAuthWithSlug(companySlug?: string | null) {
+  const session = await auth();
+
+  if (!session?.user) {
+    return {
+      error: unauthorizedResponse('Authentication required'),
+      user: null,
+      company: null,
+    };
+  }
+
+  // If slug provided, use slug-based auth
+  if (companySlug) {
+    const companyContext = await getCompanyBySlug(companySlug);
+
+    if (!companyContext) {
+      return {
+        error: forbiddenResponse('Access denied to this company'),
+        user: session.user,
+        company: null,
+      };
+    }
+
+    return {
+      error: null,
+      user: {
+        id: session.user.id,
+        email: session.user.email!,
+        name: session.user.name || null,
+        isSuperAdmin: session.user.isSuperAdmin,
+      },
+      company: {
+        id: companyContext.company.id,
+        name: companyContext.company.name,
+        role: companyContext.role,
+      },
+    };
+  }
+
+  // Fall back to cookie-based auth for backward compatibility
+  const company = await getCurrentCompany();
+
+  if (!company) {
+    return {
+      error: forbiddenResponse('No active company context'),
+      user: session.user,
+      company: null,
+    };
+  }
+
+  return {
+    error: null,
+    user: {
+      id: session.user.id,
+      email: session.user.email!,
+      name: session.user.name || null,
+      isSuperAdmin: session.user.isSuperAdmin,
+    },
+    company: {
+      id: company.company.id,
+      name: company.company.name,
+      role: company.role,
+    },
+  };
+}
+
+/**
  * Type for authenticated RFP context
  */
 export type RFPAuthContext = Awaited<ReturnType<typeof requireRFPAuth>>;

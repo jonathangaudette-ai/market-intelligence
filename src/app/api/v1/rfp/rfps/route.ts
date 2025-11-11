@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 import { db } from '@/db';
 import { rfps } from '@/db/schema';
-import { requireRFPAuth } from '@/lib/rfp/auth';
+import { requireRFPAuthWithSlug } from '@/lib/rfp/auth';
 import { eq, and, desc } from 'drizzle-orm';
 
 /**
@@ -11,20 +11,21 @@ import { eq, and, desc } from 'drizzle-orm';
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Authentication
-    const authResult = await requireRFPAuth();
-    if (authResult.error) return authResult.error;
-
-    const { user, company } = authResult;
-
-    // 2. Parse form data
+    // 1. Parse form data
     const formData = await request.formData();
+    const companySlug = formData.get('companySlug') as string | null;
     const file = formData.get('file') as File | null;
     const title = formData.get('title') as string | null;
     const clientName = formData.get('clientName') as string | null;
     const clientIndustry = formData.get('clientIndustry') as string | null;
     const submissionDeadline = formData.get('submissionDeadline') as string | null;
     const estimatedDealValue = formData.get('estimatedDealValue') as string | null;
+
+    // 2. Authentication (using slug if provided, falls back to cookie)
+    const authResult = await requireRFPAuthWithSlug(companySlug);
+    if (authResult.error) return authResult.error;
+
+    const { user, company } = authResult;
 
     // 3. Validation
     if (!file) {
@@ -145,8 +146,8 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    // 1. Authentication
-    const authResult = await requireRFPAuth();
+    // 1. Authentication (falls back to cookie-based auth)
+    const authResult = await requireRFPAuthWithSlug();
     if (authResult.error) return authResult.error;
 
     const { company } = authResult;

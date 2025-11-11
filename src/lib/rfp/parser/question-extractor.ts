@@ -83,8 +83,8 @@ Return ONLY a valid JSON array of questions, no additional text.`;
         },
       ],
       response_format: { type: 'json_object' },
-      temperature: 0.1,
-      max_tokens: 4000,
+      // GPT-5 only supports temperature=1 (default), omit the parameter
+      max_completion_tokens: 16000, // GPT-5 needs high limit for reasoning_tokens + output tokens
     });
 
     console.log('[Question Extractor] Received response from GPT-5');

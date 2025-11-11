@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, MessageSquare, FileText, Users, Settings, ChevronDown, LogOut, Menu, X, LayoutDashboard } from "lucide-react";
+import { Building2, MessageSquare, FileText, Users, Settings, ChevronDown, LogOut, Menu, X, LayoutDashboard, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CompanyProvider } from "@/components/company-provider";
@@ -9,6 +9,7 @@ import { CompanyProvider } from "@/components/company-provider";
 const navigation = [
   { name: "Dashboard", href: "/companies/demo-company/dashboard", icon: LayoutDashboard, current: false },
   { name: "Intelligence", href: "/companies/demo-company/intelligence", icon: MessageSquare, current: true },
+  { name: "RFP Assistant", href: "/dashboard/rfps", icon: FileCheck, current: false },
   { name: "Concurrents", href: "/companies/demo-company/competitors", icon: Users, current: false },
   { name: "Documents", href: "/companies/demo-company/documents", icon: FileText, current: false },
   { name: "Paramètres", href: "/companies/demo-company/settings", icon: Settings, current: false },

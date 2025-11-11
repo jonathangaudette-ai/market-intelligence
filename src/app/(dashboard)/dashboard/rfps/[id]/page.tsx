@@ -1,15 +1,14 @@
 import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { db } from '@/db';
-import { rfps } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { rfps, rfpQuestions } from '@/db/schema';
+import { eq, count, and } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
 import { ParsingProgress } from '@/components/rfp/parsing-progress';
-import { QuestionList } from '@/components/rfp/question-list';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, DollarSign, Building2, FileText, ArrowLeft } from 'lucide-react';
+import { Calendar, DollarSign, Building2, FileText, ArrowLeft, ArrowRight, CheckCircle2, Circle } from 'lucide-react';
 import Link from 'next/link';
 import { StartParsingButton } from '@/components/rfp/start-parsing-button';
 
@@ -45,6 +44,30 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
 
   if (!rfp) {
     notFound();
+  }
+
+  // Get question stats if parsing is completed
+  let questionStats = null;
+  if (rfp.parsingStatus === 'completed') {
+    const [totalCount] = await db
+      .select({ count: count() })
+      .from(rfpQuestions)
+      .where(eq(rfpQuestions.rfpId, id));
+
+    const [completedCount] = await db
+      .select({ count: count() })
+      .from(rfpQuestions)
+      .where(
+        and(
+          eq(rfpQuestions.rfpId, id),
+          eq(rfpQuestions.hasResponse, true)
+        )
+      );
+
+    questionStats = {
+      total: totalCount?.count || 0,
+      completed: completedCount?.count || 0,
+    };
   }
 
   // Format date helper
@@ -244,10 +267,72 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
         </div>
       </div>
 
-      {/* Questions List - Full width */}
-      {rfp.parsingStatus === 'completed' && (
+      {/* Questions Summary & CTA - Full width */}
+      {rfp.parsingStatus === 'completed' && questionStats && (
         <div className="mt-6">
-          <QuestionList rfpId={id} />
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Questions du RFP
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Stats */}
+                <div className="md:col-span-2 grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <p className="text-sm text-gray-500 mb-1">Questions totales</p>
+                    <p className="text-3xl font-bold text-gray-900">{questionStats.total}</p>
+                  </div>
+
+                  <div className="bg-green-50 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <p className="text-sm text-green-700">Complétées</p>
+                    </div>
+                    <p className="text-3xl font-bold text-green-900">{questionStats.completed}</p>
+                  </div>
+
+                  <div className="bg-blue-50 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Circle className="h-4 w-4 text-blue-600" />
+                      <p className="text-sm text-blue-700">En attente</p>
+                    </div>
+                    <p className="text-3xl font-bold text-blue-900">
+                      {questionStats.total - questionStats.completed}
+                    </p>
+                  </div>
+
+                  <div className="bg-purple-50 rounded-lg p-4">
+                    <p className="text-sm text-purple-700 mb-1">Progression</p>
+                    <p className="text-3xl font-bold text-purple-900">
+                      {questionStats.total > 0
+                        ? Math.round((questionStats.completed / questionStats.total) * 100)
+                        : 0}%
+                    </p>
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <div className="flex flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
+                  <FileText className="h-12 w-12 text-blue-600 mb-3" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2 text-center">
+                    Répondre aux questions
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4 text-center">
+                    Accédez à l'interface de réponse avec filtres et éditeur de texte
+                  </p>
+                  <Link href={`/dashboard/rfps/${id}/questions`} className="w-full">
+                    <Button className="w-full" size="lg">
+                      Commencer
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>

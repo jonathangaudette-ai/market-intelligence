@@ -12,6 +12,7 @@ import { Calendar, DollarSign, Building2, FileText, ArrowLeft, ArrowRight, Check
 import Link from 'next/link';
 import { StartParsingButton } from '@/components/rfp/start-parsing-button';
 import { EnrichmentForm } from '@/components/rfp/enrichment-form';
+import { ExportButton } from '@/components/rfp/export-button';
 
 interface RFPDetailPageProps {
   params: Promise<{ id: string; slug: string }>;
@@ -106,9 +107,18 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
             <p className="mt-2 text-gray-600">{rfp.clientName}</p>
           </div>
 
-          {rfp.parsingStatus === 'pending' && (
-            <StartParsingButton rfpId={id} slug={slug} />
-          )}
+          <div className="flex items-center gap-3">
+            {rfp.parsingStatus === 'pending' && (
+              <StartParsingButton rfpId={id} slug={slug} />
+            )}
+            {rfp.parsingStatus === 'completed' && (
+              <ExportButton
+                rfpId={id}
+                slug={slug}
+                rfpTitle={rfp.title || 'RFP'}
+              />
+            )}
+          </div>
         </div>
       </div>
 

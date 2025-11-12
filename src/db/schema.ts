@@ -345,6 +345,9 @@ export const rfps = pgTable("rfps", {
 
   // Metadata
   metadata: jsonb("metadata"),
+
+  // AI-Generated Intelligence Brief
+  intelligenceBrief: jsonb("intelligence_brief"), // AI-generated executive summary for Go/No-Go decision
 });
 
 // RFP Questions table

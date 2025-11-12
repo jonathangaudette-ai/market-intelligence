@@ -36,6 +36,13 @@
       "when": 1762888340000,
       "tag": "0004_add_performance_indexes",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1762905977766,
+      "tag": "0005_tearful_colossus",
+      "breakpoints": true
     }
   ]
 }

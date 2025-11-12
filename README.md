@@ -15,6 +15,36 @@ Cette application utilise:
 - **Tailwind CSS** avec design system Teal
 - **shadcn/ui** pour les composants UI
 
+### 🏗️ Architecture Multi-Tenant Slug-Based
+
+L'application utilise une **architecture slug-based** pour l'isolation multi-tenant:
+
+**Principe clé**: Le contexte de la compagnie est **extrait de l'URL** (`/companies/[slug]/*`), éliminant les race conditions et garantissant une isolation robuste.
+
+**Avantages**:
+- ✅ Pas de cookies requis - Le slug est dans l'URL
+- ✅ Aucune race condition - Le contexte existe avant toute requête
+- ✅ URLs partageables et explicites
+- ✅ Sécurité renforcée - Vérification d'accès à chaque requête
+- ✅ Cache-friendly - URLs statiques pour CDN
+
+**Structure des routes**:
+```
+/companies/[slug]/dashboard          → Dashboard principal
+/companies/[slug]/rfps               → Gestion des RFPs
+/companies/[slug]/intelligence       → Chat RAG
+/companies/[slug]/competitors        → Gestion concurrents
+```
+
+**API endpoints**:
+```
+/api/companies/[slug]/rfps           → Upload & List RFPs
+/api/companies/[slug]/documents      → Documents
+/api/companies/[slug]/chat           → RAG chat
+```
+
+Pour plus de détails, voir [`docs/REUSABLE_MULTI_TENANT_ARCHITECTURE.md`](docs/REUSABLE_MULTI_TENANT_ARCHITECTURE.md).
+
 ## Fonctionnalités
 
 ### RAG Multi-Tenant

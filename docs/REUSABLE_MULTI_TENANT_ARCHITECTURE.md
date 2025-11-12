@@ -142,108 +142,162 @@ CREATE INDEX idx_company_members_company ON company_members(company_id);
 CREATE UNIQUE INDEX idx_company_members_unique ON company_members(user_id, company_id);
 ```
 
-## 🔐 Current Company Management
+## 🔐 Company Context Management - SLUG-BASED ARCHITECTURE
 
-### Core Library (`lib/current-company.ts`)
+### ⚡ Architecture Evolution
+
+Cette plateforme utilise une **architecture slug-based** où le contexte de la compagnie est **extrait de l'URL** plutôt que des cookies. Cela élimine les race conditions et garantit une isolation multi-tenant robuste.
+
+**Pattern principal**: `/companies/[slug]/*` où `[slug]` identifie la compagnie de manière unique.
+
+### Core Library (`lib/rfp/auth.ts`)
 
 ```typescript
 "use server";
 
-import { db } from "@/lib/db";
+import { db } from "@/db";
 import { companies, companyMembers } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { auth } from "@/auth";
-import { cookies } from "next/headers";
-import type { Company, CompanyMember } from "@/db/schema";
-import { cache } from "react";
-
-export interface CompanyContext {
-  company: Company;
-  membership: CompanyMember;
-  isAdmin: boolean;
-}
+import { auth } from "@/lib/auth/config";
 
 /**
- * Get the current active company for the logged-in user
+ * Get company by slug and verify user access
+ * PRIMARY METHOD for slug-based architecture
  *
- * ⚡ OPTIMIZED: Cached with React.cache() to prevent redundant DB queries
- * Cache is scoped to a single request/render cycle
+ * Returns company data if user has access, null otherwise
  */
-export const getCurrentCompany = cache(async (): Promise<CompanyContext | null> => {
+export async function getCompanyBySlug(slug: string) {
   const session = await auth();
-  if (!session?.user?.id) {
+  if (!session?.user) {
     return null;
   }
 
-  const cookieStore = await cookies();
-  const activeCompanyId = cookieStore.get("activeCompanyId")?.value;
+  // Find company by slug
+  const [company] = await db
+    .select()
+    .from(companies)
+    .where(and(
+      eq(companies.slug, slug),
+      eq(companies.isActive, true)
+    ))
+    .limit(1);
 
-  // Super admins: Get company from cookie or first available company
+  if (!company) {
+    return null;
+  }
+
+  // Super admins can access any company
   if (session.user.isSuperAdmin) {
-    let company: Company | null = null;
-
-    if (activeCompanyId) {
-      [company] = await db
-        .select()
-        .from(companies)
-        .where(eq(companies.id, activeCompanyId))
-        .limit(1);
-    }
-
-    if (!company) {
-      [company] = await db.select().from(companies).limit(1);
-    }
-
-    if (!company) return null;
-
     return {
       company,
-      membership: {
-        id: "",
-        userId: session.user.id,
-        companyId: company.id,
-        role: "admin",
-        joinedAt: new Date(),
-        invitedBy: null,
-      } as CompanyMember,
-      isAdmin: true,
+      role: 'admin' as const,
+      userId: session.user.id,
     };
   }
 
-  // Regular users: Get their company memberships
-  const memberships = await db
+  // Verify user has access to this company
+  const [membership] = await db
     .select({
-      company: companies,
-      membership: companyMembers,
+      role: companyMembers.role,
     })
     .from(companyMembers)
-    .innerJoin(companies, eq(companyMembers.companyId, companies.id))
-    .where(eq(companyMembers.userId, session.user.id));
+    .where(
+      and(
+        eq(companyMembers.userId, session.user.id),
+        eq(companyMembers.companyId, company.id)
+      )
+    )
+    .limit(1);
 
-  if (memberships.length === 0) return null;
-
-  let selectedMembership = memberships.find(
-    (m) => m.company.id === activeCompanyId
-  );
-
-  if (!selectedMembership) {
-    selectedMembership = memberships[0];
-    try {
-      cookieStore.set("activeCompanyId", selectedMembership.company.id, {
-        path: "/",
-        maxAge: 60 * 60 * 24 * 365, // 1 year
-      });
-    } catch (error) {
-      console.warn("Failed to set activeCompanyId cookie:", error);
-    }
+  if (!membership) {
+    return null;
   }
 
   return {
-    company: selectedMembership.company,
-    membership: selectedMembership.membership,
-    isAdmin: selectedMembership.membership.role === "admin",
+    company,
+    role: membership.role,
+    userId: session.user.id,
   };
-});
+}
+
+/**
+ * Middleware helper with intelligent fallback for backward compatibility
+ *
+ * 1. Try cookie first (backward compat)
+ * 2. Extract slug from Referer header if no cookie
+ * 3. Return error if no context found
+ */
+export async function requireRFPAuth() {
+  const session = await auth();
+
+  if (!session?.user) {
+    return {
+      error: unauthorizedResponse('Authentication required'),
+      user: null,
+      company: null,
+    };
+  }
+
+  // Try cookie first (backward compatibility)
+  let company = await getCurrentCompany();
+
+  // If no cookie, extract slug from referer header
+  if (!company) {
+    const { headers } = await import('next/headers');
+    const headersList = await headers();
+    const referer = headersList.get('referer');
+
+    if (referer) {
+      // Extract slug from URL like /companies/my-company/rfps/...
+      const match = referer.match(/\/companies\/([^\/]+)\//);
+      if (match && match[1]) {
+        const slug = match[1];
+
+        // Get company by slug and verify access
+        const companyContext = await getCompanyBySlug(slug);
+        if (companyContext) {
+          return {
+            error: null,
+            user: {
+              id: session.user.id,
+              email: session.user.email!,
+              name: session.user.name || null,
+              isSuperAdmin: session.user.isSuperAdmin,
+            },
+            company: {
+              id: companyContext.company.id,
+              name: companyContext.company.name,
+              role: companyContext.role,
+            },
+          };
+        }
+      }
+    }
+  }
+
+  if (!company) {
+    return {
+      error: forbiddenResponse('No active company context'),
+      user: session.user,
+      company: null,
+    };
+  }
+
+  return {
+    error: null,
+    user: {
+      id: session.user.id,
+      email: session.user.email!,
+      name: session.user.name || null,
+      isSuperAdmin: session.user.isSuperAdmin,
+    },
+    company: {
+      id: company.company.id,
+      name: company.company.name,
+      role: company.role,
+    },
+  };
+}
 
 /**
  * Check if current user is a member of the specified company
@@ -295,21 +349,42 @@ export async function isCompanyAdmin(companyId: string): Promise<boolean> {
 }
 ```
 
-## 🗺️ Routing Architecture
+## 🗺️ Routing Architecture - SLUG-BASED
 
 ### URL Structure
 
+**PRINCIPE CLÉ**: Le slug de la compagnie est **toujours présent dans l'URL**, éliminant le besoin de cookies.
+
 ```
-/                              → Public homepage
-/login                         → Login page
-/companies/new                 → Create new company
-/companies/[slug]/*            → Company-scoped routes
+/                                           → Public homepage
+/login                                      → Login page
+/companies/[slug]/*                         → ALL company-scoped routes
 
 Company Routes:
-/companies/[slug]/dashboard
-/companies/[slug]/settings/*
-/companies/[slug]/[feature]/*
+/companies/[slug]/dashboard                 → Dashboard principal
+/companies/[slug]/rfps                      → Liste des RFPs
+/companies/[slug]/rfps/new                  → Nouveau RFP
+/companies/[slug]/rfps/[id]                 → Détails RFP
+/companies/[slug]/rfps/[id]/questions       → Questions RFP
+/companies/[slug]/intelligence              → RAG chat
+/companies/[slug]/competitors               → Gestion concurrents
+/companies/[slug]/settings/*                → Paramètres
+
+API Routes (Slug-based):
+/api/companies/[slug]/rfps                  → Upload & List RFPs
+/api/companies/[slug]/rfps/[id]             → RFP operations
+/api/companies/[slug]/documents             → Documents
+/api/companies/[slug]/chat                  → RAG chat
 ```
+
+### Avantages de l'Architecture Slug-Based
+
+✅ **Aucune race condition** - Le contexte est immédiatement disponible dans l'URL
+✅ **URLs partageables** - Chaque ressource a une URL unique et explicite
+✅ **Sécurité renforcée** - Le slug est validé à chaque requête
+✅ **Débogage simplifié** - Le contexte de la compagnie est visible dans l'URL
+✅ **Cache-friendly** - URLs statiques pour CDN et cache
+✅ **Pas de cookies requis** - Fonctionne sans état côté serveur
 
 ### Middleware (`middleware.ts`)
 
@@ -348,7 +423,9 @@ export const config = {
 };
 ```
 
-## 🔄 Company Switcher Component
+## 🔄 Company Switcher Component - SLUG-BASED
+
+Dans une architecture slug-based, le "company switcher" est simplifié car **il suffit de naviguer vers une nouvelle URL** avec un slug différent. Plus besoin de cookies!
 
 ```tsx
 // components/common/company-switcher.tsx
@@ -358,11 +435,14 @@ import { useState, useEffect } from "react";
 import { Building2, ChevronDown, Plus, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { getMyCompanies, switchCompany } from "@/app/companies/actions";
-import { useRouter } from "next/navigation";
+import { getMyCompanies } from "@/app/companies/actions";
+import { useRouter, useParams } from "next/navigation";
 
-export function CompanySwitcher({ currentCompanyId }: { currentCompanyId?: string }) {
+export function CompanySwitcher() {
   const router = useRouter();
+  const params = useParams();
+  const currentSlug = params.slug as string;
+
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -378,14 +458,12 @@ export function CompanySwitcher({ currentCompanyId }: { currentCompanyId?: strin
     setLoading(false);
   }
 
-  async function handleSwitch(companyId: string) {
-    const result = await switchCompany(companyId);
-    if (result.success && result.slug) {
-      router.push(`/companies/${result.slug}/dashboard`);
-    }
+  // ✅ SLUG-BASED: Just navigate to new URL - no cookie needed!
+  function handleSwitch(slug: string) {
+    router.push(`/companies/${slug}/dashboard`);
   }
 
-  const currentCompany = companies.find((c) => c.company.id === currentCompanyId);
+  const currentCompany = companies.find((c) => c.company.slug === currentSlug);
 
   return (
     <DropdownMenu>
@@ -406,7 +484,7 @@ export function CompanySwitcher({ currentCompanyId }: { currentCompanyId?: strin
         {companies.map(({ company, membership }) => (
           <DropdownMenuItem
             key={company.id}
-            onClick={() => handleSwitch(company.id)}
+            onClick={() => handleSwitch(company.slug)}
             className="flex items-center justify-between cursor-pointer"
           >
             <div className="flex flex-col">
@@ -415,7 +493,7 @@ export function CompanySwitcher({ currentCompanyId }: { currentCompanyId?: strin
                 {membership.role}
               </span>
             </div>
-            {company.id === currentCompanyId && (
+            {company.slug === currentSlug && (
               <Check className="w-4 h-4 text-teal-600" />
             )}
           </DropdownMenuItem>
@@ -431,84 +509,149 @@ export function CompanySwitcher({ currentCompanyId }: { currentCompanyId?: strin
 }
 ```
 
-## 📊 Data Access Patterns
+## 📊 Data Access Patterns - SLUG-BASED
 
-### Pattern: Données scopées par entreprise
+### Pattern 1: API Routes with Slug Parameter
 
 ```typescript
-// Toujours filtrer par companyId
-export async function getItems() {
-  const currentCompany = await getCurrentCompany();
-  if (!currentCompany) {
-    return { error: "No active company" };
+// /api/companies/[slug]/rfps/route.ts
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
+
+  // 1. Authenticate user
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // 2. Get company by slug and verify access
+  const companyContext = await getCompanyBySlug(slug);
+  if (!companyContext) {
+    return NextResponse.json(
+      { error: 'Company not found or access denied' },
+      { status: 403 }
+    );
+  }
+
+  // 3. Query data scoped to company
   const items = await db
     .select()
     .from(items)
-    .where(eq(items.companyId, currentCompany.company.id));
+    .where(eq(items.companyId, companyContext.company.id));
 
-  return { success: true, data: items };
+  return NextResponse.json({ items });
 }
 ```
 
-### Pattern: Vérification des permissions
+### Pattern 2: Backward-Compatible with Referer Fallback
 
 ```typescript
-export async function updateItem(itemId: string, data: any) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return { error: "Not authenticated" };
-  }
+// /api/v1/rfp/rfps/[id]/route.ts
+export async function GET(request: NextRequest, { params }: ...) {
+  // Use helper that extracts slug from referer if no cookie
+  const authResult = await requireRFPAuth();
+  if (authResult.error) return authResult.error;
 
-  const currentCompany = await getCurrentCompany();
-  if (!currentCompany) {
-    return { error: "No active company" };
-  }
+  const { company } = authResult;
 
-  // Verify item belongs to current company
+  // Verify item belongs to company
   const [item] = await db
     .select()
     .from(items)
-    .where(
-      and(
-        eq(items.id, itemId),
-        eq(items.companyId, currentCompany.company.id)
-      )
-    )
+    .where(eq(items.id, itemId))
     .limit(1);
 
-  if (!item) {
-    return { error: "Not found or access denied" };
+  if (!item || item.companyId !== company.id) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
-  // Check permissions
-  if (!currentCompany.isAdmin && item.createdBy !== session.user.id) {
-    return { error: "Unauthorized" };
-  }
-
-  // Update item
-  await db.update(items).set(data).where(eq(items.id, itemId));
-
-  return { success: true };
+  return NextResponse.json({ item });
 }
 ```
 
-## 🚀 Quick Start Checklist
+### Pattern 3: Client Component with Slug
+
+```typescript
+// components/item-list.tsx
+'use client';
+
+import { useParams } from 'next/navigation';
+
+export function ItemList() {
+  const params = useParams();
+  const slug = params.slug as string;
+
+  async function handleCreate(data: ItemData) {
+    // ✅ Slug is in the URL - no cookie needed
+    const response = await fetch(`/api/companies/${slug}/items`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    // Handle response...
+  }
+
+  // Rest of component...
+}
+```
+
+## 🚀 Quick Start Checklist - SLUG-BASED
 
 - [ ] Copier le schema de base de données (users, companies, company_members)
-- [ ] Créer `lib/current-company.ts` avec les fonctions helper
+- [ ] Créer `lib/rfp/auth.ts` avec `getCompanyBySlug()` et `requireRFPAuth()`
 - [ ] Implémenter le middleware pour les routes protégées
-- [ ] Créer le CompanySwitcher dans le header
-- [ ] Utiliser le cookie `activeCompanyId` pour persister l'entreprise active
+- [ ] Créer le CompanySwitcher dans le header (navigation uniquement)
+- [ ] **IMPORTANT**: Utiliser le slug dans l'URL (`/companies/[slug]/*`) - PAS de cookies
 - [ ] Toujours filtrer les données par `companyId` dans les queries
 - [ ] Implémenter les vérifications de permissions (isAdmin, etc.)
 - [ ] Gérer les super admins avec accès global
+- [ ] Créer endpoints API sous `/api/companies/[slug]/*`
+- [ ] Utiliser `useParams()` dans les composants clients pour extraire le slug
 
-## 📝 Notes Importantes
+## 📝 Notes Importantes - ARCHITECTURE SLUG-BASED
 
-1. **Performance**: `getCurrentCompany()` est caché avec `React.cache()` pour éviter les requêtes redondantes
-2. **Sécurité**: Toujours vérifier `companyId` dans les queries pour isolation des données
-3. **Super Admins**: Bypass automatique des vérifications de membership
-4. **URL Structure**: Toujours utiliser `/companies/[slug]/*` pour les routes scopées
-5. **Cookie**: Le cookie `activeCompanyId` persiste l'entreprise active entre les sessions
+### ✅ Avantages
+
+1. **Pas de cookies requis**: Le slug est dans l'URL, disponible immédiatement
+2. **Aucune race condition**: Le contexte existe avant toute requête
+3. **Sécurité renforcée**: `getCompanyBySlug()` vérifie l'accès à chaque requête
+4. **URLs explicites**: `/companies/acme-corp/rfps` est auto-documenté
+5. **Cache-friendly**: URLs statiques parfaites pour CDN
+
+### 🔄 Backward Compatibility
+
+Pour les anciens endpoints qui ne peuvent pas être migrés immédiatement:
+- `requireRFPAuth()` extrait le slug du header `Referer` comme fallback
+- Pattern: Cookie → Referer → Error
+- Permet une migration progressive sans casser l'existant
+
+### 🏗️ Structure des Routes
+
+**Routes modernes (slug-based)**:
+```
+/api/companies/[slug]/rfps           ✅ NOUVEAU
+/api/companies/[slug]/rfps/[id]      ✅ NOUVEAU
+```
+
+**Routes legacy (avec fallback referer)**:
+```
+/api/v1/rfp/rfps/[id]                ⚠️ LEGACY (mais fonctionne)
+/api/v1/rfp/questions/[id]/response  ⚠️ LEGACY (mais fonctionne)
+```
+
+### 🎯 Migration Strategy
+
+1. **Phase 1**: ✅ Architecture slug-based fonctionnelle
+2. **Phase 2**: Nettoyage des logs debug et code inutilisé
+3. **Phase 3**: Migration complète des endpoints vers `/api/companies/[slug]/*`
+4. **Phase 4**: Suppression des anciens endpoints `/api/v1/rfp/*`
+5. **Phase 5**: Documentation et tests
+
+### ⚡ Performance
+
+- Pas de requête DB supplémentaire pour les cookies
+- `getCompanyBySlug()` peut être optimisé avec cache si nécessaire
+- Une seule vérification d'accès par requête API

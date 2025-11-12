@@ -7,7 +7,9 @@ import { auth } from '@/lib/auth/config';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, FileText, Calendar, DollarSign } from 'lucide-react';
+import { EmptyState } from '@/components/ui/empty-state';
+import { TruncatedTextCSS } from '@/components/ui/truncated-text';
+import { Plus, FileText, Calendar, DollarSign, FileCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -198,20 +200,16 @@ export default async function RFPsListPage({
       {/* RFPs List */}
       {userRfps.length === 0 ? (
         <Card>
-          <CardContent className="py-16 text-center">
-            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Aucun RFP pour le moment
-            </h3>
-            <p className="text-gray-500 mb-6">
-              Commencez par créer votre premier RFP pour profiter de l'assistance IA
-            </p>
-            <Link href={`/companies/${slug}/rfps/new`}>
-              <Button>
-                <Plus className="h-5 w-5 mr-2" />
-                Créer mon premier RFP
-              </Button>
-            </Link>
+          <CardContent className="py-8">
+            <EmptyState
+              icon={FileCheck}
+              title="Aucun RFP créé"
+              description="Créez votre premier appel d'offres pour générer des réponses intelligentes avec l'assistance de l'IA. Gagnez du temps et améliorez la qualité de vos propositions."
+              action={{
+                label: "Créer mon premier RFP",
+                href: `/companies/${slug}/rfps/new`,
+              }}
+            />
           </CardContent>
         </Card>
       ) : (
@@ -223,17 +221,22 @@ export default async function RFPsListPage({
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3
+                          className="text-lg font-semibold text-gray-900 truncate max-w-md"
+                          title={rfp.title}
+                        >
                           {rfp.title}
                         </h3>
-                        <Badge variant={getStatusVariant(rfp.status)}>
-                          {getStatusLabel(rfp.status)}
-                        </Badge>
-                        <Badge
-                          variant={getStatusVariant(rfp.parsingStatus)}
-                        >
-                          {getParsingStatusLabel(rfp.parsingStatus)}
-                        </Badge>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <Badge variant={getStatusVariant(rfp.status)}>
+                            {getStatusLabel(rfp.status)}
+                          </Badge>
+                          <Badge
+                            variant={getStatusVariant(rfp.parsingStatus)}
+                          >
+                            {getParsingStatusLabel(rfp.parsingStatus)}
+                          </Badge>
+                        </div>
                       </div>
 
                       <p className="text-sm text-gray-600 mb-4">

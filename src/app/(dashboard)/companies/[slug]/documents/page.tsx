@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Upload,
   FileText,
@@ -369,32 +370,45 @@ export default function DocumentsPage() {
         {/* Documents Table */}
         <Card>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Document
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Concurrent
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Statut
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Chunks
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {documents.map((doc) => {
+            {documents.length === 0 ? (
+              <div className="py-8">
+                <EmptyState
+                  icon={FileText}
+                  title="Aucun document"
+                  description="Commencez à alimenter votre bibliothèque d'intelligence en téléversant des documents. Analysez PDFs, sites web et profils LinkedIn."
+                  action={{
+                    label: "Téléverser un document",
+                    onClick: () => setUploadOpen(true),
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Document
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Concurrent
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Statut
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Chunks
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {documents.map((doc) => {
                     const TypeIcon = getTypeIcon(doc.type);
                     const statusConfig = getStatusConfig(doc.status);
                     const StatusIcon = statusConfig.icon;
@@ -460,9 +474,10 @@ export default function DocumentsPage() {
                       </tr>
                     );
                   })}
-                </tbody>
-              </table>
-            </div>
+                  </tbody>
+                </table>
+              </div>
+            )}
           </CardContent>
         </Card>
 

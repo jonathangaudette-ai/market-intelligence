@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Building2, Plus, Globe, Linkedin, TrendingUp, Users, FileText, AlertCircle } from "lucide-react";
 
 type Competitor = {
@@ -175,8 +176,23 @@ export default function CompetitorsPage() {
 
       {/* Competitors Grid */}
       <div className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {competitors.map((competitor) => (
+        {competitors.length === 0 ? (
+          <Card>
+            <CardContent className="py-8">
+              <EmptyState
+                icon={Users}
+                title="Aucun concurrent suivi"
+                description="Commencez à surveiller vos concurrents en ajoutant leurs informations. Suivez leur activité, analysez leurs documents et restez informé."
+                action={{
+                  label: "Ajouter un concurrent",
+                  onClick: () => {}, // TODO: Implement add competitor
+                }}
+              />
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {competitors.map((competitor) => (
             <Card key={competitor.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -266,7 +282,8 @@ export default function CompetitorsPage() {
               </p>
             </CardContent>
           </Card>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

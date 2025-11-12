@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { QuestionDetailModal } from './question-detail-modal';
+import { QuestionListSkeleton } from '@/components/ui/skeletons';
 import {
   Select,
   SelectContent,
@@ -178,25 +179,31 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
   };
 
   if (isLoading) {
-    return (
-      <Card>
-        <CardContent className="py-8">
-          <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-            <span className="ml-3 text-gray-600">Chargement des questions...</span>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <QuestionListSkeleton count={6} />;
   }
 
   if (error) {
     return (
       <Card>
         <CardContent className="py-8">
-          <div className="text-center text-red-600">
-            <p>Erreur lors du chargement des questions</p>
-            <p className="text-sm mt-2">{error.message}</p>
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Erreur lors du chargement des questions
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Nous n'avons pas pu charger les questions. Veuillez vérifier votre connexion internet.
+            </p>
+            <Button
+              onClick={() => mutate()}
+              variant="outline"
+              className="gap-2"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Réessayer
+            </Button>
           </div>
         </CardContent>
       </Card>

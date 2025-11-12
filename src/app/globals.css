@@ -56,6 +56,27 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Focus indicators for accessibility (WCAG 2.1) */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [role="link"]:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Ensure focus is visible even in dark mode */
+  .dark button:focus-visible,
+  .dark a:focus-visible,
+  .dark input:focus-visible,
+  .dark textarea:focus-visible,
+  .dark select:focus-visible {
+    @apply ring-offset-background;
+  }
 }
 
 /* Tiptap Editor Styles */

@@ -20,6 +20,9 @@ import {
   Save,
   Loader2,
   Sparkles,
+  AlertCircle,
+  CheckCircle2,
+  RefreshCw,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -220,19 +223,33 @@ export function ResponseEditor({
             {isSaving && (
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Sauvegarde...</span>
+                <span>Sauvegarde en cours...</span>
               </div>
             )}
 
-            {lastSaved && !isSaving && (
-              <div className="text-sm text-green-600">
-                Sauvegardé à {lastSaved.toLocaleTimeString('fr-CA')}
+            {lastSaved && !isSaving && !saveError && (
+              <div className="flex items-center gap-2 text-sm text-green-600">
+                <CheckCircle2 className="h-4 w-4" />
+                <span>Sauvegardé à {lastSaved.toLocaleTimeString('fr-CA')}</span>
               </div>
             )}
 
-            {saveError && (
-              <div className="text-sm text-red-600">
-                Erreur: {saveError}
+            {saveError && !isSaving && (
+              <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+                <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-red-900">Erreur de sauvegarde</p>
+                  <p className="text-xs text-red-600">Vérifiez votre connexion internet</p>
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleSave()}
+                  className="gap-1"
+                >
+                  <RefreshCw className="h-3 w-3" />
+                  Réessayer
+                </Button>
               </div>
             )}
 
@@ -471,10 +488,31 @@ export function ResponseEditor({
 
         {/* Over limit warning */}
         {isOverLimit && (
-          <div className="px-4 py-2 bg-red-50 border-t border-red-200">
-            <p className="text-sm text-red-700">
-              ⚠️ Vous avez dépassé la limite de {wordLimit} mots de {wordCount - wordLimit!} mots.
-            </p>
+          <div className="px-4 py-3 bg-red-50 border-t border-red-200">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-red-900">
+                  Limite de mots dépassée
+                </p>
+                <p className="text-xs text-red-700 mt-0.5">
+                  Vous avez dépassé la limite de {wordLimit} mots de {wordCount - wordLimit!} mots.
+                  Veuillez réduire votre réponse.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Approaching limit warning (80% threshold) */}
+        {!isOverLimit && wordLimit && wordCount > wordLimit * 0.8 && (
+          <div className="px-4 py-2 bg-yellow-50 border-t border-yellow-200">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 text-yellow-600 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-yellow-800">
+                Attention: vous approchez de la limite ({wordCount}/{wordLimit} mots)
+              </p>
+            </div>
           </div>
         )}
       </CardContent>

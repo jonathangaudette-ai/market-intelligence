@@ -22,6 +22,11 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const slug = params.slug as string || 'demo-company';
 
+  // Auto-close sidebar on mobile when navigating
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
   // Note: No longer using cookies for company context
   // All APIs now extract company from slug in URL (via referer header)
 
@@ -41,16 +46,20 @@ export default function DashboardLayout({
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-gray-900/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-gray-900/60 z-40 lg:hidden transition-opacity"
           onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
         />
       )}
 
       {/* Sidebar */}
-      <div className={`
+      <nav
+        className={`
         fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      `}
+        aria-label="Navigation principale"
+      >
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
@@ -62,6 +71,7 @@ export default function DashboardLayout({
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-gray-400 hover:text-gray-600"
+            aria-label="Fermer la navigation"
           >
             <X className="h-5 w-5" />
           </button>
@@ -126,12 +136,15 @@ export default function DashboardLayout({
               </p>
               {user?.isSuperAdmin && <SuperAdminBadge />}
             </div>
-            <button className="text-gray-400 hover:text-gray-600">
+            <button
+              className="text-gray-400 hover:text-gray-600"
+              aria-label="Se déconnecter"
+            >
               <LogOut className="h-4 w-4" />
             </button>
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* Main Content */}
       <div className="lg:pl-64">
@@ -140,6 +153,7 @@ export default function DashboardLayout({
           <button
             onClick={() => setSidebarOpen(true)}
             className="text-gray-500 hover:text-gray-700"
+            aria-label="Ouvrir la navigation"
           >
             <Menu className="h-6 w-6" />
           </button>

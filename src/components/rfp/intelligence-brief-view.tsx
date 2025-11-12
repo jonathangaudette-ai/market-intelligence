@@ -112,7 +112,7 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
   }[brief.recommendation.goNoGo];
 
   // Prepare data for risk severity chart
-  const riskData = brief.riskFactors.reduce((acc, risk) => {
+  const riskData = (brief.riskFactors || []).reduce((acc, risk) => {
     const severity = risk.severity;
     acc[severity] = (acc[severity] || 0) + 1;
     return acc;
@@ -219,11 +219,11 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
         </CardHeader>
         <CardContent>
           <p className="text-sm">{brief.recommendation.reasoning}</p>
-          {brief.recommendation.keyConsiderations.length > 0 && (
+          {(brief.recommendation?.keyConsiderations || []).length > 0 && (
             <div className="mt-4">
               <h4 className="font-semibold text-sm mb-2">Points clés à considérer:</h4>
               <ul className="list-disc pl-5 space-y-1 text-sm">
-                {brief.recommendation.keyConsiderations.map((item, i) => (
+                {(brief.recommendation?.keyConsiderations || []).map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
               </ul>
@@ -238,30 +238,30 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
         <CardContent className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm font-semibold text-gray-600">Type de Projet</p>
-            <p>{brief.overview.projectType}</p>
+            <p>{brief.overview?.projectType || 'Non spécifié'}</p>
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-600">Industrie</p>
-            <p>{brief.overview.industry}</p>
+            <p>{brief.overview?.industry || 'Non spécifié'}</p>
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-600">Budget Estimé</p>
-            <p>{brief.overview.estimatedBudget || 'Non spécifié'}</p>
+            <p>{brief.overview?.estimatedBudget || 'Non spécifié'}</p>
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-600">Durée Estimée</p>
-            <p>{brief.overview.estimatedDuration || 'Non spécifié'}</p>
+            <p>{brief.overview?.estimatedDuration || 'Non spécifié'}</p>
           </div>
           <div className="col-span-2">
             <p className="text-sm font-semibold text-gray-600">Portée</p>
-            <p className="text-sm">{brief.overview.scope}</p>
+            <p className="text-sm">{brief.overview?.scope || 'Non spécifié'}</p>
           </div>
         </CardContent>
       </Card>
 
       {/* Restrictive Clauses & Red Flags */}
-      {(brief.restrictiveClauses.redFlags.length > 0 ||
-        brief.restrictiveClauses.penalties.length > 0) && (
+      {((brief.restrictiveClauses?.redFlags || []).length > 0 ||
+        (brief.restrictiveClauses?.penalties || []).length > 0) && (
         <Card className="border-red-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -270,20 +270,20 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {brief.restrictiveClauses.redFlags.length > 0 && (
+            {(brief.restrictiveClauses?.redFlags || []).length > 0 && (
               <div>
                 <h4 className="font-semibold text-sm mb-2">🚩 Drapeaux Rouges:</h4>
                 <ul className="list-disc pl-5 space-y-1 text-sm">
-                  {brief.restrictiveClauses.redFlags.map((flag, i) => (
+                  {(brief.restrictiveClauses?.redFlags || []).map((flag, i) => (
                     <li key={i}>{flag}</li>
                   ))}
                 </ul>
               </div>
             )}
-            {brief.restrictiveClauses.penalties.length > 0 && (
+            {(brief.restrictiveClauses?.penalties || []).length > 0 && (
               <div>
                 <h4 className="font-semibold text-sm mb-2">💰 Pénalités:</h4>
-                {brief.restrictiveClauses.penalties.map((penalty, i) => (
+                {(brief.restrictiveClauses?.penalties || []).map((penalty, i) => (
                   <div key={i} className="mb-2 p-2 bg-red-50 rounded">
                     <p className="text-sm font-medium">{penalty.description}</p>
                     <p className="text-xs text-gray-600">
@@ -299,13 +299,13 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
       )}
 
       {/* Risk Factors */}
-      {brief.riskFactors.length > 0 && (
+      {(brief.riskFactors || []).length > 0 && (
         <>
           <Card>
             <CardHeader><CardTitle>Facteurs de Risque</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {brief.riskFactors.map((risk, i) => (
+                {(brief.riskFactors || []).map((risk, i) => (
                   <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
                     <Badge variant={
                       risk.severity === 'critical' ? 'destructive' :
@@ -363,10 +363,10 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
         <CardHeader><CardTitle>Portée Fonctionnelle</CardTitle></CardHeader>
         <CardContent>
           <p className="text-sm text-gray-600 mb-4">
-            {brief.functionalScope.coreRequirements.length} exigences principales identifiées
+            {(brief.functionalScope?.coreRequirements || []).length} exigences principales identifiées
           </p>
           <div className="space-y-2">
-            {brief.functionalScope.coreRequirements.slice(0, 5).map((req, i) => (
+            {(brief.functionalScope?.coreRequirements || []).slice(0, 5).map((req, i) => (
               <div key={i} className="flex items-start gap-2">
                 <Badge variant="outline">{req.complexity}</Badge>
                 <div className="flex-1">
@@ -376,9 +376,9 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
               </div>
             ))}
           </div>
-          {brief.functionalScope.coreRequirements.length > 5 && (
+          {(brief.functionalScope?.coreRequirements || []).length > 5 && (
             <p className="text-xs text-gray-500 mt-3">
-              ... et {brief.functionalScope.coreRequirements.length - 5} autres exigences
+              ... et {(brief.functionalScope?.coreRequirements || []).length - 5} autres exigences
             </p>
           )}
         </CardContent>

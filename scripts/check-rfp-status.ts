@@ -1,36 +1,53 @@
 import { db } from '../src/db';
-import { rfps } from '../src/db/schema';
-import { desc } from 'drizzle-orm';
+import { rfps, rfpQuestions } from '../src/db/schema';
+import { eq, like, desc, count } from 'drizzle-orm';
 
-async function checkStatus() {
-  const allRfps = await db
-    .select({
-      id: rfps.id,
-      title: rfps.title,
-      parsingStatus: rfps.parsingStatus,
-      parsingStage: rfps.parsingStage,
-      progressCurrent: rfps.parsingProgressCurrent,
-      progressTotal: rfps.parsingProgressTotal,
-      questionsExtracted: rfps.questionsExtracted,
-      createdAt: rfps.createdAt,
-      updatedAt: rfps.updatedAt,
-    })
-    .from(rfps)
-    .orderBy(desc(rfps.updatedAt))
-    .limit(3);
+async function checkRFPStatus() {
+  try {
+    console.log('🔍 Checking RFP status...\n');
 
-  console.log('\n📊 RFP Status:\n');
+    // Find RFP by title
+    const [rfp] = await db
+      .select()
+      .from(rfps)
+      .where(like(rfps.title, '%testtttttt%'))
+      .orderBy(desc(rfps.createdAt))
+      .limit(1);
 
-  allRfps.forEach((rfp, idx) => {
-    console.log(`${idx + 1}. ${rfp.title}`);
-    console.log(`   ID: ${rfp.id}`);
-    console.log(`   Status: ${rfp.parsingStatus}`);
-    console.log(`   Stage: ${rfp.parsingStage || 'N/A'}`);
-    console.log(`   Progress: ${rfp.progressCurrent || 0}/${rfp.progressTotal || 0}`);
-    console.log(`   Questions extracted: ${rfp.questionsExtracted || 0}`);
-    console.log(`   Updated: ${rfp.updatedAt}`);
-    console.log('');
-  });
+    if (!rfp) {
+      console.log('❌ No RFP found with title containing "testtttttt"');
+      return;
+    }
+
+    // Count questions
+    const [questionCount] = await db
+      .select({ count: count() })
+      .from(rfpQuestions)
+      .where(eq(rfpQuestions.rfpId, rfp.id));
+
+    console.log('📄 RFP Details:');
+    console.log('  ID:', rfp.id);
+    console.log('  Title:', rfp.title);
+    console.log('  Parsing Status:', rfp.parsingStatus);
+    console.log('  Parsing Stage:', rfp.parsingStage);
+    console.log('  Question Count:', questionCount?.count || 0);
+    console.log('  Completion %:', rfp.completionPercentage);
+    console.log('  Intelligence Brief:', rfp.intelligenceBrief ? '✅ Generated' : '❌ Not generated');
+    console.log('\n');
+
+    if (rfp.parsingStatus === 'completed') {
+      console.log('✅ RFP parsing is COMPLETED');
+      console.log('👉 The CTA section should be visible on the page');
+    } else {
+      console.log('⚠️  RFP parsing status is:', rfp.parsingStatus);
+      console.log('   Expected: "completed"');
+    }
+
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Error:', error);
+    process.exit(1);
+  }
 }
 
-checkStatus();
+checkRFPStatus();

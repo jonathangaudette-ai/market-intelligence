@@ -244,7 +244,7 @@ export async function GET(
 /**
  * Helper function to update RFP completion percentage
  */
-async function updateRFPCompletionPercentage(id: string) {
+async function updateRFPCompletionPercentage(rfpId: string) {
   // Get total questions and questions with responses
   const [stats] = await db
     .select({

@@ -1,12 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, AlertTriangle, CheckCircle, XCircle, Sparkles, BarChart3, Download } from 'lucide-react';
+import { Loader2, AlertTriangle, CheckCircle, XCircle, Sparkles, Download } from 'lucide-react';
 import type { RFPIntelligenceBrief } from '@/types/rfp-intelligence';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+// Dynamically load charts to avoid SSR issues
+const RiskDistributionChart = dynamic(
+  () => import('./intelligence-brief-charts').then((mod) => mod.RiskDistributionChart),
+  { ssr: false, loading: () => <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div> }
+);
+
+const EvaluationCriteriaChart = dynamic(
+  () => import('./intelligence-brief-charts').then((mod) => mod.EvaluationCriteriaChart),
+  { ssr: false, loading: () => <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div> }
+);
 
 interface Props {
   slug: string;
@@ -324,37 +335,7 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
           </Card>
 
           {/* Risk Distribution Chart */}
-          {riskChartData.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5" />
-                  Distribution des Risques
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                  <PieChart>
-                    <Pie
-                      data={riskChartData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) => `${name}: ${((percent || 0) * 100).toFixed(0)}%`}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {riskChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          )}
+          <RiskDistributionChart riskChartData={riskChartData} />
         </>
       )}
 
@@ -385,30 +366,10 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
       </Card>
 
       {/* Evaluation Criteria Chart */}
-      {evaluationChartData.length > 0 && brief.evaluationCriteria && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              Critères d'Évaluation ({brief.evaluationCriteria.totalPoints} points)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={evaluationChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} fontSize={12} />
-                <YAxis yAxisId="left" orientation="left" stroke="#3b82f6" label={{ value: 'Points', angle: -90, position: 'insideLeft' }} />
-                <YAxis yAxisId="right" orientation="right" stroke="#10b981" label={{ value: 'Poids (%)', angle: 90, position: 'insideRight' }} />
-                <Tooltip />
-                <Legend />
-                <Bar yAxisId="left" dataKey="points" fill="#3b82f6" name="Points max" />
-                <Bar yAxisId="right" dataKey="weight" fill="#10b981" name="Poids (%)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      )}
+      <EvaluationCriteriaChart
+        evaluationChartData={evaluationChartData}
+        totalPoints={brief.evaluationCriteria?.totalPoints}
+      />
 
         {/* Generated timestamp */}
         <p className="text-xs text-gray-500 text-center">

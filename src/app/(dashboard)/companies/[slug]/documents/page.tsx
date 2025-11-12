@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   Upload,
   FileText,
@@ -236,23 +237,25 @@ export default function DocumentsPage() {
       ) : (
         <>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Documents</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Gérez vos documents et sources d'intelligence
-              </p>
-            </div>
-            <Button className="gap-2" onClick={() => setUploadOpen(true)}>
-              <Upload className="h-4 w-4" />
-              Téléverser un document
-            </Button>
-          </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: `/companies/${slug}/dashboard` },
+          { label: "Documents" },
+        ]}
+        title="Documents"
+        description="Gérez vos documents et sources d'intelligence"
+        actions={
+          <Button className="gap-2" onClick={() => setUploadOpen(true)}>
+            <Upload className="h-4 w-4" />
+            Téléverser un document
+          </Button>
+        }
+      />
 
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="max-w-7xl mx-auto">
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">

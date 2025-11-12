@@ -45,6 +45,7 @@ interface Question {
 
 interface QuestionListProps {
   rfpId: string;
+  slug: string;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -65,7 +66,7 @@ const DIFFICULTY_ICONS = {
   hard: <TrendingUp className="h-3 w-3 text-red-600" />,
 };
 
-export function QuestionList({ rfpId }: QuestionListProps) {
+export function QuestionList({ rfpId, slug }: QuestionListProps) {
   const { data, error, isLoading, mutate } = useSWR<{
     questions: Question[];
     stats: {
@@ -356,6 +357,8 @@ export function QuestionList({ rfpId }: QuestionListProps) {
       {/* Question Detail Modal */}
       <QuestionDetailModal
         question={selectedQuestion}
+        rfpId={rfpId}
+        slug={slug}
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
         onResponseSaved={handleResponseSaved}

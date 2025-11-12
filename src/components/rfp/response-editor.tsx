@@ -43,6 +43,8 @@ import { Label } from '@/components/ui/label';
 
 interface ResponseEditorProps {
   questionId: string;
+  rfpId: string;
+  slug: string;
   initialContent?: string;
   wordLimit?: number | null;
   onSave?: (content: { html: string; text: string; wordCount: number }) => void;
@@ -52,6 +54,8 @@ interface ResponseEditorProps {
 
 export function ResponseEditor({
   questionId,
+  rfpId,
+  slug,
   initialContent = '',
   wordLimit = null,
   onSave,
@@ -117,7 +121,7 @@ export function ResponseEditor({
 
     try {
       // Call API to save response
-      const response = await fetch(`/api/v1/rfp/questions/${questionId}/response`, {
+      const response = await fetch(`/api/companies/${slug}/rfps/${rfpId}/questions/${questionId}/response`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +146,7 @@ export function ResponseEditor({
     } finally {
       setIsSaving(false);
     }
-  }, [editor, questionId, isSaving, onSave]);
+  }, [editor, questionId, rfpId, slug, isSaving, onSave]);
 
   const handleManualSave = () => {
     handleSave();
@@ -156,7 +160,7 @@ export function ResponseEditor({
 
     try {
       // Call API to generate response
-      const response = await fetch(`/api/v1/rfp/questions/${questionId}/generate-response`, {
+      const response = await fetch(`/api/companies/${slug}/rfps/${rfpId}/questions/${questionId}/generate-response`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -189,7 +193,7 @@ export function ResponseEditor({
     } finally {
       setIsGenerating(false);
     }
-  }, [editor, questionId, generateMode, generateDepth, customContext, isGenerating]);
+  }, [editor, questionId, rfpId, slug, generateMode, generateDepth, customContext, isGenerating]);
 
   if (!editor) {
     return (

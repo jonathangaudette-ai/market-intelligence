@@ -72,7 +72,7 @@ export default async function QuestionsPage({ params }: QuestionsPageProps) {
       </div>
 
       {/* Question List - Full width */}
-      <QuestionList rfpId={id} />
+      <QuestionList rfpId={id} slug={slug} />
     </div>
   );
 }

@@ -40,6 +40,8 @@ interface Question {
 
 interface QuestionDetailModalProps {
   question: Question | null;
+  rfpId: string;
+  slug: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onResponseSaved?: () => void;
@@ -65,6 +67,8 @@ const DIFFICULTY_ICONS = {
 
 export function QuestionDetailModal({
   question,
+  rfpId,
+  slug,
   open,
   onOpenChange,
   onResponseSaved,
@@ -73,7 +77,7 @@ export function QuestionDetailModal({
 
   // Fetch existing response when question changes
   const { data: responseData, mutate } = useSWR(
-    question ? `/api/v1/rfp/questions/${question.id}/response` : null,
+    question ? `/api/companies/${slug}/rfps/${rfpId}/questions/${question.id}/response` : null,
     fetcher,
     { revalidateOnFocus: false }
   );
@@ -192,6 +196,8 @@ export function QuestionDetailModal({
           {/* Response editor */}
           <ResponseEditor
             questionId={question.id}
+            rfpId={rfpId}
+            slug={slug}
             initialContent={initialContent}
             wordLimit={question.wordLimit}
             onSave={handleSave}

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groupe Dissan - Document</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 2cm;
+        }
+
+        @media print {
+            body { margin: 0; padding: 0; }
+            h1 { page-break-before: auto; }
+            h2, h3 { page-break-after: avoid; }
+            table { page-break-inside: avoid; }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+        }
+
+        h1 {
+            color: #0066cc;
+            font-size: 24pt;
+            font-weight: 700;
+            margin-top: 24pt;
+            margin-bottom: 12pt;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 8pt;
+        }
+
+        h2 {
+            color: #0066cc;
+            font-size: 18pt;
+            font-weight: 600;
+            margin-top: 20pt;
+            margin-bottom: 10pt;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 6pt;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 14pt;
+            font-weight: 600;
+            margin-top: 16pt;
+            margin-bottom: 8pt;
+        }
+
+        h4 {
+            color: #666;
+            font-size: 12pt;
+            font-weight: 600;
+            margin-top: 12pt;
+            margin-bottom: 6pt;
+        }
+
+        p {
+            margin: 8pt 0;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 10pt 0;
+            padding-left: 24pt;
+        }
+
+        li {
+            margin: 4pt 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16pt 0;
+            font-size: 10pt;
+        }
+
+        table th {
+            background-color: #0066cc;
+            color: white;
+            padding: 8pt;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 8pt;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        code {
+            background-color: #f5f5f5;
+            padding: 2pt 4pt;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 10pt;
+            border-radius: 3px;
+            border: 1px solid #e0e0e0;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 12pt;
+            border-left: 4px solid #0066cc;
+            overflow-x: auto;
+            font-size: 9pt;
+            border-radius: 4px;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            border: none;
+        }
+
+        blockquote {
+            border-left: 4px solid #0066cc;
+            padding-left: 16pt;
+            margin: 16pt 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #0066cc;
+            margin: 24pt 0;
+        }
+
+        strong {
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14pt;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .print-button:hover {
+            background-color: #0052a3;
+        }
+
+        @media print {
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+    <h1>DONNÉES SYNTHÉTIQUES - GROUPE DISSAN</h1>
+<h2>Données réalistes pour tester le système RFP Surgical Retrieval</h2>
+<hr />
+<h2>📋 Vue d'ensemble</h2>
+<p>Ce répertoire contient des <strong>données synthétiques réalistes</strong> pour Groupe Dissan, leader canadien en distribution de produits d'hygiène professionnelle. Ces données sont conçues pour tester complètement le système RFP avec du contenu authentique du secteur JanSan (Janitorial &amp; Sanitation).</p>
+<p><strong>Entreprise:</strong> Groupe Dissan Inc.<br />
+<strong>Secteur:</strong> Distribution de produits d'hygiène professionnelle (B2B)<br />
+<strong>Fondation:</strong> 1991 (30+ ans d'expertise)<br />
+<strong>Couverture:</strong> Pan-canadienne (58 points de vente)<br />
+<strong>Secteurs desservis:</strong> 12 secteurs incluant santé, éducation, hôtellerie, services alimentaires, etc.</p>
+<hr />
+<h2>📂 Structure du répertoire</h2>
+<pre><code>dissan-synthetic-data/
+├── documents-entreprise/          # Documents corporatifs
+│   ├── profil-groupe-dissan.md    # Profil complet de l'entreprise
+│   └── profil-groupe-dissan.pdf   # ✅ PDF prêt pour upload
+│
+├── rfps-historiques/               # RFPs historiques complets
+│   └── RFP-2024-001-CISSS-Monteregie-Hopital/
+│       ├── RFP-Document.md         # Appel d'offres de l'hôpital
+│       ├── RFP-Document.pdf        # ✅ PDF prêt pour upload
+│       ├── REPONSES-Groupe-Dissan.md  # Réponses complètes
+│       └── REPONSES-Groupe-Dissan.pdf # ✅ PDF prêt pour upload (1.2MB)
+│
+├── divisions/                      # (À venir)
+├── produits/                       # (À venir)
+├── etudes-cas/                     # (À venir)
+├── convert-to-html.py              # Script de conversion MD → HTML
+└── README.md                       # Ce fichier
+</code></pre>
+<hr />
+<h2>✅ Contenu actuellement disponible</h2>
+<h3>1. <strong>Profil d'entreprise Groupe Dissan</strong></h3>
+<p>📄 <code>documents-entreprise/profil-groupe-dissan.pdf</code> (512 KB)</p>
+<p><strong>Contenu:</strong><br />
+- Histoire et évolution (1991-2025)<br />
+- Structure corporative (7 divisions)<br />
+- Marques propriétaires (INO Solutions, INSTINCT)<br />
+- 12 secteurs d'affaires desservis<br />
+- Certifications (ISO 9001, ISO 14001, Platinum Club)<br />
+- Chiffres clés et performance<br />
+- Engagement environnemental</p>
+<p><strong>Usage:</strong> Document de référence pour répondre aux questions "company-overview", "corporate-info", "values-culture"</p>
+<hr />
+<h3>2. <strong>RFP #1 - CISSS de la Montérégie-Est (Hôpital)</strong></h3>
+<p>📂 <code>rfps-historiques/RFP-2024-001-CISSS-Monteregie-Hopital/</code></p>
+<p><strong>Statut:</strong> WON (Gagné)<br />
+<strong>Valeur:</strong> 438 750 $ (3 ans)<br />
+<strong>Secteur:</strong> Healthcare<br />
+<strong>Client:</strong> Centre intégré de santé et de services sociaux de la Montérégie-Est</p>
+<h4>A. Document RFP (Appel d'offres)</h4>
+<p>📄 <strong>RFP-Document.pdf</strong> (356 KB)</p>
+<p><strong>Contenu:</strong><br />
+- Contexte: Réseau de 3 hôpitaux + 12 CHSLD + 45 cliniques<br />
+- Portée: Fourniture complète de produits d'hygiène (550 000 m²)<br />
+- 48 questions détaillées réparties en 8 sections:<br />
+  - Section A: Informations entreprise<br />
+  - Section B: Produits et solutions<br />
+  - Section C: Logistique et livraison<br />
+  - Section D: Support technique et formation<br />
+  - Section E: Méthodologie de projet<br />
+  - Section F: Prix et conditions<br />
+  - Section G: Responsabilité environnementale<br />
+  - Section H: Engagement et différenciation<br />
+- Exigences techniques strictes (DIN, certifications environnementales)<br />
+- Grille d'évaluation sur 100 points<br />
+- Volume annuel: 1,47 M$ estimé</p>
+<h4>B. Document RÉPONSES (Soumission Dissan)</h4>
+<p>📄 <strong>REPONSES-Groupe-Dissan.pdf</strong> (1.2 MB - 12 500 mots)</p>
+<p><strong>Contenu ultra-détaillé:</strong></p>
+<p><strong>Section A - Informations entreprise:</strong><br />
+- Présentation complète avec chiffres clés<br />
+- 3 références vérifiables (CISSS Laval, CHU Québec, CIUSSS Centre-Sud MTL)<br />
+- Organigramme de l'équipe dédiée (7 personnes)<br />
+- Certificats ISO 9001 et ISO 14001</p>
+<p><strong>Section B - Produits (40+ pages):</strong><br />
+- Catalogue complet par catégorie avec SKU, prix, spécifications<br />
+- 13 catégories de produits proposés:<br />
+  1. Nettoyants désinfectants hospitaliers (12 000 L/an)<br />
+  2. Dégraissants industriels<br />
+  3. Nettoyants pour planchers<br />
+  4. Détergents à lessive<br />
+  5. Désinfectants à haut niveau<br />
+  6. Papier hygiénique (285 000 rouleaux!)<br />
+  7. Essuie-mains<br />
+  8. Savon et gel désinfectant<br />
+  9. Sacs à déchets (biomédicaux, recyclage)<br />
+  10. Équipements et accessoires<br />
+- <strong>52% de produits certifiés écologiquement</strong> (dépasse objectif 40%)<br />
+- Systèmes de dilution contrôlée (SmartDose™, FlexDose™)<br />
+- Équipements ONYS: autolaveuses, polisseuses (vente + location)<br />
+- Budget détaillé: 1,47 M$/an après rabais</p>
+<p><strong>Sections C-H (partielles dans le document):</strong><br />
+- Logistique et livraison<br />
+- Support technique<br />
+- Méthodologie<br />
+- Prix<br />
+- Environnement<br />
+- Différenciation</p>
+<p><strong>Types de contenu RFP couverts:</strong><br />
+- ✅ company-overview<br />
+- ✅ corporate-info<br />
+- ✅ team-structure<br />
+- ✅ product-description<br />
+- ✅ service-offering<br />
+- ✅ project-methodology<br />
+- ✅ technical-solution<br />
+- ✅ pricing-structure</p>
+<hr />
+<h2>🚀 Comment utiliser ces données</h2>
+<h3>Option 1: Import via l'interface utilisateur (RECOMMANDÉ)</h3>
+<h4>Étape 1: Importer le profil d'entreprise</h4>
+<ol>
+<li>Aller dans <strong>Documents</strong> → Upload</li>
+<li>Sélectionner <code>profil-groupe-dissan.pdf</code></li>
+<li>Type de document: "Company Information"</li>
+<li>Le système va indexer le document dans Pinecone</li>
+</ol>
+<h4>Étape 2: Importer le RFP historique</h4>
+<ol>
+<li>Aller dans <strong>RFP Assistant</strong> → <strong>Bibliothèque RFP</strong> → <strong>Importer</strong></li>
+<li>Utiliser le <strong>HistoricalImportForm</strong> (wizard en 3 étapes)</li>
+</ol>
+<p><strong>Étape 1 - Upload des fichiers:</strong><br />
+- <strong>RFP PDF:</strong> Sélectionner <code>RFP-Document.pdf</code><br />
+- <strong>Réponses PDF:</strong> Sélectionner <code>REPONSES-Groupe-Dissan.pdf</code></p>
+<p><strong>Étape 2 - Métadonnées:</strong><br />
+- <strong>Titre:</strong> Fourniture produits d'hygiène - CISSS Montérégie-Est<br />
+- <strong>Nom du client:</strong> CISSS de la Montérégie-Est<br />
+- <strong>Industrie:</strong> Healthcare<br />
+- <strong>Date de soumission:</strong> 2024-02-27<br />
+- <strong>Résultat:</strong> Won (Gagné)<br />
+- <strong>Score de qualité:</strong> 90/100<br />
+- <strong>Valeur du contrat:</strong> 438 750 $</p>
+<p><strong>Étape 3 - Processing:</strong><br />
+- Le système va:<br />
+  - Extraire les questions du RFP (GPT-4o)<br />
+  - Extraire les réponses du document de réponses<br />
+  - Matcher automatiquement questions ↔ réponses (AI avec confiance ≥90%)<br />
+  - Créer les entrées dans la base de données<br />
+  - Indexer dans Pinecone avec métadonnées enrichies</p>
+<p><strong>Résultat attendu:</strong><br />
+- RFP historique visible dans la bibliothèque<br />
+- ~48 questions extraites et matchées<br />
+- Contenu disponible pour le système de Surgical Retrieval<br />
+- Prêt à être utilisé comme source pour nouveaux RFPs</p>
+<h4>Étape 3: Tester la configuration intelligente</h4>
+<ol>
+<li>Créer un nouveau RFP de test (ou utiliser un RFP existant)</li>
+<li>Cliquer sur le bouton <strong>"Configuration intelligente"</strong> (SmartConfigureButton)</li>
+<li>Le système va:</li>
+<li>Classifier les questions par type de contenu</li>
+<li>Trouver les meilleures sources historiques (dont CISSS si pertinent)</li>
+<li>
+<p>Configurer automatiquement les préférences de source</p>
+</li>
+<li>
+<p>Générer une réponse à une question</p>
+</li>
+<li>Vérifier que le badge <strong>SourceIndicatorBadge</strong> apparaît avec:</li>
+<li>Type de contenu détecté</li>
+<li>Source RFP sélectionnée (badge vert si RFP gagné)</li>
+</ol>
+<hr />
+<h3>Option 2: Import programmatique (si besoin de volume)</h3>
+<p>Si tu veux importer plusieurs RFPs rapidement, tu peux créer un script:</p>
+<pre><code class="language-typescript">// scripts/import-dissan-data.ts
+import { importHistoricalRfp } from '@/lib/rfp/historical-import';
+
+async function importDissanRfps() {
+  const dissanCompanyId = 'ton-company-id-ici';
+
+  // Import RFP #1
+  await importHistoricalRfp({
+    companyId: dissanCompanyId,
+    rfpFile: './dissan-synthetic-data/rfps-historiques/RFP-2024-001-CISSS-Monteregie-Hopital/RFP-Document.pdf',
+    responseFile: './dissan-synthetic-data/rfps-historiques/RFP-2024-001-CISSS-Monteregie-Hopital/REPONSES-Groupe-Dissan.pdf',
+    metadata: {
+      title: 'Fourniture produits hygiène - CISSS Montérégie-Est',
+      clientName: 'CISSS de la Montérégie-Est',
+      clientIndustry: 'Healthcare',
+      submittedDate: new Date('2024-02-27'),
+      result: 'won',
+      qualityScore: 90,
+      dealValue: 438750
+    }
+  });
+
+  console.log('✅ Import Dissan complété!');
+}
+
+importDissanRfps();
+</code></pre>
+<hr />
+<h2>🎯 Scénarios de test recommandés</h2>
+<h3>Test 1: Import de RFP historique</h3>
+<ul>
+<li><strong>But:</strong> Valider le workflow complet d'import</li>
+<li><strong>Étapes:</strong> Suivre Option 1 ci-dessus</li>
+<li><strong>Validation:</strong></li>
+<li>RFP apparaît dans bibliothèque</li>
+<li>Questions extraites correctement</li>
+<li>Matching questions/réponses &gt;85% de confiance</li>
+<li>Métadonnées correctes</li>
+</ul>
+<h3>Test 2: Configuration intelligente</h3>
+<ul>
+<li><strong>But:</strong> Tester le système Smart Configure</li>
+<li><strong>Étapes:</strong></li>
+<li>Créer nouveau RFP de test dans secteur Healthcare</li>
+<li>Ajouter 10-15 questions variées</li>
+<li>Lancer SmartConfigureButton</li>
+<li><strong>Validation:</strong></li>
+<li>Questions classifiées par type de contenu</li>
+<li>RFP CISSS suggéré comme source pour questions pertinentes</li>
+<li>Scores de correspondance calculés</li>
+</ul>
+<h3>Test 3: Génération de réponse avec source</h3>
+<ul>
+<li><strong>But:</strong> Valider le two-tier retrieval</li>
+<li><strong>Étapes:</strong></li>
+<li>Sélectionner une question type "company-overview"</li>
+<li>Générer réponse</li>
+<li>Vérifier les sources utilisées</li>
+<li><strong>Validation:</strong></li>
+<li>Tier 1: Contenu du RFP CISSS utilisé (si configuré)</li>
+<li>Tier 2: Autres documents d'entreprise</li>
+<li>Réponse cohérente et pertinente</li>
+<li>Badges affichés correctement</li>
+</ul>
+<h3>Test 4: Filtrage et recherche dans bibliothèque</h3>
+<ul>
+<li><strong>But:</strong> Tester l'UI RFPLibraryClient</li>
+<li><strong>Étapes:</strong></li>
+<li>Aller dans Bibliothèque RFP</li>
+<li>Utiliser filtres: result=won, search="CISSS"</li>
+<li>Trier par date, qualité, usage</li>
+<li><strong>Validation:</strong></li>
+<li>Filtrage fonctionne</li>
+<li>Recherche trouve le RFP</li>
+<li>Statistiques affichées correctement</li>
+</ul>
+<h3>Test 5: Indicateurs de source</h3>
+<ul>
+<li><strong>But:</strong> Valider SourceIndicatorBadge</li>
+<li><strong>Étapes:</strong></li>
+<li>Ouvrir un RFP avec questions configurées</li>
+<li>Vérifier badges sur chaque question</li>
+<li><strong>Validation:</strong></li>
+<li>Badge de type de contenu (violet)</li>
+<li>Badge de source (vert pour won, rouge pour lost)</li>
+<li>Tooltips avec confiance et détails</li>
+</ul>
+<hr />
+<h2>📊 Statistiques du contenu généré</h2>
+<h3>Documents d'entreprise</h3>
+<ul>
+<li><strong>1 document:</strong> Profil Groupe Dissan</li>
+<li><strong>Mots:</strong> 3 800</li>
+<li><strong>Pages PDF:</strong> ~15</li>
+<li><strong>Types de contenu:</strong> company-overview, corporate-info, values-culture, team-structure</li>
+</ul>
+<h3>RFPs historiques</h3>
+<ul>
+<li><strong>1 RFP complet:</strong> CISSS Montérégie-Est (Healthcare)</li>
+<li><strong>Document RFP:</strong> 8 200 mots, 48 questions</li>
+<li><strong>Document Réponses:</strong> 12 500 mots, réponses ultra-détaillées</li>
+<li><strong>Pages PDF totales:</strong> ~45</li>
+<li><strong>Statut:</strong> Won (gagné)</li>
+<li><strong>Valeur:</strong> 438 750 $</li>
+<li><strong>Secteur:</strong> Healthcare</li>
+<li><strong>Coverage:</strong> 8/11 types de contenu</li>
+</ul>
+<h3>À venir (en développement)</h3>
+<ul>
+<li>RFP #2: Chaîne de restaurants (Food Service - Won)</li>
+<li>RFP #3: Commission scolaire (Education - Won)</li>
+<li>Documents divisions (SaniDépôt, ONYS, MCS)</li>
+<li>Catalogues produits (INO Solutions, INSTINCT)</li>
+<li>Études de cas clients</li>
+</ul>
+<hr />
+<h2>🛠️ Outils de conversion</h2>
+<h3>Générer de nouveaux PDFs</h3>
+<p>Si tu modifies les fichiers Markdown et veux regénérer les PDFs:</p>
+<pre><code class="language-bash"># Méthode 1: Via HTML (recommandé)
+cd dissan-synthetic-data
+python3 convert-to-html.py  # Génère .html
+../convert-html-to-pdf.sh    # Convertit .html → .pdf via Chrome
+
+# Méthode 2: Conversion manuelle
+# Ouvrir les .html dans navigateur, Cmd+P, &quot;Save as PDF&quot;
+</code></pre>
+<h3>Ajouter de nouveaux documents</h3>
+<ol>
+<li>Créer le fichier <code>.md</code> dans le répertoire approprié</li>
+<li>Exécuter <code>python3 convert-to-html.py</code></li>
+<li>Exécuter <code>../convert-html-to-pdf.sh</code></li>
+<li>Le PDF est prêt pour upload!</li>
+</ol>
+<hr />
+<h2>📝 Notes importantes</h2>
+<h3>Qualité des données</h3>
+<ul>
+<li>✅ <strong>Données réalistes:</strong> Basées sur recherche réelle de Groupe Dissan (www.dissan.com)</li>
+<li>✅ <strong>Secteur authentique:</strong> Industrie JanSan (Janitorial &amp; Sanitation) canadienne</li>
+<li>✅ <strong>Cohérence:</strong> Tous les documents sont cohérents entre eux</li>
+<li>✅ <strong>Complétude:</strong> RFP #1 couvre 90% des types de questions typiques en santé</li>
+<li>⚠️ <strong>Données synthétiques:</strong> Certains chiffres, noms et détails sont fictifs mais réalistes</li>
+</ul>
+<h3>Limitations connues</h3>
+<ul>
+<li>Document de réponses RFP #1 est partiellement complété (sections C-H abrégées)</li>
+<li>Certaines références et certifications mentionnées sont fictives</li>
+<li>Annexes techniques mentionnées dans les réponses ne sont pas incluses</li>
+<li>Prix et budgets sont estimatifs mais réalistes pour le secteur</li>
+</ul>
+<h3>Confidentialité</h3>
+<ul>
+<li>✅ Aucune donnée réelle de clients</li>
+<li>✅ Pas d'informations confidentielles</li>
+<li>✅ Usage exclusif pour tests et démonstrations</li>
+</ul>
+<hr />
+<h2>🎉 Prêt à tester!</h2>
+<p>Tu as maintenant <strong>3 PDFs prêts</strong> à uploader dans ton système:</p>
+<ol>
+<li>📄 <strong>profil-groupe-dissan.pdf</strong> → Documents d'entreprise</li>
+<li>📄 <strong>RFP-Document.pdf</strong> + <strong>REPONSES-Groupe-Dissan.pdf</strong> → Bibliothèque RFP (import historique)</li>
+</ol>
+<p><strong>Prochaine étape:</strong> Ouvre ton application et commence l'import! 🚀</p>
+<p>Si tu as besoin de plus de RFPs ou de documents, je continue la génération. Actuellement à <strong>30% de complétion</strong> du plan initial.</p>
+<hr />
+<p><strong>Généré par:</strong> Claude Code<br />
+<strong>Date:</strong> 12 novembre 2025<br />
+<strong>Version:</strong> 1.0</p>
+</body>
+</html>

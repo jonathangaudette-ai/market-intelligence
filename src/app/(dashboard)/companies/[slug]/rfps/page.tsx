@@ -9,7 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/ui/empty-state';
 import { TruncatedTextCSS } from '@/components/ui/truncated-text';
-import { Plus, FileText, Calendar, DollarSign, FileCheck } from 'lucide-react';
+import { StatCard } from '@/components/ui/stat-card';
+import { Plus, FileText, Calendar, DollarSign, FileCheck, Clock, Send, Trophy } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -145,56 +146,34 @@ export default async function RFPsListPage({
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              Total RFPs
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{userRfps.length}</div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <StatCard
+          label="Total RFPs"
+          value={userRfps.length}
+          icon={FileCheck}
+          iconColor="bg-teal-100 text-teal-600"
+        />
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              En cours
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {userRfps.filter((r) => r.status === 'in_progress').length}
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard
+          label="En cours"
+          value={userRfps.filter((r) => r.status === 'in_progress').length}
+          icon={Clock}
+          iconColor="bg-blue-100 text-blue-600"
+        />
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              Soumis
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {userRfps.filter((r) => r.status === 'submitted').length}
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard
+          label="Soumis"
+          value={userRfps.filter((r) => r.status === 'submitted').length}
+          icon={Send}
+          iconColor="bg-purple-100 text-purple-600"
+        />
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              Gagnés
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {userRfps.filter((r) => r.result === 'won').length}
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard
+          label="Gagnés"
+          value={userRfps.filter((r) => r.result === 'won').length}
+          icon={Trophy}
+          iconColor="bg-green-100 text-green-600"
+        />
       </div>
 
       {/* RFPs List */}

@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
+import { StatCard } from "@/components/ui/stat-card";
 import {
   Upload,
   FileText,
@@ -255,70 +256,34 @@ export default function DocumentsPage() {
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-7xl mx-auto">
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Total documents</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.total}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-teal-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="Total documents"
+              value={stats.total}
+              icon={FileText}
+              iconColor="bg-teal-100 text-teal-600"
+            />
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Complétés</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.completed}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              label="Complétés"
+              value={stats.completed}
+              icon={CheckCircle2}
+              iconColor="bg-green-100 text-green-600"
+            />
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">En traitement</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.processing}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <Clock className="h-5 w-5 text-yellow-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              label="En traitement"
+              value={stats.processing}
+              icon={Clock}
+              iconColor="bg-yellow-100 text-yellow-600"
+            />
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Total chunks</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.totalChunks}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-blue-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              label="Total chunks"
+              value={stats.totalChunks}
+              icon={FileText}
+              iconColor="bg-blue-100 text-blue-600"
+            />
           </div>
         </div>
       </div>

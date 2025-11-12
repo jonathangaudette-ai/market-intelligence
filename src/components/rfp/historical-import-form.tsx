@@ -123,20 +123,19 @@ export function HistoricalImportForm({
       const formDataToSend = new FormData();
       formDataToSend.append('rfpPdf', rfpFile);
       formDataToSend.append('responsePdf', responseFile);
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('clientName', formData.clientName);
-      formDataToSend.append('result', formData.result);
-      formDataToSend.append('qualityScore', formData.qualityScore);
 
-      if (formData.clientIndustry) {
-        formDataToSend.append('clientIndustry', formData.clientIndustry);
-      }
-      if (formData.submittedAt) {
-        formDataToSend.append('submittedAt', formData.submittedAt);
-      }
-      if (formData.dealValue) {
-        formDataToSend.append('dealValue', formData.dealValue);
-      }
+      // Package all metadata as a single JSON field
+      const metadata = {
+        title: formData.title,
+        clientName: formData.clientName,
+        industry: formData.clientIndustry || 'Non spécifié',
+        submittedAt: formData.submittedAt || new Date().toISOString().split('T')[0],
+        result: formData.result,
+        qualityScore: parseInt(formData.qualityScore) || 80,
+        dealValue: formData.dealValue ? parseInt(formData.dealValue) : undefined,
+      };
+
+      formDataToSend.append('metadata', JSON.stringify(metadata));
 
       setProcessingProgress('Extraction du texte des PDFs...');
 

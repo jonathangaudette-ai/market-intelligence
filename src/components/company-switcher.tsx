@@ -60,6 +60,24 @@ export function CompanySwitcher({ currentUser }: CompanySwitcherProps) {
     }
   }, [currentSlug, companies]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (isOpen && !target.closest('.company-switcher-container')) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isOpen]);
+
   const loadCompanies = async () => {
     try {
       const response = await fetch('/api/companies/me');
@@ -144,7 +162,7 @@ export function CompanySwitcher({ currentUser }: CompanySwitcherProps) {
   return (
     <>
       {/* Company Selector Button */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="company-switcher-container p-4 border-b border-gray-200 relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
@@ -175,7 +193,10 @@ export function CompanySwitcher({ currentUser }: CompanySwitcherProps) {
 
         {/* Dropdown */}
         {isOpen && (
-          <div className="absolute left-4 right-4 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-auto">
+          <div
+            className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-2">
               {companies.map((company) => (
                 <button

@@ -24,7 +24,11 @@ import {
   CheckCircle2,
   Circle,
   TrendingUp,
+  User,
 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { AssignmentButton } from './assignment-button';
+import { BulkActionsBar } from './bulk-actions-bar';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -41,6 +45,11 @@ interface Question {
   hasResponse: boolean;
   requiresAttachment: boolean;
   wordLimit: number | null;
+  assignedUser?: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
 }
 
 interface QuestionListProps {
@@ -84,8 +93,10 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterDifficulty, setFilterDifficulty] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterAssigned, setFilterAssigned] = useState<string>('all'); // all, assigned, unassigned
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedQuestionIds, setSelectedQuestionIds] = useState<string[]>([]);
 
   const handleQuestionClick = (question: Question) => {
     setSelectedQuestion(question);
@@ -127,9 +138,38 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
         return false;
       }
 
+      // Assigned filter
+      if (filterAssigned === 'assigned' && !q.assignedUser) {
+        return false;
+      }
+      if (filterAssigned === 'unassigned' && q.assignedUser) {
+        return false;
+      }
+
       return true;
     });
-  }, [data?.questions, searchQuery, filterCategory, filterDifficulty, filterStatus]);
+  }, [data?.questions, searchQuery, filterCategory, filterDifficulty, filterStatus, filterAssigned]);
+
+  // Selection handlers
+  const toggleQuestionSelection = (questionId: string) => {
+    setSelectedQuestionIds(prev =>
+      prev.includes(questionId)
+        ? prev.filter(id => id !== questionId)
+        : [...prev, questionId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedQuestionIds.length === filteredQuestions.length) {
+      setSelectedQuestionIds([]);
+    } else {
+      setSelectedQuestionIds(filteredQuestions.map(q => q.id));
+    }
+  };
+
+  const clearSelection = () => {
+    setSelectedQuestionIds([]);
+  };
 
   if (isLoading) {
     return (
@@ -230,7 +270,7 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Search and Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
             <div className="relative md:col-span-2">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
@@ -266,48 +306,94 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
                 <SelectItem value="hard">Difficile</SelectItem>
               </SelectContent>
             </Select>
+
+            <Select value={filterAssigned} onValueChange={setFilterAssigned}>
+              <SelectTrigger>
+                <SelectValue placeholder="Assignment" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous</SelectItem>
+                <SelectItem value="assigned">Assignées</SelectItem>
+                <SelectItem value="unassigned">Non assignées</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+
+          {/* Bulk Selection */}
+          {filteredQuestions.length > 0 && (
+            <div className="flex items-center gap-3 py-2 border-t border-b">
+              <Checkbox
+                checked={selectedQuestionIds.length === filteredQuestions.length}
+                onCheckedChange={toggleSelectAll}
+              />
+              <span className="text-sm text-gray-600">
+                {selectedQuestionIds.length > 0
+                  ? `${selectedQuestionIds.length} sélectionnée(s)`
+                  : 'Sélectionner tout'}
+              </span>
+            </div>
+          )}
 
           {/* Questions List */}
           <div className="space-y-3">
             {filteredQuestions.map((question) => (
               <div
                 key={question.id}
-                onClick={() => handleQuestionClick(question)}
-                className="border rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer"
+                className="border rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition-all"
               >
-                {/* Header */}
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    {question.questionNumber && (
-                      <Badge variant="outline" className="font-mono text-xs">
-                        {question.questionNumber}
-                      </Badge>
-                    )}
-                    {question.category && (
-                      <Badge
-                        variant="outline"
-                        className={CATEGORY_COLORS[question.category] || 'bg-gray-100'}
-                      >
-                        {question.category}
-                      </Badge>
-                    )}
-                    {question.difficulty && (
-                      <div className="flex items-center gap-1 text-xs">
-                        {DIFFICULTY_ICONS[question.difficulty]}
-                        <span className="capitalize">{question.difficulty}</span>
-                      </div>
-                    )}
+                <div className="flex items-start gap-3">
+                  {/* Checkbox */}
+                  <div className="pt-1">
+                    <Checkbox
+                      checked={selectedQuestionIds.includes(question.id)}
+                      onCheckedChange={() => toggleQuestionSelection(question.id)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {question.hasResponse ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <Circle className="h-5 w-5 text-gray-300" />
-                    )}
-                  </div>
-                </div>
+                  {/* Question Content */}
+                  <div
+                    className="flex-1 cursor-pointer"
+                    onClick={() => handleQuestionClick(question)}
+                  >
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {question.questionNumber && (
+                          <Badge variant="outline" className="font-mono text-xs">
+                            {question.questionNumber}
+                          </Badge>
+                        )}
+                        {question.category && (
+                          <Badge
+                            variant="outline"
+                            className={CATEGORY_COLORS[question.category] || 'bg-gray-100'}
+                          >
+                            {question.category}
+                          </Badge>
+                        )}
+                        {question.difficulty && (
+                          <div className="flex items-center gap-1 text-xs">
+                            {DIFFICULTY_ICONS[question.difficulty]}
+                            <span className="capitalize">{question.difficulty}</span>
+                          </div>
+                        )}
+                        {question.assignedUser && (
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                            <User className="h-3 w-3 mr-1" />
+                            {question.assignedUser.name}
+                          </Badge>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {question.hasResponse ? (
+                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        ) : (
+                          <Circle className="h-5 w-5 text-gray-300" />
+                        )}
+                      </div>
+                    </div>
 
                 {/* Section Title */}
                 {question.sectionTitle && (
@@ -319,28 +405,43 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
                   {question.questionText}
                 </p>
 
-                {/* Footer */}
-                <div className="flex items-center gap-4 text-xs text-gray-500">
-                  {question.estimatedMinutes && (
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      <span>{question.estimatedMinutes} min</span>
-                    </div>
-                  )}
+                    {/* Footer */}
+                    <div className="flex items-center gap-4 text-xs text-gray-500">
+                      {question.estimatedMinutes && (
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          <span>{question.estimatedMinutes} min</span>
+                        </div>
+                      )}
 
-                  {question.wordLimit && (
-                    <div className="flex items-center gap-1">
-                      <FileQuestion className="h-3 w-3" />
-                      <span>Max: {question.wordLimit} mots</span>
-                    </div>
-                  )}
+                      {question.wordLimit && (
+                        <div className="flex items-center gap-1">
+                          <FileQuestion className="h-3 w-3" />
+                          <span>Max: {question.wordLimit} mots</span>
+                        </div>
+                      )}
 
-                  {question.tags && question.tags.length > 0 && (
-                    <div className="flex items-center gap-1">
-                      <Tag className="h-3 w-3" />
-                      <span>{question.tags.slice(0, 3).join(', ')}</span>
+                      {question.tags && question.tags.length > 0 && (
+                        <div className="flex items-center gap-1">
+                          <Tag className="h-3 w-3" />
+                          <span>{question.tags.slice(0, 3).join(', ')}</span>
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
+
+                  {/* Assignment Button */}
+                  <div className="pt-1" onClick={(e) => e.stopPropagation()}>
+                    <AssignmentButton
+                      questionId={question.id}
+                      rfpId={rfpId}
+                      slug={slug}
+                      currentAssignee={question.assignedUser}
+                      size="sm"
+                      variant="outline"
+                      onAssigned={() => mutate()}
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -362,6 +463,15 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
         onResponseSaved={handleResponseSaved}
+      />
+
+      {/* Bulk Actions Bar */}
+      <BulkActionsBar
+        selectedQuestionIds={selectedQuestionIds}
+        rfpId={rfpId}
+        slug={slug}
+        onClearSelection={clearSelection}
+        onActionComplete={() => mutate()}
       />
     </div>
   );

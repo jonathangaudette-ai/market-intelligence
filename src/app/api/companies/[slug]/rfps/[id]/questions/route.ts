@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { rfpQuestions, rfps } from '@/db/schema';
+import { rfpQuestions, rfps, users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { requireRFPAuthWithSlug } from '@/lib/rfp/auth';
 
@@ -37,12 +37,30 @@ export async function GET(
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
-    // 4. Get all questions for this RFP
-    const questions = await db
-      .select()
+    // 4. Get all questions for this RFP with assigned user info
+    const questionsWithUsers = await db
+      .select({
+        question: rfpQuestions,
+        assignedUser: {
+          id: users.id,
+          name: users.name,
+          email: users.email,
+        },
+      })
       .from(rfpQuestions)
+      .leftJoin(users, eq(rfpQuestions.assignedTo, users.id))
       .where(eq(rfpQuestions.rfpId, id))
       .orderBy(rfpQuestions.questionNumber);
+
+    // Map to include assigned user info
+    const questions = questionsWithUsers.map(({ question, assignedUser }) => ({
+      ...question,
+      assignedUser: assignedUser?.id ? {
+        id: assignedUser.id,
+        name: assignedUser.name || assignedUser.email || '',
+        email: assignedUser.email || '',
+      } : null,
+    }));
 
     // 5. Calculate stats
     const stats = {

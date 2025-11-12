@@ -107,7 +107,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
           </div>
 
           {rfp.parsingStatus === 'pending' && (
-            <StartParsingButton rfpId={id} />
+            <StartParsingButton rfpId={id} slug={slug} />
           )}
         </div>
       </div>
@@ -117,7 +117,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
         {/* Left column - RFP Details */}
         <div className="lg:col-span-2 space-y-6">
           {/* Parsing Progress */}
-          <ParsingProgress rfpId={id} />
+          <ParsingProgress rfpId={id} slug={slug} />
 
           {/* RFP Information */}
           <Card>

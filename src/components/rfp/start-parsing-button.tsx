@@ -7,9 +7,10 @@ import { Loader2, Play } from 'lucide-react';
 
 interface StartParsingButtonProps {
   rfpId: string;
+  slug: string;
 }
 
-export function StartParsingButton({ rfpId }: StartParsingButtonProps) {
+export function StartParsingButton({ rfpId, slug }: StartParsingButtonProps) {
   const router = useRouter();
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +20,7 @@ export function StartParsingButton({ rfpId }: StartParsingButtonProps) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/v1/rfp/rfps/${rfpId}/parse`, {
+      const response = await fetch(`/api/companies/${slug}/rfps/${rfpId}/parse`, {
         method: 'POST',
       });
 

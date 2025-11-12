@@ -76,7 +76,7 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
       byDifficulty: Record<string, number>;
       totalEstimatedTime: number;
     };
-  }>(`/api/v1/rfp/rfps/${rfpId}/questions`, fetcher, {
+  }>(`/api/companies/${slug}/rfps/${rfpId}/questions`, fetcher, {
     refreshInterval: 0, // No auto-refresh
   });
 

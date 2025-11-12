@@ -29,6 +29,7 @@ interface ParsingProgressData {
 
 interface ParsingProgressProps {
   rfpId: string;
+  slug: string;
   onComplete?: () => void;
   onError?: (error: string) => void;
 }
@@ -51,7 +52,7 @@ const STAGE_DESCRIPTIONS: Record<string, string> = {
   saving: 'Enregistrement de toutes les questions avec leurs métadonnées',
 };
 
-export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressProps) {
+export function ParsingProgress({ rfpId, slug, onComplete, onError }: ParsingProgressProps) {
   const [progress, setProgress] = useState<ParsingProgressData | null>(null);
   const [isPolling, setIsPolling] = useState(true);
 
@@ -60,7 +61,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
 
     const fetchProgress = async () => {
       try {
-        const response = await fetch(`/api/v1/rfp/rfps/${rfpId}/progress`);
+        const response = await fetch(`/api/companies/${slug}/rfps/${rfpId}/progress`);
         const data = await response.json();
 
         if (!response.ok) {
@@ -73,7 +74,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
         if (data.status === 'extracted') {
           console.log('[RFP] Extraction completed, starting categorization phase...');
           try {
-            const categorizeResponse = await fetch(`/api/v1/rfp/rfps/${rfpId}/categorize`, {
+            const categorizeResponse = await fetch(`/api/companies/${slug}/rfps/${rfpId}/categorize`, {
               method: 'POST',
             });
 
@@ -112,7 +113,7 @@ export function ParsingProgress({ rfpId, onComplete, onError }: ParsingProgressP
     const interval = setInterval(fetchProgress, 2000);
 
     return () => clearInterval(interval);
-  }, [rfpId, isPolling, onComplete, onError]);
+  }, [rfpId, slug, isPolling, onComplete, onError]);
 
   if (!progress) {
     return (

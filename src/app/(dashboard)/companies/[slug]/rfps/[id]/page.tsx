@@ -8,7 +8,7 @@ import { ParsingProgress } from '@/components/rfp/parsing-progress';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, DollarSign, Building2, FileText, ArrowLeft, ArrowRight, CheckCircle2, Circle } from 'lucide-react';
+import { Calendar, DollarSign, Building2, FileText, ArrowLeft, ArrowRight, CheckCircle2, Circle, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { StartParsingButton } from '@/components/rfp/start-parsing-button';
 import { EnrichmentForm } from '@/components/rfp/enrichment-form';
@@ -316,17 +316,24 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                 </div>
 
                 {/* CTA */}
-                <div className="flex flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
-                  <FileText className="h-12 w-12 text-blue-600 mb-3" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 text-center">
-                    Répondre aux questions
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-4 text-center">
-                    Accédez à l'interface de réponse avec filtres et éditeur de texte
-                  </p>
+                <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
+                  <div className="flex flex-col items-center mb-2">
+                    <FileText className="h-10 w-10 text-blue-600 mb-2" />
+                    <h3 className="text-base font-semibold text-gray-900 text-center">
+                      Prochaines étapes
+                    </h3>
+                  </div>
+
+                  <Link href={`/companies/${slug}/rfps/${id}/summary`} className="w-full">
+                    <Button className="w-full bg-teal-600 hover:bg-teal-700" size="lg" variant="default">
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Sommaire Intelligent
+                    </Button>
+                  </Link>
+
                   <Link href={`/companies/${slug}/rfps/${id}/questions`} className="w-full">
-                    <Button className="w-full" size="lg">
-                      Commencer
+                    <Button className="w-full" size="lg" variant="outline">
+                      Répondre aux questions
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                   </Link>

@@ -4,6 +4,7 @@ import { rfps, rfpQuestions } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { requireRFPAuth } from '@/lib/rfp/auth';
 import { categorizeQuestionsBatch } from '@/lib/rfp/ai/claude';
+import { generateIntelligenceBrief } from '@/lib/rfp/intelligence-brief';
 
 // Increase timeout to 13 minutes for categorization (separate from extraction)
 export const maxDuration = 800;
@@ -234,6 +235,18 @@ export async function POST(
         totalQuestions: savedQuestions.length,
         duration: 'calculated_client_side',
       });
+
+      // 8. Trigger automatic intelligence brief generation (fire-and-forget)
+      console.log(`[RFP ${id}] Triggering automatic intelligence brief generation...`);
+      generateIntelligenceBrief(id)
+        .then(() => {
+          console.log(`[RFP ${id}] Intelligence brief generated successfully`);
+          return addParsingLog(id, 'success', 'completed', '✨ Sommaire intelligent généré automatiquement');
+        })
+        .catch((err) => {
+          console.error(`[RFP ${id}] Failed to generate intelligence brief:`, err);
+          return addParsingLog(id, 'error', 'completed', `⚠️ Échec de génération du sommaire: ${err.message}`);
+        });
 
       return NextResponse.json({
         message: 'RFP categorization completed successfully',

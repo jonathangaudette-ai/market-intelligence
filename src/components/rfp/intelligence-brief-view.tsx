@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, AlertTriangle, CheckCircle, XCircle, Sparkles } from 'lucide-react';
+import { Loader2, AlertTriangle, CheckCircle, XCircle, Sparkles, BarChart3, Download } from 'lucide-react';
 import type { RFPIntelligenceBrief } from '@/types/rfp-intelligence';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface Props {
   slug: string;
@@ -17,6 +18,10 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function handlePrintPDF() {
+    window.print();
+  }
 
   useEffect(() => {
     loadBrief();
@@ -106,6 +111,31 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
     NO_GO: 'bg-red-100 text-red-800 border-red-200',
   }[brief.recommendation.goNoGo];
 
+  // Prepare data for risk severity chart
+  const riskData = brief.riskFactors.reduce((acc, risk) => {
+    const severity = risk.severity;
+    acc[severity] = (acc[severity] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const riskChartData = Object.entries(riskData).map(([severity, count]) => ({
+    name: severity.charAt(0).toUpperCase() + severity.slice(1),
+    value: count,
+    color: {
+      critical: '#dc2626',
+      high: '#ea580c',
+      medium: '#f59e0b',
+      low: '#84cc16',
+    }[severity] || '#gray',
+  }));
+
+  // Prepare data for evaluation criteria chart
+  const evaluationChartData = brief.evaluationCriteria?.scoring?.map((criterion) => ({
+    name: criterion.criterion.length > 20 ? criterion.criterion.substring(0, 20) + '...' : criterion.criterion,
+    points: criterion.maxPoints,
+    weight: criterion.weight,
+  })) || [];
+
   return (
     <div className="space-y-6">
       {/* Header with Recommendation */}
@@ -114,14 +144,35 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               {recommendationIcon}
-              <div>
+              <div className="flex-1">
                 <CardTitle className="text-2xl">Recommandation: {brief.recommendation.goNoGo}</CardTitle>
-                <p className="text-sm mt-1">Confiance: {brief.recommendation.confidence}%</p>
+                <div className="mt-2">
+                  <div className="flex items-center justify-between text-sm mb-1">
+                    <span>Niveau de confiance</span>
+                    <span className="font-semibold">{brief.recommendation.confidence}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className={`h-2.5 rounded-full ${
+                        brief.recommendation.confidence >= 80 ? 'bg-green-600' :
+                        brief.recommendation.confidence >= 60 ? 'bg-yellow-500' :
+                        'bg-red-500'
+                      }`}
+                      style={{ width: `${brief.recommendation.confidence}%` }}
+                    ></div>
+                  </div>
+                </div>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={generateBrief} disabled={generating}>
-              {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Régénérer'}
-            </Button>
+            <div className="flex gap-2 print:hidden">
+              <Button variant="outline" size="sm" onClick={handlePrintPDF}>
+                <Download className="h-4 w-4 mr-1" />
+                Export PDF
+              </Button>
+              <Button variant="outline" size="sm" onClick={generateBrief} disabled={generating}>
+                {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Régénérer'}
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -207,27 +258,62 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
 
       {/* Risk Factors */}
       {brief.riskFactors.length > 0 && (
-        <Card>
-          <CardHeader><CardTitle>Facteurs de Risque</CardTitle></CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {brief.riskFactors.map((risk, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
-                  <Badge variant={
-                    risk.severity === 'critical' ? 'destructive' :
-                    risk.severity === 'high' ? 'default' : 'secondary'
-                  }>{risk.severity}</Badge>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">{risk.risk}</p>
-                    {risk.mitigation && (
-                      <p className="text-xs text-gray-600 mt-1">Mitigation: {risk.mitigation}</p>
-                    )}
+        <>
+          <Card>
+            <CardHeader><CardTitle>Facteurs de Risque</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {brief.riskFactors.map((risk, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
+                    <Badge variant={
+                      risk.severity === 'critical' ? 'destructive' :
+                      risk.severity === 'high' ? 'default' : 'secondary'
+                    }>{risk.severity}</Badge>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{risk.risk}</p>
+                      {risk.mitigation && (
+                        <p className="text-xs text-gray-600 mt-1">Mitigation: {risk.mitigation}</p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Risk Distribution Chart */}
+          {riskChartData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Distribution des Risques
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={250}>
+                  <PieChart>
+                    <Pie
+                      data={riskChartData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {riskChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          )}
+        </>
       )}
 
       {/* Functional Scope Summary */}
@@ -255,6 +341,32 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
           )}
         </CardContent>
       </Card>
+
+      {/* Evaluation Criteria Chart */}
+      {evaluationChartData.length > 0 && brief.evaluationCriteria && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              Critères d'Évaluation ({brief.evaluationCriteria.totalPoints} points)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={evaluationChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} fontSize={12} />
+                <YAxis yAxisId="left" orientation="left" stroke="#3b82f6" label={{ value: 'Points', angle: -90, position: 'insideLeft' }} />
+                <YAxis yAxisId="right" orientation="right" stroke="#10b981" label={{ value: 'Poids (%)', angle: 90, position: 'insideRight' }} />
+                <Tooltip />
+                <Legend />
+                <Bar yAxisId="left" dataKey="points" fill="#3b82f6" name="Points max" />
+                <Bar yAxisId="right" dataKey="weight" fill="#10b981" name="Poids (%)" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Generated timestamp */}
       <p className="text-xs text-gray-500 text-center">

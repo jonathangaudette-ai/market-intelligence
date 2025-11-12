@@ -7,6 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatCard } from "@/components/ui/stat-card";
 import {
   Upload,
   FileText,
@@ -235,86 +238,52 @@ export default function DocumentsPage() {
       ) : (
         <>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-6">
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: `/companies/${slug}/dashboard` },
+          { label: "Documents" },
+        ]}
+        title="Documents"
+        description="Gérez vos documents et sources d'intelligence"
+        actions={
+          <Button className="gap-2" onClick={() => setUploadOpen(true)}>
+            <Upload className="h-4 w-4" />
+            Téléverser un document
+          </Button>
+        }
+      />
+
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Documents</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Gérez vos documents et sources d'intelligence
-              </p>
-            </div>
-            <Button className="gap-2" onClick={() => setUploadOpen(true)}>
-              <Upload className="h-4 w-4" />
-              Téléverser un document
-            </Button>
-          </div>
-
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Total documents</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.total}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-teal-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard
+              label="Total documents"
+              value={stats.total}
+              icon={FileText}
+              iconColor="bg-teal-100 text-teal-600"
+            />
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Complétés</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.completed}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              label="Complétés"
+              value={stats.completed}
+              icon={CheckCircle2}
+              iconColor="bg-green-100 text-green-600"
+            />
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">En traitement</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.processing}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <Clock className="h-5 w-5 text-yellow-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              label="En traitement"
+              value={stats.processing}
+              icon={Clock}
+              iconColor="bg-yellow-100 text-yellow-600"
+            />
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Total chunks</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {stats.totalChunks}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-blue-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              label="Total chunks"
+              value={stats.totalChunks}
+              icon={FileText}
+              iconColor="bg-blue-100 text-blue-600"
+            />
           </div>
         </div>
       </div>
@@ -369,32 +338,45 @@ export default function DocumentsPage() {
         {/* Documents Table */}
         <Card>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Document
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Concurrent
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Statut
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Chunks
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {documents.map((doc) => {
+            {documents.length === 0 ? (
+              <div className="py-8">
+                <EmptyState
+                  icon={FileText}
+                  title="Aucun document"
+                  description="Commencez à alimenter votre bibliothèque d'intelligence en téléversant des documents. Analysez PDFs, sites web et profils LinkedIn."
+                  action={{
+                    label: "Téléverser un document",
+                    onClick: () => setUploadOpen(true),
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Document
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Concurrent
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Statut
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Chunks
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {documents.map((doc) => {
                     const TypeIcon = getTypeIcon(doc.type);
                     const statusConfig = getStatusConfig(doc.status);
                     const StatusIcon = statusConfig.icon;
@@ -460,9 +442,10 @@ export default function DocumentsPage() {
                       </tr>
                     );
                   })}
-                </tbody>
-              </table>
-            </div>
+                  </tbody>
+                </table>
+              </div>
+            )}
           </CardContent>
         </Card>
 

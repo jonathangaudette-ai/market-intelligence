@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Save, Loader2, Sparkles, Linkedin } from 'lucide-react';
+import { Save, Loader2, Sparkles, Linkedin, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 
 interface EnrichmentFormProps {
   rfpId: string;
@@ -243,37 +243,55 @@ export function EnrichmentForm({ rfpId, slug, initialData }: EnrichmentFormProps
         </div>
 
         {/* Save button and status */}
-        <div className="flex items-center justify-between pt-4 border-t">
-          <div>
-            {saveSuccess && (
-              <div className="text-sm text-green-600 flex items-center gap-2">
-                ✓ Enregistré avec succès
+        <div className="space-y-3">
+          {saveSuccess && (
+            <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-md px-3 py-2">
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+              <span className="text-sm text-green-700 font-medium">Enregistré avec succès</span>
+            </div>
+          )}
+          {saveError && (
+            <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+              <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-red-900">Erreur lors de l'enregistrement</p>
+                <p className="text-xs text-red-600">Vérifiez votre connexion internet</p>
               </div>
-            )}
-            {saveError && (
-              <div className="text-sm text-red-600 flex items-center gap-2">
-                ❌ Erreur: {saveError}
-              </div>
-            )}
-          </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleSave}
+                className="gap-1"
+              >
+                <RefreshCw className="h-3 w-3" />
+                Réessayer
+              </Button>
+            </div>
+          )}
 
-          <Button
-            onClick={handleSave}
-            disabled={isSaving || !hasChanges()}
-            size="lg"
-          >
-            {isSaving ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Enregistrement...
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4 mr-2" />
-                Enregistrer l'enrichissement
-              </>
-            )}
-          </Button>
+          <div className="flex items-center justify-between pt-4 border-t">
+            <p className="text-sm text-gray-500">
+              {hasChanges() ? 'Modifications non enregistrées' : 'Aucune modification'}
+            </p>
+
+            <Button
+              onClick={handleSave}
+              disabled={isSaving || !hasChanges()}
+              size="lg"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Enregistrement...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  Enregistrer l'enrichissement
+                </>
+              )}
+            </Button>
+          </div>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">

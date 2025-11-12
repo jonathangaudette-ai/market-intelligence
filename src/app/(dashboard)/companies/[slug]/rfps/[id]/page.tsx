@@ -8,6 +8,7 @@ import { ParsingProgress } from '@/components/rfp/parsing-progress';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { PageHeader } from '@/components/ui/page-header';
 import { Calendar, DollarSign, Building2, FileText, ArrowLeft, ArrowRight, CheckCircle2, Circle, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { StartParsingButton } from '@/components/rfp/start-parsing-button';
@@ -91,24 +92,31 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
     }).format(amount);
   };
 
+  // Prepare status badge
+  const getStatusBadge = () => {
+    if (rfp.parsingStatus === 'completed') {
+      return <Badge variant="default">Parsing terminé</Badge>;
+    }
+    if (rfp.parsingStatus === 'processing') {
+      return <Badge variant="secondary">En cours de parsing</Badge>;
+    }
+    return <Badge variant="outline">En attente</Badge>;
+  };
+
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
-      {/* Header */}
-      <div className="mb-6">
-        <Link href={`/companies/${slug}/rfps`}>
-          <Button variant="ghost" size="sm" className="mb-4">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Retour aux RFPs
-          </Button>
-        </Link>
-
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">{rfp.title}</h1>
-            <p className="mt-2 text-gray-600">{rfp.clientName}</p>
-          </div>
-
-          <div className="flex items-center gap-3">
+    <>
+      {/* Page Header with Breadcrumbs */}
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: `/companies/${slug}/dashboard` },
+          { label: "RFPs", href: `/companies/${slug}/rfps` },
+          { label: rfp.title || "RFP" },
+        ]}
+        title={rfp.title || "RFP"}
+        description={rfp.clientName || undefined}
+        badge={getStatusBadge()}
+        actions={
+          <>
             {rfp.parsingStatus === 'pending' && (
               <StartParsingButton rfpId={id} slug={slug} />
             )}
@@ -126,9 +134,11 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                 rfpTitle={rfp.title || 'RFP'}
               />
             )}
-          </div>
-        </div>
-      </div>
+          </>
+        }
+      />
+
+      <div className="container mx-auto py-8 max-w-6xl">
 
       {/* Main content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -370,6 +380,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
           initialData={rfp.manualEnrichment as any}
         />
       </div>
-    </div>
+      </div>
+    </>
   );
 }

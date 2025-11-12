@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
 import { Building2, Plus, Globe, Linkedin, TrendingUp, Users, FileText, AlertCircle } from "lucide-react";
 
 type Competitor = {
@@ -60,6 +63,8 @@ const mockCompetitors: Competitor[] = [
 ];
 
 export default function CompetitorsPage() {
+  const params = useParams();
+  const slug = params.slug as string;
   const [competitors] = useState<Competitor[]>(mockCompetitors);
 
   const getPriorityColor = (priority: string) => {
@@ -91,23 +96,25 @@ export default function CompetitorsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Concurrents</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Gérez et suivez vos concurrents principaux
-              </p>
-            </div>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Ajouter un concurrent
-            </Button>
-          </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: `/companies/${slug}/dashboard` },
+          { label: "Concurrents" },
+        ]}
+        title="Concurrents"
+        description="Gérez et suivez vos concurrents principaux"
+        actions={
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
+            Ajouter un concurrent
+          </Button>
+        }
+      />
 
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="max-w-7xl mx-auto">
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
@@ -175,8 +182,23 @@ export default function CompetitorsPage() {
 
       {/* Competitors Grid */}
       <div className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {competitors.map((competitor) => (
+        {competitors.length === 0 ? (
+          <Card>
+            <CardContent className="py-8">
+              <EmptyState
+                icon={Users}
+                title="Aucun concurrent suivi"
+                description="Commencez à surveiller vos concurrents en ajoutant leurs informations. Suivez leur activité, analysez leurs documents et restez informé."
+                action={{
+                  label: "Ajouter un concurrent",
+                  onClick: () => {}, // TODO: Implement add competitor
+                }}
+              />
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {competitors.map((competitor) => (
             <Card key={competitor.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -266,7 +288,8 @@ export default function CompetitorsPage() {
               </p>
             </CardContent>
           </Card>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

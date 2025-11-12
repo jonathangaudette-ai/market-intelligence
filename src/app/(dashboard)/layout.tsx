@@ -10,6 +10,8 @@ import { CompanyProvider } from "@/components/company-provider";
 import { CompanySwitcher } from "@/components/company-switcher";
 import { SuperAdminBadge } from "@/components/super-admin-badge";
 import { useSession } from "@/hooks/use-session";
+import { useSidebarStats } from "@/hooks/use-sidebar-stats";
+import { StatCardCompact } from "@/components/ui/stat-card";
 
 export default function DashboardLayout({
   children,
@@ -21,6 +23,12 @@ export default function DashboardLayout({
   const params = useParams();
   const pathname = usePathname();
   const slug = params.slug as string || 'demo-company';
+  const { stats, isLoading: statsLoading } = useSidebarStats(slug);
+
+  // Auto-close sidebar on mobile when navigating
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   // Note: No longer using cookies for company context
   // All APIs now extract company from slug in URL (via referer header)
@@ -41,16 +49,20 @@ export default function DashboardLayout({
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-gray-900/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-gray-900/60 z-40 lg:hidden transition-opacity"
           onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
         />
       )}
 
       {/* Sidebar */}
-      <div className={`
+      <nav
+        className={`
         fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      `}
+        aria-label="Navigation principale"
+      >
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
@@ -62,6 +74,7 @@ export default function DashboardLayout({
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-gray-400 hover:text-gray-600"
+            aria-label="Fermer la navigation"
           >
             <X className="h-5 w-5" />
           </button>
@@ -98,14 +111,16 @@ export default function DashboardLayout({
         <div className="p-4 mx-4 mt-6 bg-gradient-to-br from-teal-50 to-blue-50 rounded-lg border border-teal-200">
           <p className="text-xs font-semibold text-teal-900 mb-3">Utilisation ce mois-ci</p>
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-xs text-teal-700">Messages</span>
-              <Badge variant="default" className="text-xs">247</Badge>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs text-teal-700">Documents</span>
-              <Badge variant="default" className="text-xs">18</Badge>
-            </div>
+            <StatCardCompact
+              label="Messages"
+              value={stats.messages}
+              loading={statsLoading}
+            />
+            <StatCardCompact
+              label="Documents"
+              value={stats.documents}
+              loading={statsLoading}
+            />
           </div>
         </div>
 
@@ -126,12 +141,15 @@ export default function DashboardLayout({
               </p>
               {user?.isSuperAdmin && <SuperAdminBadge />}
             </div>
-            <button className="text-gray-400 hover:text-gray-600">
+            <button
+              className="text-gray-400 hover:text-gray-600"
+              aria-label="Se déconnecter"
+            >
               <LogOut className="h-4 w-4" />
             </button>
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* Main Content */}
       <div className="lg:pl-64">
@@ -140,6 +158,7 @@ export default function DashboardLayout({
           <button
             onClick={() => setSidebarOpen(true)}
             className="text-gray-500 hover:text-gray-700"
+            aria-label="Ouvrir la navigation"
           >
             <Menu className="h-6 w-6" />
           </button>

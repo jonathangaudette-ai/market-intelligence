@@ -62,9 +62,10 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
  */
 export async function indexDocument(params: {
   documentId: string;
+  companyId: string;
   text: string;
   documentType: RFPVectorMetadata['documentType'];
-  metadata?: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'createdAt' | 'documentType'>;
+  metadata?: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'companyId' | 'createdAt' | 'documentType'>;
 }): Promise<void> {
   const namespace = getRFPNamespace();
 
@@ -74,6 +75,7 @@ export async function indexDocument(params: {
   // Prepare metadata
   const metadata: RFPVectorMetadata = {
     documentId: params.documentId,
+    companyId: params.companyId,
     documentType: params.documentType,
     text: params.text,
     createdAt: new Date().toISOString(),
@@ -93,26 +95,28 @@ export async function indexDocument(params: {
 /**
  * Index multiple document chunks in batch
  */
-export async function indexDocumentChunks(
+export async function indexDocumentChunks(params: {
+  companyId: string;
   chunks: Array<{
     id: string;
     text: string;
     documentType: RFPVectorMetadata['documentType'];
-    metadata?: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'createdAt' | 'documentType'>;
-  }>
-): Promise<void> {
+    metadata?: Omit<RFPVectorMetadata, 'text' | 'documentId' | 'companyId' | 'createdAt' | 'documentType'>;
+  }>;
+}): Promise<void> {
   const namespace = getRFPNamespace();
 
   // Generate embeddings for all chunks
-  const texts = chunks.map((c) => c.text);
+  const texts = params.chunks.map((c) => c.text);
   const embeddings = await generateEmbeddings(texts);
 
   // Prepare vectors for Pinecone
-  const vectors = chunks.map((chunk, idx) => ({
+  const vectors = params.chunks.map((chunk, idx) => ({
     id: chunk.id,
     values: embeddings[idx],
     metadata: {
       documentId: chunk.id,
+      companyId: params.companyId,
       documentType: chunk.documentType,
       text: chunk.text,
       createdAt: new Date().toISOString(),

@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { StartParsingButton } from '@/components/rfp/start-parsing-button';
 import { EnrichmentForm } from '@/components/rfp/enrichment-form';
 import { ExportButton } from '@/components/rfp/export-button';
+import { SmartConfigureButton } from '@/components/rfp/smart-configure-button';
 
 interface RFPDetailPageProps {
   params: Promise<{ id: string; slug: string }>;
@@ -110,6 +111,13 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
           <div className="flex items-center gap-3">
             {rfp.parsingStatus === 'pending' && (
               <StartParsingButton rfpId={id} slug={slug} />
+            )}
+            {rfp.parsingStatus === 'completed' && !rfp.isHistorical && (
+              <SmartConfigureButton
+                rfpId={id}
+                slug={slug}
+                variant="outline"
+              />
             )}
             {rfp.parsingStatus === 'completed' && (
               <ExportButton

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { rfpQuestions, rfpResponses, rfps, companies } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { rfpQuestions, rfpResponses, rfps, companies, rfpSourcePreferences } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
 import { getCompanyBySlug } from '@/lib/rfp/auth';
 import { z } from 'zod';
@@ -80,6 +80,10 @@ export async function POST(
         wordLimit: rfpQuestions.wordLimit,
         difficulty: rfpQuestions.difficulty,
         estimatedMinutes: rfpQuestions.estimatedMinutes,
+        // Surgical retrieval fields
+        primaryContentType: rfpQuestions.primaryContentType,
+        selectedSourceRfpId: rfpQuestions.selectedSourceRfpId,
+        adaptationLevel: rfpQuestions.adaptationLevel,
       })
       .from(rfpQuestions)
       .where(eq(rfpQuestions.id, questionId))
@@ -137,31 +141,79 @@ export async function POST(
     console.log(`[Generate Response] Generating embedding for question: ${questionId}`);
     const queryEmbedding = await generateEmbedding(question.questionText);
 
-    // Step 2: Retrieve relevant context from Pinecone (filtered by company)
-    console.log(`[Generate Response] Searching Pinecone for relevant documents (company: ${rfp.companyId})...`);
+    // Step 2: Two-tier retrieval (Surgical Retrieval System)
+    let sourceRfpIds: string[] = [];
+    let sourceContext = '';
+    let ragContext = '';
+
+    // Tier 1: Source-pinned retrieval (if source is selected)
+    if (question.selectedSourceRfpId) {
+      console.log(`[Generate Response] Using selected source RFP: ${question.selectedSourceRfpId}`);
+      sourceRfpIds = [question.selectedSourceRfpId];
+    } else {
+      // Check if there are smart defaults from preferences
+      const [prefs] = await db
+        .select()
+        .from(rfpSourcePreferences)
+        .where(eq(rfpSourcePreferences.rfpId, rfpId))
+        .limit(1);
+
+      if (prefs && question.primaryContentType) {
+        const suggestedSources = prefs.suggestedSources as Record<string, string[]> || {};
+        const suggested = suggestedSources[question.primaryContentType];
+        if (suggested && suggested.length > 0) {
+          console.log(`[Generate Response] Using smart default source for ${question.primaryContentType}: ${suggested[0]}`);
+          sourceRfpIds = [suggested[0]];
+        }
+      }
+    }
+
+    // If we have a source RFP, retrieve from it
+    if (sourceRfpIds.length > 0) {
+      console.log(`[Generate Response] Retrieving from source RFP(s): ${sourceRfpIds.join(', ')}`);
+      const sourceResults = await retrieveFromSourceRfps(
+        queryEmbedding,
+        sourceRfpIds,
+        rfp.companyId
+      );
+      sourceContext = sourceResults.map(r => r.text).join('\n\n');
+      console.log(`[Generate Response] Source context retrieved: ${sourceContext.length} chars`);
+    }
+
+    // Tier 2: General RAG (exclude source RFPs)
+    console.log(`[Generate Response] Retrieving general RAG context (excluding sources)...`);
     const relevantDocs = await retrieveRelevantDocs(
       queryEmbedding,
       question.category || 'general',
       depth,
-      rfp.companyId
+      rfp.companyId,
+      sourceRfpIds // Exclude source RFPs from general RAG
     );
+    ragContext = relevantDocs.map(doc => doc.text).join('\n\n');
 
-    console.log(`[Generate Response] Found ${relevantDocs.length} relevant documents`);
+    console.log(`[Generate Response] Found ${relevantDocs.length} relevant documents from general RAG`);
 
     // Step 3: Build context based on mode
     let contextText = '';
     const contextSources: string[] = [];
 
     if (mode === 'standard') {
-      // Standard: Only product/company docs
-      contextText = relevantDocs
+      // Standard: Only product/company docs + source context if available
+      const standardDocs = relevantDocs
         .filter(doc => ['company_info', 'product_docs'].includes(doc.category))
         .map(doc => doc.text)
         .join('\n\n---\n\n');
-      contextSources.push('knowledge_base');
+
+      if (sourceContext) {
+        contextText = `PAST RFP CONTENT (ADAPT TO CURRENT MANDATE):\n${sourceContext}\n\n---\n\nKNOWLEDGE BASE:\n${standardDocs}`;
+        contextSources.push('historical_rfp', 'knowledge_base');
+      } else {
+        contextText = standardDocs;
+        contextSources.push('knowledge_base');
+      }
     } else if (mode === 'with_context') {
-      // With context: All docs + RFP metadata + LinkedIn + Manual enrichment
-      const allDocsText = relevantDocs.map(doc => doc.text).join('\n\n---\n\n');
+      // With context: Source + All docs + RFP metadata + LinkedIn + Manual enrichment
+      const allDocsText = ragContext;
 
       // Build RFP metadata section
       let rfpMetadata = `
@@ -204,8 +256,14 @@ RFP CONTEXT:
         contextSources.push('rfp_extract');
       }
 
-      contextText = `${rfpMetadata}\n\n---\n\nKNOWLEDGE BASE:\n\n${allDocsText}`;
-      contextSources.push('knowledge_base', 'rfp_metadata');
+      // Add source context if available
+      if (sourceContext) {
+        contextText = `${rfpMetadata}\n\n---\n\nPAST RFP CONTENT (ADAPT TO CURRENT MANDATE):\n${sourceContext}\n\n---\n\nKNOWLEDGE BASE:\n\n${allDocsText}`;
+        contextSources.push('historical_rfp', 'knowledge_base', 'rfp_metadata');
+      } else {
+        contextText = `${rfpMetadata}\n\n---\n\nKNOWLEDGE BASE:\n\n${allDocsText}`;
+        contextSources.push('knowledge_base', 'rfp_metadata');
+      }
     } else if (mode === 'manual') {
       // Manual: Only custom context provided by user
       contextText = customContext || '';
@@ -231,7 +289,7 @@ RFP CONTEXT:
     // Step 6: Count words
     const wordCount = countWords(responseText);
 
-    // Step 7: Save response to database
+    // Step 7: Save response to database (with surgical retrieval metadata)
     const [savedResponse] = await db
       .insert(rfpResponses)
       .values({
@@ -244,6 +302,9 @@ RFP CONTEXT:
         wasAiGenerated: true,
         aiModel,
         status: 'draft',
+        // Surgical retrieval metadata
+        sourceRfpIds,
+        adaptationUsed: question.adaptationLevel || 'contextual',
       })
       .returning();
 
@@ -256,6 +317,20 @@ RFP CONTEXT:
         updatedAt: new Date(),
       })
       .where(eq(rfpQuestions.id, questionId));
+
+    // Step 9: Update usage count for source RFPs
+    if (sourceRfpIds.length > 0) {
+      console.log(`[Generate Response] Updating usage count for source RFPs: ${sourceRfpIds.join(', ')}`);
+      for (const sourceId of sourceRfpIds) {
+        await db
+          .update(rfps)
+          .set({
+            usageCount: sql`COALESCE(${rfps.usageCount}, 0) + 1`,
+            lastUsedAt: new Date(),
+          })
+          .where(eq(rfps.id, sourceId));
+      }
+    }
 
     return NextResponse.json({
       success: true,
@@ -306,26 +381,62 @@ async function retrieveRelevantDocs(
   queryEmbedding: number[],
   category: string,
   depth: 'basic' | 'advanced',
-  companyId: string
+  companyId: string,
+  excludeRfpIds: string[] = []
 ): Promise<Array<{ text: string; category: string; title: string; score: number }>> {
   const index = pinecone.index(INDEX_NAME);
 
   // Adjust topK based on depth
   const topK = depth === 'basic' ? 5 : 10;
 
+  // Build filter
+  const filter: any = {
+    companyId: { $eq: companyId },
+  };
+
+  // Exclude source RFPs from general RAG
+  if (excludeRfpIds.length > 0) {
+    filter.rfpId = { $nin: excludeRfpIds };
+  }
+
   const results = await index.namespace(NAMESPACE).query({
     vector: queryEmbedding,
     topK,
     includeMetadata: true,
-    filter: {
-      companyId: { $eq: companyId },
-    },
+    filter,
   });
 
   return results.matches.map(match => ({
     text: (match.metadata?.text as string) || '',
     category: (match.metadata?.category as string) || 'unknown',
     title: (match.metadata?.title as string) || 'Untitled',
+    score: match.score || 0,
+  }));
+}
+
+/**
+ * Retrieve content from specific source RFPs (Surgical Retrieval - Tier 1)
+ */
+async function retrieveFromSourceRfps(
+  queryEmbedding: number[],
+  sourceRfpIds: string[],
+  companyId: string
+): Promise<Array<{ text: string; rfpId: string; score: number }>> {
+  const index = pinecone.index(INDEX_NAME);
+
+  const results = await index.namespace(NAMESPACE).query({
+    vector: queryEmbedding,
+    topK: 5,
+    includeMetadata: true,
+    filter: {
+      companyId: { $eq: companyId },
+      rfpId: { $in: sourceRfpIds },
+    },
+  });
+
+  return results.matches.map(match => ({
+    text: (match.metadata?.text as string) || '',
+    rfpId: (match.metadata?.rfpId as string) || '',
     score: match.score || 0,
   }));
 }

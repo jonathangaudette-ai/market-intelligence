@@ -29,6 +29,8 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { AssignmentButton } from './assignment-button';
 import { BulkActionsBar } from './bulk-actions-bar';
+import { SourceIndicatorBadge } from './source-indicator-badge';
+import type { ContentType } from '@/types/content-types';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -50,6 +52,10 @@ interface Question {
     name: string;
     email: string;
   } | null;
+  // Surgical Retrieval System fields
+  primaryContentType?: ContentType | null;
+  selectedSourceRfpId?: string | null;
+  detectionConfidence?: number | null;
 }
 
 interface QuestionListProps {
@@ -384,6 +390,14 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
                             {question.assignedUser.name}
                           </Badge>
                         )}
+                        {/* Source Indicator Badge */}
+                        <SourceIndicatorBadge
+                          primaryContentType={question.primaryContentType}
+                          selectedSourceRfpId={question.selectedSourceRfpId}
+                          detectionConfidence={question.detectionConfidence}
+                          slug={slug}
+                          compact={false}
+                        />
                       </div>
 
                       <div className="flex items-center gap-2">

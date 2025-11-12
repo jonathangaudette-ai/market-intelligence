@@ -259,6 +259,10 @@ export const rfps = pgTable("rfps", {
   clientName: varchar("client_name", { length: 255 }).notNull(),
   clientIndustry: varchar("client_industry", { length: 100 }),
 
+  // RFP Mode (NEW - for surgical retrieval)
+  mode: varchar("mode", { length: 20 }).default("active"), // active, historical, template
+  isHistorical: boolean("is_historical").default(false),
+
   // Original file
   originalFilename: varchar("original_filename", { length: 255 }),
   originalFileUrl: text("original_file_url"),
@@ -338,6 +342,14 @@ export const rfps = pgTable("rfps", {
     .notNull()
     .references(() => companies.id, { onDelete: "cascade" }),
 
+  // Historical RFP fields (NEW - for surgical retrieval)
+  submittedDocument: text("submitted_document"), // S3/Vercel Blob URL of submitted response
+  outcomeNotes: text("outcome_notes"), // Notes about why won/lost
+  qualityScore: integer("quality_score"), // 0-100 quality score
+  usageCount: integer("usage_count").default(0), // How many times used as source
+  lastUsedAt: timestamp("last_used_at"), // Last time used as source
+  dealValue: integer("deal_value"), // Actual deal value if won
+
   // Audit
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -369,6 +381,14 @@ export const rfpQuestions = pgTable("rfp_questions", {
   tags: jsonb("tags"), // Array of tags
   difficulty: varchar("difficulty", { length: 20 }), // easy, medium, hard
   estimatedMinutes: integer("estimated_minutes"),
+
+  // Content Type Classification (NEW - for surgical retrieval)
+  contentTypes: jsonb("content_types").$type<string[]>().default([]), // Array of content types
+  primaryContentType: varchar("primary_content_type", { length: 100 }), // Main content type
+  detectionConfidence: integer("detection_confidence"), // 0-100 confidence score
+  selectedSourceRfpId: pgUuid("selected_source_rfp_id"), // Selected source RFP for this question
+  adaptationLevel: varchar("adaptation_level", { length: 20 }).default("contextual"), // verbatim, light, contextual, creative
+  appliedFromSettings: boolean("applied_from_settings").default(false), // true if auto-configured
 
   // Status
   status: varchar("status", { length: 50 }).default("pending"), // pending, in_progress, completed, reviewed
@@ -405,6 +425,10 @@ export const rfpResponses = pgTable("rfp_responses", {
   sourcesUsed: jsonb("sources_used"), // Array of source references
   confidenceScore: integer("confidence_score"), // 0-100
 
+  // Surgical Retrieval metadata (NEW)
+  sourceRfpIds: jsonb("source_rfp_ids").$type<string[]>().default([]), // RFP IDs used as sources
+  adaptationUsed: varchar("adaptation_used", { length: 20 }), // Adaptation level used
+
   // Editing history
   version: integer("version").default(1),
   previousVersionId: varchar("previous_version_id", { length: 255 }),
@@ -429,6 +453,34 @@ export const rfpResponses = pgTable("rfp_responses", {
   metadata: jsonb("metadata"),
 });
 
+// RFP Source Preferences table (NEW - for surgical retrieval)
+export const rfpSourcePreferences = pgTable("rfp_source_preferences", {
+  id: pgUuid("id").$defaultFn(() => uuidv4()).primaryKey(),
+  rfpId: pgUuid("rfp_id")
+    .notNull()
+    .references(() => rfps.id, { onDelete: "cascade" })
+    .unique(),
+
+  // Smart defaults (AI-generated)
+  defaultSourceStrategy: varchar("default_source_strategy", { length: 20 }).default("hybrid"), // auto, manual, hybrid
+  defaultAdaptationLevel: varchar("default_adaptation_level", { length: 20 }).default("contextual"), // verbatim, light, contextual, creative
+
+  // Simplified: top 3 sources per content-type (not 12 manual configs)
+  suggestedSources: jsonb("suggested_sources").default({}), // Record<ContentType, string[]>
+  // Format: { "project-methodology": ["rfp-id-1", "rfp-id-2", "rfp-id-3"] }
+
+  // Global mandate context
+  globalMandateContext: text("global_mandate_context"),
+
+  // RAG filters (simplified)
+  preferWonRfps: boolean("prefer_won_rfps").default(true),
+  minQualityScore: integer("min_quality_score").default(70),
+
+  // Audit
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // RFP Relations
 export const rfpsRelations = relations(rfps, ({ one, many }) => ({
   company: one(companies, {
@@ -440,6 +492,7 @@ export const rfpsRelations = relations(rfps, ({ one, many }) => ({
     references: [users.id],
   }),
   questions: many(rfpQuestions),
+  sourcePreferences: one(rfpSourcePreferences),
 }));
 
 export const rfpQuestionsRelations = relations(rfpQuestions, ({ one, many }) => ({
@@ -466,5 +519,12 @@ export const rfpResponsesRelations = relations(rfpResponses, ({ one }) => ({
   reviewedByUser: one(users, {
     fields: [rfpResponses.reviewedBy],
     references: [users.id],
+  }),
+}));
+
+export const rfpSourcePreferencesRelations = relations(rfpSourcePreferences, ({ one }) => ({
+  rfp: one(rfps, {
+    fields: [rfpSourcePreferences.rfpId],
+    references: [rfps.id],
   }),
 }));

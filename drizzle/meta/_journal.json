@@ -43,6 +43,13 @@
       "when": 1762905977766,
       "tag": "0005_tearful_colossus",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1762976258814,
+      "tag": "0006_smooth_steve_rogers",
+      "breakpoints": true
     }
   ]
 }

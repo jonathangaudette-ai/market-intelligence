@@ -348,6 +348,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
       <div className="mt-6">
         <EnrichmentForm
           rfpId={id}
+          slug={slug}
           initialData={rfp.manualEnrichment as any}
         />
       </div>

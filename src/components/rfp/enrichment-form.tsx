@@ -9,6 +9,7 @@ import { Save, Loader2, Sparkles, Linkedin } from 'lucide-react';
 
 interface EnrichmentFormProps {
   rfpId: string;
+  slug: string;
   initialData?: {
     clientBackground?: string;
     keyNeeds?: string;
@@ -18,7 +19,7 @@ interface EnrichmentFormProps {
   };
 }
 
-export function EnrichmentForm({ rfpId, initialData }: EnrichmentFormProps) {
+export function EnrichmentForm({ rfpId, slug, initialData }: EnrichmentFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -48,7 +49,7 @@ export function EnrichmentForm({ rfpId, initialData }: EnrichmentFormProps) {
     setSaveSuccess(false);
 
     try {
-      const response = await fetch(`/api/v1/rfp/rfps/${rfpId}/enrichment`, {
+      const response = await fetch(`/api/companies/${slug}/rfps/${rfpId}/enrichment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ export function EnrichmentForm({ rfpId, initialData }: EnrichmentFormProps) {
     setLinkedInSuccess(false);
 
     try {
-      const response = await fetch(`/api/v1/rfp/rfps/${rfpId}/enrich-linkedin`, {
+      const response = await fetch(`/api/companies/${slug}/rfps/${rfpId}/enrich-linkedin`, {
         method: 'POST',
       });
 

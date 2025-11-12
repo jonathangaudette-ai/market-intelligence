@@ -137,9 +137,51 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
   })) || [];
 
   return (
-    <div className="space-y-6">
-      {/* Header with Recommendation */}
-      <Card className={`border-2 ${recommendationColor}`}>
+    <>
+      <style>{`
+        @media print {
+          body {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+          }
+
+          @page {
+            margin: 1.5cm;
+            size: A4;
+          }
+
+          nav, header, .print\\:hidden {
+            display: none !important;
+          }
+
+          .container {
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+          }
+
+          .card, [class*="Card"] {
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .space-y-6 > * {
+            margin-bottom: 1.5rem !important;
+          }
+
+          svg {
+            max-width: 100% !important;
+            height: auto !important;
+          }
+
+          * {
+            box-shadow: none !important;
+          }
+        }
+      `}</style>
+      <div className="space-y-6">
+        {/* Header with Recommendation */}
+        <Card className={`border-2 ${recommendationColor}`}>
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
@@ -298,7 +340,7 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${name}: ${((percent || 0) * 100).toFixed(0)}%`}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -368,10 +410,11 @@ export function RFPIntelligenceBriefView({ slug, rfpId }: Props) {
         </Card>
       )}
 
-      {/* Generated timestamp */}
-      <p className="text-xs text-gray-500 text-center">
-        Généré le {new Date(brief.generatedAt).toLocaleDateString('fr-CA')} avec {brief.modelUsed}
-      </p>
-    </div>
+        {/* Generated timestamp */}
+        <p className="text-xs text-gray-500 text-center">
+          Généré le {new Date(brief.generatedAt).toLocaleDateString('fr-CA')} avec {brief.modelUsed}
+        </p>
+      </div>
+    </>
   );
 }

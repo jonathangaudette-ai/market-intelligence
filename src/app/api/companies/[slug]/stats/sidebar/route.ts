@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { companies, companyMembers, documents, chatMessages } from '@/db/schema';
+import { companies, companyMembers, documents, messages } from '@/db/schema';
 import { eq, and, count, gte } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
 
@@ -59,11 +59,11 @@ export async function GET(
     // Count messages this month
     const [messageCount] = await db
       .select({ count: count() })
-      .from(chatMessages)
+      .from(messages)
       .where(
         and(
-          eq(chatMessages.companyId, company.id),
-          gte(chatMessages.createdAt, firstDayOfMonth)
+          eq(messages.companyId, company.id),
+          gte(messages.createdAt, firstDayOfMonth)
         )
       );
 

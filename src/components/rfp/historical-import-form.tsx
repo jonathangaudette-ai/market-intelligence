@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Stepper, StepContent, type Step, type StepStatus } from '@/components/ui/stepper';
-import { Loader2, FileText, Settings, CheckCircle } from 'lucide-react';
+import { Loader2, FileText, Settings, CheckCircle, ArrowRight } from 'lucide-react';
 
 const STEPS: Step[] = [
   { id: 'files', label: 'Fichiers' },
@@ -31,6 +31,11 @@ export function HistoricalImportForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [processingProgress, setProcessingProgress] = useState<string>('');
+  const [importResult, setImportResult] = useState<{
+    rfpId: string;
+    autoAccepted: number;
+    needsReview: any[] | null;
+  } | null>(null);
 
   // Files
   const [rfpFile, setRfpFile] = useState<File | null>(null);
@@ -162,11 +167,12 @@ export function HistoricalImportForm({
 
       console.log('[Historical Import] Success:', data);
 
-      // Wait a bit to show success state
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Redirect to RFP detail page
-      router.push(`/companies/${slug}/rfps/${data.rfpId}`);
+      // Store import result to show summary
+      setImportResult({
+        rfpId: data.rfpId,
+        autoAccepted: data.autoAccepted,
+        needsReview: data.needsReview,
+      });
     } catch (err) {
       console.error('[Historical Import] Error:', err);
       setError(err instanceof Error ? err.message : 'Une erreur est survenue');
@@ -411,15 +417,83 @@ export function HistoricalImportForm({
               </div>
             )}
 
-            {stepStatuses.processing === 'completed' && (
-              <div className="text-center py-8">
-                <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                <p className="text-green-600 font-medium">
-                  Import réussi!
-                </p>
-                <p className="text-sm text-gray-600 mt-2">
-                  Redirection vers le RFP...
-                </p>
+            {stepStatuses.processing === 'completed' && importResult && (
+              <div className="space-y-6">
+                {/* Success Header */}
+                <div className="text-center py-4">
+                  <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                  <p className="text-green-600 font-medium text-lg">
+                    Import réussi!
+                  </p>
+                  <p className="text-sm text-gray-600 mt-2">
+                    Voici un sommaire de ce qui a été intégré dans le système RAG
+                  </p>
+                </div>
+
+                {/* Import Summary Card */}
+                <Card className="border-2 border-green-200 bg-green-50/50">
+                  <CardContent className="pt-6">
+                    <h3 className="text-base font-semibold text-gray-900 mb-4">
+                      📊 Sommaire d'intégration RAG
+                    </h3>
+
+                    <div className="space-y-4">
+                      {/* Stats Grid */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-white rounded-lg p-4 border border-green-200">
+                          <p className="text-sm text-gray-500 mb-1">Questions/Réponses matchées</p>
+                          <p className="text-3xl font-bold text-green-600">
+                            {importResult.autoAccepted + (importResult.needsReview?.length || 0)}
+                          </p>
+                        </div>
+
+                        <div className="bg-white rounded-lg p-4 border border-green-200">
+                          <p className="text-sm text-gray-500 mb-1">Auto-acceptées (≥90% confiance)</p>
+                          <p className="text-3xl font-bold text-green-600">
+                            {importResult.autoAccepted}
+                          </p>
+                        </div>
+
+                        {importResult.needsReview && importResult.needsReview.length > 0 && (
+                          <div className="bg-white rounded-lg p-4 border border-amber-200 col-span-2">
+                            <p className="text-sm text-amber-700 mb-1">
+                              Nécessitant révision manuelle (&lt;90% confiance)
+                            </p>
+                            <p className="text-3xl font-bold text-amber-600">
+                              {importResult.needsReview.length}
+                            </p>
+                            <p className="text-xs text-amber-600 mt-2">
+                              Ces réponses ont été sauvegardées mais nécessitent une vérification
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Info Box */}
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <h4 className="text-sm font-semibold text-blue-900 mb-2">
+                          ✅ Intégration RAG complétée
+                        </h4>
+                        <ul className="text-sm text-blue-800 space-y-1">
+                          <li>• Les questions et réponses sont maintenant disponibles comme sources</li>
+                          <li>• Le système utilisera ce RFP pour améliorer les réponses futures</li>
+                          <li>• Les matches haute confiance sont immédiatement utilisables</li>
+                          <li>• Score de qualité calculé: disponible dans la page du RFP</li>
+                        </ul>
+                      </div>
+
+                      {/* CTA Button */}
+                      <Button
+                        className="w-full"
+                        size="lg"
+                        onClick={() => router.push(`/companies/${slug}/rfps/${importResult.rfpId}`)}
+                      >
+                        Voir le RFP historique
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             )}
 

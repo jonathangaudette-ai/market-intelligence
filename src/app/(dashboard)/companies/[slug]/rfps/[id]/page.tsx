@@ -94,6 +94,9 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
 
   // Prepare status badge
   const getStatusBadge = () => {
+    if (rfp.isHistorical) {
+      return <Badge variant="secondary" className="bg-amber-100 text-amber-800 border-amber-300">📚 Historique</Badge>;
+    }
     if (rfp.parsingStatus === 'completed') {
       return <Badge variant="default">Parsing terminé</Badge>;
     }
@@ -140,12 +143,51 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
 
       <div className="container mx-auto py-8 max-w-6xl">
 
+      {/* Historical RFP Banner */}
+      {rfp.isHistorical && (
+        <div className="mb-6 bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-0.5">
+              <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+                <span className="text-2xl">📚</span>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-amber-900 mb-1">
+                RFP Historique - Archive
+              </h3>
+              <p className="text-sm text-amber-800">
+                Ce RFP a été soumis et est maintenant utilisé comme source pour améliorer les réponses futures via le système de récupération chirurgicale.
+                Les questions et réponses sont en <strong>lecture seule</strong>.
+              </p>
+              {rfp.result && (
+                <div className="mt-2 flex items-center gap-2">
+                  <Badge variant={rfp.result === 'won' ? 'default' : 'secondary'} className={rfp.result === 'won' ? 'bg-green-100 text-green-800 border-green-300' : ''}>
+                    Résultat: {rfp.result === 'won' ? '🏆 Gagné' : rfp.result === 'lost' ? '❌ Perdu' : '⏳ En attente'}
+                  </Badge>
+                  {rfp.qualityScore && (
+                    <Badge variant="outline" className="bg-blue-50 text-blue-800 border-blue-300">
+                      Score qualité: {rfp.qualityScore}/100
+                    </Badge>
+                  )}
+                  {rfp.usageCount !== null && rfp.usageCount > 0 && (
+                    <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-300">
+                      Utilisé {rfp.usageCount}× comme source
+                    </Badge>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left column - RFP Details */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Parsing Progress */}
-          <ParsingProgress rfpId={id} slug={slug} />
+          {/* Parsing Progress - Only for active RFPs */}
+          {!rfp.isHistorical && <ParsingProgress rfpId={id} slug={slug} />}
 
           {/* RFP Information */}
           <Card>
@@ -318,7 +360,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                   <div className="bg-green-50 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-1">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      <p className="text-sm text-green-700">Complétées</p>
+                      <p className="text-sm text-green-700">{rfp.isHistorical ? 'Réponses archivées' : 'Complétées'}</p>
                     </div>
                     <p className="text-3xl font-bold text-green-900">{questionStats.completed}</p>
                   </div>
@@ -343,43 +385,63 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                   </div>
                 </div>
 
-                {/* CTA */}
-                <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
-                  <div className="flex flex-col items-center mb-2">
-                    <FileText className="h-10 w-10 text-blue-600 mb-2" />
-                    <h3 className="text-base font-semibold text-gray-900 text-center">
-                      Prochaines étapes
-                    </h3>
+                {/* CTA - Different for historical vs active */}
+                {rfp.isHistorical ? (
+                  <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-lg p-6 border-2 border-amber-200">
+                    <div className="flex flex-col items-center mb-2">
+                      <FileText className="h-10 w-10 text-amber-600 mb-2" />
+                      <h3 className="text-base font-semibold text-gray-900 text-center">
+                        Archive en lecture seule
+                      </h3>
+                    </div>
+
+                    <Link href={`/companies/${slug}/rfps/${id}/questions`} className="w-full">
+                      <Button className="w-full" size="lg" variant="outline">
+                        Voir les Q&R archivées
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
                   </div>
+                ) : (
+                  <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
+                    <div className="flex flex-col items-center mb-2">
+                      <FileText className="h-10 w-10 text-blue-600 mb-2" />
+                      <h3 className="text-base font-semibold text-gray-900 text-center">
+                        Prochaines étapes
+                      </h3>
+                    </div>
 
-                  <Link href={`/companies/${slug}/rfps/${id}/summary`} className="w-full">
-                    <Button className="w-full bg-teal-600 hover:bg-teal-700" size="lg" variant="default">
-                      <Sparkles className="h-4 w-4 mr-2" />
-                      Sommaire Intelligent
-                    </Button>
-                  </Link>
+                    <Link href={`/companies/${slug}/rfps/${id}/summary`} className="w-full">
+                      <Button className="w-full bg-teal-600 hover:bg-teal-700" size="lg" variant="default">
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Sommaire Intelligent
+                      </Button>
+                    </Link>
 
-                  <Link href={`/companies/${slug}/rfps/${id}/questions`} className="w-full">
-                    <Button className="w-full" size="lg" variant="outline">
-                      Répondre aux questions
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
-                </div>
+                    <Link href={`/companies/${slug}/rfps/${id}/questions`} className="w-full">
+                      <Button className="w-full" size="lg" variant="outline">
+                        Répondre aux questions
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
         </div>
       )}
 
-      {/* Manual Enrichment Form - Full width */}
-      <div className="mt-6">
-        <EnrichmentForm
-          rfpId={id}
-          slug={slug}
-          initialData={rfp.manualEnrichment as any}
-        />
-      </div>
+      {/* Manual Enrichment Form - Full width (only for active RFPs) */}
+      {!rfp.isHistorical && (
+        <div className="mt-6">
+          <EnrichmentForm
+            rfpId={id}
+            slug={slug}
+            initialData={rfp.manualEnrichment as any}
+          />
+        </div>
+      )}
       </div>
     </>
   );

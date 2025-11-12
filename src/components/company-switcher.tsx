@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, usePathname } from 'next/navigation';
 import { Building2, ChevronDown, Plus, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,6 +31,7 @@ interface CompanySwitcherProps {
 export function CompanySwitcher({ currentUser }: CompanySwitcherProps) {
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const currentSlug = params.slug as string;
 
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -98,11 +99,25 @@ export function CompanySwitcher({ currentUser }: CompanySwitcherProps) {
       });
 
       if (response.ok) {
-        router.push(`/companies/${slug}/dashboard`);
         setIsOpen(false);
+
+        // Keep the same sub-path when switching companies
+        // e.g., /companies/old-company/rfps -> /companies/new-company/rfps
+        const newPath = pathname.replace(`/companies/${currentSlug}`, `/companies/${slug}`);
+
+        // Navigate to the new path
+        router.push(newPath);
+
+        // Force a refresh to ensure everything is updated
+        router.refresh();
+      } else {
+        const error = await response.json();
+        console.error('Error switching company:', error);
+        alert(`Erreur: ${error.error || 'Impossible de changer d\'entreprise'}`);
       }
     } catch (error) {
       console.error('Error switching company:', error);
+      alert('Erreur réseau. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }

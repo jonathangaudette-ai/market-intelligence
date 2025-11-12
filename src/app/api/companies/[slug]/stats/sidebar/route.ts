@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { companies, companyMembers, documents, messages } from '@/db/schema';
+import { companies, companyMembers, documents, messages, conversations } from '@/db/schema';
 import { eq, and, count, gte } from 'drizzle-orm';
 import { auth } from '@/lib/auth/config';
 
@@ -60,9 +60,10 @@ export async function GET(
     const [messageCount] = await db
       .select({ count: count() })
       .from(messages)
+      .innerJoin(conversations, eq(messages.conversationId, conversations.id))
       .where(
         and(
-          eq(messages.companyId, company.id),
+          eq(conversations.companyId, company.id),
           gte(messages.createdAt, firstDayOfMonth)
         )
       );

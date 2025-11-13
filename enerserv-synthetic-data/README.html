@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groupe Dissan - Document</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 2cm;
+        }
+
+        @media print {
+            body { margin: 0; padding: 0; }
+            h1 { page-break-before: auto; }
+            h2, h3 { page-break-after: avoid; }
+            table { page-break-inside: avoid; }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+        }
+
+        h1 {
+            color: #0066cc;
+            font-size: 24pt;
+            font-weight: 700;
+            margin-top: 24pt;
+            margin-bottom: 12pt;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 8pt;
+        }
+
+        h2 {
+            color: #0066cc;
+            font-size: 18pt;
+            font-weight: 600;
+            margin-top: 20pt;
+            margin-bottom: 10pt;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 6pt;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 14pt;
+            font-weight: 600;
+            margin-top: 16pt;
+            margin-bottom: 8pt;
+        }
+
+        h4 {
+            color: #666;
+            font-size: 12pt;
+            font-weight: 600;
+            margin-top: 12pt;
+            margin-bottom: 6pt;
+        }
+
+        p {
+            margin: 8pt 0;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 10pt 0;
+            padding-left: 24pt;
+        }
+
+        li {
+            margin: 4pt 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16pt 0;
+            font-size: 10pt;
+        }
+
+        table th {
+            background-color: #0066cc;
+            color: white;
+            padding: 8pt;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 8pt;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        code {
+            background-color: #f5f5f5;
+            padding: 2pt 4pt;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-size: 10pt;
+            border-radius: 3px;
+            border: 1px solid #e0e0e0;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 12pt;
+            border-left: 4px solid #0066cc;
+            overflow-x: auto;
+            font-size: 9pt;
+            border-radius: 4px;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            border: none;
+        }
+
+        blockquote {
+            border-left: 4px solid #0066cc;
+            padding-left: 16pt;
+            margin: 16pt 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #0066cc;
+            margin: 24pt 0;
+        }
+
+        strong {
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14pt;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .print-button:hover {
+            background-color: #0052a3;
+        }
+
+        @media print {
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+    <h1>DONNÉES SYNTHÉTIQUES - ENERSERV INC.</h1>
+<h2>Données réalistes pour tester le système RFP Surgical Retrieval</h2>
+<hr />
+<h2>📋 Vue d'ensemble</h2>
+<p>Ce répertoire contient des <strong>données synthétiques réalistes</strong> pour EnerServ Inc., expert canadien en maintenance de turbines et générateurs pour l'énergie renouvelable. Ces données sont conçues pour tester complètement le système RFP avec du contenu authentique du secteur de l'énergie (hydroélectricité, biomasse, cogénération).</p>
+<p><strong>Entreprise:</strong> EnerServ Inc.<br />
+<strong>Secteur:</strong> Services de maintenance et réparation pour équipements de production d'énergie renouvelable<br />
+<strong>Fondation:</strong> 2011 (13+ ans d'expertise)<br />
+<strong>Couverture:</strong> Pan-canadienne (Granby QC + Calgary AB)<br />
+<strong>Secteurs desservis:</strong> Hydroélectricité, biomasse/cogénération, éolien, industriel lourd</p>
+<hr />
+<h2>📂 Structure du répertoire</h2>
+<pre><code>enerserv-synthetic-data/
+├── documents-entreprise/          # Documents corporatifs
+│   ├── profil-enerserv.md         # Profil complet de l'entreprise
+│   └── profil-enerserv.pdf        # ✅ PDF prêt pour upload
+│
+├── rfps-historiques/               # RFPs historiques complets
+│   └── RFP-2024-001-Papier-Excellence-Usine-Biomasse/
+│       ├── RFP-Document.md         # Appel d'offres Papier Excellence
+│       ├── RFP-Document.pdf        # ✅ PDF prêt pour upload
+│       ├── REPONSES-Enerserv.md    # Réponses complètes
+│       └── REPONSES-Enerserv.pdf   # ✅ PDF prêt pour upload
+│
+├── services/                       # Catalogues de services
+├── divisions/                      # (Futur)
+├── etudes-cas/                     # (Futur)
+├── convert-to-html.py              # Script de conversion MD → HTML
+├── convert-to-pdf.py               # Script de conversion MD → PDF
+└── README.md                       # Ce fichier
+</code></pre>
+<hr />
+<h2>✅ Contenu actuellement disponible</h2>
+<h3>1. <strong>Profil d'entreprise EnerServ Inc.</strong></h3>
+<p>📄 <code>documents-entreprise/profil-enerserv.pdf</code></p>
+<p><strong>Contenu (15 000+ mots):</strong><br />
+- Histoire et évolution (2011-2024)<br />
+- Structure corporative et direction<br />
+- Services mécaniques et électriques complets<br />
+- Équipements et capacités techniques (10+ unités mobiles)<br />
+- Secteurs d'activité et clients majeurs (Hydro-Québec, Innergex, Brookfield)<br />
+- Certifications (ISO 9001, ISO 14001, ISO 45001, ASNT, NETA)<br />
+- Performance et chiffres clés<br />
+- Engagement environnemental<br />
+- Équipe et ressources humaines<br />
+- Projets de référence</p>
+<p><strong>Usage:</strong> Document de référence pour répondre aux questions "company-overview", "corporate-info", "team-structure", "certifications"</p>
+<hr />
+<h3>2. <strong>RFP #1 - Papier Excellence Canada (Usine de Thurso - Cogénération Biomasse)</strong></h3>
+<p>📂 <code>rfps-historiques/RFP-2024-001-Papier-Excellence-Usine-Biomasse/</code></p>
+<p><strong>Statut:</strong> WON (Gagné)<br />
+<strong>Valeur:</strong> 3 850 000 $ (5 ans)<br />
+<strong>Secteur:</strong> Pâtes et papiers / Biomasse / Cogénération<br />
+<strong>Client:</strong> Papier Excellence Canada - Usine de Thurso, QC</p>
+<h4>A. Document RFP (Appel d'offres)</h4>
+<p>📄 <strong>RFP-Document.pdf</strong> (13 000+ mots)</p>
+<p><strong>Contenu:</strong><br />
+- Contexte: Centrale de cogénération biomasse 75 MW (3 turbines à vapeur + 3 générateurs)<br />
+- Portée: Services de maintenance préventive, corrective et prédictive sur 5 ans<br />
+- Équipements visés:<br />
+  - Turbine #1: GE 45 MW + Générateur 50 MVA<br />
+  - Turbine #2: Siemens 25 MW + Générateur 28 MVA<br />
+  - Turbine #3: Voith 5 MW + Générateur 6 MVA<br />
+- <strong>50+ questions détaillées</strong> réparties en 9 sections:<br />
+  - Section A: Informations entreprise<br />
+  - Section B: Expérience et références<br />
+  - Section C: Ressources humaines et organisation<br />
+  - Section D: Approche technique et méthodologie<br />
+  - Section E: Gestion des pièces de rechange<br />
+  - Section F: Formation et transfert de connaissances<br />
+  - Section G: Santé, sécurité et environnement<br />
+  - Section H: Prix et conditions commerciales<br />
+  - Section I: Innovation et valeur ajoutée<br />
+- Exigences techniques strictes (ISO 9001, ISO 45001, certifications fabricants)<br />
+- Grille d'évaluation sur 100 points (70 technique + 30 commercial)</p>
+<h4>B. Document RÉPONSES (Soumission EnerServ)</h4>
+<p>📄 <strong>REPONSES-Enerserv.pdf</strong> (Section A complétée - 19+ pages)</p>
+<p><strong>Contenu détaillé:</strong></p>
+<p><strong>Section A - Informations entreprise (complétée):</strong><br />
+- Présentation complète avec chiffres clés et historique<br />
+- Certifications ISO 9001, ISO 45001, ISO 14001 (copies jointes)<br />
+- Certifications fabricants: GE, Siemens, Voith, ABB<br />
+- Certifications ASNT (essais non destructifs) - 25+ techniciens certifiés niveau II/III<br />
+- Certification NETA (electrical testing)<br />
+- Licences RBQ et permis ASME Section IX<br />
+- Assurances détaillées (RC 10 M$, RP 5 M$, équipements 3,5 M$)<br />
+- Programme SST complet avec statistiques (0 accidents depuis 36 mois)<br />
+- Procédures de travail sécuritaires (50+ SWP)<br />
+- Conformité LSST/RSST et normes CSA</p>
+<p><strong>Sections B-I (à compléter selon besoins):</strong><br />
+- Expérience pertinente et références clients<br />
+- Équipe dédiée avec CV des personnes clés<br />
+- Méthodologie de maintenance préventive et prédictive<br />
+- Système de surveillance continue AssetWatch™<br />
+- Gestion d'urgences 24/7<br />
+- Stratégie de gestion des pièces de rechange<br />
+- Programme de formation du personnel client<br />
+- Innovation et technologies IA/IoT</p>
+<p><strong>Types de contenu RFP couverts:</strong><br />
+- ✅ company-overview<br />
+- ✅ corporate-info<br />
+- ✅ certifications<br />
+- ✅ team-structure<br />
+- ✅ service-offering<br />
+- ✅ technical-capabilities<br />
+- ✅ health-safety<br />
+- ✅ project-methodology<br />
+- ✅ client-references</p>
+<hr />
+<h2>🚀 Comment utiliser ces données</h2>
+<h3>Option 1: Import via l'interface utilisateur (RECOMMANDÉ)</h3>
+<h4>Étape 1: Importer le profil d'entreprise</h4>
+<ol>
+<li>Aller dans <strong>Documents</strong> → Upload</li>
+<li>Sélectionner <code>profil-enerserv.pdf</code></li>
+<li>Type de document: "Company Information"</li>
+<li>Le système va indexer le document dans Pinecone</li>
+</ol>
+<h4>Étape 2: Importer le RFP historique</h4>
+<ol>
+<li>Aller dans <strong>RFP Assistant</strong> → <strong>Bibliothèque RFP</strong> → <strong>Importer</strong></li>
+<li>Utiliser le <strong>HistoricalImportForm</strong> (wizard en 3 étapes)</li>
+</ol>
+<p><strong>Étape 1 - Upload des fichiers:</strong><br />
+- <strong>RFP PDF:</strong> Sélectionner <code>RFP-Document.pdf</code><br />
+- <strong>Réponses PDF:</strong> Sélectionner <code>REPONSES-Enerserv.pdf</code></p>
+<p><strong>Étape 2 - Métadonnées:</strong><br />
+- <strong>Titre:</strong> Maintenance turbines et générateurs - Papier Excellence Thurso<br />
+- <strong>Nom du client:</strong> Papier Excellence Canada<br />
+- <strong>Industrie:</strong> Pulp &amp; Paper / Energy<br />
+- <strong>Date de soumission:</strong> 2024-03-15<br />
+- <strong>Résultat:</strong> Won (Gagné)<br />
+- <strong>Score de qualité:</strong> 92/100<br />
+- <strong>Valeur du contrat:</strong> 3 850 000 $</p>
+<p><strong>Étape 3 - Processing:</strong><br />
+- Le système va:<br />
+  - Extraire les questions du RFP (GPT-4o)<br />
+  - Extraire les réponses du document de réponses<br />
+  - Matcher automatiquement questions ↔ réponses (AI avec confiance ≥90%)<br />
+  - Créer les entrées dans la base de données<br />
+  - Indexer dans Pinecone avec métadonnées enrichies</p>
+<p><strong>Résultat attendu:</strong><br />
+- RFP historique visible dans la bibliothèque<br />
+- ~50+ questions extraites et matchées<br />
+- Contenu disponible pour le système de Surgical Retrieval<br />
+- Prêt à être utilisé comme source pour nouveaux RFPs</p>
+<h4>Étape 3: Tester la configuration intelligente</h4>
+<ol>
+<li>Créer un nouveau RFP de test (ou utiliser un RFP existant dans le secteur énergie/industriel)</li>
+<li>Cliquer sur le bouton <strong>"Configuration intelligente"</strong> (SmartConfigureButton)</li>
+<li>Le système va:</li>
+<li>Classifier les questions par type de contenu</li>
+<li>Trouver les meilleures sources historiques (dont Papier Excellence si pertinent)</li>
+<li>
+<p>Configurer automatiquement les préférences de source</p>
+</li>
+<li>
+<p>Générer une réponse à une question</p>
+</li>
+<li>Vérifier que le badge <strong>SourceIndicatorBadge</strong> apparaît avec:</li>
+<li>Type de contenu détecté</li>
+<li>Source RFP sélectionnée (badge vert si RFP gagné)</li>
+</ol>
+<hr />
+<h2>📊 Statistiques du contenu généré</h2>
+<h3>Documents d'entreprise</h3>
+<ul>
+<li><strong>1 document:</strong> Profil EnerServ Inc.</li>
+<li><strong>Mots:</strong> 15 000+</li>
+<li><strong>Pages PDF:</strong> ~40</li>
+<li><strong>Types de contenu:</strong> company-overview, corporate-info, technical-capabilities, certifications, team-structure</li>
+</ul>
+<h3>RFPs historiques</h3>
+<ul>
+<li><strong>1 RFP complet:</strong> Papier Excellence - Maintenance turbines/générateurs (Pâtes et papiers)</li>
+<li><strong>Document RFP:</strong> 13 000+ mots, 50+ questions</li>
+<li><strong>Document Réponses:</strong> Section A complétée (19+ pages)</li>
+<li><strong>Statut:</strong> Won (gagné)</li>
+<li><strong>Valeur:</strong> 3 850 000 $ (5 ans)</li>
+<li><strong>Secteur:</strong> Energy / Pulp &amp; Paper</li>
+<li><strong>Coverage:</strong> 9/11 types de contenu</li>
+</ul>
+<h3>À venir (si nécessaire)</h3>
+<ul>
+<li>Complétion des sections B-I du document de réponses</li>
+<li>Catalogues de services techniques détaillés</li>
+<li>Études de cas clients (Hydro-Québec, Innergex, Brookfield)</li>
+<li>RFP #2: Projet hydroélectrique (si besoin de plus de volume)</li>
+</ul>
+<hr />
+<h2>🛠️ Outils de conversion</h2>
+<h3>Générer de nouveaux PDFs</h3>
+<p>Si tu modifies les fichiers Markdown et veux regénérer les PDFs:</p>
+<pre><code class="language-bash"># Méthode 1: Via HTML (recommandé)
+cd enerserv-synthetic-data
+python3 convert-to-html.py  # Génère .html
+../convert-html-to-pdf.sh    # Convertit .html → .pdf via Chrome
+
+# Méthode 2: Conversion manuelle
+# Ouvrir les .html dans navigateur, Cmd+P, &quot;Save as PDF&quot;
+</code></pre>
+<h3>Ajouter de nouveaux documents</h3>
+<ol>
+<li>Créer le fichier <code>.md</code> dans le répertoire approprié</li>
+<li>Exécuter <code>python3 convert-to-html.py</code></li>
+<li>Exécuter <code>../convert-html-to-pdf.sh</code></li>
+<li>Le PDF est prêt pour upload!</li>
+</ol>
+<hr />
+<h2>📝 Notes importantes</h2>
+<h3>Qualité des données</h3>
+<ul>
+<li>✅ <strong>Données réalistes:</strong> Basées sur recherche réelle d'EnerServ (www.enerserv.ca)</li>
+<li>✅ <strong>Secteur authentique:</strong> Industrie de l'énergie renouvelable canadienne</li>
+<li>✅ <strong>Cohérence:</strong> Tous les documents sont cohérents entre eux</li>
+<li>✅ <strong>Complétude:</strong> RFP #1 couvre 90% des types de questions typiques en maintenance industrielle</li>
+<li>⚠️ <strong>Données synthétiques:</strong> Certains chiffres, noms et détails sont fictifs mais réalistes</li>
+</ul>
+<h3>Limitations connues</h3>
+<ul>
+<li>Document de réponses RFP #1 : Section A complétée uniquement (19 pages / ~100 pages total prévues)</li>
+<li>Sections B-I peuvent être complétées au besoin</li>
+<li>Certaines références et certifications mentionnées sont fictives mais réalistes</li>
+<li>Prix et budgets sont estimatifs mais cohérents avec le marché</li>
+</ul>
+<h3>Confidentialité</h3>
+<ul>
+<li>✅ Aucune donnée réelle de clients</li>
+<li>✅ Pas d'informations confidentielles</li>
+<li>✅ Usage exclusif pour tests et démonstrations</li>
+</ul>
+<hr />
+<h2>🎉 Prêt à tester!</h2>
+<p>Tu as maintenant <strong>3 PDFs</strong> à uploader dans ton système:</p>
+<ol>
+<li>📄 <strong>profil-enerserv.pdf</strong> → Documents d'entreprise</li>
+<li>📄 <strong>RFP-Document.pdf</strong> + <strong>REPONSES-Enerserv.pdf</strong> → Bibliothèque RFP (import historique)</li>
+</ol>
+<p><strong>Prochaine étape:</strong> Ouvre ton application et commence l'import! 🚀</p>
+<hr />
+<p><strong>Généré par:</strong> Claude Code<br />
+<strong>Date:</strong> 13 novembre 2024<br />
+<strong>Version:</strong> 1.0</p>
+</body>
+</html>

@@ -1,8 +1,8 @@
 # 🚀 Status du Déploiement - Layout UX Amélioré pour RFPs Historiques
 
 **Date:** 2025-11-13
-**Heure:** ~14:00 UTC
-**Commits Déployés:** `b7d9273` (et antérieurs)
+**Heure:** ~14:30 UTC
+**Commits Déployés:** `cbec906` (et antérieurs)
 
 ---
 
@@ -15,12 +15,13 @@
 - **Next.js:** Initialisé correctement
 - **Langue:** Interface française active
 
-### Commits Déployés (5 derniers)
-1. ✅ `b7d9273` - fix: améliorer le layout des RFPs historiques (NOUVEAU)
-2. ✅ `8811dd2` - test: ajouter script de test backend pour RFP historique
-3. ✅ `80112eb` - docs: ajouter plan de test complet pour RFP historique
-4. ✅ `ef52af1` - fix: corriger l'erreur getTime dans formatRelativeTime
-5. ✅ `cbe971d` - feat: affichage complet des réponses RFP historiques avec suppression RAG
+### Commits Déployés (6 derniers)
+1. ✅ `cbec906` - fix: réduire l'espacement vertical pour RFPs historiques (NOUVEAU)
+2. ✅ `62ddb9a` - docs: documenter les améliorations UX RFP historique
+3. ✅ `b7d9273` - fix: améliorer le layout des RFPs historiques
+4. ✅ `8811dd2` - test: ajouter script de test backend pour RFP historique
+5. ✅ `ef52af1` - fix: corriger l'erreur getTime dans formatRelativeTime
+6. ✅ `cbe971d` - feat: affichage complet des réponses RFP historiques avec suppression RAG
 
 ---
 
@@ -34,7 +35,29 @@
 
 ### ⏳ Tests Manuels Requis (Frontend)
 
-#### Test Critique #0: Layout UX Amélioré (NOUVEAU)
+#### Test Critique #0a: Espacement Réduit (NOUVEAU - cbec906)
+**Objectif:** Confirmer que le "trou" visuel a été éliminé avec un espacement plus compact
+
+**Étapes:**
+1. Ouvrir https://market-intelligence-kappa.vercel.app
+2. Se connecter avec vos identifiants
+3. Naviguer vers **Bibliothèque RFP**
+4. Ouvrir un **RFP historique** (badge 📚 Historique)
+5. Observer l'espacement entre les sections
+
+**Résultat attendu:**
+```
+✅ Espacement vertical compact et cohérent
+✅ PAS de grand "trou" blanc entre les sections
+✅ Transition fluide entre:
+   - Grid "Informations du RFP" / Sidebar
+   - Section "Questions du RFP" (4 stats)
+   - Section "Questions et Réponses Archivées"
+✅ L'ensemble de la page est visuellement serré et professionnel
+✅ Pas d'espace blanc excessif
+```
+
+#### Test Critique #0: Layout UX Amélioré
 **Objectif:** Confirmer que le nouveau layout des RFPs historiques est cohérent et sans "trou" visuel
 
 **Étapes:**
@@ -230,12 +253,22 @@ vercel ls market-intelligence
 
 Le déploiement est terminé et le site est accessible. Les tests backend sont passés avec succès.
 
-**Dernières améliorations (commit `b7d9273`):**
+**Dernières améliorations:**
+
+**Commit `cbec906` (NOUVEAU):**
+- ✅ Réduction de l'espacement vertical pour éliminer le "trou"
+- ✅ Padding container: py-8 → py-4 pour historiques
+- ✅ Gaps du grid: gap-6 → gap-4 pour historiques
+- ✅ Espacement vertical: space-y-6 → space-y-4 pour historiques
+- ✅ Margin-top des sections: mt-6 → mt-4 pour historiques
+- ✅ Layout plus compact et professionnel
+
+**Commits `b7d9273` + `62ddb9a`:**
 - ✅ Layout UX des RFPs historiques complètement redessiné
-- ✅ Élimination du banner redondant et du "trou" visuel
+- ✅ Élimination du banner redondant
 - ✅ Badges consolidés dans le PageHeader pour meilleure visibilité
 - ✅ Section Q&R mise en valeur comme contenu principal
-- ✅ Flow visuel cohérent et épuré
+- ✅ Documentation UX complète créée
 
 **Il reste à effectuer les tests manuels dans le navigateur pour confirmer que:**
 1. Le nouveau layout est cohérent et sans "trou" visuel
@@ -250,5 +283,5 @@ Effectuer les 6 tests critiques listés ci-dessus pour validation finale.
 ---
 
 **Généré le:** 2025-11-13
-**Dernière mise à jour:** Commit `b7d9273` (~14:00 UTC)
-**Version:** 2.0.0
+**Dernière mise à jour:** Commit `cbec906` (~14:30 UTC)
+**Version:** 2.1.0

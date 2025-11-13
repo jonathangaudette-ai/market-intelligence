@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Wand2, Loader2, CheckCircle2, XCircle, TrendingUp } from 'lucide-react';
+import { Wand2, Loader2, CheckCircle2, XCircle, TrendingUp, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface SmartConfigureButtonProps {
@@ -98,17 +97,39 @@ export function SmartConfigureButton({
       </Button>
 
       {/* Dialog */}
-      <Dialog open={isOpen} onOpenChange={(open) => !isConfiguring && (open ? setIsOpen(true) : handleClose())}>
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+          onClick={(e) => {
+            // Allow closing by clicking backdrop only when not configuring
+            if (e.target === e.currentTarget && !isConfiguring) {
+              handleClose();
+            }
+          }}
+        >
+          <div
+            className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Header */}
-            <div className="border-b border-gray-200 px-6 py-4">
-              <h2 className="text-xl font-semibold text-gray-900">
-                Configuration intelligente des sources
-              </h2>
-              <p className="text-sm text-gray-600 mt-1">
-                L'IA analyse vos questions et trouve les meilleures sources historiques
-              </p>
+            <div className="border-b border-gray-200 px-6 py-4 flex items-start justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Configuration intelligente des sources
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  L'IA analyse vos questions et trouve les meilleures sources historiques
+                </p>
+              </div>
+              {!isConfiguring && (
+                <button
+                  onClick={handleClose}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="Fermer"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              )}
             </div>
 
             {/* Content */}
@@ -254,7 +275,7 @@ export function SmartConfigureButton({
             </div>
           </div>
         </div>
-      </Dialog>
+      )}
     </>
   );
 }

@@ -5,10 +5,19 @@
 
 /**
  * Format a date as relative time (e.g., "Il y a 2 heures")
+ * Accepts Date object, ISO string, or timestamp
  */
-export function formatRelativeTime(date: Date): string {
+export function formatRelativeTime(date: Date | string | number): string {
+  // Convert to Date object if needed
+  const dateObj = date instanceof Date ? date : new Date(date);
+
+  // Validate date
+  if (isNaN(dateObj.getTime())) {
+    return "Date invalide";
+  }
+
   const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
+  const diffMs = now.getTime() - dateObj.getTime();
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);

@@ -36,8 +36,8 @@ interface Response {
   adaptationUsed: string | null;
   version: number;
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string | Date; // Can be string from API or Date object
+  updatedAt: string | Date;
   createdByUser: {
     id: string;
     name: string | null;

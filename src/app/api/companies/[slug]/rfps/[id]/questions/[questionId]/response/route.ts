@@ -242,6 +242,117 @@ export async function GET(
 }
 
 /**
+ * DELETE /api/companies/[slug]/rfps/[rfpId]/questions/[questionId]/response
+ * Delete the latest response for a question and clean up RAG vectors
+ */
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string; id: string; questionId: string }> }
+) {
+  try {
+    const { slug, id: rfpId, questionId } = await params;
+
+    // Get authenticated user
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Verify company access
+    const companyContext = await getCompanyBySlug(slug);
+    if (!companyContext) {
+      return NextResponse.json(
+        { error: 'Company not found or access denied' },
+        { status: 403 }
+      );
+    }
+
+    // Verify question exists and belongs to this RFP
+    const [question] = await db
+      .select({ id: rfpQuestions.id, rfpId: rfpQuestions.rfpId })
+      .from(rfpQuestions)
+      .where(eq(rfpQuestions.id, questionId))
+      .limit(1);
+
+    if (!question) {
+      return NextResponse.json({ error: 'Question not found' }, { status: 404 });
+    }
+
+    if (question.rfpId !== rfpId) {
+      return NextResponse.json({ error: 'Question does not belong to this RFP' }, { status: 400 });
+    }
+
+    // Get RFP and verify ownership
+    const [rfp] = await db
+      .select({ id: rfps.id, companyId: rfps.companyId })
+      .from(rfps)
+      .where(eq(rfps.id, question.rfpId))
+      .limit(1);
+
+    if (!rfp) {
+      return NextResponse.json({ error: 'RFP not found' }, { status: 404 });
+    }
+
+    // Verify RFP belongs to this company
+    if (rfp.companyId !== companyContext.company.id) {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
+    }
+
+    // Get latest response to delete
+    const [latestResponse] = await db
+      .select()
+      .from(rfpResponses)
+      .where(eq(rfpResponses.questionId, questionId))
+      .orderBy(desc(rfpResponses.version))
+      .limit(1);
+
+    if (!latestResponse) {
+      return NextResponse.json({ error: 'No response found' }, { status: 404 });
+    }
+
+    // Delete response from database
+    await db
+      .delete(rfpResponses)
+      .where(eq(rfpResponses.id, latestResponse.id));
+
+    // Update question to mark as no response
+    await db
+      .update(rfpQuestions)
+      .set({
+        hasResponse: false,
+        status: 'pending',
+        updatedAt: new Date(),
+      })
+      .where(eq(rfpQuestions.id, questionId));
+
+    // Delete from Pinecone RAG (async, don't wait)
+    // This is a best-effort deletion - if it fails, we log but don't fail the request
+    try {
+      const { deleteResponseContent } = await import('@/lib/rfp/pinecone');
+      await deleteResponseContent(rfpId, questionId);
+      console.log(`[RAG] Successfully deleted vectors for question ${questionId}`);
+    } catch (ragError) {
+      console.error('[RAG] Failed to delete vectors from Pinecone:', ragError);
+      // Continue - database deletion succeeded
+    }
+
+    // Update RFP completion percentage
+    await updateRFPCompletionPercentage(question.rfpId);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Response deleted successfully',
+    });
+  } catch (error) {
+    console.error('Error deleting response:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
  * Helper function to update RFP completion percentage
  */
 async function updateRFPCompletionPercentage(rfpId: string) {

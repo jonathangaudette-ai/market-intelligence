@@ -188,6 +188,91 @@ export async function queryByContentType(
 }
 
 /**
+ * Delete RFP content from Pinecone
+ * This is used when an RFP or its responses are deleted
+ */
+export async function deleteRfpContent(rfpId: string): Promise<void> {
+  const namespace = getRFPNamespace();
+
+  try {
+    // Delete all vectors for this RFP by filtering on rfpId metadata
+    // Pinecone doesn't support bulk delete by metadata, so we need to delete by ID pattern
+    // Since we use pattern: ${rfpId}-chunk-${i}, we need to fetch and delete all matching IDs
+
+    // Query all vectors for this RFP
+    const queryResult = await namespace.query({
+      vector: Array(1536).fill(0), // Dummy vector
+      filter: { rfpId },
+      topK: 10000, // Max to get all vectors for this RFP
+      includeMetadata: false,
+    });
+
+    if (queryResult.matches && queryResult.matches.length > 0) {
+      const vectorIds = queryResult.matches.map((match) => match.id);
+
+      // Delete in batches of 100 (Pinecone limit)
+      const batchSize = 100;
+      for (let i = 0; i < vectorIds.length; i += batchSize) {
+        const batch = vectorIds.slice(i, i + batchSize);
+        await namespace.deleteMany(batch);
+      }
+
+      console.log(`[Pinecone] Deleted ${vectorIds.length} vectors for RFP ${rfpId}`);
+    } else {
+      console.log(`[Pinecone] No vectors found for RFP ${rfpId}`);
+    }
+  } catch (error) {
+    console.error(`[Pinecone] Error deleting vectors for RFP ${rfpId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Delete specific response chunks from Pinecone
+ * This is used when a specific response is deleted but the RFP remains
+ */
+export async function deleteResponseContent(
+  rfpId: string,
+  questionId: string
+): Promise<void> {
+  const namespace = getRFPNamespace();
+
+  try {
+    // Query vectors for this specific question/response
+    // We filter by rfpId and look for vectors that match this question
+    const queryResult = await namespace.query({
+      vector: Array(1536).fill(0), // Dummy vector
+      filter: {
+        rfpId,
+        questionId, // Assuming we store questionId in metadata
+      },
+      topK: 1000,
+      includeMetadata: false,
+    });
+
+    if (queryResult.matches && queryResult.matches.length > 0) {
+      const vectorIds = queryResult.matches.map((match) => match.id);
+      await namespace.deleteMany(vectorIds);
+
+      console.log(
+        `[Pinecone] Deleted ${vectorIds.length} vectors for question ${questionId} in RFP ${rfpId}`
+      );
+    } else {
+      console.log(
+        `[Pinecone] No vectors found for question ${questionId} in RFP ${rfpId}`
+      );
+    }
+  } catch (error) {
+    console.error(
+      `[Pinecone] Error deleting vectors for question ${questionId}:`,
+      error
+    );
+    // Don't throw - we want to continue even if Pinecone deletion fails
+    console.warn('[Pinecone] Continuing despite Pinecone deletion error');
+  }
+}
+
+/**
  * Test Pinecone connection and namespace access
  */
 export async function testPineconeConnection(): Promise<boolean> {

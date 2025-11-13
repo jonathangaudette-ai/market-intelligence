@@ -15,6 +15,7 @@ import { StartParsingButton } from '@/components/rfp/start-parsing-button';
 import { EnrichmentForm } from '@/components/rfp/enrichment-form';
 import { ExportButton } from '@/components/rfp/export-button';
 import { SmartConfigureButton } from '@/components/rfp/smart-configure-button';
+import { HistoricalQABrowser } from '@/components/rfp/historical-qa-browser';
 
 interface RFPDetailPageProps {
   params: Promise<{ id: string; slug: string }>;
@@ -427,6 +428,26 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                   </div>
                 )}
               </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Historical RFP Q&A Browser - Full width (only for historical RFPs) */}
+      {rfp.isHistorical && rfp.parsingStatus === 'completed' && (
+        <div className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-amber-600" />
+                Questions et Réponses Archivées
+              </CardTitle>
+              <p className="text-sm text-gray-600 mt-2">
+                Parcourez les réponses complètes soumises pour ce RFP historique. Ces réponses servent de source pour le système RAG.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <HistoricalQABrowser rfpId={id} slug={slug} />
             </CardContent>
           </Card>
         </div>

@@ -87,7 +87,7 @@ export default async function RFPLibraryPage({
         <div className="flex items-center justify-between mb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <Database className="h-8 w-8 text-purple-600" />
+              <Database className="h-8 w-8 text-teal-600" />
               <h1 className="text-3xl font-bold text-gray-900">
                 Bibliothèque de RFPs historiques
               </h1>
@@ -98,7 +98,7 @@ export default async function RFPLibraryPage({
           </div>
 
           <Link href={`/companies/${slug}/rfps/import`}>
-            <Button className="bg-purple-600 hover:bg-purple-700">
+            <Button className="bg-teal-600 hover:bg-teal-700">
               <Upload className="h-4 w-4 mr-2" />
               Importer un RFP
             </Button>
@@ -138,8 +138,8 @@ export default async function RFPLibraryPage({
             <CardContent className="pt-6">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  <TrendingUp className="h-4 w-4 text-blue-600" />
-                  <p className="text-3xl font-bold text-blue-600">{winRate}%</p>
+                  <TrendingUp className="h-4 w-4 text-teal-600" />
+                  <p className="text-3xl font-bold text-teal-600">{winRate}%</p>
                 </div>
                 <p className="text-sm text-gray-500">Taux de succès</p>
               </div>
@@ -149,7 +149,7 @@ export default async function RFPLibraryPage({
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-3xl font-bold text-purple-600">{avgQualityScore}</p>
+                <p className="text-3xl font-bold text-teal-600">{avgQualityScore}</p>
                 <p className="text-sm text-gray-500 mt-1">Qualité moyenne</p>
               </div>
             </CardContent>
@@ -188,15 +188,15 @@ export default async function RFPLibraryPage({
 
       {/* Info Card */}
       {totalRfps > 0 && (
-        <Card className="mt-6 bg-purple-50 border-purple-200">
+        <Card className="mt-6 bg-teal-50 border-teal-200">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <Database className="h-5 w-5 text-purple-600 mt-0.5" />
-              <div className="flex-1 text-sm text-purple-900">
+              <Database className="h-5 w-5 text-teal-600 mt-0.5" />
+              <div className="flex-1 text-sm text-teal-900">
                 <p className="font-medium mb-1">
                   Comment fonctionne la bibliothèque de RFPs?
                 </p>
-                <p className="text-purple-700">
+                <p className="text-teal-700">
                   Lorsque vous générez une réponse, l'IA analyse votre bibliothèque historique
                   pour trouver les meilleures réponses similaires. Les RFPs gagnés avec un score de
                   qualité élevé sont prioritaires pour améliorer vos chances de succès.

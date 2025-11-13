@@ -282,7 +282,7 @@ export default function DocumentsPage() {
               label="Total chunks"
               value={stats.totalChunks}
               icon={FileText}
-              iconColor="bg-blue-100 text-blue-600"
+              iconColor="bg-teal-100 text-teal-600"
             />
           </div>
         </div>

@@ -161,14 +161,14 @@ export default async function RFPsListPage({
           label="En cours"
           value={userRfps.filter((r) => r.status === 'in_progress').length}
           icon={Clock}
-          iconColor="bg-blue-100 text-blue-600"
+          iconColor="bg-teal-50 text-teal-600"
         />
 
         <StatCard
           label="Soumis"
           value={userRfps.filter((r) => r.status === 'submitted').length}
           icon={Send}
-          iconColor="bg-purple-100 text-purple-600"
+          iconColor="bg-teal-100 text-teal-600"
         />
 
         <StatCard

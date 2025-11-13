@@ -62,7 +62,7 @@ export default async function QuestionsPage({ params }: QuestionsPageProps) {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <FileText className="h-8 w-8 text-blue-600" />
+              <FileText className="h-8 w-8 text-teal-600" />
               <h1 className="text-3xl font-bold text-gray-900">Questions</h1>
             </div>
             <p className="text-gray-600">{rfp.title}</p>

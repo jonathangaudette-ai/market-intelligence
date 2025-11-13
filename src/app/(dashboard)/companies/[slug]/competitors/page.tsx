@@ -70,9 +70,9 @@ export default function CompetitorsPage() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-700 border-red-200";
+        return "bg-teal-100 text-teal-700 border-teal-200";
       case "medium":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
+        return "bg-teal-50 text-teal-700 border-teal-200";
       case "low":
         return "bg-gray-100 text-gray-700 border-gray-200";
       default:
@@ -138,8 +138,8 @@ export default function CompetitorsPage() {
                       {competitors.filter((c) => c.priority === "high").length}
                     </p>
                   </div>
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <AlertCircle className="h-5 w-5 text-red-600" />
+                  <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                    <AlertCircle className="h-5 w-5 text-teal-600" />
                   </div>
                 </div>
               </CardContent>
@@ -154,8 +154,8 @@ export default function CompetitorsPage() {
                       {competitors.reduce((sum, c) => sum + c.documentCount, 0)}
                     </p>
                   </div>
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-5 w-5 text-teal-600" />
                   </div>
                 </div>
               </CardContent>
@@ -170,8 +170,8 @@ export default function CompetitorsPage() {
                       {competitors.filter((c) => c.linkedinId).length}
                     </p>
                   </div>
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Linkedin className="h-5 w-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                    <Linkedin className="h-5 w-5 text-teal-600" />
                   </div>
                 </div>
               </CardContent>
@@ -203,7 +203,7 @@ export default function CompetitorsPage() {
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-teal-100 to-blue-100 rounded-lg flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-teal-100 to-teal-50 rounded-lg flex items-center justify-center">
                       <Building2 className="h-6 w-6 text-teal-600" />
                     </div>
                     <div>

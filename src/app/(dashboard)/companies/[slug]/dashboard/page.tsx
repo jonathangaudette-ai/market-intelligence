@@ -107,7 +107,7 @@ export default function DashboardPage() {
       description: "rapport-q4-competitor-x.pdf",
       time: "Il y a 2 heures",
       icon: FileText,
-      color: "bg-blue-100 text-blue-600",
+      color: "bg-teal-100 text-teal-600",
     },
     {
       id: "2",
@@ -125,7 +125,7 @@ export default function DashboardPage() {
       description: "New Startup ajouté à la liste de surveillance",
       time: "Il y a 5 heures",
       icon: Building2,
-      color: "bg-purple-100 text-purple-600",
+      color: "bg-teal-50 text-teal-600",
     },
     {
       id: "4",
@@ -134,7 +134,7 @@ export default function DashboardPage() {
       description: "Competitor Y a publié 5 nouvelles offres d'emploi",
       time: "Il y a 1 jour",
       icon: AlertCircle,
-      color: "bg-orange-100 text-orange-600",
+      color: "bg-yellow-100 text-yellow-600",
     },
   ];
 

@@ -166,12 +166,12 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                     Résultat: {rfp.result === 'won' ? '🏆 Gagné' : rfp.result === 'lost' ? '❌ Perdu' : '⏳ En attente'}
                   </Badge>
                   {rfp.qualityScore && (
-                    <Badge variant="outline" className="bg-blue-50 text-blue-800 border-blue-300">
+                    <Badge variant="outline" className="bg-teal-50 text-teal-800 border-teal-300">
                       Score qualité: {rfp.qualityScore}/100
                     </Badge>
                   )}
                   {rfp.usageCount !== null && rfp.usageCount > 0 && (
-                    <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-300">
+                    <Badge variant="outline" className="bg-teal-50 text-teal-800 border-teal-300">
                       Utilisé {rfp.usageCount}× comme source
                     </Badge>
                   )}
@@ -365,19 +365,19 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                     <p className="text-3xl font-bold text-green-900">{questionStats.completed}</p>
                   </div>
 
-                  <div className="bg-blue-50 rounded-lg p-4">
+                  <div className="bg-teal-50 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-1">
-                      <Circle className="h-4 w-4 text-blue-600" />
-                      <p className="text-sm text-blue-700">En attente</p>
+                      <Circle className="h-4 w-4 text-teal-600" />
+                      <p className="text-sm text-teal-700">En attente</p>
                     </div>
-                    <p className="text-3xl font-bold text-blue-900">
+                    <p className="text-3xl font-bold text-teal-900">
                       {questionStats.total - questionStats.completed}
                     </p>
                   </div>
 
-                  <div className="bg-purple-50 rounded-lg p-4">
-                    <p className="text-sm text-purple-700 mb-1">Progression</p>
-                    <p className="text-3xl font-bold text-purple-900">
+                  <div className="bg-teal-50 rounded-lg p-4">
+                    <p className="text-sm text-teal-700 mb-1">Progression</p>
+                    <p className="text-3xl font-bold text-teal-900">
                       {questionStats.total > 0
                         ? Math.round((questionStats.completed / questionStats.total) * 100)
                         : 0}%
@@ -403,9 +403,9 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                     </Link>
                   </div>
                 ) : (
-                  <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
+                  <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg p-6 border-2 border-teal-200">
                     <div className="flex flex-col items-center mb-2">
-                      <FileText className="h-10 w-10 text-blue-600 mb-2" />
+                      <FileText className="h-10 w-10 text-teal-600 mb-2" />
                       <h3 className="text-base font-semibold text-gray-900 text-center">
                         Prochaines étapes
                       </h3>

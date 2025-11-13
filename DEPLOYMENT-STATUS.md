@@ -1,8 +1,8 @@
-# 🚀 Status du Déploiement - RFP Historique avec Q&R Complètes
+# 🚀 Status du Déploiement - Layout UX Amélioré pour RFPs Historiques
 
 **Date:** 2025-11-13
-**Heure:** 13:30 UTC
-**Commits Déployés:** `8811dd2` (et antérieurs)
+**Heure:** ~14:00 UTC
+**Commits Déployés:** `b7d9273` (et antérieurs)
 
 ---
 
@@ -15,11 +15,12 @@
 - **Next.js:** Initialisé correctement
 - **Langue:** Interface française active
 
-### Commits Déployés (4 derniers)
-1. ✅ `8811dd2` - test: ajouter script de test backend pour RFP historique
-2. ✅ `80112eb` - docs: ajouter plan de test complet pour RFP historique
-3. ✅ `ef52af1` - fix: corriger l'erreur getTime dans formatRelativeTime
-4. ✅ `cbe971d` - feat: affichage complet des réponses RFP historiques avec suppression RAG
+### Commits Déployés (5 derniers)
+1. ✅ `b7d9273` - fix: améliorer le layout des RFPs historiques (NOUVEAU)
+2. ✅ `8811dd2` - test: ajouter script de test backend pour RFP historique
+3. ✅ `80112eb` - docs: ajouter plan de test complet pour RFP historique
+4. ✅ `ef52af1` - fix: corriger l'erreur getTime dans formatRelativeTime
+5. ✅ `cbe971d` - feat: affichage complet des réponses RFP historiques avec suppression RAG
 
 ---
 
@@ -32,6 +33,34 @@
 - [x] Build Next.js réussi sans erreurs TypeScript
 
 ### ⏳ Tests Manuels Requis (Frontend)
+
+#### Test Critique #0: Layout UX Amélioré (NOUVEAU)
+**Objectif:** Confirmer que le nouveau layout des RFPs historiques est cohérent et sans "trou" visuel
+
+**Étapes:**
+1. Ouvrir https://market-intelligence-kappa.vercel.app
+2. Se connecter avec vos identifiants
+3. Naviguer vers **Bibliothèque RFP**
+4. Ouvrir un **RFP historique** (badge 📚 Historique)
+5. Observer le layout de la page
+
+**Résultat attendu:**
+```
+✅ PageHeader affiche TOUS les badges importants:
+   - 📚 Historique
+   - 🏆 Gagné / ❌ Perdu (selon résultat)
+   - Qualité: XX/100
+   - XX× utilisé
+✅ PAS de banner amber redondant en haut de page
+✅ Section "Questions du RFP" affiche 4 stats en ligne
+✅ PAS de box "Archive en lecture seule" séparée
+✅ Section "Questions et Réponses Archivées" bien visible avec:
+   - Border amber proéminente
+   - Header avec gradient amber
+   - Description "Archive en lecture seule" claire
+   - Icon 📚
+✅ Flow visuel cohérent, pas de "trou" entre les sections
+```
 
 #### Test Critique #1: Vérification Erreur getTime
 **Objectif:** Confirmer que l'erreur `TypeError: e.getTime is not a function` a disparu
@@ -147,6 +176,7 @@ vercel ls market-intelligence
 ## 📊 Checklist de Validation Finale
 
 ### Avant de Fermer ce Ticket
+- [ ] Test #0: Layout UX amélioré (NOUVEAU) ✅
 - [ ] Test #1: Erreur getTime disparue ✅
 - [ ] Test #2: Réponses complètes visibles ✅
 - [ ] Test #3: Dates formatées correctement ✅
@@ -198,16 +228,27 @@ vercel ls market-intelligence
 
 **Statut Global:** 🟢 **DÉPLOYÉ ET ACCESSIBLE**
 
-Le déploiement est terminé et le site est accessible. Les tests backend sont passés avec succès. Il reste à effectuer les tests manuels dans le navigateur pour confirmer que:
-1. L'erreur `getTime` a disparu
-2. Les réponses complètes sont visibles
-3. La suppression RAG fonctionne
+Le déploiement est terminé et le site est accessible. Les tests backend sont passés avec succès.
+
+**Dernières améliorations (commit `b7d9273`):**
+- ✅ Layout UX des RFPs historiques complètement redessiné
+- ✅ Élimination du banner redondant et du "trou" visuel
+- ✅ Badges consolidés dans le PageHeader pour meilleure visibilité
+- ✅ Section Q&R mise en valeur comme contenu principal
+- ✅ Flow visuel cohérent et épuré
+
+**Il reste à effectuer les tests manuels dans le navigateur pour confirmer que:**
+1. Le nouveau layout est cohérent et sans "trou" visuel
+2. L'erreur `getTime` a disparu
+3. Les réponses complètes sont visibles
+4. Les dates sont formatées correctement
+5. La suppression RAG fonctionne
 
 **Prochaine étape recommandée:**
-Effectuer les 5 tests critiques listés ci-dessus pour validation finale.
+Effectuer les 6 tests critiques listés ci-dessus pour validation finale.
 
 ---
 
 **Généré le:** 2025-11-13
-**Dernière mise à jour:** Commit `8811dd2`
-**Version:** 1.0.0
+**Dernière mise à jour:** Commit `b7d9273` (~14:00 UTC)
+**Version:** 2.0.0

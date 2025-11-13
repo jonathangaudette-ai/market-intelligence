@@ -60,11 +60,14 @@ export default async function RFPsListPage({
     }
   }
 
-  // Fetch RFPs for this company
+  // Fetch active RFPs for this company (exclude historical)
   const userRfps = await db
     .select()
     .from(rfps)
-    .where(eq(rfps.companyId, company.id))
+    .where(and(
+      eq(rfps.companyId, company.id),
+      eq(rfps.isHistorical, false)
+    ))
     .orderBy(desc(rfps.createdAt));
 
   // Format date helper

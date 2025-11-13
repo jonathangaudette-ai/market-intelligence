@@ -18,7 +18,7 @@ export async function verifyAuth() {
   };
 }
 
-export async function getCurrentCompany() {
+export async function getCurrentCompany(slugOverride?: string) {
   const session = await auth();
 
   if (!session?.user) {
@@ -29,9 +29,12 @@ export async function getCurrentCompany() {
   // This would be set by the company switcher component
   const { cookies } = await import("next/headers");
   const cookieStore = await cookies();
-  const activeCompanyId = cookieStore.get("activeCompanyId")?.value;
+  const activeCompanySlug = cookieStore.get("active-company-slug")?.value;
 
-  if (!activeCompanyId) {
+  // Use slug override if provided, otherwise fallback to cookie
+  const slug = slugOverride || activeCompanySlug;
+
+  if (!slug) {
     return null;
   }
 
@@ -50,7 +53,7 @@ export async function getCurrentCompany() {
     .where(
       and(
         eq(companyMembers.userId, session.user.id),
-        eq(companyMembers.companyId, activeCompanyId),
+        eq(companies.slug, slug),
         eq(companies.isActive, true)
       )
     )

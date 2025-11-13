@@ -33,8 +33,8 @@ export async function requireAuth(
     };
   }
 
-  // 2. Verify company context
-  const currentCompany = await getCurrentCompany();
+  // 2. Verify company context (use slugToVerify if provided)
+  const currentCompany = await getCurrentCompany(slugToVerify);
   if (!currentCompany) {
     return {
       success: false,

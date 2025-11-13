@@ -161,11 +161,11 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
         }
       />
 
-      <div className="container mx-auto py-8 max-w-6xl">
+      <div className={`container mx-auto max-w-6xl ${rfp.isHistorical ? 'py-4' : 'py-8'}`}>
       {/* Main content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className={`grid grid-cols-1 lg:grid-cols-3 ${rfp.isHistorical ? 'gap-4' : 'gap-6'}`}>
         {/* Left column - RFP Details */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className={`lg:col-span-2 ${rfp.isHistorical ? 'space-y-4' : 'space-y-6'}`}>
           {/* Parsing Progress - Only for active RFPs */}
           {!rfp.isHistorical && <ParsingProgress rfpId={id} slug={slug} />}
 
@@ -320,7 +320,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
 
       {/* Questions Summary & CTA - Full width */}
       {rfp.parsingStatus === 'completed' && questionStats && (
-        <div className="mt-6">
+        <div className={rfp.isHistorical ? "mt-4" : "mt-6"}>
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -432,7 +432,7 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
 
       {/* Historical RFP Q&A Browser - Full width (only for historical RFPs) */}
       {rfp.isHistorical && rfp.parsingStatus === 'completed' && (
-        <div className="mt-6">
+        <div className="mt-4">
           <Card className="border-2 border-amber-200">
             <CardHeader className="bg-gradient-to-r from-amber-50 to-yellow-50">
               <CardTitle className="flex items-center gap-2 text-lg">

@@ -1,0 +1,1 @@
+Les fichiers HTML sont créés. Les PDFs peuvent être générés avec: pip install weasyprint && python3 convert-to-pdf.py

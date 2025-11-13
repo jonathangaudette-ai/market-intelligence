@@ -93,10 +93,29 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
     }).format(amount);
   };
 
-  // Prepare status badge
+  // Prepare status badge with additional badges for historical RFPs
   const getStatusBadge = () => {
     if (rfp.isHistorical) {
-      return <Badge variant="secondary" className="bg-amber-100 text-amber-800 border-amber-300">📚 Historique</Badge>;
+      return (
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary" className="bg-amber-100 text-amber-800 border-amber-300">📚 Historique</Badge>
+          {rfp.result && (
+            <Badge variant={rfp.result === 'won' ? 'default' : 'secondary'} className={rfp.result === 'won' ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'}>
+              {rfp.result === 'won' ? '🏆 Gagné' : rfp.result === 'lost' ? '❌ Perdu' : '⏳ En attente'}
+            </Badge>
+          )}
+          {rfp.qualityScore && (
+            <Badge variant="outline" className="bg-teal-50 text-teal-800 border-teal-300">
+              Qualité: {rfp.qualityScore}/100
+            </Badge>
+          )}
+          {rfp.usageCount !== null && rfp.usageCount > 0 && (
+            <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-300">
+              {rfp.usageCount}× utilisé
+            </Badge>
+          )}
+        </div>
+      );
     }
     if (rfp.parsingStatus === 'completed') {
       return <Badge variant="default">Parsing terminé</Badge>;
@@ -143,46 +162,6 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
       />
 
       <div className="container mx-auto py-8 max-w-6xl">
-
-      {/* Historical RFP Banner */}
-      {rfp.isHistorical && (
-        <div className="mb-6 bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 mt-0.5">
-              <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
-                <span className="text-2xl">📚</span>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-amber-900 mb-1">
-                RFP Historique - Archive
-              </h3>
-              <p className="text-sm text-amber-800">
-                Ce RFP a été soumis et est maintenant utilisé comme source pour améliorer les réponses futures via le système de récupération chirurgicale.
-                Les questions et réponses sont en <strong>lecture seule</strong>.
-              </p>
-              {rfp.result && (
-                <div className="mt-2 flex items-center gap-2">
-                  <Badge variant={rfp.result === 'won' ? 'default' : 'secondary'} className={rfp.result === 'won' ? 'bg-green-100 text-green-800 border-green-300' : ''}>
-                    Résultat: {rfp.result === 'won' ? '🏆 Gagné' : rfp.result === 'lost' ? '❌ Perdu' : '⏳ En attente'}
-                  </Badge>
-                  {rfp.qualityScore && (
-                    <Badge variant="outline" className="bg-teal-50 text-teal-800 border-teal-300">
-                      Score qualité: {rfp.qualityScore}/100
-                    </Badge>
-                  )}
-                  {rfp.usageCount !== null && rfp.usageCount > 0 && (
-                    <Badge variant="outline" className="bg-teal-50 text-teal-800 border-teal-300">
-                      Utilisé {rfp.usageCount}× comme source
-                    </Badge>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Main content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left column - RFP Details */}
@@ -350,9 +329,9 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Stats */}
-                <div className="md:col-span-2 grid grid-cols-2 gap-4">
+              {rfp.isHistorical ? (
+                // Simplified stats for historical RFPs - no CTA needed
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-gray-50 rounded-lg p-4">
                     <p className="text-sm text-gray-500 mb-1">Questions totales</p>
                     <p className="text-3xl font-bold text-gray-900">{questionStats.total}</p>
@@ -361,23 +340,23 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                   <div className="bg-green-50 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-1">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      <p className="text-sm text-green-700">{rfp.isHistorical ? 'Réponses archivées' : 'Complétées'}</p>
+                      <p className="text-sm text-green-700">Réponses archivées</p>
                     </div>
                     <p className="text-3xl font-bold text-green-900">{questionStats.completed}</p>
                   </div>
 
-                  <div className="bg-teal-50 rounded-lg p-4">
+                  <div className="bg-amber-50 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-1">
-                      <Circle className="h-4 w-4 text-teal-600" />
-                      <p className="text-sm text-teal-700">En attente</p>
+                      <Circle className="h-4 w-4 text-amber-600" />
+                      <p className="text-sm text-amber-700">Sans réponse</p>
                     </div>
-                    <p className="text-3xl font-bold text-teal-900">
+                    <p className="text-3xl font-bold text-amber-900">
                       {questionStats.total - questionStats.completed}
                     </p>
                   </div>
 
                   <div className="bg-teal-50 rounded-lg p-4">
-                    <p className="text-sm text-teal-700 mb-1">Progression</p>
+                    <p className="text-sm text-teal-700 mb-1">Taux de complétion</p>
                     <p className="text-3xl font-bold text-teal-900">
                       {questionStats.total > 0
                         ? Math.round((questionStats.completed / questionStats.total) * 100)
@@ -385,25 +364,43 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                     </p>
                   </div>
                 </div>
-
-                {/* CTA - Different for historical vs active */}
-                {rfp.isHistorical ? (
-                  <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-lg p-6 border-2 border-amber-200">
-                    <div className="flex flex-col items-center mb-2">
-                      <FileText className="h-10 w-10 text-amber-600 mb-2" />
-                      <h3 className="text-base font-semibold text-gray-900 text-center">
-                        Archive en lecture seule
-                      </h3>
+              ) : (
+                // Active RFPs get the full layout with CTA
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="md:col-span-2 grid grid-cols-2 gap-4">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <p className="text-sm text-gray-500 mb-1">Questions totales</p>
+                      <p className="text-3xl font-bold text-gray-900">{questionStats.total}</p>
                     </div>
 
-                    <Link href={`/companies/${slug}/rfps/${id}/questions`} className="w-full">
-                      <Button className="w-full" size="lg" variant="outline">
-                        Voir les Q&R archivées
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </Link>
+                    <div className="bg-green-50 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        <p className="text-sm text-green-700">Complétées</p>
+                      </div>
+                      <p className="text-3xl font-bold text-green-900">{questionStats.completed}</p>
+                    </div>
+
+                    <div className="bg-teal-50 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Circle className="h-4 w-4 text-teal-600" />
+                        <p className="text-sm text-teal-700">En attente</p>
+                      </div>
+                      <p className="text-3xl font-bold text-teal-900">
+                        {questionStats.total - questionStats.completed}
+                      </p>
+                    </div>
+
+                    <div className="bg-teal-50 rounded-lg p-4">
+                      <p className="text-sm text-teal-700 mb-1">Progression</p>
+                      <p className="text-3xl font-bold text-teal-900">
+                        {questionStats.total > 0
+                          ? Math.round((questionStats.completed / questionStats.total) * 100)
+                          : 0}%
+                      </p>
+                    </div>
                   </div>
-                ) : (
+
                   <div className="flex flex-col justify-center gap-3 bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg p-6 border-2 border-teal-200">
                     <div className="flex flex-col items-center mb-2">
                       <FileText className="h-10 w-10 text-teal-600 mb-2" />
@@ -426,8 +423,8 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
                       </Button>
                     </Link>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -436,17 +433,20 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
       {/* Historical RFP Q&A Browser - Full width (only for historical RFPs) */}
       {rfp.isHistorical && rfp.parsingStatus === 'completed' && (
         <div className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-amber-600" />
+          <Card className="border-2 border-amber-200">
+            <CardHeader className="bg-gradient-to-r from-amber-50 to-yellow-50">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center">
+                  <span className="text-xl">📚</span>
+                </div>
                 Questions et Réponses Archivées
               </CardTitle>
-              <p className="text-sm text-gray-600 mt-2">
-                Parcourez les réponses complètes soumises pour ce RFP historique. Ces réponses servent de source pour le système RAG.
+              <p className="text-sm text-gray-700 mt-2">
+                <strong>Archive en lecture seule</strong> - Parcourez les réponses complètes soumises pour ce RFP.
+                Ces réponses alimentent le système de récupération chirurgicale pour améliorer les futures propositions.
               </p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <HistoricalQABrowser rfpId={id} slug={slug} />
             </CardContent>
           </Card>

@@ -13,6 +13,7 @@ import { GPT5_CONFIGS, GPT4O_FALLBACK } from '@/lib/constants/ai-models';
 import { parsePDF, cleanPDFText } from './parser/pdf-parser';
 import OpenAI from 'openai';
 import { eq } from 'drizzle-orm';
+import { put } from '@vercel/blob';
 
 // Lazy initialization
 let _openai: OpenAI | null = null;
@@ -260,6 +261,32 @@ export async function importHistoricalRfp(
     const responseParsed = await parsePDF(responseBuffer);
     const responseText = cleanPDFText(responseParsed.text);
 
+    // 1.5. Upload PDFs to Vercel Blob for future access
+    console.log('[Import] Uploading PDFs to Vercel Blob...');
+    const timestamp = Date.now();
+
+    // Upload RFP PDF
+    const rfpBlob = await put(
+      `historical-rfps/${input.companyId}/${timestamp}-rfp-${input.rfpPdf.name}`,
+      rfpBuffer,
+      {
+        access: 'public',
+        contentType: 'application/pdf',
+      }
+    );
+    console.log(`[Import] RFP PDF uploaded: ${rfpBlob.url}`);
+
+    // Upload Response PDF
+    const responseBlob = await put(
+      `historical-rfps/${input.companyId}/${timestamp}-response-${input.responsePdf.name}`,
+      responseBuffer,
+      {
+        access: 'public',
+        contentType: 'application/pdf',
+      }
+    );
+    console.log(`[Import] Response PDF uploaded: ${responseBlob.url}`);
+
     // 2. Parse RFP questions (using existing logic from question-extractor)
     console.log('[Import] Parsing RFP questions...');
     const { extractQuestions } = await import('./parser/question-extractor');
@@ -297,6 +324,12 @@ export async function importHistoricalRfp(
       extractedText: rfpText,
       parsingStatus: 'completed',
       status: 'submitted',
+      // Store PDF URLs for future access
+      originalFileUrl: rfpBlob.url,
+      originalFilename: input.rfpPdf.name,
+      fileSizeBytes: input.rfpPdf.size,
+      fileType: 'application/pdf',
+      submittedDocument: responseBlob.url,
     }).returning();
 
     // 7. Save auto-accepted questions + responses

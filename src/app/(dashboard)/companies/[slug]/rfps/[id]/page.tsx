@@ -16,6 +16,7 @@ import { EnrichmentForm } from '@/components/rfp/enrichment-form';
 import { ExportButton } from '@/components/rfp/export-button';
 import { SmartConfigureButton } from '@/components/rfp/smart-configure-button';
 import { HistoricalQABrowser } from '@/components/rfp/historical-qa-browser';
+import { PdfDownloadButton } from '@/components/rfp/pdf-download-button';
 
 interface RFPDetailPageProps {
   params: Promise<{ id: string; slug: string }>;
@@ -315,6 +316,32 @@ export default async function RFPDetailPage({ params }: RFPDetailPageProps) {
               )}
             </CardContent>
           </Card>
+
+          {/* Documents Sources - Only for historical RFPs */}
+          {rfp.isHistorical && (rfp.originalFileUrl || rfp.submittedDocument) && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Documents sources</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {rfp.originalFileUrl && (
+                  <PdfDownloadButton
+                    url={rfp.originalFileUrl}
+                    filename={rfp.originalFilename || 'rfp-original.pdf'}
+                    label="RFP original"
+                    fileSize={rfp.fileSizeBytes || undefined}
+                  />
+                )}
+                {rfp.submittedDocument && (
+                  <PdfDownloadButton
+                    url={rfp.submittedDocument}
+                    filename={`reponse-${rfp.clientName || 'document'}.pdf`}
+                    label="Réponse soumise"
+                  />
+                )}
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 

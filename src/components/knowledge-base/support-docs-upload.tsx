@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 
 interface SupportDocsUploadProps {
+  companySlug: string;
   onUploadComplete: () => void;
 }
 
@@ -42,7 +43,7 @@ const ALLOWED_TYPES = [
   "text/plain",
 ];
 
-export function SupportDocsUpload({ onUploadComplete }: SupportDocsUploadProps) {
+export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocsUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [documentPurpose, setDocumentPurpose] = useState<DocumentPurpose>("rfp_support");
   const [contentType, setContentType] = useState("");
@@ -127,7 +128,7 @@ export function SupportDocsUpload({ onUploadComplete }: SupportDocsUploadProps) 
       if (contentType) formData.append("contentType", contentType);
       if (tags.length > 0) formData.append("tags", JSON.stringify(tags));
 
-      const response = await fetch("/api/knowledge-base/upload", {
+      const response = await fetch(`/api/companies/${companySlug}/knowledge-base/upload`, {
         method: "POST",
         body: formData,
       });
@@ -184,7 +185,7 @@ export function SupportDocsUpload({ onUploadComplete }: SupportDocsUploadProps) 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       try {
-        const response = await fetch(`/api/knowledge-base/upload?documentId=${documentId}`);
+        const response = await fetch(`/api/companies/${companySlug}/knowledge-base/upload?documentId=${documentId}`);
         if (!response.ok) continue;
 
         const data = await response.json();

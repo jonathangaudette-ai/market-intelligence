@@ -75,7 +75,7 @@ export default function KnowledgeBasePage() {
     async function loadAnalytics() {
       try {
         setLoadingAnalytics(true);
-        const response = await fetch('/api/knowledge-base/analytics?period=30');
+        const response = await fetch(`/api/companies/${slug}/knowledge-base/analytics?period=30`);
         if (!response.ok) throw new Error('Failed to load analytics');
         const data = await response.json();
         setAnalytics(data);
@@ -210,7 +210,7 @@ export default function KnowledgeBasePage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Téléverser un document de support
           </h2>
-          <SupportDocsUpload onUploadComplete={handleUploadComplete} />
+          <SupportDocsUpload companySlug={slug} onUploadComplete={handleUploadComplete} />
         </div>
 
         {/* Documents List */}

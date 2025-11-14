@@ -386,6 +386,231 @@ Décrivez vos initiatives environnementales:
 **Q20. Différenciation et innovation**
 Qu'est-ce qui distingue votre offre de la concurrence? Proposez-vous des solutions innovantes adaptées à une chaîne en croissance comme la nôtre?
 
+### SECTION G: SPÉCIFICATIONS TECHNIQUES DES PRODUITS
+
+**Q21. Tests d'efficacité des désinfectants**
+Fournissez les résultats de tests d'efficacité de vos désinfectants pour surfaces contact alimentaire selon les normes NSF/ANSI 51 ou équivalentes.
+
+**Q22. Compatibilité matériaux**
+Décrivez la compatibilité de vos produits avec les matériaux de cuisine commerciale (acier inoxydable, aluminium, plastiques alimentaires, planchers antidérapants).
+
+**Q23. Spécifications chimiques**
+Pour les désinfectants et dégraissants, indiquez : pH, concentration d'agents actifs, temps d'action, méthode d'application, rinçage requis ou non.
+
+**Q24. Fiches techniques complètes**
+Fournissez les fiches techniques et FDS en français pour tous les produits chimiques proposés.
+
+**Q25. Stabilité et entreposage**
+Quelle est la durée de conservation de vos produits? Quelles sont les conditions d'entreposage requises (température, lumière, humidité)?
+
+**Q26. Systèmes de dosage**
+Décrivez vos systèmes de dosage automatique pour lave-vaisselle, plonge 3 compartiments et application au sol.
+
+**Q27. Papiers et essuie-tout**
+Fournissez les spécifications : grammage, absorption, résistance humide, compatibilité distributeurs, certifications FSC.
+
+**Q28. Sacs à déchets résistants**
+Spécifications des sacs pour graisse et déchets alimentaires : épaisseur, résistance perforation/déchirure, odeurs neutralisantes.
+
+**Q29. Équipements proposés**
+Décrivez les équipements disponibles (autolaveuses compactes, extracteurs, polisseuses) : spécifications techniques, options location/achat.
+
+**Q30. Produits pour zones spécifiques**
+Proposez des solutions pour : cuisines grasses, comptoirs libre-service, salles de bain clients, aires de jeux enfants, terrasses extérieures.
+
+**Q31. Contrôle qualité**
+Comment assurez-vous la qualité et la constance de vos produits? Avez-vous des procédures de contrôle qualité en fabrication et distribution?
+
+**Q32. Produits sans parfum**
+Proposez-vous des options sans parfum pour respecter les sensibilités de certains clients et employés?
+
+**Q33. Solutions virucides**
+Avez-vous des désinfectants avec allégations virucides approuvées par Santé Canada (numéro DIN)? Lesquels?
+
+**Q34. Tests en conditions réelles**
+Avez-vous mené des tests de performance en environnement de restauration rapide? Partagez les résultats.
+
+### SECTION H: CONFORMITÉ RÉGLEMENTAIRE ET SÉCURITÉ
+
+**Q35. Conformité MAPAQ détaillée**
+Confirmez la conformité de TOUS vos produits proposés aux exigences du MAPAQ pour usage en cuisine commerciale.
+
+**Q36. Liste NSF complète**
+Fournissez la liste exhaustive de vos produits listés NSF catégories A1, A4, A7, A8 (surfaces contact alimentaire, nettoyants cuisine, désinfectants).
+
+**Q37. SIMDUT et FDS**
+Tous les produits chimiques ont-ils des FDS conformes au SIMDUT 2015? Fournissez un index complet.
+
+**Q38. Traçabilité produits**
+Comment assurez-vous la traçabilité de vos produits (lot, date fabrication, provenance)? Système en place?
+
+**Q39. Rappels de produits**
+Quelle est votre procédure en cas de rappel? Avez-vous eu des rappels dans les 5 dernières années?
+
+**Q40. Allergènes et ingrédients**
+Vos produits contiennent-ils des allergènes? Comment sont-ils identifiés sur l'étiquetage?
+
+**Q41. Formations sécurité SIMDUT**
+Offrez-vous des formations SIMDUT 2015 pour notre personnel? Contenu et durée?
+
+**Q42. Équipements de protection**
+Fournissez-vous les EPI nécessaires (gants, lunettes, tabliers) avec vos produits concentrés?
+
+**Q43. Procédures d'urgence**
+Décrivez les procédures en cas de déversement, contact cutané, ingestion accidentelle pour vos produits.
+
+**Q44. Assurances et responsabilité**
+Quelle est votre couverture d'assurance responsabilité produits? Montant et assureur?
+
+**Q45. Conformité environnementale**
+Vos produits respectent-ils les règlements sur le phosphore, les VOC et les substances toxiques du Québec?
+
+**Q46. Gestion matières dangereuses**
+Comment gérez-vous les matières dangereuses résiduelles? Programme de reprise des contenants vides?
+
+**Q47. Audits de conformité**
+Êtes-vous audité par des organismes externes? Fréquence et résultats des derniers audits?
+
+### SECTION I: LOGISTIQUE APPROFONDIE
+
+**Q48. Centres de distribution**
+Où sont situés vos entrepôts desservant nos 4 zones? Superficie et capacités de stockage?
+
+**Q49. Flotte de livraison**
+Décrivez votre flotte : nombre de camions, types (réfrigérés si applicable), âge moyen, entretien.
+
+**Q50. Planification livraisons**
+Comment planifiez-vous les tournées pour optimiser les coûts tout en respectant les fenêtres horaires de chaque restaurant?
+
+**Q51. Suivi temps réel**
+Offrez-vous le suivi GPS en temps réel des livraisons? Le client peut-il voir où est son camion?
+
+**Q52. Livraisons d'urgence**
+Quel est le délai garanti pour une livraison d'urgence (rupture de stock critique)? Frais additionnels?
+
+**Q53. Emballage et palettisation**
+Comment sont emballées et palettisées les commandes? Protection contre bris et déversements?
+
+**Q54. Déchargement**
+Le livreur décharge-t-il et place-t-il les produits dans les aires d'entreposage ou seulement à la porte?
+
+**Q55. Preuve de livraison**
+Système de preuve de livraison électronique? Signature, photo, heure précise?
+
+**Q56. Gestion des retours**
+Procédure de retour pour produits endommagés, périmés ou non conformes? Crédit ou remplacement?
+
+**Q57. Ruptures de stock**
+Comment gérez-vous les ruptures? Notification proactive? Produits de remplacement équivalents?
+
+**Q58. Consolidation commandes**
+Pouvez-vous consolider les commandes de nos 18 restaurants pour réduire le nombre de livraisons et les coûts?
+
+**Q59. Fenêtres de livraison**
+Quelle est la fenêtre horaire typique pour une livraison? Peut-on l'affiner (+/- 30 min)?
+
+**Q60. Optimisation routes**
+Utilisez-vous un logiciel d'optimisation de tournées (TMS) pour réduire les coûts et l'empreinte carbone?
+
+### SECTION J: TECHNOLOGIE ET INNOVATION
+
+**Q61. Portail clients détaillé**
+Décrivez en détail les fonctionnalités de votre portail/app : passation commandes, historique, rapports, analytics, gestion multi-sites.
+
+**Q62. Intégrations systèmes**
+Votre système peut-il s'intégrer avec notre ERP/comptabilité? APIs disponibles? Formats supportés (EDI, XML, CSV)?
+
+**Q63. Rapports et analytics**
+Quels rapports fournissez-vous? Consommation par site, analyse de tendances, prévisions, coûts, conformité?
+
+**Q64. Gestion utilisateurs**
+Peut-on créer des comptes multiples avec permissions différentes (gérants, acheteur central, finances)?
+
+**Q65. Alertes et notifications**
+Quelles notifications automatiques offrez-vous? (livraison en route, facture disponible, rappel produit, promotions)
+
+**Q66. Application mobile**
+Avez-vous une app mobile pour passer commandes et consulter infos en déplacement?
+
+**Q67. Catalogues personnalisés**
+Peut-on créer des catalogues personnalisés par site selon leurs besoins spécifiques?
+
+**Q68. Budgets et contrôles**
+Peut-on définir des budgets par site et avoir des alertes de dépassement?
+
+**Q69. Commandes récurrentes**
+Peut-on programmer des commandes automatiques récurrentes pour produits consommés régulièrement?
+
+**Q70. Formation plateforme**
+Quelle formation offrez-vous sur l'utilisation du portail? Support technique disponible?
+
+### SECTION K: SUPPORT ET PARTENARIAT
+
+**Q71. Représentant dédié**
+Aurons-nous un représentant commercial dédié? Son rôle et disponibilité?
+
+**Q72. Support technique spécialisé**
+Avez-vous des techniciens spécialisés en chimie/hygiène alimentaire disponibles pour conseils?
+
+**Q73. Visites régulières**
+Quelle est la fréquence des visites sur site proposée? Contenu type d'une visite?
+
+**Q74. Audits d'hygiène**
+Offrez-vous des audits d'hygiène et salubrité pour identifier les opportunités d'amélioration?
+
+**Q75. Protocoles personnalisés**
+Pouvez-vous développer des protocoles de nettoyage personnalisés pour nos restaurants?
+
+**Q76. Formation continue**
+Programme de formation continue pour nouveaux produits, techniques, réglementations?
+
+**Q77. Webinaires et ressources**
+Offrez-vous des webinaires, vidéos de formation, fiches pratiques accessibles en ligne?
+
+**Q78. Support multilingue**
+Support disponible en français et anglais (nos restaurants à Montréal ont personnel bilingue)?
+
+**Q79. Gestion des plaintes**
+Procédure de gestion des plaintes? Délai de réponse garanti? Escalade si insatisfaction?
+
+**Q80. Revues trimestrielles**
+Proposez-vous des revues de performance trimestrielles pour discuter satisfaction, opportunités, innovations?
+
+### SECTION L: DÉVELOPPEMENT DURABLE
+
+**Q81. Politique environnementale**
+Décrivez votre politique environnementale et vos engagements de développement durable.
+
+**Q82. Réduction emballages**
+Quelles initiatives avez-vous pour réduire les emballages? Objectifs chiffrés?
+
+**Q83. Programme de recyclage**
+Programme de reprise et recyclage des contenants vides? Logistique et incitatifs?
+
+**Q84. Produits concentrés**
+Quel % de votre offre est en format concentré pour réduire transport et emballages?
+
+**Q85. Flotte écologique**
+Avez-vous des véhicules électriques, hybrides ou au gaz naturel? Plan de verdissement?
+
+**Q86. Empreinte carbone**
+Mesurez-vous votre empreinte carbone? Objectifs de réduction? Compensation carbone offerte?
+
+**Q87. Économie circulaire**
+Avez-vous des initiatives d'économie circulaire (reconditionnement, réutilisation, upcycling)?
+
+**Q88. Certifications vertes**
+Certifications environnementales de l'entreprise (non seulement produits)? EcoVadis, B Corp, etc.?
+
+**Q89. Sourcing responsable**
+Comment assurez-vous un approvisionnement responsable de vos matières premières?
+
+**Q90. Partenariats environnementaux**
+Partenariats avec ONGs ou organismes environnementaux? Initiatives communautaires?
+
+**Q91. Rapport développement durable**
+Publiez-vous un rapport annuel de développement durable? Accessible publiquement?
+
 ---
 
 ## 8. LIVRABLES REQUIS

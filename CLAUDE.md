@@ -160,13 +160,15 @@ const response = await anthropic.messages.create({
 });
 ```
 
-#### 3. **Claude Haiku 4.5** (Anthropic)
-- **Model ID**: `'claude-4-5-haiku-20250514'`
+#### 3. **Claude Haiku 3.5** (Anthropic)
+- **Model ID**: `'claude-3-5-haiku-20241022'`
 - **Status**: ✅ **AVAILABLE AND DEPLOYED**
+- **Note**: ⚠️ Claude Haiku 4.5 is not yet available via API. Currently using Claude 3.5 Haiku.
 - **Use Cases**:
-  - Fast, lightweight tasks
+  - Fast, lightweight tasks (70% cheaper than Sonnet)
   - Real-time question answering
   - Quick document summarization
+  - Document analysis and categorization
 - **Configuration**: `CLAUDE_MODELS.haiku` in `src/lib/constants/ai-models.ts`
 
 **Example Usage:**
@@ -174,7 +176,7 @@ const response = await anthropic.messages.create({
 import { CLAUDE_MODELS } from '@/lib/constants/ai-models';
 
 const response = await anthropic.messages.create({
-  model: CLAUDE_MODELS.haiku, // 'claude-4-5-haiku-20250514'
+  model: CLAUDE_MODELS.haiku, // 'claude-3-5-haiku-20241022'
   max_tokens: 4096,
   messages: [{ role: 'user', content: prompt }]
 });

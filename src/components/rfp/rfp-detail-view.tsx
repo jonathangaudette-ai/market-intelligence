@@ -30,9 +30,10 @@ interface RFP {
 
 interface RFPDetailViewProps {
   rfpId: string;
+  companySlug: string;
 }
 
-export function RFPDetailView({ rfpId }: RFPDetailViewProps) {
+export function RFPDetailView({ rfpId, companySlug }: RFPDetailViewProps) {
   const router = useRouter();
   const [rfp, setRfp] = useState<RFP | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +47,7 @@ export function RFPDetailView({ rfpId }: RFPDetailViewProps) {
   async function fetchRFP() {
     try {
       setLoading(true);
-      const response = await fetch(`/api/v1/rfp/rfps/${rfpId}`);
+      const response = await fetch(`/api/companies/${companySlug}/rfps/${rfpId}`);
 
       if (!response.ok) {
         const data = await response.json();
@@ -67,7 +68,7 @@ export function RFPDetailView({ rfpId }: RFPDetailViewProps) {
       setParsing(true);
       setError(null);
 
-      const response = await fetch(`/api/v1/rfp/rfps/${rfpId}/parse`, {
+      const response = await fetch(`/api/companies/${companySlug}/rfps/${rfpId}/parse`, {
         method: 'POST',
       });
 

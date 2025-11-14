@@ -358,6 +358,187 @@ Présentez une innovation ou une initiative récente de votre entreprise qui dé
 **Question H.3**
 Quelle est votre vision pour l'avenir de l'hygiène en milieu hospitalier? Comment votre entreprise se prépare-t-elle aux défis futurs (nouvelles pandémies, résistance antimicrobienne, etc.)?
 
+### SECTION I : SPÉCIFICATIONS DÉTAILLÉES DES PRODUITS
+
+**Question I.1**
+Pour chaque nettoyant désinfectant hospitalier proposé, fournissez les résultats de tests d'efficacité contre C. difficile (spores), SARM, ERV, virus influenza et coronavirus selon les normes ASTM ou équivalentes.
+
+**Question I.2**
+Quels sont les temps de contact requis pour chaque désinfectant proposé contre différents pathogènes? Fournissez un tableau comparatif détaillé.
+
+**Question I.3**
+Décrivez la compatibilité de vos produits chimiques avec les matériaux couramment utilisés en milieu hospitalier (acier inoxydable, plastiques, caoutchouc, surfaces peintes, etc.). Fournissez des rapports de tests de compatibilité.
+
+**Question I.4**
+Pour les produits désinfectants, indiquez le pH, la concentration d'agents actifs, les surfactants utilisés et leur biodégradabilité. Fournissez les fiches techniques complètes.
+
+**Question I.5**
+Quelle est la stabilité de vos produits concentrés et dilués? Quelle est leur durée de conservation dans différentes conditions de température et d'exposition à la lumière?
+
+**Question I.6**
+Décrivez les propriétés organoleptiques de vos produits (odeur, couleur, texture). Avez-vous des options sans parfum ou hypoallergéniques?
+
+**Question I.7**
+Pour les papiers sanitaires, fournissez les spécifications techniques détaillées : grammage (g/m²), nombre de plis, longueur par rouleau, absorption (g/g selon TAPPI), résistance à la traction (sèche et humide).
+
+**Question I.8**
+Vos papiers sanitaires sont-ils certifiés FSC, PEFC ou équivalent? Quel est le pourcentage de contenu recyclé post-consommation?
+
+**Question I.9**
+Décrivez les caractéristiques techniques de vos sacs à déchets biomédicaux : épaisseur (mil), résistance à la perforation (ASTM D1922), résistance à la traction (ASTM D638), conformité aux normes CSA Z316.6.
+
+**Question I.10**
+Pour les systèmes de dilution contrôlée, fournissez les spécifications techniques : ratios de dilution disponibles, précision (±%), débit (L/min), compatibilité avec différentes pressions d'eau.
+
+**Question I.11**
+Quelles sont les températures d'utilisation recommandées et les limites (min/max) pour chaque catégorie de produits chimiques?
+
+**Question I.12**
+Décrivez les systèmes de dosage et distributeurs proposés : capacité, matériaux, mécanismes de distribution, facilité de maintenance, options sans contact.
+
+**Question I.13**
+Fournissez les données de toxicité aiguë (DL50 orale, dermale, CL50 inhalation) et de toxicité chronique pour vos principaux produits chimiques.
+
+**Question I.14**
+Quels sont les équipements de protection individuelle (EPI) recommandés pour la manipulation de chaque produit? Fournissez une matrice EPI par produit.
+
+**Question I.15**
+Décrivez les procédures d'urgence en cas de déversement accidentel pour chacune de vos catégories de produits chimiques. Fournissez des kits de déversement si applicable.
+
+### SECTION J : CONFORMITÉ ET CERTIFICATIONS APPROFONDIES
+
+**Question J.1**
+Fournissez la liste complète des numéros DIN de Santé Canada pour tous vos désinfectants, incluant la date d'émission et d'expiration de chaque autorisation.
+
+**Question J.2**
+Vos produits sont-ils conformes à la Loi sur les produits dangereux et au SIMDUT 2015? Fournissez les FDS (Fiches de Données de Sécurité) à jour en français pour tous les produits chimiques.
+
+**Question J.3**
+Vos installations de fabrication ou d'entreposage sont-elles certifiées selon les BPF (Bonnes Pratiques de Fabrication) ou équivalent? Fournissez les certificats.
+
+**Question J.4**
+Avez-vous des certifications spécifiques au milieu hospitalier (ex: certification pour salles blanches, conformité USP si applicable)? Documentez.
+
+**Question J.5**
+Vos produits respectent-ils les restrictions VOC (composés organiques volatils) établies par Environnement Canada et le Règlement sur les produits de consommation contenant des COV?
+
+**Question J.6**
+Êtes-vous en conformité avec le Règlement sur les produits chimiques et contenants de consommation (RPCCC)? Fournissez les preuves de conformité pour l'étiquetage et l'emballage.
+
+**Question J.7**
+Vos produits sont-ils testés et approuvés par des laboratoires indépendants reconnus (ex: NSF, UL, EPA, AISE)? Fournissez les rapports de tests.
+
+**Question J.8**
+Avez-vous des certifications Cradle to Cradle, EcoLogo, Green Seal ou équivalentes? Pour quels produits spécifiquement? Fournissez les certificats valides.
+
+**Question J.9**
+Vos emballages sont-ils conformes aux réglementations sur les plastiques à usage unique et aux objectifs de contenu recyclé du gouvernement du Québec?
+
+**Question J.10**
+Avez-vous un programme de gestion des matières dangereuses résiduelles (GMDR) conforme à la Loi sur la qualité de l'environnement du Québec?
+
+**Question J.11**
+Fournissez votre bilan GES (Gaz à Effet de Serre) pour les trois dernières années si disponible. Avez-vous des cibles de réduction des émissions?
+
+**Question J.12**
+Êtes-vous soumis à des audits de conformité réglementaire? Par quels organismes? Quelle est la fréquence? Fournissez les résultats des derniers audits.
+
+### SECTION K : PERFORMANCE ET EFFICACITÉ
+
+**Question K.1**
+Fournissez des études comparatives ou des données de performance démontrant l'efficacité supérieure de vos produits par rapport aux produits concurrents ou standards de l'industrie.
+
+**Question K.2**
+Avez-vous des données sur la réduction du temps de nettoyage ou l'amélioration de la productivité du personnel d'entretien grâce à vos produits ou systèmes?
+
+**Question K.3**
+Quels sont les taux de dilution recommandés vs. les taux de dilution minimum efficaces pour vos produits concentrés? Comment garantissez-vous l'efficacité à différents ratios?
+
+**Question K.4**
+Fournissez des données sur la durabilité et la longévité de vos équipements (autolaveuses, distributeurs, systèmes de dilution) : MTBF (Mean Time Between Failures), durée de vie prévue, taux de défaillance.
+
+**Question K.5**
+Avez-vous des études de cas ou témoignages clients documentant des réductions de coûts ou améliorations mesurables suite à l'adoption de vos solutions?
+
+**Question K.6**
+Quelle est l'efficacité de vos produits à basse température (eau froide)? Fournissez des données comparatives pour différentes températures d'eau.
+
+**Question K.7**
+Vos produits ont-ils un impact sur la durée de vie des surfaces (planchers, équipements)? Fournissez des études sur la prévention de l'usure ou de la corrosion.
+
+**Question K.8**
+Quelle est la performance de vos produits en eau dure vs. eau douce? Recommandez-vous des ajustements de dosage selon la dureté de l'eau?
+
+**Question K.9**
+Fournissez des données sur le pouvoir moussant de vos produits et son impact sur le rinçage et la consommation d'eau.
+
+**Question K.10**
+Avez-vous mené des tests d'acceptabilité/satisfaction auprès d'utilisateurs finaux (personnel d'entretien, patients, visiteurs)? Partagez les résultats.
+
+### SECTION L : INNOVATION ET AMÉLIORATION CONTINUE
+
+**Question L.1**
+Décrivez vos investissements en recherche et développement (R&D) au cours des trois dernières années. Quel pourcentage de votre chiffre d'affaires est alloué à la R&D?
+
+**Question L.2**
+Quelles innovations technologiques avez-vous introduites dans vos produits ou services au cours des 24 derniers mois? Fournissez des exemples concrets.
+
+**Question L.3**
+Avez-vous des partenariats avec des universités, centres de recherche ou instituts pour le développement de nouvelles solutions d'hygiène?
+
+**Question L.4**
+Décrivez votre processus d'amélioration continue des produits. Comment intégrez-vous les retours clients dans le développement de nouveaux produits?
+
+**Question L.5**
+Avez-vous développé ou prévoyez-vous de développer des solutions utilisant des technologies émergentes (nanotechnologie, biotechnologie, IoT pour le monitoring, etc.)?
+
+**Question L.6**
+Quels sont vos projets ou lancements de produits prévus pour les 12-24 prochains mois qui pourraient bénéficier au CISSS?
+
+**Question L.7**
+Comment suivez-vous les tendances et évolutions réglementaires dans le domaine des produits d'hygiène et de désinfection? Avez-vous une veille réglementaire active?
+
+**Question L.8**
+Offrez-vous des programmes pilotes ou des périodes d'essai pour tester de nouveaux produits avant leur intégration complète?
+
+**Question L.9**
+Avez-vous des programmes de co-développement avec vos clients pour créer des solutions personnalisées répondant à des besoins spécifiques?
+
+**Question L.10**
+Décrivez votre approche pour rester compétitif et pertinent dans un marché en évolution rapide, notamment face aux préoccupations environnementales et de santé publique.
+
+### SECTION M : GESTION DE PROJET ET PARTENARIAT
+
+**Question M.1**
+Décrivez votre approche de gestion de la transition lors de l'implantation initiale du contrat. Quel est le calendrier de déploiement proposé?
+
+**Question M.2**
+Quels sont les indicateurs de performance clés (KPI) que vous proposez de suivre pour mesurer le succès du partenariat? Comment seront-ils rapportés?
+
+**Question M.3**
+Proposez-vous des revues de performance trimestrielles ou annuelles? Quel serait le format et les participants de ces rencontres?
+
+**Question M.4**
+Comment gérez-vous l'escalade des problèmes ou plaintes? Décrivez votre structure de gestion des réclamations et les délais de résolution garantis.
+
+**Question M.5**
+Avez-vous un système de gestion de la relation client (CRM)? Comment assurez-vous le suivi des interactions, commandes et demandes de service?
+
+**Question M.6**
+Proposez-vous un portail client en ligne pour la passation de commandes, consultation de factures, suivi des livraisons et accès à la documentation? Décrivez les fonctionnalités.
+
+**Question M.7**
+Comment gérez-vous les rappels de produits ou les notifications de sécurité? Quelle est votre procédure de communication et de gestion de crise?
+
+**Question M.8**
+Offrez-vous des garanties de niveau de service (SLA) pour les livraisons, le support technique et la résolution de problèmes? Quelles sont les pénalités en cas de non-respect?
+
+**Question M.9**
+Comment impliquez-vous vos clients dans l'amélioration de vos services? Menez-vous des enquêtes de satisfaction? À quelle fréquence?
+
+**Question M.10**
+Êtes-vous ouvert à des clauses de performance basées sur des résultats mesurables (ex: réduction des infections nosocomiales, diminution de la consommation de produits, amélioration de la satisfaction du personnel)? Donnez des exemples.
+
 ---
 
 ## 7. DOCUMENTS REQUIS

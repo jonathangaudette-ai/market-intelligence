@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import Link from "next/link";
 
 interface SupportDoc {
   id: string;
@@ -216,9 +217,12 @@ export function SupportDocsList({ slug, refreshTrigger }: SupportDocsListProps) 
                         <FileText className="h-5 w-5 text-teal-600" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                        <Link
+                          href={`/companies/${slug}/knowledge-base/support-docs/${doc.id}`}
+                          className="text-sm font-medium text-teal-600 hover:text-teal-700 truncate max-w-xs block hover:underline"
+                        >
                           {doc.name}
-                        </p>
+                        </Link>
                       </div>
                     </div>
                   </td>

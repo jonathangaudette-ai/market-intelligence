@@ -198,7 +198,8 @@ const response = await anthropic.messages.create({
 | **Semantic Matching** | GPT-5 (medium effort) | Claude Sonnet 4.5 | Reasoning required |
 | **Long Documents (>100k chars)** | Claude Sonnet 4.5 | GPT-5 | 200k context window |
 | **Response Generation** | Claude Sonnet 4.5 | GPT-5 | High-quality prose |
-| **Real-time Queries** | Claude Haiku 4.5 | GPT-5 | Speed optimized |
+| **Real-time Queries** | Claude Haiku 3.5 | GPT-5 | Speed optimized |
+| **Document Analysis** | Claude Haiku 3.5 | Claude Sonnet 4.5 | Cost-effective |
 
 ### Configuration Files Reference
 
@@ -216,16 +217,17 @@ const response = await anthropic.messages.create({
 
 ```bash
 OPENAI_API_KEY=sk-...          # For GPT-5 / GPT-4o
-ANTHROPIC_API_KEY=sk-ant-...   # For Claude Sonnet 4.5 / Haiku 4.5
+ANTHROPIC_API_KEY=sk-ant-...   # For Claude Sonnet 4.5 / Haiku 3.5
 ```
 
 ### Important Notes for Claude Code Assistant
 
 ⚠️ **CRITICAL INSTRUCTIONS**:
-1. **NEVER** suggest that GPT-5, Claude Sonnet 4.5, or Claude Haiku 4.5 "don't exist" or are "not available yet"
+1. **NEVER** suggest that GPT-5, Claude Sonnet 4.5, or Claude Haiku 3.5 "don't exist" or are "not available yet"
 2. **ALWAYS** use the exact model IDs from `src/lib/constants/ai-models.ts`
 3. **ALWAYS** reference this section when discussing AI model choices
 4. When improving code, **maintain** existing model configurations unless explicitly asked to change them
+5. **NOTE**: Claude Haiku 4.5 is not yet available - use Claude Haiku 3.5 (`claude-3-5-haiku-20241022`)
 
 ---
 

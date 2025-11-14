@@ -239,7 +239,11 @@ async function triggerDocumentAnalysis(
       `[DocumentAnalysis] Analysis complete: ${analysis.documentType} (${analysis.confidence})`
     );
 
-    // 5. Update document with analysis results
+    // 5. Calculate text statistics
+    const wordCount = text.split(/\s+/).length;
+    const pageCount = Math.ceil(text.length / 3000); // Rough estimate: ~3000 chars per page
+
+    // 6. Update document with analysis results AND extracted text
     await db
       .update(documents)
       .set({
@@ -251,6 +255,12 @@ async function triggerDocumentAnalysis(
         analysisConfidence: Math.round(analysis.confidence * 100),
         metadata: {
           blobUrl,
+          // Extraction data
+          extractedText: text,
+          pageCount,
+          wordCount,
+          extractedAt: new Date().toISOString(),
+          // Analysis data
           analysis: {
             documentType: analysis.documentType,
             confidence: analysis.confidence,
@@ -266,7 +276,7 @@ async function triggerDocumentAnalysis(
       `[DocumentAnalysis] Document ${documentId} analysis saved to database`
     );
 
-    // 6. Create embeddings and index in Pinecone (Phase 1 Day 6-7)
+    // 7. Create embeddings and index in Pinecone (Phase 1 Day 6-7)
     const [doc] = await db
       .select()
       .from(documents)
@@ -409,6 +419,42 @@ async function createDocumentEmbeddings(
     }
 
     console.log(`[CreateEmbeddings] Successfully indexed ${vectors.length} chunks for ${documentId}`);
+
+    // 5. Update document metadata with chunks information
+    const [currentDoc] = await db
+      .select()
+      .from(documents)
+      .where(eq(documents.id, documentId))
+      .limit(1);
+
+    if (currentDoc) {
+      const currentMetadata = currentDoc.metadata as any || {};
+
+      await db
+        .update(documents)
+        .set({
+          totalChunks: chunks.length,
+          vectorsCreated: true,
+          metadata: {
+            ...currentMetadata,
+            chunks: chunks.map((chunk, idx) => ({
+              chunkId: `${documentId}-chunk-${idx}`,
+              startIndex: chunk.start,
+              endIndex: chunk.end,
+              content: chunk.text,
+              tokens: Math.ceil(chunk.text.length / 4), // Rough estimate: 1 token ≈ 4 chars
+            })),
+            chunkedAt: new Date().toISOString(),
+            embeddedAt: new Date().toISOString(),
+            vectorsCreated: chunks.length,
+            embeddingModel: 'text-embedding-3-small',
+          },
+        })
+        .where(eq(documents.id, documentId));
+
+      console.log(`[CreateEmbeddings] Saved ${chunks.length} chunks to database for ${documentId}`);
+    }
+
   } catch (error) {
     console.error(`[CreateEmbeddings] Error creating embeddings for ${documentId}:`, error);
     throw error;

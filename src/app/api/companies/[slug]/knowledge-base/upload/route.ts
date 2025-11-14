@@ -243,11 +243,11 @@ async function triggerDocumentAnalysis(
     const wordCount = text.split(/\s+/).length;
     const pageCount = Math.ceil(text.length / 3000); // Rough estimate: ~3000 chars per page
 
-    // 6. Update document with analysis results AND extracted text
+    // 6. Update document with analysis results AND extracted text (but keep status as 'processing')
     await db
       .update(documents)
       .set({
-        status: 'completed',
+        status: 'processing', // Keep as processing until embeddings are created
         documentPurpose: analysis.recommendedPurpose,
         contentType: analysis.documentType,
         contentTypeTags: analysis.contentTypeTags,
@@ -291,6 +291,16 @@ async function triggerDocumentAnalysis(
         filename,
         analysis
       );
+
+      // 8. Mark document as completed AFTER successful embedding creation
+      await db
+        .update(documents)
+        .set({
+          status: 'completed',
+        })
+        .where(eq(documents.id, documentId));
+
+      console.log(`[DocumentAnalysis] Document ${documentId} completed successfully with embeddings`);
     }
 
   } catch (error) {

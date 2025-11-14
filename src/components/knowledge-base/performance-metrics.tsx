@@ -60,7 +60,7 @@ export function PerformanceMetrics({ performance, trends }: PerformanceMetricsPr
       value: performance.documentsNeedingReview,
       description: "Confiance < 70%",
       trend: 0,
-      color: performance.documentsNeedingReview === 0 ? "text-green-600" : "text-orange-600",
+      color: performance.documentsNeedingReview === 0 ? "text-green-600" : "text-yellow-600",
     },
     {
       label: "Échecs d'analyse",

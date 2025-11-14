@@ -120,19 +120,19 @@ export default function KnowledgeBasePage() {
                 label="Confiance moyenne"
                 value={`${analytics.stats.avgConfidence}%`}
                 icon={Sparkles}
-                iconColor="bg-purple-100 text-purple-600"
+                iconColor="bg-teal-100 text-teal-600"
               />
               <StatCard
                 label="Chunks indexés"
                 value={analytics.stats.totalChunks}
                 icon={Database}
-                iconColor="bg-blue-100 text-blue-600"
+                iconColor="bg-teal-100 text-teal-600"
               />
               <StatCard
                 label="Uploads récents (30j)"
                 value={analytics.stats.recentUploads}
                 icon={TrendingUp}
-                iconColor="bg-green-100 text-green-600"
+                iconColor="bg-teal-100 text-teal-600"
               />
             </div>
           ) : null}

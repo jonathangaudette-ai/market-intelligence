@@ -69,11 +69,11 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
         };
       case "info":
         return {
-          bg: "bg-blue-50",
-          border: "border-blue-200",
-          icon: "text-blue-600",
-          title: "text-blue-900",
-          text: "text-blue-700",
+          bg: "bg-teal-50",
+          border: "border-teal-200",
+          icon: "text-teal-600",
+          title: "text-teal-900",
+          text: "text-teal-700",
         };
       case "action":
         return {

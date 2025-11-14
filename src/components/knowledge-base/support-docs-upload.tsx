@@ -208,14 +208,14 @@ export function SupportDocsUpload({ onUploadComplete }: SupportDocsUploadProps) 
     switch (uploadStatus.status) {
       case "uploading":
         return (
-          <div className="flex items-center gap-2 text-blue-600">
+          <div className="flex items-center gap-2 text-teal-600">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span className="text-sm">{uploadStatus.message}</span>
           </div>
         );
       case "analyzing":
         return (
-          <div className="flex items-center gap-2 text-purple-600">
+          <div className="flex items-center gap-2 text-teal-600">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span className="text-sm">{uploadStatus.message}</span>
           </div>

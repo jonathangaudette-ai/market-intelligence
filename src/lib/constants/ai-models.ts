@@ -56,7 +56,7 @@ export const GPT4O_FALLBACK = {
  */
 export const CLAUDE_MODELS = {
   sonnet: 'claude-sonnet-4-5-20250929',
-  haiku: 'claude-4-5-haiku-20250514',
+  haiku: 'claude-3-5-haiku-20241022', // Claude 3.5 Haiku (current available model)
 } as const;
 
 /**

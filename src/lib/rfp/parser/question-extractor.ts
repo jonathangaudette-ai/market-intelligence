@@ -61,8 +61,8 @@ Return a structured JSON array of questions.`;
 ${options?.maxQuestions ? `Extract up to ${options.maxQuestions} questions.` : ''}
 ${options?.sectionTitle ? `Focus on section: ${options.sectionTitle}` : ''}
 
-RFP Text:
-${text.substring(0, 12000)} ${text.length > 12000 ? '...[truncated]' : ''}
+RFP Text (${text.length} characters total):
+${text.substring(0, 120000)} ${text.length > 120000 ? '...[truncated]' : ''}
 
 Return ONLY a valid JSON array of questions, no additional text.`;
 

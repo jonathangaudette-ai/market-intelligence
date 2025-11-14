@@ -281,6 +281,17 @@ export function HistoricalQABrowser({
                             {question.sectionTitle}
                           </p>
                         )}
+                        {/* Response preview when collapsed */}
+                        {!isExpanded && hasResponse && question.response && (
+                          <div className="mt-2 pt-2 border-t border-gray-100">
+                            <p className="text-xs text-gray-600 line-clamp-3">
+                              {question.response.responseText}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1 italic">
+                              Cliquer pour voir la réponse complète →
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="flex-shrink-0">

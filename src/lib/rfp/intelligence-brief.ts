@@ -35,9 +35,9 @@ export async function generateIntelligenceBrief(rfpId: string): Promise<RFPIntel
     .map((q, i) => `${i + 1}. [${q.category || 'General'}] ${q.questionText}`)
     .join('\n');
 
-  // Generate Intelligence Brief using GPT-4
+  // Generate Intelligence Brief using GPT-5
   const completion = await openai.chat.completions.create({
-    model: 'gpt-4o',
+    model: 'gpt-5',
     messages: [
       {
         role: 'system',
@@ -70,7 +70,7 @@ ${questionsText.substring(0, 15000)} ${questionsText.length > 15000 ? '... (trun
 Generate a comprehensive intelligence brief in JSON format.`,
       },
     ],
-    temperature: 0.3,
+    // GPT-5 does not support temperature - uses reasoning.effort instead
     response_format: { type: 'json_object' },
   });
 
@@ -82,7 +82,7 @@ Generate a comprehensive intelligence brief in JSON format.`,
   const brief: RFPIntelligenceBrief = {
     ...JSON.parse(briefContent),
     generatedAt: new Date().toISOString(),
-    modelUsed: 'gpt-4o',
+    modelUsed: 'gpt-5',
     version: '1.0',
   };
 

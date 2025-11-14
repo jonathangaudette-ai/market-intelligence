@@ -76,8 +76,8 @@ async function parseSubmittedResponse(responseText: string): Promise<ResponseStr
 
   const prompt = `Analyze this RFP response document and extract its structure.
 
-Document:
-${responseText.substring(0, 50000)}
+Document (${responseText.length} characters):
+${responseText.substring(0, 200000)}
 
 Return JSON with this structure:
 {
@@ -93,9 +93,9 @@ Return JSON with this structure:
 Extract all major sections and their content. For each section, infer what RFP questions it might be answering.`;
 
   try {
-    // Try GPT-5 first
+    // Use GPT-5 for document parsing
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o', // Using GPT-4o for now since GPT-5 may not be available
+      model: 'gpt-5',
       messages: [
         {
           role: 'system',
@@ -107,7 +107,7 @@ Extract all major sections and their content. For each section, infer what RFP q
         }
       ],
       response_format: { type: 'json_object' },
-      temperature: 0.7,
+      // GPT-5 does not support temperature - uses reasoning.effort and text.verbosity instead
     });
 
     const content = response.choices[0].message.content;
@@ -139,7 +139,7 @@ ${JSON.stringify(questions.map(q => ({ questionText: q.questionText, category: q
 Response Sections:
 ${JSON.stringify(responseStructure.sections.map(s => ({
   sectionTitle: s.sectionTitle,
-  contentPreview: s.content.substring(0, 200) + '...',
+  contentPreview: s.content.substring(0, 2000) + (s.content.length > 2000 ? '...' : ''),
   possibleQuestions: s.possibleQuestions
 })), null, 2)}
 
@@ -163,7 +163,7 @@ Return JSON:
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-5',
       messages: [
         {
           role: 'system',
@@ -175,7 +175,7 @@ Return JSON:
         }
       ],
       response_format: { type: 'json_object' },
-      temperature: 0.5, // Lower temperature for more consistent matching
+      // GPT-5 does not support temperature - uses reasoning.effort instead (configured in prompt)
     });
 
     const content = response.choices[0].message.content;
@@ -303,9 +303,9 @@ export async function importHistoricalRfp(
       responseStructure
     );
 
-    // 5. Separate by confidence threshold (90%)
-    const autoAccepted = matchingResult.matches.filter(m => m.confidence >= 0.90);
-    const needsReview = matchingResult.matches.filter(m => m.confidence < 0.90);
+    // 5. Separate by confidence threshold (75%)
+    const autoAccepted = matchingResult.matches.filter(m => m.confidence >= 0.75);
+    const needsReview = matchingResult.matches.filter(m => m.confidence < 0.75);
 
     // 6. Create RFP in DB (mode: historical)
     console.log('[Import] Creating historical RFP record...');

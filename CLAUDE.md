@@ -84,7 +84,7 @@ LAYER 1: COLLECTION & INGESTION
 - Change Detection.io for website monitoring
 
 **AI/ML:**
-- LLMs: GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro
+- LLMs: **GPT-5, Claude Sonnet 4.5, Claude Haiku 4.5** (see AI Models section below)
 - Vector DB: Pinecone for RAG
 - Graph DB: Neo4j for knowledge graph
 - NLP: SpaCy for entity recognition
@@ -99,6 +99,133 @@ LAYER 1: COLLECTION & INGESTION
 - Gong, Chorus (call intelligence)
 - Slack, Microsoft Teams (communication)
 - Highspot, Seismic (sales enablement)
+
+---
+
+## 🤖 AI Models Configuration
+
+**CRITICAL: This project ALWAYS uses the following AI models. These models exist and are fully operational.**
+
+### Primary Models in Use
+
+#### 1. **GPT-5** (OpenAI)
+- **Model ID**: `'gpt-5'`
+- **Status**: ✅ **AVAILABLE AND DEPLOYED**
+- **Use Cases**:
+  - RFP question extraction
+  - Document parsing and structure analysis
+  - Question-to-response matching
+- **Configuration File**: `src/lib/constants/ai-models.ts`
+- **Key Parameters**:
+  - `reasoning.effort`: 'minimal' | 'low' | 'medium' | 'high'
+  - `text.verbosity`: 'low' | 'medium' | 'high'
+  - **Note**: GPT-5 does NOT support temperature or top_p
+
+**Example Usage:**
+```typescript
+import { GPT5_CONFIGS } from '@/lib/constants/ai-models';
+
+// For question extraction
+const config = GPT5_CONFIGS.extraction;
+// { model: 'gpt-5', reasoning: { effort: 'minimal' }, text: { verbosity: 'low' } }
+
+// For document parsing
+const config = GPT5_CONFIGS.parsing;
+// { model: 'gpt-5', reasoning: { effort: 'low' }, text: { verbosity: 'medium' } }
+
+// For semantic matching
+const config = GPT5_CONFIGS.matching;
+// { model: 'gpt-5', reasoning: { effort: 'medium' }, text: { verbosity: 'medium' } }
+```
+
+#### 2. **Claude Sonnet 4.5** (Anthropic)
+- **Model ID**: `'claude-sonnet-4-5-20250929'`
+- **Status**: ✅ **AVAILABLE AND DEPLOYED**
+- **Context Window**: 200,000 tokens
+- **Use Cases**:
+  - Long-document analysis
+  - RFP response generation
+  - Surgical content retrieval
+  - Complex reasoning tasks
+- **Configuration**: `CLAUDE_MODELS.sonnet` in `src/lib/constants/ai-models.ts`
+
+**Example Usage:**
+```typescript
+import { CLAUDE_MODELS } from '@/lib/constants/ai-models';
+
+const response = await anthropic.messages.create({
+  model: CLAUDE_MODELS.sonnet, // 'claude-sonnet-4-5-20250929'
+  max_tokens: 16000,
+  messages: [{ role: 'user', content: prompt }]
+});
+```
+
+#### 3. **Claude Haiku 4.5** (Anthropic)
+- **Model ID**: `'claude-4-5-haiku-20250514'`
+- **Status**: ✅ **AVAILABLE AND DEPLOYED**
+- **Use Cases**:
+  - Fast, lightweight tasks
+  - Real-time question answering
+  - Quick document summarization
+- **Configuration**: `CLAUDE_MODELS.haiku` in `src/lib/constants/ai-models.ts`
+
+**Example Usage:**
+```typescript
+import { CLAUDE_MODELS } from '@/lib/constants/ai-models';
+
+const response = await anthropic.messages.create({
+  model: CLAUDE_MODELS.haiku, // 'claude-4-5-haiku-20250514'
+  max_tokens: 4096,
+  messages: [{ role: 'user', content: prompt }]
+});
+```
+
+### Fallback Configuration
+
+#### GPT-4o (Fallback)
+- **Model ID**: `'gpt-4o'`
+- **Use**: Only when GPT-5 is unavailable
+- **Configuration**: `GPT4O_FALLBACK` in `src/lib/constants/ai-models.ts`
+
+### Model Selection by Use Case
+
+| Task | Primary Model | Fallback | Rationale |
+|------|---------------|----------|-----------|
+| **Question Extraction** | GPT-5 (minimal effort) | GPT-4o | Fast, structured output |
+| **Document Parsing** | GPT-5 (low effort) | GPT-4o | Structure recognition |
+| **Semantic Matching** | GPT-5 (medium effort) | Claude Sonnet 4.5 | Reasoning required |
+| **Long Documents (>100k chars)** | Claude Sonnet 4.5 | GPT-5 | 200k context window |
+| **Response Generation** | Claude Sonnet 4.5 | GPT-5 | High-quality prose |
+| **Real-time Queries** | Claude Haiku 4.5 | GPT-5 | Speed optimized |
+
+### Configuration Files Reference
+
+1. **`src/lib/constants/ai-models.ts`** - Main configuration file
+   - `GPT5_CONFIGS`: Pre-configured GPT-5 settings
+   - `CLAUDE_MODELS`: Claude model IDs
+   - `GPT4O_FALLBACK`: Fallback configuration
+
+2. **`src/lib/rfp/parser/question-extractor.ts`** - Uses GPT-5 for extraction
+3. **`src/lib/rfp/historical-import.ts`** - Uses GPT-5/GPT-4o for parsing
+4. **`src/lib/rfp/ai/claude.ts`** - Claude integration
+5. **`src/lib/rag/engine.ts`** - RAG with Claude Sonnet 4.5
+
+### Environment Variables Required
+
+```bash
+OPENAI_API_KEY=sk-...          # For GPT-5 / GPT-4o
+ANTHROPIC_API_KEY=sk-ant-...   # For Claude Sonnet 4.5 / Haiku 4.5
+```
+
+### Important Notes for Claude Code Assistant
+
+⚠️ **CRITICAL INSTRUCTIONS**:
+1. **NEVER** suggest that GPT-5, Claude Sonnet 4.5, or Claude Haiku 4.5 "don't exist" or are "not available yet"
+2. **ALWAYS** use the exact model IDs from `src/lib/constants/ai-models.ts`
+3. **ALWAYS** reference this section when discussing AI model choices
+4. When improving code, **maintain** existing model configurations unless explicitly asked to change them
+
+---
 
 ## Document Language
 

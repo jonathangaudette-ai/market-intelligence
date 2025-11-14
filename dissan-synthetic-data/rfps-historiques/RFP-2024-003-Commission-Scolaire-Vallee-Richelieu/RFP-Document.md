@@ -481,6 +481,384 @@ Les soumissions seront évaluées selon les critères suivants:
 
 ---
 
+## SECTION 6.5 : QUESTIONS DÉTAILLÉES À RÉPONDRE
+
+Les soumissionnaires doivent répondre de manière claire, précise et complète à toutes les questions suivantes. Les réponses seront évaluées selon les critères de la section 6.
+
+### A. PROFIL ET EXPÉRIENCE DE L'ENTREPRISE
+
+**Question A.1** - Présentation générale de l'entreprise
+Décrivez votre entreprise : année de fondation, nombre d'employés, structure corporative, chiffre d'affaires annuel, principales clientèles desservies.
+
+**Question A.2** - Présence au Québec
+Où sont situés vos bureaux et entrepôts au Québec? Quelle est votre couverture géographique?
+
+**Question A.3** - Expérience en milieu scolaire
+Décrivez votre expérience auprès d'établissements scolaires (commissions scolaires, cégeps, universités). Combien de clients éducation avez-vous actuellement?
+
+**Question A.4** - Références clients en éducation
+Fournissez 3 références d'institutions d'enseignement que vous desservez ou avez desservies récemment (nom, contact, téléphone, services fournis, durée du contrat).
+
+**Question A.5** - Certifications ISO
+Détenez-vous les certifications ISO 9001 (qualité) et ISO 14001 (environnement)? Fournissez les certificats valides.
+
+**Question A.6** - Structure de votre équipe
+Présentez l'organigramme de votre entreprise et l'équipe qui serait assignée à notre compte.
+
+**Question A.7** - Représentant dédié
+Qui serait notre représentant commercial dédié? Fournissez son profil, son expérience et sa disponibilité.
+
+**Question A.8** - Historique de croissance
+Décrivez l'évolution de votre entreprise au cours des 5 dernières années (croissance, acquisitions, expansions, innovations).
+
+**Question A.9** - Stabilité financière
+Fournissez une preuve de stabilité financière (rapport Dun & Bradstreet, états financiers vérifiés ou lettre bancaire).
+
+**Question A.10** - Assurances détaillées
+Confirmez vos couvertures d'assurance : responsabilité civile, responsabilité professionnelle, dommages aux biens, RC produits. Montants et assureur?
+
+**Question A.11** - Affiliation et partenariats
+Êtes-vous membre d'associations professionnelles (APPA, AQESSS, autres)? Avez-vous des partenariats stratégiques?
+
+### B. PRODUITS ET GAMME OFFERTE
+
+**Question B.1** - Catalogue complet
+Fournissez votre catalogue complet de produits d'hygiène et d'entretien adaptés au milieu scolaire.
+
+**Question B.2** - Marques propriétaires
+Quelles sont vos marques propriétaires? Décrivez leur positionnement (qualité, économie, environnement).
+
+**Question B.3** - Marques distribuées
+Quelles marques de manufacturiers reconnus distribuez-vous? Êtes-vous distributeur exclusif ou autorisé?
+
+**Question B.4** - Produits pour chaque catégorie (Section 3)
+Pour chacune des 8 catégories de produits de la Section 3, proposez au minimum 2 options avec :
+- Nom commercial et manufacturier
+- SKU/code produit
+- Format et conditionnement
+- Prix unitaire et prix par cas
+- Certifications (Ecologo, Green Seal, etc.)
+- Rendement/dilution
+
+**Question B.5** - Nettoyants multi-usages spécifiques
+Proposez des nettoyants multi-usages adaptés aux surfaces pédagogiques (tableaux, pupitres, casiers). Fournissez les fiches techniques.
+
+**Question B.6** - Désinfectants efficaces
+Vos désinfectants ont-ils des numéros DIN de Santé Canada? Contre quels pathogènes sont-ils efficaces (virus, bactéries, spores)? Temps de contact?
+
+**Question B.7** - Produits pour planchers scolaires
+Proposez des solutions pour différents types de planchers (vinyle, céramique, béton poli, bois verni). Compatibilité et méthodes d'application?
+
+**Question B.8** - Nettoyants sans parfum
+Offrez-vous des produits sans parfum ou hypoallergéniques pour réduire les réactions allergiques des enfants sensibles?
+
+**Question B.9** - Produits pour cafétérias
+Proposez des produits NSF pour surfaces contact alimentaire et équipements de cuisine (lave-vaisselle, dégraissants).
+
+**Question B.10** - Papiers sanitaires adaptés aux enfants
+Vos papiers hygiéniques et essuie-mains sont-ils doux et adaptés aux jeunes enfants? Certification FSC ou PEFC?
+
+**Question B.11** - Sacs à déchets codés par couleur
+Proposez-vous des sacs codés par couleur pour faciliter le tri des matières résiduelles (déchets, recyclage, compost)?
+
+**Question B.12** - Systèmes de dilution contrôlée
+Décrivez vos systèmes de dilution pour minimiser le gaspillage et assurer la sécurité : types, ratios, facilité d'utilisation.
+
+**Question B.13** - Distributeurs et équipements
+Proposez-vous des distributeurs de savon, papier et désinfectant? Options sans contact? En vente ou prêt gratuit?
+
+**Question B.14** - Équipements d'entretien
+Offrez-vous des équipements (autolaveuses, polisseuses, extracteurs, chariots) en vente ou location? Service d'entretien inclus?
+
+**Question B.15** - Produits certifiés écologiques
+Quel pourcentage de votre gamme est certifié écologique (Ecologo, Green Seal, certification équivalente)? Listez-les.
+
+**Question B.16** - Nouveaux produits verts
+Avez-vous de nouveaux produits écologiques en développement ou récemment lancés qui pourraient nous intéresser?
+
+**Question B.17** - Fiches techniques et FDS
+Fournissez les fiches techniques et fiches de données de sécurité (FDS) en français pour tous les produits chimiques proposés.
+
+**Question B.18** - Échantillons
+Pouvez-vous fournir des échantillons de vos principaux produits pour tests dans nos écoles?
+
+### C. CONFORMITÉ ET SÉCURITÉ
+
+**Question C.1** - Conformité réglementaire complète
+Confirmez que tous vos produits sont conformes aux lois et règlements du Québec et du Canada (SIMDUT 2015, Loi sur les produits dangereux).
+
+**Question C.2** - Certifications NSF et Ecologo
+Fournissez la liste complète de vos produits certifiés NSF et Ecologo avec les numéros de certification.
+
+**Question C.3** - Numéros DIN
+Pour tous les désinfectants, fournissez les numéros DIN de Santé Canada et les dates d'expiration des autorisations.
+
+**Question C.4** - Tests de laboratoire
+Vos produits sont-ils testés par des laboratoires indépendants? Fournissez les rapports de tests d'efficacité et de sécurité.
+
+**Question C.5** - Ingrédients préoccupants
+Vos produits contiennent-ils des substances préoccupantes (phosphates, APE, COV élevés, allergènes connus)? Listez-les.
+
+**Question C.6** - Étiquetage bilingue
+Tous vos produits sont-ils étiquetés en français (obligatoire) et anglais? Pictogrammes SIMDUT présents?
+
+**Question C.7** - Sécurité pour les enfants
+Vos produits sont-ils sécuritaires en milieu scolaire où des enfants peuvent y être exposés? Précautions spéciales?
+
+**Question C.8** - Emballages sécuritaires
+Les contenants ont-ils des fermetures à l'épreuve des enfants si applicable? Emballages robustes?
+
+**Question C.9** - Traçabilité
+Comment assurez-vous la traçabilité de vos produits (lots, dates, provenance)? Système informatisé?
+
+**Question C.10** - Rappels et alertes
+Quelle est votre procédure de communication en cas de rappel de produit ou d'alerte sécurité?
+
+**Question C.11** - Programme de gestion des matières dangereuses
+Avez-vous un programme de reprise des contenants vides et de gestion des matières dangereuses résiduelles?
+
+**Question C.12** - Formation SIMDUT
+Offrez-vous des formations SIMDUT 2015 pour notre personnel d'entretien? Contenu, durée, formateurs?
+
+**Question C.13** - Protocoles sécuritaires
+Fournissez-vous des protocoles d'utilisation sécuritaire pour chaque produit chimique?
+
+### D. LIVRAISON ET LOGISTIQUE
+
+**Question D.1** - Réseau de distribution régional
+Décrivez votre réseau de distribution pour desservir nos 25 écoles dans la Vallée-du-Richelieu. Entrepôt le plus proche?
+
+**Question D.2** - Fréquence de livraison standard
+Quelle est la fréquence de livraison standard proposée pour nos écoles (hebdomadaire, bimensuelle, mensuelle)?
+
+**Question D.3** - Horaires de livraison
+Quels sont vos horaires de livraison? Pouvez-vous livrer durant les heures scolaires (7h-16h) ou préférez-vous hors heures?
+
+**Question D.4** - Livraisons regroupées ou individuelles
+Proposez-vous des livraisons individuelles à chaque école ou une livraison centralisée à un point commun?
+
+**Question D.5** - Livraisons d'urgence
+Offrez-vous un service de livraison d'urgence? Délai garanti et frais additionnels?
+
+**Question D.6** - Flotte de véhicules
+Décrivez votre flotte : nombre, types de véhicules, entretien, propreté, identification corporative.
+
+**Question D.7** - Chauffeurs-livreurs
+Vos chauffeurs sont-ils formés, courtois, en uniforme? Parlent-ils français? Vérification des antécédents?
+
+**Question D.8** - Déchargement et placement
+Le livreur décharge-t-il et place-t-il les produits dans les aires d'entreposage désignées ou laisse-t-il à la porte?
+
+**Question D.9** - Preuve de livraison
+Système de preuve de livraison électronique? Signature numérique, photo, heure précise?
+
+**Question D.10** - Suivi des livraisons
+Offrez-vous un système de suivi en temps réel des livraisons (GPS, notifications)? Accessible en ligne?
+
+**Question D.11** - Emballage et protection
+Comment emballez-vous les commandes pour éviter les bris et déversements durant le transport?
+
+**Question D.12** - Gestion des retours
+Procédure de retour pour produits endommagés, défectueux ou non conformes? Délai de traitement?
+
+**Question D.13** - Ruptures de stock
+Comment gérez-vous les ruptures de stock? Notification proactive? Substitution par produit équivalent?
+
+**Question D.14** - Performance de livraison
+Quels sont vos indicateurs de performance (taux de livraisons à temps, taux d'erreurs)? Statistiques récentes?
+
+### E. GESTION DES COMMANDES ET FACTURATION
+
+**Question E.1** - Passation de commandes
+Comment passons-nous les commandes? Téléphone, courriel, fax, portail en ligne, application mobile?
+
+**Question E.2** - Portail clients en ligne
+Décrivez les fonctionnalités de votre portail/plateforme en ligne : passation commandes, historique, factures, rapports.
+
+**Question E.3** - Gestion multi-sites
+Votre système permet-il de gérer facilement 25 écoles distinctes? Commandes individuelles ou consolidées?
+
+**Question E.4** - Catalogues personnalisés
+Peut-on créer des catalogues personnalisés pour chaque école selon leurs besoins spécifiques?
+
+**Question E.5** - Commandes récurrentes
+Peut-on programmer des commandes automatiques récurrentes pour produits consommés régulièrement?
+
+**Question E.6** - Gestion de l'inventaire
+Offrez-vous un service de gestion d'inventaire et de réapprovisionnement automatique basé sur la consommation?
+
+**Question E.7** - Niveaux de stock
+Peut-on définir des seuils de réapprovisionnement et recevoir des alertes automatiques?
+
+**Question E.8** - Rapports et analytics
+Quels rapports fournissez-vous? Consommation par école, tendances, prévisions budgétaires, analyse de dépenses?
+
+**Question E.9** - Intégration systèmes
+Votre système peut-il s'intégrer avec notre système comptable? Formats supportés (EDI, XML, CSV)?
+
+**Question E.10** - Facturation consolidée
+Peut-on recevoir une facture mensuelle consolidée pour toutes les écoles ou une facture par école?
+
+**Question E.11** - Détail des factures
+Les factures indiquent-elles clairement : école, date livraison, quantités, prix unitaires, rabais, taxes?
+
+**Question E.12** - Facturation électronique
+Acceptez-vous la facturation électronique? Formats supportés (PDF, EDI, XML)?
+
+**Question E.13** - Conditions de paiement
+Quelles sont vos conditions de paiement? Net 30 jours? 60 jours? Escompte pour paiement rapide?
+
+**Question E.14** - Gestion utilisateurs
+Peut-on créer plusieurs comptes utilisateurs avec différents niveaux d'accès (direction, concierges, achats)?
+
+### F. FORMATION ET SUPPORT TECHNIQUE
+
+**Question F.1** - Programme de formation initial
+Décrivez votre programme de formation initiale pour notre personnel d'entretien (25 concierges) : contenu, durée, formateur.
+
+**Question F.2** - Matériel pédagogique
+Quel matériel fourni ssez-vous? Manuels en français, vidéos, fiches pratiques, affiches murales?
+
+**Question F.3** - Formation sur les équipements
+Offrez-vous une formation sur l'utilisation des équipements (autolaveuses, diluteurs, distributeurs)?
+
+**Question F.4** - Formation continue
+Proposez-vous des formations continues ou de recyclage? Fréquence? Nouveaux produits et techniques?
+
+**Question F.5** - Formation SIMDUT obligatoire
+Formation SIMDUT 2015 incluse? Certificats remis? Renouvellement périodique?
+
+**Question F.6** - Support technique disponibilité
+Heures de disponibilité de votre support technique? Ligne téléphonique dédiée? Support en français?
+
+**Question F.7** - Visites sur site
+Fréquence des visites sur site de votre représentant? Contenu type d'une visite?
+
+**Question F.8** - Audits d'entretien
+Offrez-vous des audits d'entretien pour évaluer la qualité et identifier les améliorations possibles?
+
+**Question F.9** - Protocoles personnalisés
+Pouvez-vous développer des protocoles d'entretien personnalisés pour différents types d'espaces scolaires?
+
+**Question F.10** - Résolution de problèmes
+Comment nous assistez-vous en cas de problème (produit inefficace, équipement brisé, plainte)?
+
+**Question F.11** - Documentation en ligne
+Avez-vous une bibliothèque en ligne avec fiches techniques, FDS, vidéos tutoriels, FAQ?
+
+**Question F.12** - Webinaires et formation à distance
+Offrez-vous des formations par webinaire pour réduire les déplacements?
+
+### G. ENVIRONNEMENT ET DÉVELOPPEMENT DURABLE
+
+**Question G.1** - Politique environnementale
+Décrivez la politique environnementale de votre entreprise et vos engagements concrets.
+
+**Question G.2** - Objectif 50% produits écologiques
+Comment pouvez-vous nous aider à atteindre notre objectif de 50% de produits écologiques d'ici 2025?
+
+**Question G.3** - Réduction des emballages
+Quelles initiatives avez-vous pour réduire les emballages? Contenants en vrac, formats concentrés, recharges?
+
+**Question G.4** - Programme de recyclage
+Offrez-vous un programme de reprise et recyclage des contenants vides? Logistique? Incitatifs financiers?
+
+**Question G.5** - Produits biodégradables
+Quel pourcentage de vos produits est biodégradable? Délai de biodégradation?
+
+**Question G.6** - Réduction de l'eau
+Vos produits permettent-ils de réduire la consommation d'eau (peu de rinçage, faible moussant)?
+
+**Question G.7** - Flotte écologique
+Votre flotte de livraison inclut-elle des véhicules électriques, hybrides ou au biocarburant?
+
+**Question G.8** - Empreinte carbone
+Mesurez-vous votre empreinte carbone? Objectifs de réduction? Compensation carbone?
+
+**Question G.9** - Certifications environnementales entreprise
+Avez-vous des certifications environnementales corporatives (ISO 14001, EcoVadis, B Corp)?
+
+**Question G.10** - Sourcing responsable
+Comment assurez-vous un approvisionnement responsable et éthique de vos matières premières?
+
+**Question G.11** - Rapport de développement durable
+Publiez-vous un rapport annuel de développement durable? Accessible où?
+
+**Question G.12** - Initiatives communautaires
+Avez-vous des partenariats avec des organismes environnementaux ou initiatives communautaires vertes?
+
+**Question G.13** - Éducation environnementale
+Pouvez-vous fournir du matériel éducatif sur l'environnement pour nos élèves (affiches, activités)?
+
+### H. PRIX ET CONDITIONS COMMERCIALES
+
+**Question H.1** - Grille de prix complète
+Fournissez une grille de prix détaillée pour tous les produits proposés dans chaque catégorie de la Section 3, incluant prix unitaire et prix par cas.
+
+**Question H.2** - Rabais sur volume
+Quelle structure de rabais sur volume proposez-vous? Paliers et pourcentages?
+
+**Question H.3** - Prix fixes ou variables
+Vos prix sont-ils fixes pour la durée du contrat (3 ans) ou sujets à ajustement? Si ajustement, selon quelle formule?
+
+**Question H.4** - Clause d'indexation
+Si indexation, quelle est la formule proposée (IPC, coût matières premières, autres)? Fréquence et avis?
+
+**Question H.5** - Promotions et spéciaux
+Offrez-vous des promotions périodiques à vos clients sous contrat? Comment en profitons-nous?
+
+**Question H.6** - Garantie de prix concurrentiels
+Garantissez-vous que vos prix sont compétitifs avec le marché? Clause d'égalisation de prix?
+
+**Question H.7** - Frais de livraison
+Les livraisons sont-elles incluses ou y a-t-il des frais? Seuil de commande minimum pour livraison gratuite?
+
+**Question H.8** - Frais de service additionnels
+Y a-t-il des frais cachés ou additionnels (gestion de compte, plateforme en ligne, formation, équipements prêtés)?
+
+**Question H.9** - Modalités de paiement
+Conditions de paiement proposées? Escompte pour paiement anticipé?
+
+**Question H.10** - Garanties sur produits
+Quelle garantie offrez-vous sur vos produits? Remplacement si non satisfait?
+
+**Question H.11** - Garantie satisfaction
+Offrez-vous une garantie de satisfaction? Essai sans engagement? Période d'évaluation?
+
+### I. INNOVATION ET VALEUR AJOUTÉE
+
+**Question I.1** - Avantages concurrentiels
+Qu'est-ce qui distingue votre offre de celle de vos concurrents? Listez 3 avantages clés.
+
+**Question I.2** - Innovations récentes
+Décrivez une innovation ou initiative récente qui démontre votre leadership dans l'industrie.
+
+**Question I.3** - Technologies et outils
+Quelles technologies utilisez-vous pour améliorer le service (IoT, IA, automatisation, analytics)?
+
+**Question I.4** - Solutions pour milieu scolaire
+Avez-vous développé des solutions spécifiquement pour le milieu scolaire? Lesquelles?
+
+**Question I.5** - Programme de fidélité
+Offrez-vous un programme de récompenses ou de fidélité pour vos clients? Avantages?
+
+**Question I.6** - Partenariat et collaboration
+Comment envisagez-vous notre relation : transactionnelle ou partenariat stratégique? Expliquez votre approche.
+
+**Question I.7** - Amélioration continue
+Comment intégrez-vous les retours clients pour améliorer vos produits et services?
+
+**Question I.8** - Veille et tendances
+Comment restez-vous à jour sur les tendances et nouvelles technologies en hygiène et entretien?
+
+**Question I.9** - Benchmarking
+Offrez-vous des analyses comparatives avec d'autres institutions pour identifier les meilleures pratiques?
+
+**Question I.10** - Engagement à long terme
+Comment démontrerez-vous votre engagement envers notre commission scolaire sur le long terme?
+
+---
+
 ## SECTION 7 : EXIGENCES DE LA SOUMISSION
 
 ### 7.1 Documents requis

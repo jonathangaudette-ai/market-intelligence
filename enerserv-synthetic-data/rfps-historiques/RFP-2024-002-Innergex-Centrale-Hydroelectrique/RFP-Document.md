@@ -426,6 +426,666 @@ Décrire garanties sur :
 | Maintenance préventive (années 2-3) | ________ $ |
 | **TOTAL CONTRAT (3 ans)** | **________ $ CAD** |
 
+### SECTION G - ÉQUIPEMENTS ET TECHNOLOGIES (15 points)
+
+**G1. Équipements de diagnostic et inspection**
+Décrire vos équipements de diagnostic pour turbines hydrauliques :
+- Endoscopes industriels (rigides et flexibles)
+- Caméras sous-marines et systèmes d'inspection
+- Équipements de mesure dimensionnelle (laser, ultra-sons)
+- Analyseurs de vibration et capteurs
+- Équipements NDT (UT, MT, PT)
+- Calibration et traçabilité
+
+**G2. Équipements d'essais électriques**
+Décrire équipements pour tests de générateurs :
+- Mégohmmètres haute tension (≥15 kV)
+- Équipements Doble (facteur de puissance, décharge partielle)
+- Équipements de test diélectrique AC/DC
+- TTR (Transformer Turns Ratio)
+- Micro-ohmmètres pour résistance des enroulements
+- Certificats de calibration
+
+**G3. Équipements de levage et manutention**
+Décrire capacités de levage :
+- Grues mobiles (capacité, portée, hauteur)
+- Équipements de levage hydraulique
+- Palans, treuils et équipements spécialisés
+- Accessoires de levage (élingues, manilles, poutres)
+- Plans de levage et procédures de sécurité
+- Certifications et inspections
+
+**G4. Équipements de soudage spécialisés**
+Décrire équipements pour réparations de turbines :
+- Procédés disponibles (GTAW, GMAW pour aciers inox)
+- Équipements de soudage sous-marin (si applicable)
+- Équipements de traitement thermique post-soudure (PWHT)
+- Soudeurs certifiés (WPS, PQR pour aciers inox 13Cr-4Ni)
+- Équipements de contrôle qualité soudures
+- Certifications et qualifications
+
+**G5. Équipements d'usinage sur site**
+Décrire capacités d'usinage portable :
+- Tours portables et fraiseuses
+- Équipements d'alésage pour paliers et guidage
+- Équipements de rectification portable
+- Capacités dimensionnelles et précision
+- Usinage de surfaces d'étanchéité
+- Expérience sur composants de grandes dimensions
+
+**G6. Systèmes de mesure de performance**
+Décrire équipements pour mesures hydrauliques :
+- Débitmètres et méthodes de mesure de débit
+- Capteurs de pression et température haute précision
+- Systèmes d'acquisition de données
+- Logiciels de calcul de rendement (selon IEC 60193 ou 60041)
+- Incertitude de mesure et protocoles
+- Rapports de performance
+
+**G7. Équipements de nettoyage et finition**
+Décrire méthodes de préparation de surface :
+- Systèmes de sablage/grenaillage
+- Hydrodémolition et nettoyage haute pression
+- Polissage et finition de surfaces hydrauliques
+- Équipements de peinture et revêtement
+- Contrôle de rugosité (Ra, Rz)
+- Standards de finition pour performance hydraulique
+
+**G8. Outils spécialisés turbines hydrauliques**
+Décrire outillages spécifiques :
+- Extracteurs de roues et aubes
+- Outils de démontage/montage de paliers
+- Gabarits de mesure et montages spéciaux
+- Outils Voith propriétaires (si applicable)
+- Clés et équipements hydrauliques spécialisés
+- Inventaire et disponibilité
+
+**G9. Logiciels et technologies numériques**
+Décrire outils numériques utilisés :
+- Logiciels de modélisation CFD (Computational Fluid Dynamics)
+- Logiciels de conception CAD/CAM
+- Systèmes de gestion de projet (MS Project, Primavera)
+- CMMS (gestion de maintenance)
+- Plateformes de visualisation et rapports
+- Formation et expertise des utilisateurs
+
+**G10. Atelier mobile et installations**
+Décrire installations de support :
+- Atelier mobile pour interventions sur site
+- Ateliers fixes (adresse, superficie, équipements)
+- Capacité de fabrication de pièces
+- Zones de stockage et entreposage
+- Distance par rapport au site de L'Assomption
+- Photos des installations
+
+**G11. Équipements de protection et sécurité**
+Décrire EPI et équipements de sécurité :
+- EPI standard (casques, lunettes, gants, bottes)
+- Équipements antichutte (harnais, longes, points d'ancrage)
+- Protection respiratoire (masques, respirateurs)
+- Équipements pour espaces clos
+- Détecteurs de gaz et équipements de monitoring
+- Inspection et renouvellement
+
+**G12. Systèmes de monitoring permanent**
+Si vous proposez surveillance continue :
+- Types de capteurs (vibration, température, débit)
+- Architecture du système (cloud, on-premise)
+- Plateforme de visualisation
+- Algorithmes d'analyse et alertes
+- Maintenance et support du système
+- Coûts récurrents
+
+**G13. Équipements de test de performance**
+Décrire capacités de tests :
+- Méthodologie selon normes IEC
+- Instrumentation de précision
+- Systèmes d'acquisition haute fréquence
+- Traitement et analyse des données
+- Rapports de performance et courbes
+- Expertise et certifications
+
+**G14. Capacités de reverse engineering**
+Pour pièces obsolètes ou non disponibles :
+- Scanner 3D et métrologie
+- Rétro-conception CAD
+- Fabrication de pièces sur plan
+- Analyse métallurgique et sélection matériaux
+- Validation et tests
+- Exemples de réalisations
+
+**G15. Investissements récents**
+Décrire investissements technologiques :
+- Équipements acquis (3 dernières années)
+- Investissements en cours ou planifiés
+- Budget R&D et innovation
+- Partenariats technologiques
+- Veille technologique
+- Engagement d'amélioration continue
+
+### SECTION H - GESTION DES PIÈCES ET APPROVISIONNEMENT (12 points)
+
+**H1. Stratégie de gestion des pièces critiques**
+Décrire votre approche :
+- Liste de pièces critiques recommandées en stock
+- Analyse de criticité et classification ABC
+- Délais d'approvisionnement par type de pièce
+- Stock de sécurité et gestion des urgences
+- Système de gestion d'inventaire (logiciel)
+- Traçabilité et documentation
+
+**H2. Relations avec fabricants OEM**
+Décrire relations avec Voith et ABB :
+- Statut (partenaire autorisé, distributeur, etc.)
+- Accès aux pièces d'origine
+- Délais et conditions d'approvisionnement
+- Support technique du fabricant
+- Formation et mises à jour techniques
+- Contacts directs chez les fabricants
+
+**H3. Fournisseurs alternatifs**
+Pour pièces non-OEM ou obsolètes :
+- Réseau de fournisseurs qualifiés
+- Critères de qualification des fournisseurs
+- Pièces équivalentes et substitutions
+- Garanties sur pièces alternatives
+- Processus d'approbation client
+- Expérience de substitutions réussies
+
+**H4. Fabrication de pièces sur mesure**
+Capacités de fabrication :
+- Types de pièces fabriquées en interne
+- Sous-traitants qualifiés (usinage, fonderie)
+- Processus de contrôle qualité
+- Matériaux spéciaux (aciers inox, alliages)
+- Délais et coûts vs. pièces OEM
+- Garanties offertes
+
+**H5. Approvisionnement international**
+Pour pièces importées :
+- Expérience d'importation (Europe, Asie)
+- Gestion douanière et logistique
+- Délais typiques par région
+- Gestion des risques (retards, taxes)
+- Transport et assurance
+- Réseau de contacts internationaux
+
+**H6. Pièces d'urgence**
+Plan pour situations d'urgence :
+- Stock stratégique de pièces communes
+- Délais garantis pour urgences
+- Réseau de location d'équipements
+- Solutions temporaires de contournement
+- Coordination avec fabricants
+- Exemples de situations d'urgence gérées
+
+**H7. Documentation et certifications**
+Pour toutes les pièces fournies :
+- Certificats matériaux (mill certificates)
+- Traçabilité complète (origine, lot, date)
+- Documentation technique (dessins, specs)
+- Conformité aux standards (ASTM, ASME)
+- Rapports de tests si applicable
+- Archivage et accès
+
+**H8. Garanties sur pièces**
+Décrire garanties offertes :
+- Pièces OEM : durée et couverture
+- Pièces alternatives : durée et couverture
+- Pièces fabriquées sur mesure : garantie
+- Conditions et exclusions
+- Processus de réclamation
+- Remplacement et responsabilités
+
+**H9. Gestion de l'obsolescence**
+Approche proactive :
+- Veille sur obsolescence des pièces
+- Anticipation et achats préventifs
+- Solutions de remplacement identifiées
+- Communication avec client
+- Plans de modernisation
+- Expérience concrète
+
+**H10. Optimisation des coûts**
+Stratégies de réduction des coûts :
+- Analyse valeur des pièces
+- Standardisation quand possible
+- Consolidation des achats
+- Négociations avec fournisseurs
+- Partage d'économies avec client
+- Exemples de réductions obtenues
+
+**H11. Délais et logistique**
+Gestion des livraisons :
+- Délais garantis par catégorie de pièce
+- Coordination avec planning de travaux
+- Gestion des urgences et express
+- Entreposage temporaire sur site
+- Gestion des retours et reprises
+- Système de suivi en temps réel
+
+**H12. Transparence tarifaire**
+Politique de tarification :
+- Pourcentage de majoration sur pièces OEM : ____%
+- Pourcentage sur pièces alternatives : ____%
+- Politique open-book (si applicable)
+- Facturation et documentation
+- Audits possibles par le client
+- Engagement de transparence
+
+### SECTION I - FORMATION ET TRANSFERT DE CONNAISSANCES (10 points)
+
+**I1. Programme de formation du personnel Innergex**
+Décrire formations offertes :
+- Opération optimale des turbines Francis
+- Surveillance et diagnostic de base
+- Procédures de maintenance préventive
+- Détection précoce de problèmes
+- Interprétation des paramètres de performance
+- Durée, formateurs, matériel pédagogique
+
+**I2. Formation pratique sur site**
+Approche de formation hands-on :
+- Formation durant les interventions (mentorat)
+- Participation du personnel Innergex aux travaux
+- Explication des techniques et procédures
+- Transfert de connaissances en temps réel
+- Démonstrations pratiques
+- Évaluation des acquis
+
+**I3. Documentation technique**
+Documentation fournie en français :
+- Rapports d'intervention détaillés
+- Procédures de maintenance mises à jour
+- Manuels d'opération en français
+- Schémas et dessins as-built
+- Historique complet des travaux
+- Format et accessibilité (papier, électronique)
+
+**I4. Base de connaissances**
+Système de gestion des connaissances :
+- Plateforme électronique accessible
+- Historique des interventions
+- Problèmes rencontrés et solutions
+- Meilleures pratiques
+- Accès pour personnel Innergex
+- Mises à jour continues
+
+**I5. Vidéos et supports visuels**
+Matériel pédagogique multimédia :
+- Vidéos des interventions majeures
+- Photos avant/après détaillées
+- Animations 3D si pertinent
+- Vidéos de formation
+- Supports de présentation
+- Bibliothèque accessible
+
+**I6. Webinaires et sessions techniques**
+Formation continue :
+- Sessions techniques annuelles
+- Webinaires sur nouveautés et meilleures pratiques
+- Retours d'expérience sur projets similaires
+- Partage de connaissances secteur hydro
+- Accès à expertise des fabricants
+- Programme et fréquence
+
+**I7. Certifications et attestations**
+Reconnaissance de la formation :
+- Attestations de formation délivrées
+- Certifications reconnues si applicable
+- Unités de formation continue (UFC)
+- Reconnaissance professionnelle (OIQ)
+- Validité et renouvellements
+- Valeur pour le personnel
+
+**I8. Formation sur outils numériques**
+Si systèmes de monitoring ou logiciels :
+- Formation sur plateforme de visualisation
+- Interprétation des données et alertes
+- Utilisation du CMMS ou autre système
+- Support technique continu
+- Documentation utilisateur en français
+- Hotline et assistance
+
+**I9. Manuels et guides**
+Documentation écrite complète :
+- Mise à jour des manuels de maintenance
+- Procédures opérationnelles standards (SOP)
+- Guides de dépannage
+- Checklists d'inspection
+- Tout en français
+- Format pratique et utilisable
+
+**I10. Transfert d'expertise hydraulique**
+Connaissances spécialisées :
+- Principes d'hydraulique des turbines Francis
+- Optimisation du rendement
+- Analyse des courbes de performance
+- Diagnostic des problèmes hydrauliques
+- Cas pratiques et exercices
+- Niveau technique adapté
+
+### SECTION J - TESTS ET CONTRÔLE QUALITÉ (15 points)
+
+**J1. Programme d'essais non destructifs (NDT)**
+Décrire capacités NDT :
+- Techniques utilisées (UT, MT, PT, RT, VT)
+- Qualifications des techniciens (ASNT niveau II/III)
+- Équipements et appareils
+- Applications sur turbines hydrauliques
+- Normes suivies (ASTM, ASME)
+- Rapports et documentation
+
+**J2. Tests métallurgiques**
+Analyses de matériaux :
+- Analyse PMI (identification métaux)
+- Tests de dureté (Brinell, Rockwell)
+- Analyse métallographique
+- Tests de traction si requis
+- Laboratoires accrédités utilisés
+- Interprétation et rapports
+
+**J3. Contrôle dimensionnel**
+Mesures de précision :
+- Instruments (micromètres, comparateurs, jauges)
+- Métrologie 3D et laser scanning
+- Vérification de géométrie (circularité, cylindricité)
+- Mesures de jeux et tolérances
+- Normes et tolérances suivies
+- Rapports dimensionnels
+
+**J4. Tests d'équilibrage**
+Équilibrage de rotors :
+- Équipements d'équilibrage (capacité)
+- Équilibrage statique et dynamique
+- Normes ISO 1940, ISO 21940
+- Classes d'équilibrage atteintes
+- Vérification finale
+- Documentation et rapports
+
+**J5. Essais de vibration**
+Analyse vibratoire :
+- Mesures de vibration selon ISO 20816
+- Analyseurs multi-canaux
+- Analyse spectrale (FFT)
+- Comparaison avant/après travaux
+- Critères d'acceptation
+- Rapports vibratoires
+
+**J6. Tests hydrauliques et de performance**
+Mesures de rendement :
+- Protocole selon IEC 60193 ou 60041
+- Instrumentation et précision
+- Points de mesure et conditions
+- Calcul du rendement et incertitudes
+- Courbes de performance (colline)
+- Rapport de performance complet
+
+**J7. Tests électriques haute tension**
+Pour générateurs :
+- Tests de résistance d'isolement (Megger)
+- Tests de facteur de puissance (tan delta)
+- Tests de décharge partielle
+- Tests diélectriques AC/DC
+- Critères d'acceptation IEEE/NEMA
+- Rapports d'essais électriques
+
+**J8. Inspections visuelles et endoscopiques**
+Examens détaillés :
+- Inspections visuelles systématiques
+- Endoscopie (accès difficiles)
+- Photographie et vidéo HD
+- Critères d'évaluation (fissures, usure, corrosion)
+- Rapports avec images annotées
+- Recommandations
+
+**J9. Tests d'étanchéité**
+Vérification des étanchéités :
+- Tests de pression d'eau
+- Tests d'étanchéité à l'air
+- Détection de fuites
+- Critères d'acceptation
+- Corrections et re-tests
+- Documentation
+
+**J10. Contrôle qualité des soudures**
+Assurance qualité soudage :
+- Inspection visuelle (VT)
+- Tests NDT (PT, MT, UT selon cas)
+- Critères d'acceptation (ASME, AWS)
+- Documentation complète (WPS, PQR, WPQ)
+- Réparations si nécessaire
+- Traçabilité
+
+**J11. Tests de mise en service**
+Commissionnement après travaux :
+- Procédures de démarrage progressif
+- Tests de fonctionnement à différentes charges
+- Vérification de tous les paramètres
+- Tests de protection et sécurité
+- Optimisation et ajustements
+- Rapport de mise en service
+
+**J12. Audits qualité**
+Processus d'audit :
+- Audits internes durant les travaux
+- Points d'arrêt qualité (hold points)
+- Inspections par tierce partie si requis
+- Audits client (protocole)
+- Non-conformités et actions correctives
+- Amélioration continue
+
+**J13. Traçabilité complète**
+Gestion documentaire :
+- Traçabilité des matériaux (certificats)
+- Traçabilité des pièces (origine, lot)
+- Historique des interventions
+- Archivage des rapports de tests
+- Système de gestion documentaire
+- Accès et conservation (durée)
+
+**J14. Normes et standards**
+Conformité réglementaire :
+- Normes IEC pour turbines hydrauliques
+- Normes IEEE/NEMA pour générateurs
+- Code ASME pour soudage et matériaux
+- Normes ASTM pour tests
+- Conformité CSA et canadienne
+- Certifications et accréditations
+
+**J15. Garantie de qualité**
+Engagement qualité :
+- Certification ISO 9001:2015
+- Politique qualité de l'entreprise
+- Indicateurs de performance qualité
+- Satisfaction client mesurée
+- Taux de non-conformité
+- Plan d'amélioration continue
+
+### SECTION K - INNOVATION ET VALEUR AJOUTÉE (10 points)
+
+**K1. Technologies innovantes proposées**
+Solutions avancées :
+- Intelligence artificielle pour diagnostics
+- Capteurs IoT et monitoring en continu
+- Drones pour inspections
+- Réalité augmentée pour formation
+- Modélisation CFD avancée
+- Autres innovations pertinentes
+
+**K2. Optimisation du rendement**
+Méthodes d'amélioration :
+- Analyse CFD et optimisation de profil
+- Revêtements spéciaux anti-usure
+- Traitement de surface (polissage, coating)
+- Modifications de conception
+- Cas concrets d'amélioration (% gain mesuré)
+- Garantie de performance
+
+**K3. Prolongation de la vie utile**
+Stratégies de longévité :
+- Techniques de réparation avancées
+- Matériaux haute performance
+- Protection contre cavitation et érosion
+- Surveillance prédictive
+- Plans de modernisation progressive
+- Retour sur investissement
+
+**K4. Réduction de l'empreinte environnementale**
+Engagement environnemental :
+- Matériaux et produits écologiques
+- Gestion des déchets et recyclage
+- Réduction de consommation d'eau/énergie
+- Certification ISO 14001
+- Initiatives vertes
+- Mesure de l'impact
+
+**K5. Digitalisation et Industrie 4.0**
+Transformation numérique :
+- Plateforme cloud de gestion d'actifs
+- Jumeau numérique (digital twin)
+- Analyses prédictives par IA
+- Tableaux de bord en temps réel
+- Intégration systèmes Innergex
+- Valeur ajoutée concrète
+
+**K6. Benchmarking et meilleures pratiques**
+Partage de connaissances :
+- Comparaison avec autres centrales hydro
+- Accès à base de données performance
+- Meilleures pratiques mondiales
+- Retours d'expérience
+- Réseau d'expertise
+- Valeur pour Innergex
+
+**K7. Partenariats et recherche**
+Collaboration avec centres de recherche :
+- Partenariats universitaires (ÉTS, Polytechnique)
+- Projets de R&D en cours
+- Accès à expertise de pointe
+- Innovations en développement
+- Bénéfices pour le client
+- Exemples concrets
+
+**K8. Services à valeur ajoutée**
+Services complémentaires :
+- Audits énergétiques
+- Études d'optimisation multi-sites
+- Support technique 24/7
+- Accès à portail client
+- Rapports personnalisés
+- Autres services uniques
+
+**K9. Engagement de performance**
+Garanties et SLA :
+- Garantie de rendement minimum
+- Pénalités/bonus de performance
+- Garantie sur durée des arrêts
+- SLA sur temps de réponse
+- Partage de risques et gains
+- Transparence et mesure
+
+**K10. Différenciateurs compétitifs**
+Ce qui vous distingue :
+- Expertise unique ou spécialisée
+- Technologies propriétaires
+- Approche innovante
+- Réseau et ressources
+- Engagement client
+- Preuves et témoignages
+
+### SECTION L - PARTENARIAT ET COLLABORATION (10 points)
+
+**L1. Vision du partenariat à long terme**
+Approche partenariale :
+- Vision au-delà du contrat initial
+- Engagement mutuel et confiance
+- Objectifs communs Innergex-Fournisseur
+- Création de valeur partagée
+- Relation stratégique vs. transactionnelle
+- Exemples de partenariats réussis
+
+**L2. Flexibilité et adaptation**
+Capacité d'ajustement :
+- Adaptation aux besoins évolutifs
+- Flexibilité des ressources
+- Extension possible à autres sites Innergex
+- Services additionnels disponibles
+- Réactivité aux demandes
+- Témoignages de flexibilité
+
+**L3. Communication et transparence**
+Ouverture et partage :
+- Politique de transparence
+- Communication proactive
+- Partage d'information
+- Escalade rapide de problèmes
+- Réunions régulières de pilotage
+- Canaux de communication
+
+**L4. Amélioration continue conjointe**
+Démarche collaborative :
+- Revues post-projet (lessons learned)
+- Identification d'opportunités d'amélioration
+- Innovation collaborative
+- Partage des bénéfices d'optimisation
+- Culture d'amélioration
+- Exemples concrets
+
+**L5. Développement local et régional**
+Contribution économique locale :
+- Embauche locale (Lanaudière)
+- Sous-traitance régionale
+- Achats locaux
+- Formation de main-d'œuvre
+- Implication communautaire
+- Retombées économiques
+
+**L6. Responsabilité sociale et éthique**
+Engagement RSE :
+- Politique développement durable
+- Responsabilité sociale
+- Éthique et intégrité
+- Diversité et inclusion
+- Gouvernance
+- Rapport RSE/ESG
+
+**L7. Support exécutif**
+Engagement de la direction :
+- Sponsor exécutif dédié au compte
+- Visites régulières sur site
+- Participation aux revues stratégiques
+- Accessibilité de la direction
+- Engagement à long terme
+- Résolution de problèmes
+
+**L8. Gestion de la relation client**
+Organisation dédiée :
+- Gestionnaire de compte dédié
+- Équipe stable et engagement
+- Processus de gestion de compte
+- Mesure de satisfaction
+- Gestion proactive
+- Points de contact
+
+**L9. Résolution collaborative de conflits**
+Approche de résolution :
+- Processus de résolution amiable
+- Escalade structurée
+- Médiation si nécessaire
+- Approche gagnant-gagnant
+- Prévention des litiges
+- Expérience de résolutions réussies
+
+**L10. Extension potentielle du partenariat**
+Opportunités futures :
+- Extension à d'autres centrales Innergex
+- Services additionnels possibles
+- Économies d'échelle multi-sites
+- Standardisation et optimisation
+- Engagement de croissance conjointe
+- Vision à 5-10 ans
+
 ---
 
 ## 5. CRITÈRES D'ÉVALUATION (100 points)

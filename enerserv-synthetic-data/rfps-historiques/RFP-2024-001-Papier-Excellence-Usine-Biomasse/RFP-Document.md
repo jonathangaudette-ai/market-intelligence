@@ -699,6 +699,528 @@ Expliquer ce qui différencie votre offre de vos compétiteurs et la valeur ajou
 - Approche partenariale
 - Engagement de performance
 
+### SECTION J - TESTS ET CONTRÔLE QUALITÉ
+
+**Question J1 : Protocoles de tests**
+Décrire vos protocoles de tests pour les turbines à vapeur, incluant:
+- Tests de performance et rendement
+- Mesures de vibration selon normes ISO 10816
+- Tests d'étanchéité et fuites
+- Vérification des jeux et tolérances
+- Équipements de mesure utilisés
+- Rapports de tests et documentation
+
+**Question J2 : Essais électriques haute tension**
+Décrire vos procédures d'essais électriques pour générateurs, incluant:
+- Tests de résistance d'isolement (Megger)
+- Tests de facteur de puissance (Doble)
+- Tests de décharge partielle
+- Tests diélectriques AC et DC
+- Normes suivies (IEEE, NEMA)
+- Équipements de test et calibration
+
+**Question J3 : Essais non destructifs (NDT)**
+Décrire vos capacités en essais non destructifs, incluant:
+- Techniques utilisées (UT, MT, PT, RT)
+- Qualifications des techniciens (ASNT niveau II/III)
+- Équipements et appareillages
+- Applications sur turbines et générateurs
+- Rapports et interprétation des résultats
+- Conformité aux normes ASTM
+
+**Question J4 : Analyse vibratoire avancée**
+Décrire vos méthodes d'analyse vibratoire, incluant:
+- Analyseurs multi-canaux utilisés (marque, modèle)
+- Paramètres mesurés (vélocité, accélération, déplacement)
+- Analyse spectrale FFT et enveloppe
+- Analyse des orbites et phase
+- Logiciels d'analyse (SKF, Emerson, etc.)
+- Base de données de signatures vibratoires
+
+**Question J5 : Thermographie infrarouge**
+Décrire vos capacités en thermographie, incluant:
+- Caméras utilisées (résolution, plage de température)
+- Certification des thermographes (niveau I, II, III)
+- Applications spécifiques (connexions électriques, roulements, enroulements)
+- Logiciels d'analyse thermique
+- Rapports thermographiques
+- Fréquence des inspections thermiques
+
+**Question J6 : Analyse tribologique**
+Décrire votre programme d'analyse d'huile, incluant:
+- Laboratoire utilisé (interne ou externe)
+- Paramètres analysés (viscosité, contamination, métaux d'usure)
+- Fréquence de prélèvement
+- Méthodes d'analyse (spectrométrie, ferrographie)
+- Seuils d'alerte et d'action
+- Rapports et recommandations
+
+**Question J7 : Tests de performance énergétique**
+Décrire votre approche pour mesurer et optimiser la performance, incluant:
+- Méthodes de calcul du rendement
+- Instrumentation pour mesures de débit, pression, température
+- Courbes de performance et écarts vs. design
+- Identification des pertes et inefficacités
+- Recommandations d'optimisation
+- Rapports de performance
+
+**Question J8 : Contrôle dimensionnel**
+Décrire vos capacités en mesures de précision, incluant:
+- Instruments de mesure (micromètres, comparateurs, jauges)
+- Mesures d'alignement laser (précision ±0.01 mm)
+- Vérification de concentricité et faux-rond
+- Mesures de jeux axiaux et radiaux
+- Équipements de métrologie 3D
+- Certificats de calibration
+
+**Question J9 : Tests d'équilibrage**
+Décrire vos procédures d'équilibrage dynamique, incluant:
+- Équipements d'équilibrage (marque, capacité)
+- Normes suivies (ISO 1940, ISO 21940)
+- Classes d'équilibrage atteintes (G2.5, G6.3)
+- Équilibrage en place vs. en atelier
+- Vérification finale et acceptation
+- Documentation et rapports
+
+**Question J10 : Contrôle qualité des réparations**
+Décrire votre processus de contrôle qualité pour les réparations, incluant:
+- Inspections en cours de travaux
+- Points d'arrêt qualité (hold points)
+- Checklists et procédures
+- Documentation photographique
+- Tests de réception après réparation
+- Non-conformités et actions correctives
+
+**Question J11 : Traçabilité des matériaux**
+Décrire votre système de traçabilité, incluant:
+- Certificats matériaux (mill certificates)
+- Traçabilité des soudures (WPS, PQR, WPQ)
+- Marquage et identification
+- Registres et archives
+- Conformité aux codes ASME
+- Durée de conservation des dossiers
+
+**Question J12 : Audits et inspections**
+Décrire votre approche d'audit qualité, incluant:
+- Audits internes de vos processus
+- Inspections par tierces parties (si applicable)
+- Audits clients (fréquence, portée)
+- Non-conformités et plans d'action
+- Amélioration continue
+- Certifications maintenues (ISO 9001)
+
+**Question J13 : Essais de mise en service**
+Décrire vos procédures de commissionnement après maintenance, incluant:
+- Tests fonctionnels et opérationnels
+- Montée en charge progressive
+- Vérification des paramètres de fonctionnement
+- Tests de protection et sécurité
+- Validation des performances
+- Rapports de mise en service et acceptation
+
+**Question J14 : Documentation technique**
+Décrire la documentation technique que vous fournirez, incluant:
+- Rapports d'intervention détaillés
+- Protocoles de tests complétés
+- Dessins as-built mis à jour
+- Photos et vidéos des travaux
+- Recommandations de suivi
+- Format et langue (français obligatoire)
+
+**Question J15 : Systèmes de gestion de la qualité**
+Décrire votre système de gestion de la qualité, incluant:
+- Certification ISO 9001:2015
+- Manuel qualité et procédures
+- Gestion des documents et enregistrements
+- Indicateurs de performance qualité
+- Revues de direction
+- Satisfaction client
+
+### SECTION K - TECHNOLOGIES ET ÉQUIPEMENTS
+
+**Question K1 : Atelier mobile**
+Décrire votre atelier mobile d'intervention, incluant:
+- Type de véhicule et aménagement
+- Équipements embarqués
+- Outils et instruments disponibles
+- Capacité d'intervention autonome
+- Équipements de sécurité
+- Photos de l'atelier mobile
+
+**Question K2 : Équipements de levage**
+Décrire vos équipements de levage et manutention, incluant:
+- Grues mobiles (capacité, portée)
+- Ponts roulants portables
+- Palans et treuils
+- Élingues et accessoires de levage
+- Certifications et inspections
+- Plan de levage et procédures de sécurité
+
+**Question K3 : Équipements de soudage**
+Décrire vos équipements de soudage, incluant:
+- Procédés disponibles (GTAW, GMAW, SMAW, FCAW)
+- Équipements portables et fixes
+- Capacité ampérage et gamme de tension
+- Équipements de préchauffage et PWHT
+- Équipements de protection (extracteurs, écrans)
+- Certifications CSA
+
+**Question K4 : Équipements d'usinage**
+Décrire vos capacités d'usinage, incluant:
+- Tours portables sur site
+- Fraiseuses et perceuses portables
+- Équipements d'alésage
+- Capacités dimensionnelles
+- Précision et tolérances atteintes
+- Ateliers fixes (si applicable)
+
+**Question K5 : Systèmes de surveillance IoT**
+Décrire votre plateforme de surveillance continue, incluant:
+- Types de capteurs (vibration, température, pression, débit)
+- Architecture du système (cloud, on-premise, edge)
+- Protocoles de communication (4G, WiFi, Ethernet)
+- Plateforme de visualisation (interface utilisateur)
+- Algorithmes d'analyse et IA
+- Système d'alertes et notifications
+
+**Question K6 : Logiciels spécialisés**
+Décrire les logiciels que vous utilisez, incluant:
+- CMMS (gestion de maintenance assistée par ordinateur)
+- Logiciels d'analyse vibratoire
+- Logiciels de thermographie
+- Logiciels de simulation et modélisation
+- Logiciels de gestion de projet
+- Formation des utilisateurs
+
+**Question K7 : Équipements de test électrique**
+Décrire vos équipements de test électrique, incluant:
+- Mégohmmètres (tension jusqu'à 15 kV)
+- Équipements Doble (facteur de puissance, décharge partielle)
+- Équipements de test haute tension (AC/DC)
+- TTR (Transformer Turns Ratio)
+- Micro-ohmmètres
+- Calibration et traçabilité
+
+**Question K8 : Équipements de nettoyage et préparation**
+Décrire vos équipements de nettoyage, incluant:
+- Systèmes de sablage et grenaillage
+- Nettoyage haute pression
+- Nettoyage chimique et dégraissage
+- Aspirateurs industriels (dont HEPA)
+- Équipements de ventilation
+- Gestion des résidus et déchets
+
+**Question K9 : Équipements de séchage**
+Décrire vos équipements de séchage d'enroulements, incluant:
+- Fours de séchage portables
+- Systèmes de chauffage par air chaud
+- Systèmes de chauffage par résistances
+- Contrôle de température et humidité
+- Monitoring de résistance d'isolement
+- Procédures et courbes de séchage
+
+**Question K10 : Presse hydraulique**
+Décrire vos équipements de pressage, incluant:
+- Capacité des presses (tonnes)
+- Presses portables vs. fixes
+- Accessoires et outillages
+- Applications (roulements, accouplements, etc.)
+- Sécurité et procédures
+- Disponibilité pour interventions sur site
+
+**Question K11 : Équipements de protection individuelle**
+Décrire les EPI fournis à votre personnel, incluant:
+- EPI de base (casque, lunettes, gants, bottes)
+- Protection auditive
+- Équipements antichutte (harnais, longes)
+- Protection respiratoire
+- Vêtements ignifuges et arc flash
+- Renouvellement et inspections
+
+**Question K12 : Outils spécialisés turbines**
+Décrire vos outils spécialisés pour turbines, incluant:
+- Extracteurs de rotors et aubes
+- Outils de démontage de paliers
+- Gabarits et montages spéciaux
+- Outils de mesure spécifiques
+- Outils propriétaires fabricants (GE, Siemens)
+- Inventaire et disponibilité
+
+**Question K13 : Véhicules et logistique**
+Décrire votre flotte de véhicules, incluant:
+- Camions et véhicules utilitaires
+- Remorques et semi-remorques
+- Véhicules d'urgence 24/7
+- Entretien et fiabilité
+- Couverture GPS et géolocalisation
+- Capacité de transport d'équipements lourds
+
+**Question K14 : Installations et ateliers**
+Décrire vos installations fixes, incluant:
+- Adresse et superficie des ateliers
+- Équipements majeurs disponibles
+- Capacité de rebobinage d'enroulements
+- Zone de stockage de pièces
+- Bureaux et salles de formation
+- Proximité par rapport au site de Thurso
+
+**Question K15 : Investissements technologiques**
+Décrire vos investissements récents et planifiés, incluant:
+- Nouveaux équipements acquis (3 dernières années)
+- Investissements en technologies numériques
+- Plans d'investissement futurs
+- Budget R&D et innovation
+- Partenariats technologiques
+- Veille technologique
+
+### SECTION L - GESTION DE PROJET ET COMMUNICATION
+
+**Question L1 : Structure de gestion de projet**
+Décrire votre structure de gestion pour ce contrat, incluant:
+- Organigramme de l'équipe projet
+- Rôles et responsabilités clairement définis
+- Chargé de projet dédié (% temps)
+- Équipe de support et backup
+- Lignes de reporting
+- Processus de prise de décision
+
+**Question L2 : Planification et échéanciers**
+Décrire votre approche de planification, incluant:
+- Méthodologie de planification (Gantt, Critical Path)
+- Logiciels de planification utilisés (MS Project, Primavera)
+- Planification des arrêts majeurs annuels
+- Coordination avec opérations du client
+- Gestion des chemins critiques
+- Flexibilité et contingences
+
+**Question L3 : Communication et rapports**
+Décrire votre plan de communication, incluant:
+- Fréquence des rapports (journaliers, hebdomadaires, mensuels)
+- Format et contenu des rapports
+- Tableaux de bord de performance (KPI)
+- Réunions régulières (fréquence, participants)
+- Système de gestion documentaire
+- Communication en situation d'urgence
+
+**Question L4 : Coordination opérationnelle**
+Décrire votre approche de coordination avec les équipes du client, incluant:
+- Interface avec équipes de production
+- Interface avec équipes de maintenance interne
+- Coordination des permis de travail
+- Gestion des espaces et accès
+- Respect des procédures internes du client
+- Intégration à la culture de l'entreprise
+
+**Question L5 : Gestion des changements**
+Décrire votre processus de gestion des changements, incluant:
+- Procédure de demande de modification
+- Évaluation des impacts (coûts, délais, qualité)
+- Processus d'approbation
+- Documentation des changements
+- Communication aux parties prenantes
+- Ajustements contractuels
+
+**Question L6 : Gestion des risques**
+Décrire votre approche de gestion des risques, incluant:
+- Identification et analyse des risques
+- Matrice de risques (probabilité × impact)
+- Plans de mitigation et contingence
+- Monitoring des risques
+- Escalade et communication
+- Registre des risques
+
+**Question L7 : Système de gestion des interventions**
+Décrire votre système de gestion (CMMS), incluant:
+- Logiciel utilisé (nom, version)
+- Fonctionnalités principales
+- Gestion des bons de travail
+- Historique des interventions
+- Gestion d'inventaire intégrée
+- Accès client au système
+
+**Question L8 : Indicateurs de performance (KPI)**
+Décrire les indicateurs que vous proposez de suivre, incluant:
+- Disponibilité des équipements (%)
+- Taux de respect des échéanciers (%)
+- Temps de réponse aux urgences (heures)
+- Nombre d'arrêts non planifiés
+- Taux de conformité aux procédures (%)
+- Satisfaction client
+- Tableaux de bord et rapports
+
+**Question L9 : Réunions et gouvernance**
+Décrire votre structure de gouvernance, incluant:
+- Comité de pilotage (fréquence, participants)
+- Réunions opérationnelles hebdomadaires
+- Réunions de planification des arrêts
+- Revues de performance trimestrielles
+- Revue annuelle stratégique
+- Procès-verbaux et suivis
+
+**Question L10 : Gestion de crise**
+Décrire votre plan de gestion de crise, incluant:
+- Définition des situations de crise
+- Procédure d'escalade
+- Cellule de crise (composition, rôles)
+- Centre de coordination
+- Communication en temps de crise
+- Débriefing et leçons apprises
+
+**Question L11 : Amélioration continue**
+Décrire votre démarche d'amélioration continue, incluant:
+- Revues post-intervention (lessons learned)
+- Processus de suggestion d'amélioration
+- Benchmarking avec meilleures pratiques
+- Innovation et optimisation
+- Implication des équipes
+- Suivi des actions d'amélioration
+
+**Question L12 : Transition et mobilisation**
+Décrire votre plan de transition en début de contrat, incluant:
+- Activités de démarrage (mobilisation)
+- Transfert de connaissance du fournisseur sortant
+- Établissement des procédures
+- Formation initiale des équipes
+- Installation des systèmes
+- Période de rodage et ajustements
+
+**Question L13 : Outils collaboratifs**
+Décrire les outils que vous utiliserez, incluant:
+- Plateformes de partage de documents (SharePoint, Teams, etc.)
+- Outils de communication (Slack, Teams, etc.)
+- Outils de gestion de projet
+- Portail client en ligne
+- Applications mobiles
+- Sécurité et confidentialité des données
+
+**Question L14 : Bilinguisme et langue**
+Décrire votre capacité à travailler en français, incluant:
+- Bilinguisme de l'équipe (français/anglais)
+- Documentation en français
+- Rapports en français
+- Formation en français
+- Communication quotidienne
+- Respect de la Charte de la langue française
+
+**Question L15 : Fin de contrat**
+Décrire votre approche en fin de contrat, incluant:
+- Transfert de documentation complète
+- Transfert de connaissance
+- Remise de l'historique complet
+- Recommandations pour la suite
+- Retour de matériel et pièces
+- Support durant la transition
+
+### SECTION M - PARTENARIAT ET COLLABORATION
+
+**Question M1 : Vision du partenariat**
+Décrire votre vision d'un partenariat à long terme avec Papier Excellence, incluant:
+- Approche partenariale vs. transactionnelle
+- Engagement mutuel
+- Objectifs communs et alignement
+- Création de valeur partagée
+- Relations au-delà du contrat
+- Engagement de la direction
+
+**Question M2 : Flexibilité et adaptation**
+Décrire votre capacité d'adaptation, incluant:
+- Ajustement aux besoins changeants
+- Flexibilité des ressources
+- Capacité de surge (pic de demande)
+- Services additionnels disponibles
+- Modification de portée
+- Réactivité aux demandes
+
+**Question M3 : Partage d'expertise**
+Décrire comment vous partagez votre expertise, incluant:
+- Transfert de connaissances continu
+- Meilleures pratiques de l'industrie
+- Benchmarking avec autres clients
+- Formation et mentorat
+- Documentation et guides
+- Conférences et webinaires
+
+**Question M4 : Innovation collaborative**
+Décrire votre approche d'innovation en partenariat, incluant:
+- Projets d'innovation conjoints
+- Pilotes de nouvelles technologies
+- Partage des bénéfices d'innovation
+- Investissements partagés
+- Propriété intellectuelle
+- Culture d'innovation
+
+**Question M5 : Transparence et confiance**
+Décrire comment vous établissez la confiance, incluant:
+- Transparence des coûts et tarification
+- Open-book accounting (si applicable)
+- Partage d'information
+- Honnêteté et intégrité
+- Résolution proactive de problèmes
+- Communication franche
+
+**Question M6 : Engagement de performance**
+Décrire les engagements de performance que vous êtes prêt à prendre, incluant:
+- Garanties de disponibilité
+- Pénalités/bonus de performance
+- SLA (Service Level Agreements)
+- Objectifs mesurables
+- Partage de risque et récompenses
+- Contrats incitatifs
+
+**Question M7 : Support exécutif**
+Décrire l'implication de votre direction, incluant:
+- Sponsor exécutif dédié au compte
+- Visites régulières sur site
+- Participation aux revues stratégiques
+- Escalade et résolution de problèmes
+- Engagement à long terme
+- Accessibilité de la direction
+
+**Question M8 : Collaboration inter-sites**
+Si Papier Excellence étend le contrat à d'autres sites, décrire:
+- Capacité de déploiement multi-sites
+- Standardisation des pratiques
+- Économies d'échelle
+- Partage de ressources entre sites
+- Gestion centralisée vs. décentralisée
+- Expérience de contrats multi-sites
+
+**Question M9 : Responsabilité sociale d'entreprise**
+Décrire vos engagements RSE, incluant:
+- Politique de développement durable
+- Initiatives environnementales
+- Responsabilité sociale
+- Implication communautaire
+- Éthique et gouvernance
+- Rapports RSE/ESG
+
+**Question M10 : Développement local**
+Décrire votre contribution au développement local, incluant:
+- Embauche locale (Outaouais/Thurso)
+- Sous-traitance locale
+- Achats locaux
+- Formation et développement de main-d'œuvre régionale
+- Partenariats avec institutions (cégeps, universités)
+- Retombées économiques locales
+
+**Question M11 : Expérience client**
+Décrire votre approche de satisfaction client, incluant:
+- Mesure de la satisfaction (enquêtes, NPS)
+- Gestion des plaintes et réclamations
+- Service après-vente
+- Démarche centrée sur le client
+- Exemples de clients satisfaits
+- Témoignages et études de cas
+
+**Question M12 : Résolution de conflits**
+Décrire votre approche de résolution de conflits, incluant:
+- Processus de résolution amiable
+- Escalade structurée
+- Médiation et arbitrage
+- Approche collaborative
+- Prévention des litiges
+- Expérience de résolution réussie
+
 ---
 
 ## 5. CRITÈRES D'ÉVALUATION

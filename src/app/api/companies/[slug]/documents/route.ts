@@ -49,9 +49,10 @@ export async function GET(
       whereConditions.push(eq(documents.documentType, documentType));
     }
 
-    // Support Docs RAG v4.0 - Filter by documentPurpose
+    // Support Docs RAG v4.0 - Filter by documentPurpose (supports comma-separated values)
     if (purpose) {
-      whereConditions.push(eq(documents.documentPurpose, purpose));
+      const purposes = purpose.split(',').map(p => p.trim());
+      whereConditions.push(sql`${documents.documentPurpose} IN (${sql.join(purposes.map(p => sql`${p}`), sql`, `)})`);
     }
 
     // 4. Get total count for pagination

@@ -9,6 +9,7 @@ import { Pinecone } from '@pinecone-database/pinecone';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { getAIModelOrDefault, type CompanySettings } from '@/types/company';
+import { DualQueryRetrievalEngine } from '@/lib/rag/dual-query-engine';
 
 const GenerateRequestSchema = z.object({
   mode: z.enum(['standard', 'with_context', 'manual']).default('with_context'),
@@ -168,30 +169,61 @@ export async function POST(
       }
     }
 
-    // If we have a source RFP, retrieve from it
-    if (sourceRfpIds.length > 0) {
-      console.log(`[Generate Response] Retrieving from source RFP(s): ${sourceRfpIds.join(', ')}`);
-      const sourceResults = await retrieveFromSourceRfps(
-        queryEmbedding,
-        sourceRfpIds,
-        rfp.companyId
-      );
-      sourceContext = sourceResults.map(r => r.text).join('\n\n');
-      console.log(`[Generate Response] Source context retrieved: ${sourceContext.length} chars`);
-    }
+    // Step 2: Dual Query Retrieval (Support Docs RAG v4.0)
+    console.log(`[Generate Response] Starting dual query retrieval (pinned + support + historical)...`);
 
-    // Tier 2: General RAG (exclude source RFPs)
-    console.log(`[Generate Response] Retrieving general RAG context (excluding sources)...`);
-    const relevantDocs = await retrieveRelevantDocs(
+    const dualEngine = new DualQueryRetrievalEngine();
+    const retrievalResults = await dualEngine.retrieve(
       queryEmbedding,
       question.category || 'general',
-      depth,
       rfp.companyId,
-      sourceRfpIds // Exclude source RFPs from general RAG
+      {
+        pinnedSourceRfpId: sourceRfpIds.length > 0 ? sourceRfpIds[0] : undefined,
+        depth: depth === 'basic' ? 'basic' : 'detailed',
+      }
     );
-    ragContext = relevantDocs.map(doc => doc.text).join('\n\n');
 
-    console.log(`[Generate Response] Found ${relevantDocs.length} relevant documents from general RAG`);
+    // Separate results by source type
+    const pinnedChunks = retrievalResults.chunks.filter((c: any) => c.source === 'pinned');
+    const supportChunks = retrievalResults.chunks.filter((c: any) => c.source === 'support');
+    const historicalChunks = retrievalResults.chunks.filter((c: any) => c.source === 'historical');
+
+    // Extract source context from pinned results
+    sourceContext = pinnedChunks
+      .map((r: any) => r.text)
+      .join('\n\n');
+
+    // Extract RAG context from support docs + historical RFPs
+    const supportDocsText = supportChunks
+      .map((r: any) => r.text)
+      .join('\n\n');
+    const historicalText = historicalChunks
+      .map((r: any) => r.text)
+      .join('\n\n');
+
+    // Combine support docs and historical for ragContext
+    ragContext = [supportDocsText, historicalText].filter(t => t).join('\n\n---\n\n');
+
+    // Extract unique RFP IDs from pinned results for usage tracking
+    const usedRfpIds = new Set<string>();
+    pinnedChunks.forEach((r: any) => {
+      if (r.metadata.rfpId) usedRfpIds.add(r.metadata.rfpId);
+    });
+    sourceRfpIds = Array.from(usedRfpIds);
+
+    // Build relevantDocs array for backwards compatibility with context building
+    const relevantDocs = retrievalResults.chunks.map((doc: any) => ({
+      text: doc.text,
+      category: doc.metadata.category || 'unknown',
+      title: doc.metadata.title || 'Untitled',
+      score: doc.score,
+    }));
+
+    console.log(`[Generate Response] Retrieval complete:`);
+    console.log(`  - Pinned: ${retrievalResults.metadata.pinnedCount} docs`);
+    console.log(`  - Support: ${retrievalResults.metadata.supportCount} docs`);
+    console.log(`  - Historical: ${retrievalResults.metadata.historicalCount} docs`);
+    console.log(`  - Total: ${retrievalResults.metadata.totalResults} docs`);
 
     // Step 3: Build context based on mode
     let contextText = '';
@@ -349,6 +381,16 @@ RFP CONTEXT:
         depth,
         contextSources,
         relevantDocsCount: relevantDocs.length,
+        // Support Docs RAG v4.0 metadata
+        sourceBreakdown: {
+          pinned: retrievalResults.metadata.pinnedCount,
+          supportDocs: retrievalResults.metadata.supportCount,
+          historical: retrievalResults.metadata.historicalCount,
+          total: retrievalResults.metadata.totalResults,
+        },
+        averageScore: retrievalResults.chunks.length > 0
+          ? retrievalResults.chunks.reduce((sum: number, doc: any) => sum + doc.compositeScore, 0) / retrievalResults.chunks.length
+          : 0,
       },
     });
   } catch (error) {
@@ -375,71 +417,16 @@ async function generateEmbedding(text: string): Promise<number[]> {
 }
 
 /**
- * Retrieve relevant documents from Pinecone (filtered by company for multi-tenant isolation)
+ * DEPRECATED: These functions have been replaced by DualQueryRetrievalEngine (Support Docs RAG v4.0)
+ *
+ * The new DualQueryRetrievalEngine provides:
+ * - Parallel queries across 3 sources (pinned, support docs, historical RFPs)
+ * - Composite scoring (semantic + outcome + recency + quality)
+ * - Better multi-tenant security with tenant_id
+ * - Automatic source type tracking
+ *
+ * See src/lib/rag/dual-query-engine.ts for the implementation.
  */
-async function retrieveRelevantDocs(
-  queryEmbedding: number[],
-  category: string,
-  depth: 'basic' | 'advanced',
-  companyId: string,
-  excludeRfpIds: string[] = []
-): Promise<Array<{ text: string; category: string; title: string; score: number }>> {
-  const index = pinecone.index(INDEX_NAME);
-
-  // Adjust topK based on depth
-  const topK = depth === 'basic' ? 5 : 10;
-
-  // Build filter
-  const filter: any = {
-    tenant_id: { $eq: companyId }, // Use tenant_id for multi-tenant isolation
-  };
-
-  // Exclude source RFPs from general RAG
-  if (excludeRfpIds.length > 0) {
-    filter.rfpId = { $nin: excludeRfpIds };
-  }
-
-  const results = await index.namespace(NAMESPACE).query({
-    vector: queryEmbedding,
-    topK,
-    includeMetadata: true,
-    filter,
-  });
-
-  return results.matches.map(match => ({
-    text: (match.metadata?.text as string) || '',
-    category: (match.metadata?.category as string) || 'unknown',
-    title: (match.metadata?.title as string) || 'Untitled',
-    score: match.score || 0,
-  }));
-}
-
-/**
- * Retrieve content from specific source RFPs (Surgical Retrieval - Tier 1)
- */
-async function retrieveFromSourceRfps(
-  queryEmbedding: number[],
-  sourceRfpIds: string[],
-  companyId: string
-): Promise<Array<{ text: string; rfpId: string; score: number }>> {
-  const index = pinecone.index(INDEX_NAME);
-
-  const results = await index.namespace(NAMESPACE).query({
-    vector: queryEmbedding,
-    topK: 5,
-    includeMetadata: true,
-    filter: {
-      tenant_id: { $eq: companyId }, // Use tenant_id for multi-tenant isolation
-      rfpId: { $in: sourceRfpIds },
-    },
-  });
-
-  return results.matches.map(match => ({
-    text: (match.metadata?.text as string) || '',
-    rfpId: (match.metadata?.rfpId as string) || '',
-    score: match.score || 0,
-  }));
-}
 
 /**
  * Generate response using Claude

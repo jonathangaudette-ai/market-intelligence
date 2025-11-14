@@ -17,6 +17,8 @@ import { documents, companyMembers } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { put } from '@vercel/blob';
 import { analyzeDocument } from '@/lib/rfp/services/document-analysis.service';
+import { generateEmbeddings } from '@/lib/rfp/ai/embeddings';
+import { getRFPNamespace } from '@/lib/rfp/pinecone';
 
 /**
  * Upload schema validation
@@ -268,8 +270,20 @@ async function triggerDocumentAnalysis(
       `[DocumentAnalysis] Document ${documentId} analysis saved to database`
     );
 
-    // 6. TODO: Trigger embedding creation (Phase 1 Day 6-7)
-    // await triggerEmbedding(documentId, text);
+    // 6. Create embeddings and index in Pinecone (Phase 1 Day 6-7)
+    const doc = await db.query.documents.findFirst({
+      where: eq(documents.id, documentId),
+    });
+
+    if (doc) {
+      await createDocumentEmbeddings(
+        documentId,
+        doc.companyId,
+        text,
+        filename,
+        analysis
+      );
+    }
 
   } catch (error) {
     console.error(`[DocumentAnalysis] Error analyzing ${documentId}:`, error);
@@ -306,6 +320,111 @@ async function extractText(buffer: ArrayBuffer, filename: string): Promise<strin
   // For PDF/DOCX, would normally use proper parsers
   // For this POC, return placeholder
   return `[Text extracted from ${filename} - ${buffer.byteLength} bytes]\n\n(PDF/DOCX parsing to be implemented)`;
+}
+
+/**
+ * Create embeddings for a support document and index in Pinecone
+ * Phase 1 Day 6-7 - Support Docs RAG v4.0
+ */
+async function createDocumentEmbeddings(
+  documentId: string,
+  companyId: string,
+  text: string,
+  filename: string,
+  analysis: {
+    documentType: string;
+    recommendedPurpose: 'rfp_support' | 'rfp_response' | 'company_info';
+    contentTypeTags: string[];
+    suggestedCategories: Array<{ category: string; confidence: number }>;
+  }
+): Promise<void> {
+  console.log(`[CreateEmbeddings] Starting embedding creation for ${documentId}`);
+
+  try {
+    // 1. Chunk the text into smaller pieces (~1000 characters with overlap)
+    const chunks = chunkText(text, 1000, 200);
+    console.log(`[CreateEmbeddings] Created ${chunks.length} chunks`);
+
+    // 2. Generate embeddings for all chunks
+    const chunkTexts = chunks.map(c => c.text);
+    const embeddings = await generateEmbeddings(chunkTexts);
+    console.log(`[CreateEmbeddings] Generated ${embeddings.length} embeddings`);
+
+    // 3. Prepare vectors for Pinecone
+    const namespace = getRFPNamespace();
+    const primaryCategory = analysis.suggestedCategories[0]?.category || 'general';
+
+    const vectors = chunks.map((chunk, idx) => ({
+      id: `${documentId}-chunk-${idx}`,
+      values: embeddings[idx],
+      metadata: {
+        // Core identifiers
+        documentId,
+        tenant_id: companyId,
+        documentType: 'rfp_support_doc',
+
+        // Support Docs RAG v4.0 fields
+        documentPurpose: analysis.recommendedPurpose,
+        contentType: analysis.documentType,
+        // Add primary category and 'general' to ensure it's found by DualQueryEngine
+        contentTypeTags: [primaryCategory, 'general', ...analysis.contentTypeTags],
+        isHistoricalRfp: false,
+
+        // Content
+        text: chunk.text,
+        title: filename,
+        category: primaryCategory,
+
+        // Metadata
+        chunkIndex: idx,
+        totalChunks: chunks.length,
+        startChar: chunk.start,
+        endChar: chunk.end,
+        createdAt: new Date().toISOString(),
+      } as Record<string, any>,
+    }));
+
+    // 4. Upsert to Pinecone in batches
+    const batchSize = 100;
+    for (let i = 0; i < vectors.length; i += batchSize) {
+      const batch = vectors.slice(i, i + batchSize);
+      await namespace.upsert(batch);
+      console.log(`[CreateEmbeddings] Indexed batch ${i / batchSize + 1} (${batch.length} vectors)`);
+    }
+
+    console.log(`[CreateEmbeddings] Successfully indexed ${vectors.length} chunks for ${documentId}`);
+  } catch (error) {
+    console.error(`[CreateEmbeddings] Error creating embeddings for ${documentId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Chunk text into overlapping pieces
+ */
+function chunkText(
+  text: string,
+  chunkSize: number = 1000,
+  overlap: number = 200
+): Array<{ text: string; start: number; end: number }> {
+  const chunks: Array<{ text: string; start: number; end: number }> = [];
+
+  let start = 0;
+  while (start < text.length) {
+    const end = Math.min(start + chunkSize, text.length);
+    const chunkText = text.slice(start, end);
+
+    chunks.push({
+      text: chunkText,
+      start,
+      end,
+    });
+
+    // Move forward by (chunkSize - overlap) to create overlapping chunks
+    start += chunkSize - overlap;
+  }
+
+  return chunks;
 }
 
 /**

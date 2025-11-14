@@ -36,7 +36,7 @@ export async function GET(
     const sinceDate = new Date();
     sinceDate.setDate(sinceDate.getDate() - periodDays);
 
-    // 3. Fetch support documents statistics
+    // 3. Fetch support documents statistics (rfp_support + company_info)
     const supportDocs = await db
       .select({
         id: documents.id,
@@ -53,7 +53,7 @@ export async function GET(
       .where(
         and(
           eq(documents.companyId, company.company.id),
-          eq(documents.documentPurpose, 'rfp_support')
+          sql`${documents.documentPurpose} IN ('rfp_support', 'company_info')`
         )
       )
       .orderBy(desc(documents.createdAt));

@@ -75,7 +75,7 @@ export async function indexDocument(params: {
   // Prepare metadata
   const metadata: RFPVectorMetadata = {
     documentId: params.documentId,
-    companyId: params.companyId,
+    tenant_id: params.companyId, // Use tenant_id for consistency
     documentType: params.documentType,
     text: params.text,
     createdAt: new Date().toISOString(),
@@ -116,7 +116,7 @@ export async function indexDocumentChunks(params: {
     values: embeddings[idx],
     metadata: {
       documentId: chunk.id,
-      companyId: params.companyId,
+      tenant_id: params.companyId, // Use tenant_id for consistency
       documentType: chunk.documentType,
       text: chunk.text,
       createdAt: new Date().toISOString(),

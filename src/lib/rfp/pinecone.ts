@@ -49,14 +49,23 @@ export function getRFPContextNamespace(rfpId: string) {
 
 /**
  * Metadata structure for RFP library vectors
+ * Updated for Support Docs RAG v4.0 (Phase 0.5)
  */
 export interface RFPVectorMetadata {
+  // Core fields
   documentId: string;
-  companyId: string; // For multi-tenant isolation
+  tenant_id: string; // Multi-tenant isolation (renamed from companyId for consistency)
   documentType: 'company_info' | 'product_doc' | 'past_rfp' | 'answer_library' | 'competitive_intel' | 'rfp_content';
   text: string;
   source?: string;
   createdAt: string;
+
+  // NEW: Support Docs RAG v4 fields
+  documentPurpose?: 'rfp_support' | 'rfp_response' | 'company_info'; // Purpose classification
+  contentType?: string; // Specific type: methodology_guide, case_study, technical_spec, etc.
+  contentTypeTags?: string[]; // Array of tags for categorization
+  isHistoricalRfp?: boolean; // True for historical RFP responses
+  category?: string; // RFP category for matching
 
   // Optional fields for answer library
   questionCategory?: string;
@@ -73,14 +82,14 @@ export interface RFPVectorMetadata {
   // Optional fields for competitive intel
   competitor?: string;
 
-  // NEW: Surgical Retrieval System fields
-  contentType?: string; // 'project-methodology', 'technical-solution', etc.
-  isHistorical?: boolean; // true for historical RFPs
+  // Surgical Retrieval System fields
   rfpOutcome?: 'won' | 'lost' | 'pending'; // Outcome of the RFP
   qualityScore?: number; // 0-100 quality score
+  outcomeScore?: number; // Normalized outcome score (0-1)
   industry?: string; // Client industry
   submittedAt?: string; // Submission date
   chunkIndex?: number; // Index of chunk within document
+  lastUsedAt?: string; // Last time used as source
 
   // Flexible additional metadata
   [key: string]: any;
@@ -119,12 +128,13 @@ export async function indexRfpContent(
       values: embedding,
       metadata: {
         documentId: rfpId,
-        companyId: metadata.companyId,
+        tenant_id: metadata.companyId, // Use tenant_id for consistency
         rfpId,
         documentType: 'rfp_content',
+        documentPurpose: metadata.isHistorical ? 'rfp_response' : undefined,
         text: chunks[i].text,
         contentType: chunks[i].contentType,
-        isHistorical: metadata.isHistorical,
+        isHistoricalRfp: metadata.isHistorical,
         rfpOutcome: metadata.rfpOutcome,
         qualityScore: metadata.qualityScore,
         industry: metadata.industry,
@@ -162,13 +172,13 @@ export async function queryByContentType(
   const namespace = getRFPNamespace();
 
   const filter: any = {
-    companyId: filters.companyId,
-    contentType: filters.contentType,
-    isHistorical: true
+    tenant_id: { $eq: filters.companyId }, // Use tenant_id with $eq operator
+    contentType: { $eq: filters.contentType }, // Use $eq for consistency
+    isHistoricalRfp: { $eq: true } // Updated field name
   };
 
   if (filters.onlyWon) {
-    filter.rfpOutcome = 'won';
+    filter.rfpOutcome = { $eq: 'won' };
   }
 
   if (filters.minQualityScore) {

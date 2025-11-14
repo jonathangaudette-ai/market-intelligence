@@ -391,7 +391,7 @@ async function retrieveRelevantDocs(
 
   // Build filter
   const filter: any = {
-    companyId: { $eq: companyId },
+    tenant_id: { $eq: companyId }, // Use tenant_id for multi-tenant isolation
   };
 
   // Exclude source RFPs from general RAG
@@ -429,7 +429,7 @@ async function retrieveFromSourceRfps(
     topK: 5,
     includeMetadata: true,
     filter: {
-      companyId: { $eq: companyId },
+      tenant_id: { $eq: companyId }, // Use tenant_id for multi-tenant isolation
       rfpId: { $in: sourceRfpIds },
     },
   });

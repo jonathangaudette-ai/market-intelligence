@@ -92,6 +92,12 @@ export const documents = pgTable("documents", {
   analysisCompleted: boolean("analysis_completed").default(false),
   analysisConfidence: integer("analysis_confidence"), // 0-100
 
+  // RAG Support Documents fields (Phase 0.5 - Support Docs RAG v4)
+  documentPurpose: varchar("document_purpose", { length: 50 }).$type<'rfp_response' | 'rfp_support' | 'company_info'>(), // Purpose of document for RAG
+  contentType: varchar("content_type", { length: 100 }), // methodology_guide, case_study, technical_spec, etc.
+  contentTypeTags: text("content_type_tags").array(), // Array of content tags for categorization
+  isHistoricalRfp: boolean("is_historical_rfp").default(false), // True for historical RFP responses
+
   // Progress tracking for real-time updates
   processingSteps: jsonb("processing_steps"), // Array of { step: string, status: 'pending'|'in_progress'|'completed'|'failed', timestamp: number }
 

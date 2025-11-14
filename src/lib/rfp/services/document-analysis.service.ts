@@ -341,7 +341,9 @@ async function cacheAnalysis(filename: string, analysis: DocumentAnalysis): Prom
   // Limit cache size to 1000 entries
   if (analysisCache.size > 1000) {
     const firstKey = analysisCache.keys().next().value;
-    analysisCache.delete(firstKey);
+    if (firstKey) {
+      analysisCache.delete(firstKey);
+    }
   }
 }
 

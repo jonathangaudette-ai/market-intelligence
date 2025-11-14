@@ -10,11 +10,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { z } from 'zod';
-import { db } from '@/db/drizzle';
-import { documents, companyMembers } from '@/db/schema';
+import { db } from '@/db';
+import { documents } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
+import { requireAuth } from '@/lib/auth/middleware';
 import { put } from '@vercel/blob';
 import { analyzeDocument } from '@/lib/rfp/services/document-analysis.service';
 import { generateEmbeddings } from '@/lib/rfp/ai/embeddings';
@@ -51,30 +51,14 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Authenticate user
-    const session = await getServerSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // 1. Authentication
+    const authResult = await requireAuth('viewer');
+    if (!authResult.success) return authResult.error;
 
-    // 2. Get user's company
-    const userCompany = await db.query.companyMembers.findFirst({
-      where: eq(companyMembers.userId, session.user.id as string),
-      with: {
-        company: true,
-      },
-    });
+    const { company, session } = authResult.data;
+    const companyId = company.company.id;
 
-    if (!userCompany?.company) {
-      return NextResponse.json(
-        { error: 'No company associated with user' },
-        { status: 403 }
-      );
-    }
-
-    const companyId = userCompany.company.id;
-
-    // 3. Parse form data
+    // 2. Parse form data
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     const documentPurpose = formData.get('documentPurpose') as string | null;
@@ -117,7 +101,7 @@ export async function POST(request: NextRequest) {
         contentType: contentType || undefined,
         contentTypeTags: tags.length > 0 ? tags : undefined,
         isHistoricalRfp: false,
-        uploadedBy: session.user.id as string,
+        uploadedBy: session!.user.id as string,
         metadata: {
           blobUrl: blob.url,
           originalName: file.name,
@@ -271,9 +255,11 @@ async function triggerDocumentAnalysis(
     );
 
     // 6. Create embeddings and index in Pinecone (Phase 1 Day 6-7)
-    const doc = await db.query.documents.findFirst({
-      where: eq(documents.id, documentId),
-    });
+    const [doc] = await db
+      .select()
+      .from(documents)
+      .where(eq(documents.id, documentId))
+      .limit(1);
 
     if (doc) {
       await createDocumentEmbeddings(
@@ -444,9 +430,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const document = await db.query.documents.findFirst({
-      where: eq(documents.id, documentId),
-    });
+    const [document] = await db
+      .select()
+      .from(documents)
+      .where(eq(documents.id, documentId))
+      .limit(1);
 
     if (!document) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });

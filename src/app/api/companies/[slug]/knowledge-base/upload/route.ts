@@ -299,25 +299,43 @@ async function triggerDocumentAnalysis(
 
 /**
  * Extract text from document buffer
- * TODO: Implement proper PDF/DOCX parsing in production
  */
 async function extractText(buffer: ArrayBuffer, filename: string): Promise<string> {
-  // For now, return a placeholder
-  // In production, use libraries like:
-  // - pdf-parse for PDF
-  // - mammoth for DOCX
-  // - For plain text, use TextDecoder
-
   const extension = filename.split('.').pop()?.toLowerCase();
 
+  // Plain text
   if (extension === 'txt') {
     const decoder = new TextDecoder('utf-8');
     return decoder.decode(buffer);
   }
 
-  // For PDF/DOCX, would normally use proper parsers
-  // For this POC, return placeholder
-  return `[Text extracted from ${filename} - ${buffer.byteLength} bytes]\n\n(PDF/DOCX parsing to be implemented)`;
+  // PDF extraction
+  if (extension === 'pdf') {
+    try {
+      // Dynamic import to avoid bundling issues
+      const pdfParse = (await import('pdf-parse')).default;
+      const pdfBuffer = Buffer.from(buffer);
+      const data = await pdfParse(pdfBuffer);
+
+      console.log(`[ExtractText] PDF extracted: ${data.numpages} pages, ${data.text.length} chars`);
+
+      if (!data.text || data.text.trim().length === 0) {
+        throw new Error('PDF contains no extractable text');
+      }
+
+      return data.text;
+    } catch (error) {
+      console.error('[ExtractText] PDF parsing failed:', error);
+      throw new Error(`Failed to extract text from PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  // DOCX/DOC - Not implemented yet
+  if (extension === 'docx' || extension === 'doc') {
+    throw new Error('DOCX/DOC parsing not yet implemented. Please convert to PDF or TXT.');
+  }
+
+  throw new Error(`Unsupported file type: ${extension}`);
 }
 
 /**

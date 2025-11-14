@@ -46,7 +46,8 @@ export function SupportDocsList({ slug, refreshTrigger }: SupportDocsListProps) 
   const loadDocuments = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/companies/${slug}/documents?purpose=rfp_support`);
+      // Fetch all support documents (rfp_support + company_info)
+      const response = await fetch(`/api/companies/${slug}/documents?purpose=rfp_support,company_info`);
 
       if (!response.ok) {
         throw new Error("Failed to load documents");

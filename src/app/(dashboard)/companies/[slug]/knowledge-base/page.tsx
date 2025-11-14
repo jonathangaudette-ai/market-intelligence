@@ -61,6 +61,10 @@ interface Analytics {
 export default function KnowledgeBasePage() {
   const params = useParams();
   const slug = params.slug as string;
+
+  // Debug: Log slug to verify it's extracted correctly
+  console.log('[KnowledgeBase] Slug from params:', slug, 'Type:', typeof slug);
+
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [loadingAnalytics, setLoadingAnalytics] = useState(true);

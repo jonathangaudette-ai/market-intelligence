@@ -56,13 +56,19 @@ export async function POST(
   try {
     // 1. Extract slug from params
     const { slug } = await params;
+    console.log('[KnowledgeBaseUpload] POST Request - Slug:', slug);
 
     // 2. Authentication with slug verification
     const authResult = await requireAuth('viewer', slug);
-    if (!authResult.success) return authResult.error;
+    console.log('[KnowledgeBaseUpload] Auth result:', authResult.success ? 'SUCCESS' : 'FAILED');
+    if (!authResult.success) {
+      console.error('[KnowledgeBaseUpload] Auth failed, returning error');
+      return authResult.error;
+    }
 
     const { company, session } = authResult.data;
     const companyId = company.company.id;
+    console.log('[KnowledgeBaseUpload] Company ID:', companyId);
 
     // 2. Parse form data
     const formData = await request.formData();

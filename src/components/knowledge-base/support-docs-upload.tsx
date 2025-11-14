@@ -128,7 +128,10 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
       if (contentType) formData.append("contentType", contentType);
       if (tags.length > 0) formData.append("tags", JSON.stringify(tags));
 
-      const response = await fetch(`/api/companies/${companySlug}/knowledge-base/upload`, {
+      const uploadUrl = `/api/companies/${companySlug}/knowledge-base/upload`;
+      console.log('[SupportDocsUpload] Uploading to:', uploadUrl, 'companySlug:', companySlug);
+
+      const response = await fetch(uploadUrl, {
         method: "POST",
         body: formData,
       });

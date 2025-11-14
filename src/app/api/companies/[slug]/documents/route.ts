@@ -27,6 +27,7 @@ export async function GET(
     const status = searchParams.get("status") as "completed" | "processing" | "failed" | "pending" | null;
     const competitorId = searchParams.get("competitorId");
     const documentType = searchParams.get("documentType");
+    const purpose = searchParams.get("purpose") as "rfp_support" | "rfp_response" | "company_info" | null;
 
     // Pagination parameters
     const page = parseInt(searchParams.get("page") || "1");
@@ -46,6 +47,11 @@ export async function GET(
 
     if (documentType) {
       whereConditions.push(eq(documents.documentType, documentType));
+    }
+
+    // Support Docs RAG v4.0 - Filter by documentPurpose
+    if (purpose) {
+      whereConditions.push(eq(documents.documentPurpose, purpose));
     }
 
     // 4. Get total count for pagination
@@ -72,6 +78,11 @@ export async function GET(
         errorMessage: documents.errorMessage,
         createdAt: documents.createdAt,
         updatedAt: documents.updatedAt,
+
+        // Support Docs RAG v4.0 fields
+        documentPurpose: documents.documentPurpose,
+        contentType: documents.contentType,
+        contentTypeTags: documents.contentTypeTags,
 
         // Competitor info (if linked)
         competitor: {
@@ -113,6 +124,12 @@ export async function GET(
         analysisCompleted: doc.analysisCompleted,
         analysisConfidence: doc.analysisConfidence,
         errorMessage: doc.errorMessage,
+
+        // Support Docs RAG v4.0 fields
+        documentPurpose: doc.documentPurpose,
+        contentType: doc.contentType,
+        contentTypeTags: doc.contentTypeTags,
+        createdAt: doc.createdAt, // Full date for support docs list
       };
     });
 

@@ -139,23 +139,27 @@ export default function SupportDocumentDetailPage() {
     }
   };
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     if (!document?.blobUrl) {
       toast.error("URL du fichier non disponible");
       return;
     }
 
     try {
-      const response = await fetch(document.blobUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      // Vercel Blob URLs support direct download via query parameter
+      const downloadUrl = new URL(document.blobUrl);
+      downloadUrl.searchParams.set('download', '1');
+
+      // Create temporary link and trigger download
       const a = window.document.createElement("a");
-      a.href = url;
+      a.href = downloadUrl.toString();
       a.download = document.name;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
       window.document.body.appendChild(a);
       a.click();
       window.document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+
       toast.success("Téléchargement démarré");
     } catch (error) {
       console.error("Download error:", error);

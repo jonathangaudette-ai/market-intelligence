@@ -4,7 +4,7 @@
  *
  * This endpoint handles:
  * 1. File upload (PDF, DOCX, TXT) with validation
- * 2. S3/Vercel Blob storage
+ * 2. Vercel Blob storage
  * 3. Database record creation
  * 4. Async document analysis trigger
  */

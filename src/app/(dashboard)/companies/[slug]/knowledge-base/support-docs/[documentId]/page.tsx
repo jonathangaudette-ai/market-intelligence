@@ -67,6 +67,16 @@ interface DocumentDetail {
   wordCount?: number;
   extractedAt?: string;
 
+  // Chunks data
+  chunks: Array<{
+    chunkId: string;
+    startIndex: number;
+    endIndex: number;
+    content: string;
+    tokens?: number;
+  }>;
+  extractedText?: string;
+
   // File access
   blobUrl?: string;
   fileSize?: number;
@@ -561,6 +571,80 @@ export default function SupportDocumentDetailPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Chunks Section */}
+        {document.chunks && document.chunks.length > 0 && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Database className="h-5 w-5 text-teal-600" />
+                  Chunks Extraits ({document.chunks.length})
+                </CardTitle>
+                <Badge variant="outline" className="text-xs">
+                  {document.chunks.reduce((sum, c) => sum + (c.tokens || 0), 0)} tokens
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {document.chunks.map((chunk, index) => (
+                  <Card key={chunk.chunkId} className="bg-gray-50">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="text-xs">
+                            Chunk {index + 1}
+                          </Badge>
+                          <span className="text-xs text-gray-500">
+                            Positions {chunk.startIndex}-{chunk.endIndex}
+                          </span>
+                        </div>
+                        {chunk.tokens && (
+                          <Badge variant="outline" className="text-xs">
+                            {chunk.tokens} tokens
+                          </Badge>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="prose prose-sm max-w-none">
+                        <pre className="whitespace-pre-wrap text-xs text-gray-700 bg-white p-4 rounded border border-gray-200 font-mono leading-relaxed">
+{chunk.content}
+                        </pre>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Full Extracted Text (Optional - collapsed by default) */}
+        {document.extractedText && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-teal-600" />
+                Texte Complet Extrait
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <details className="group">
+                <summary className="cursor-pointer text-sm text-teal-600 hover:text-teal-700 font-medium mb-2 list-none flex items-center gap-2">
+                  <span className="transform transition-transform group-open:rotate-90">▶</span>
+                  Cliquez pour afficher le texte complet ({document.extractedText.length.toLocaleString()} caractères)
+                </summary>
+                <div className="mt-4">
+                  <pre className="whitespace-pre-wrap text-xs text-gray-700 bg-gray-50 p-4 rounded border border-gray-200 font-mono leading-relaxed max-h-96 overflow-y-auto">
+{document.extractedText}
+                  </pre>
+                </div>
+              </details>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Error Message (if any) */}
         {document.errorMessage && (

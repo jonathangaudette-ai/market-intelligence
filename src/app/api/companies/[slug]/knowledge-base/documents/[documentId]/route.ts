@@ -110,6 +110,10 @@ export async function GET(
       wordCount: metadata.wordCount,
       extractedAt: metadata.extractedAt,
 
+      // Chunks data
+      chunks: metadata.chunks || [],
+      extractedText: metadata.extractedText,
+
       // File access
       blobUrl: metadata.blobUrl,
       fileSize: metadata.fileSize,

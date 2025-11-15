@@ -32,9 +32,68 @@ interface SupportDocsUploadProps {
   onUploadComplete: () => void;
 }
 
-type DocumentPurpose = "rfp_support" | "company_info";
+type DocumentCategory =
+  | "company_info"
+  | "knowledge_base"
+  | "rfp_won"
+  | "rfp_all"
+  | "competitive"
+  | "product";
+
+type DocumentPurpose = "rfp_support" | "company_info" | "rfp_response";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+
+// Mapping catégorie → backend fields
+const CATEGORY_MAPPING: Record<DocumentCategory, {
+  documentPurpose: DocumentPurpose;
+  documentType: string;
+  isHistoricalRfp?: boolean;
+  rfpOutcome?: "won" | "lost" | "pending";
+}> = {
+  company_info: {
+    documentPurpose: "company_info",
+    documentType: "company_info"
+  },
+  knowledge_base: {
+    documentPurpose: "rfp_support",
+    documentType: "product_doc"
+  },
+  rfp_won: {
+    documentPurpose: "rfp_response",
+    documentType: "past_rfp",
+    isHistoricalRfp: true,
+    rfpOutcome: "won"
+  },
+  rfp_all: {
+    documentPurpose: "rfp_response",
+    documentType: "past_rfp",
+    isHistoricalRfp: true
+  },
+  competitive: {
+    documentPurpose: "rfp_support",
+    documentType: "competitive_intel"
+  },
+  product: {
+    documentPurpose: "rfp_support",
+    documentType: "product_doc"
+  },
+};
+
+// Options de sous-catégories
+const CONTENT_TYPES = [
+  { value: "company-overview", label: "Présentation entreprise" },
+  { value: "corporate-info", label: "Informations corporatives" },
+  { value: "team-structure", label: "Structure d'équipe" },
+  { value: "company-history", label: "Historique entreprise" },
+  { value: "values-culture", label: "Valeurs et culture" },
+  { value: "product-description", label: "Description produit" },
+  { value: "service-offering", label: "Offre de services" },
+  { value: "project-methodology", label: "Méthodologie projet" },
+  { value: "technical-solution", label: "Solution technique" },
+  { value: "project-timeline", label: "Calendrier projet" },
+  { value: "pricing-structure", label: "Structure de prix" },
+];
 
 const ALLOWED_TYPES = [
   "application/pdf",
@@ -45,7 +104,7 @@ const ALLOWED_TYPES = [
 
 export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocsUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [documentPurpose, setDocumentPurpose] = useState<DocumentPurpose>("rfp_support");
+  const [documentCategory, setDocumentCategory] = useState<DocumentCategory>("knowledge_base");
   const [contentType, setContentType] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
@@ -122,9 +181,15 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
     setUploadStatus({ status: "uploading", message: "Upload en cours..." });
 
     try {
+      // Map category to backend fields
+      const mapping = CATEGORY_MAPPING[documentCategory];
+
       const formData = new FormData();
       formData.append("file", selectedFile);
-      formData.append("documentPurpose", documentPurpose);
+      formData.append("documentPurpose", mapping.documentPurpose);
+      formData.append("documentType", mapping.documentType);
+      if (mapping.isHistoricalRfp) formData.append("isHistoricalRfp", "true");
+      if (mapping.rfpOutcome) formData.append("rfpOutcome", mapping.rfpOutcome);
       if (contentType) formData.append("contentType", contentType);
       if (tags.length > 0) formData.append("tags", JSON.stringify(tags));
 
@@ -311,39 +376,64 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
             )}
           </div>
 
-          {/* Document Purpose */}
+          {/* Document Category */}
           <div className="space-y-2">
-            <Label>Usage du document</Label>
+            <Label>Catégorie du document *</Label>
             <Select
-              value={documentPurpose}
-              onValueChange={(value) => setDocumentPurpose(value as DocumentPurpose)}
+              value={documentCategory}
+              onValueChange={(value) => setDocumentCategory(value as DocumentCategory)}
               disabled={uploading}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="rfp_support">
-                  Document de support RFP (méthodologies, études de cas, etc.)
-                </SelectItem>
                 <SelectItem value="company_info">
-                  Information générale sur l'entreprise
+                  🏢 Informations Entreprise
+                </SelectItem>
+                <SelectItem value="knowledge_base">
+                  📚 Base de Connaissances (méthodologies, guides)
+                </SelectItem>
+                <SelectItem value="rfp_won">
+                  🏆 RFP Historique Gagné
+                </SelectItem>
+                <SelectItem value="rfp_all">
+                  📋 RFP Historique (tous)
+                </SelectItem>
+                <SelectItem value="competitive">
+                  🎯 Intelligence Concurrentielle
+                </SelectItem>
+                <SelectItem value="product">
+                  🔧 Documentation Produits
                 </SelectItem>
               </SelectContent>
             </Select>
+            <p className="text-xs text-gray-500">
+              Cette catégorie détermine comment le document sera utilisé dans le système
+            </p>
           </div>
 
-          {/* Content Type (Optional) */}
+          {/* Content Type (Subcategory - Optional) */}
           <div className="space-y-2">
-            <Label>Type de contenu (optionnel)</Label>
-            <Input
-              placeholder="ex: méthodologie agile, étude de cas bancaire..."
+            <Label>Sous-catégorie (optionnel)</Label>
+            <Select
               value={contentType}
-              onChange={(e) => setContentType(e.target.value)}
+              onValueChange={setContentType}
               disabled={uploading}
-            />
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionnez un type de contenu..." />
+              </SelectTrigger>
+              <SelectContent>
+                {CONTENT_TYPES.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <p className="text-xs text-gray-500">
-              Claude analysera automatiquement le document, mais vous pouvez fournir un indice
+              Claude analysera automatiquement, mais vous pouvez préciser pour plus de précision
             </p>
           </div>
 

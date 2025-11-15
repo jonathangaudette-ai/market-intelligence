@@ -74,6 +74,9 @@ export async function POST(
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     const documentPurpose = formData.get('documentPurpose') as string | null;
+    const documentType = formData.get('documentType') as string | null;
+    const isHistoricalRfp = formData.get('isHistoricalRfp') === 'true';
+    const rfpOutcome = formData.get('rfpOutcome') as string | null;
     const contentType = formData.get('contentType') as string | null;
     const tagsString = formData.get('tags') as string | null;
     const tags = tagsString ? JSON.parse(tagsString) : [];
@@ -107,17 +110,19 @@ export async function POST(
         companyId,
         name: file.name,
         type: file.type,
+        documentType: documentType || undefined,
         sourceUrl: blob.url,
         status: 'pending', // Will be updated after analysis
         documentPurpose: (documentPurpose as any) || 'rfp_support',
         contentType: contentType || undefined,
         contentTypeTags: tags.length > 0 ? tags : undefined,
-        isHistoricalRfp: false,
+        isHistoricalRfp: isHistoricalRfp || false,
         uploadedBy: session!.user.id as string,
         metadata: {
           blobUrl: blob.url,
           originalName: file.name,
           uploadedAt: new Date().toISOString(),
+          rfpOutcome: rfpOutcome || undefined,
         },
       })
       .returning();

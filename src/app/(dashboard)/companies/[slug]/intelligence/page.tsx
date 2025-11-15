@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Send, User, FileText, Building2, Sparkles } from "lucide-react";
+import { Bot, Send, User, FileText, Building2, Sparkles, BookOpen, Trophy, Target, Package } from "lucide-react";
 import { toast } from "sonner";
+import { DocumentFilters, DocumentFilterId } from "@/components/intelligence/document-filters";
 
 type Message = {
   id: string;
@@ -32,6 +33,59 @@ const mockMessages: Message[] = [
   },
 ];
 
+// Mapping filtres → Pinecone filters
+function buildPineconeFilters(selectedFilters: DocumentFilterId[]) {
+  if (selectedFilters.length === 0) return undefined;
+
+  const conditions: any[] = [];
+
+  selectedFilters.forEach((filter) => {
+    switch (filter) {
+      case "company_info":
+        conditions.push({ documentPurpose: { $eq: "company_info" } });
+        break;
+      case "knowledge_base":
+        conditions.push({
+          $and: [
+            { documentPurpose: { $eq: "rfp_support" } },
+            { documentType: { $eq: "product_doc" } },
+          ],
+        });
+        break;
+      case "rfp_won":
+        conditions.push({
+          $and: [
+            { documentPurpose: { $eq: "rfp_response" } },
+            { isHistoricalRfp: { $eq: true } },
+            { rfpOutcome: { $eq: "won" } },
+          ],
+        });
+        break;
+      case "rfp_all":
+        conditions.push({
+          $and: [
+            { documentPurpose: { $eq: "rfp_response" } },
+            { isHistoricalRfp: { $eq: true } },
+          ],
+        });
+        break;
+      case "competitive":
+        conditions.push({ documentType: { $eq: "competitive_intel" } });
+        break;
+      case "product":
+        conditions.push({
+          $and: [
+            { documentPurpose: { $eq: "rfp_support" } },
+            { documentType: { $eq: "product_doc" } },
+          ],
+        });
+        break;
+    }
+  });
+
+  return conditions.length > 1 ? { $or: conditions } : conditions[0];
+}
+
 export default function IntelligencePage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -39,6 +93,26 @@ export default function IntelligencePage() {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<DocumentFilterId[]>([
+    "company_info",
+    "knowledge_base",
+  ]); // Default filters
+
+  // Persistance localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(`chat-filters-${slug}`);
+    if (saved) {
+      try {
+        setSelectedFilters(JSON.parse(saved));
+      } catch (e) {
+        console.error("Error loading filters from localStorage:", e);
+      }
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    localStorage.setItem(`chat-filters-${slug}`, JSON.stringify(selectedFilters));
+  }, [selectedFilters, slug]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +130,9 @@ export default function IntelligencePage() {
     setLoading(true);
 
     try {
+      // Build Pinecone filters from selected categories
+      const filters = buildPineconeFilters(selectedFilters);
+
       // Call real chat API
       const response = await fetch(`/api/companies/${slug}/chat`, {
         method: "POST",
@@ -64,6 +141,7 @@ export default function IntelligencePage() {
         },
         body: JSON.stringify({
           message: question,
+          filters: filters,
         }),
       });
 
@@ -98,6 +176,31 @@ export default function IntelligencePage() {
     }
   };
 
+  // Helper functions for source badges
+  const getCategoryIcon = (source: any) => {
+    const { documentPurpose, documentType } = source;
+    if (documentPurpose === "company_info") return "🏢";
+    if (documentPurpose === "rfp_support") {
+      if (documentType === "competitive_intel") return "🎯";
+      if (documentType === "product_doc") return "📚";
+      return "📚";
+    }
+    if (documentPurpose === "rfp_response") return "🏆";
+    return "📄";
+  };
+
+  const getCategoryLabel = (source: any) => {
+    const { documentPurpose, documentType } = source;
+    if (documentPurpose === "company_info") return "Info Entreprise";
+    if (documentPurpose === "rfp_support") {
+      if (documentType === "competitive_intel") return "Intelligence";
+      if (documentType === "product_doc") return "Base Connaissances";
+      return "Support";
+    }
+    if (documentPurpose === "rfp_response") return "Historique RFP";
+    return "Autre";
+  };
+
   const quickPrompts = [
     "Quelles sont les forces de nos principaux concurrents?",
     "Résume les dernières nouvelles sur Competitor X",
@@ -126,6 +229,14 @@ export default function IntelligencePage() {
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
         <div className="h-full max-w-5xl mx-auto px-4 py-6 flex flex-col">
+          {/* Document Filters */}
+          <div className="mb-6">
+            <DocumentFilters
+              selectedFilters={selectedFilters}
+              onChange={setSelectedFilters}
+            />
+          </div>
+
           {/* Messages */}
           <ScrollArea className="flex-1 mb-6">
             <div className="space-y-6 pr-4">
@@ -174,9 +285,15 @@ export default function IntelligencePage() {
                                 >
                                   <FileText className="h-3 w-3 text-teal-600 mt-0.5 flex-shrink-0" />
                                   <div className="flex-1 min-w-0">
-                                    <span className="font-medium text-gray-900 hover:text-teal-700 hover:underline">
-                                      {source.source}
-                                    </span>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span className="font-medium text-gray-900 hover:text-teal-700 hover:underline">
+                                        {source.source}
+                                      </span>
+                                      <Badge variant="secondary" className="text-xs gap-1">
+                                        <span>{getCategoryIcon(source)}</span>
+                                        <span>{getCategoryLabel(source)}</span>
+                                      </Badge>
+                                    </div>
                                     {source.competitor && (
                                       <div className="flex items-center gap-1 mt-1">
                                         <Building2 className="h-2.5 w-2.5 text-gray-400" />

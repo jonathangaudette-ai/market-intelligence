@@ -90,15 +90,52 @@ export default function IntelligencePage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<DocumentFilterId[]>([
     "company_info",
     "knowledge_base",
   ]); // Default filters
 
-  // Persistance localStorage
+  // Load messages and conversationId from sessionStorage on mount
+  useEffect(() => {
+    const savedMessages = sessionStorage.getItem(`chat-messages-${slug}`);
+    const savedConversationId = sessionStorage.getItem(`chat-conversation-${slug}`);
+
+    if (savedMessages) {
+      try {
+        const parsed = JSON.parse(savedMessages);
+        setMessages(parsed);
+      } catch (e) {
+        console.error("Error loading messages from sessionStorage:", e);
+        setMessages(mockMessages); // Fallback to mock messages
+      }
+    } else {
+      setMessages(mockMessages); // First visit, show mock messages
+    }
+
+    if (savedConversationId) {
+      setConversationId(savedConversationId);
+    }
+  }, [slug]);
+
+  // Save messages to sessionStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      sessionStorage.setItem(`chat-messages-${slug}`, JSON.stringify(messages));
+    }
+  }, [messages, slug]);
+
+  // Save conversationId to sessionStorage whenever it changes
+  useEffect(() => {
+    if (conversationId) {
+      sessionStorage.setItem(`chat-conversation-${slug}`, conversationId);
+    }
+  }, [conversationId, slug]);
+
+  // Persistance localStorage for filters
   useEffect(() => {
     const saved = localStorage.getItem(`chat-filters-${slug}`);
     if (saved) {
@@ -142,6 +179,7 @@ export default function IntelligencePage() {
         body: JSON.stringify({
           message: question,
           filters: filters,
+          conversationId: conversationId, // Pass existing conversationId to continue conversation
         }),
       });
 
@@ -151,6 +189,11 @@ export default function IntelligencePage() {
       }
 
       const data = await response.json();
+
+      // Update conversationId if returned by API (for session persistence)
+      if (data.conversationId && data.conversationId !== conversationId) {
+        setConversationId(data.conversationId);
+      }
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

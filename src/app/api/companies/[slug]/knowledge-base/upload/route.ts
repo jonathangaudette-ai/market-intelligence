@@ -248,14 +248,29 @@ async function triggerDocumentAnalysis(
     const wordCount = text.split(/\s+/).length;
     const pageCount = Math.ceil(text.length / 3000); // Rough estimate: ~3000 chars per page
 
+    // 5.5. Read current document to preserve user-selected values
+    const [currentDoc] = await db
+      .select()
+      .from(documents)
+      .where(eq(documents.id, documentId))
+      .limit(1);
+
+    // Only use AI recommendations if user didn't already set these values
+    const finalDocumentPurpose = currentDoc?.documentPurpose || analysis.recommendedPurpose;
+    const finalContentType = currentDoc?.contentType || analysis.documentType;
+    const finalContentTypeTags = currentDoc?.contentTypeTags || analysis.contentTypeTags;
+
+    console.log(`[DocumentAnalysis] Preserving user selections: purpose=${finalDocumentPurpose}, contentType=${finalContentType}`);
+
     // 6. Update document with analysis results AND extracted text (but keep status as 'processing')
+    // ✅ PRESERVE user-selected categories, only use AI recommendations as fallback
     await db
       .update(documents)
       .set({
         status: 'processing', // Keep as processing until embeddings are created
-        documentPurpose: analysis.recommendedPurpose,
-        contentType: analysis.documentType,
-        contentTypeTags: analysis.contentTypeTags,
+        documentPurpose: finalDocumentPurpose as any,
+        contentType: finalContentType,
+        contentTypeTags: finalContentTypeTags,
         analysisCompleted: true,
         analysisConfidence: Math.round(analysis.confidence * 100),
         metadata: {

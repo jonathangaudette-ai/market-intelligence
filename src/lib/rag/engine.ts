@@ -42,6 +42,8 @@ export interface RAGSource {
   competitor?: string;
   relevance: number;
   metadata?: Record<string, any>;
+  documentPurpose?: string;
+  documentType?: string;
 }
 
 export interface ChunkMetadata {
@@ -203,11 +205,14 @@ export class MultiTenantRAGEngine {
     // Transform to RAGSource format
     return queryResponse.matches.map((match) => ({
       text: (match.metadata?.text as string) || "",
-      source: (match.metadata?.document_name as string) || "Unknown",
-      documentId: (match.metadata?.document_id as string) || "",
+      source: (match.metadata?.title as string) || "Unknown", // ✅ Fixed: title not document_name
+      documentId: (match.metadata?.documentId as string) || "", // ✅ Fixed: documentId not document_id
       competitor: (match.metadata?.competitor_name as string) || undefined,
       relevance: match.score || 0,
       metadata: match.metadata,
+      // ✅ Add category metadata for frontend display
+      documentPurpose: match.metadata?.documentPurpose as string,
+      documentType: match.metadata?.documentType as string,
     }));
   }
 

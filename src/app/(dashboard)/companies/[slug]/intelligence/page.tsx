@@ -21,6 +21,8 @@ type Message = {
     documentId: string;
     competitor?: string;
     relevance: number;
+    documentPurpose?: string;
+    documentType?: string;
   }>;
 };
 
@@ -204,6 +206,8 @@ export default function IntelligencePage() {
           documentId: s.documentId,
           competitor: s.competitor,
           relevance: s.relevance,
+          documentPurpose: s.documentPurpose, // ✅ Add category metadata
+          documentType: s.documentType, // ✅ Add category metadata
         })),
       };
 
@@ -323,7 +327,7 @@ export default function IntelligencePage() {
                               {message.sources.map((source, idx) => (
                                 <Link
                                   key={idx}
-                                  href={`/companies/${slug}/documents/${source.documentId}`}
+                                  href={`/companies/${slug}/knowledge-base/support-docs/${source.documentId}`}
                                   className="flex items-start gap-2 text-xs bg-gray-50 p-2 rounded hover:bg-teal-50 hover:border-teal-200 border border-transparent transition-colors cursor-pointer"
                                 >
                                   <FileText className="h-3 w-3 text-teal-600 mt-0.5 flex-shrink-0" />

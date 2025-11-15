@@ -94,9 +94,11 @@ export interface ChatParams {
 
 export class MultiTenantRAGEngine {
   private index;
+  private namespace;
 
   constructor() {
     this.index = getPinecone().index(process.env.PINECONE_INDEX_NAME || "market-intelligence-prod");
+    this.namespace = this.index.namespace('rfp-library'); // ← Use the correct namespace!
   }
 
   /**
@@ -165,7 +167,7 @@ export class MultiTenantRAGEngine {
     }
 
     // Upsert to Pinecone (also supports batching up to 1000 vectors)
-    await this.index.upsert(allVectors);
+    await this.namespace.upsert(allVectors);
 
     console.log(`[RAG] Batch embedded ${chunks.length} chunks in ${Math.ceil(chunks.length / BATCH_SIZE)} API calls (vs ${chunks.length} before)`);
 
@@ -188,7 +190,7 @@ export class MultiTenantRAGEngine {
     const queryEmbedding = embeddingResponse.data[0].embedding;
 
     // Query Pinecone with tenant filtering
-    const queryResponse = await this.index.query({
+    const queryResponse = await this.namespace.query({
       vector: queryEmbedding,
       topK,
       includeMetadata: true,
@@ -302,7 +304,7 @@ Réponds en français de manière concise et professionnelle. Si les sources ne 
    * Delete all vectors for a document
    */
   async deleteDocument(documentId: string): Promise<void> {
-    await this.index.deleteMany({
+    await this.namespace.deleteMany({
       filter: { document_id: { $eq: documentId } },
     });
   }
@@ -311,7 +313,7 @@ Réponds en français de manière concise et professionnelle. Si les sources ne 
    * Delete all vectors for a company (use with caution!)
    */
   async deleteCompanyData(companyId: string): Promise<void> {
-    await this.index.deleteMany({
+    await this.namespace.deleteMany({
       filter: { tenant_id: { $eq: companyId } },
     });
   }

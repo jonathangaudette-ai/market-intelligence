@@ -382,16 +382,35 @@ async function createDocumentEmbeddings(
   console.log(`[CreateEmbeddings] Starting embedding creation for ${documentId}`);
 
   try {
-    // 1. Chunk the text into smaller pieces (~1000 characters with overlap)
+    // 1. Fetch document from DB to get REAL metadata (user-selected categories)
+    const [dbDoc] = await db
+      .select()
+      .from(documents)
+      .where(eq(documents.id, documentId))
+      .limit(1);
+
+    if (!dbDoc) {
+      throw new Error(`Document ${documentId} not found in database`);
+    }
+
+    // Extract REAL values from user selection (not AI recommendations)
+    const realDocumentPurpose = dbDoc.documentPurpose || analysis.recommendedPurpose;
+    const realDocumentType = dbDoc.documentType || 'rfp_support_doc';
+    const realIsHistoricalRfp = dbDoc.isHistoricalRfp || false;
+    const realRfpOutcome = (dbDoc.metadata as any)?.rfpOutcome;
+
+    console.log(`[CreateEmbeddings] Using REAL metadata: purpose=${realDocumentPurpose}, type=${realDocumentType}, historical=${realIsHistoricalRfp}, outcome=${realRfpOutcome}`);
+
+    // 2. Chunk the text into smaller pieces (~1000 characters with overlap)
     const chunks = chunkText(text, 1000, 200);
     console.log(`[CreateEmbeddings] Created ${chunks.length} chunks`);
 
-    // 2. Generate embeddings for all chunks
+    // 3. Generate embeddings for all chunks
     const chunkTexts = chunks.map(c => c.text);
     const embeddings = await generateEmbeddings(chunkTexts);
     console.log(`[CreateEmbeddings] Generated ${embeddings.length} embeddings`);
 
-    // 3. Prepare vectors for Pinecone
+    // 4. Prepare vectors for Pinecone
     const namespace = getRFPNamespace();
     const primaryCategory = analysis.suggestedCategories[0]?.category || 'general';
 
@@ -402,14 +421,17 @@ async function createDocumentEmbeddings(
         // Core identifiers
         documentId,
         tenant_id: companyId,
-        documentType: 'rfp_support_doc',
+
+        // ✅ USE REAL VALUES FROM USER SELECTION (not hardcoded!)
+        documentType: realDocumentType,
+        documentPurpose: realDocumentPurpose,
+        isHistoricalRfp: realIsHistoricalRfp,
+        ...(realRfpOutcome && { rfpOutcome: realRfpOutcome }),
 
         // Support Docs RAG v4.0 fields
-        documentPurpose: analysis.recommendedPurpose,
         contentType: analysis.documentType,
         // Add primary category and 'general' to ensure it's found by DualQueryEngine
         contentTypeTags: [primaryCategory, 'general', ...analysis.contentTypeTags],
-        isHistoricalRfp: false,
 
         // Content
         text: chunk.text,

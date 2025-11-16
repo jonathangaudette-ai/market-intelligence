@@ -28,10 +28,7 @@ async function runABTest() {
   console.log('🧪 A/B Test: Semantic Search vs Reranked Results\n');
   console.log('='.repeat(80));
 
-  const engine = new MultiTenantRAGEngine(
-    process.env.PINECONE_INDEX || 'market-intelligence-prod',
-    'rfp-library'
-  );
+  const engine = new MultiTenantRAGEngine();
 
   for (let i = 0; i < TEST_QUERIES.length; i++) {
     const query = TEST_QUERIES[i];

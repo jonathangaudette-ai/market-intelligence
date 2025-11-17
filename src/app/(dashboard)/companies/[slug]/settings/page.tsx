@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,10 +26,11 @@ import {
 } from "lucide-react";
 import { AI_MODELS, AI_MODEL_METADATA, type AIModelId } from "@/types/company";
 
-type Tab = "general" | "team" | "integrations" | "notifications" | "security";
+type Tab = "general" | "team" | "integrations" | "notifications" | "security" | "prompts";
 
 export default function SettingsPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
 
   const [activeTab, setActiveTab] = useState<Tab>("general");
@@ -98,6 +99,7 @@ export default function SettingsPage() {
     { id: "integrations" as Tab, label: "Intégrations", icon: Globe },
     { id: "notifications" as Tab, label: "Notifications", icon: Bell },
     { id: "security" as Tab, label: "Sécurité", icon: Shield },
+    { id: "prompts" as Tab, label: "Prompts IA", icon: Zap },
   ];
 
   const teamMembers = [
@@ -187,7 +189,13 @@ export default function SettingsPage() {
                     return (
                       <button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
+                        onClick={() => {
+                          if (tab.id === "prompts") {
+                            router.push(`/companies/${slug}/settings/prompts`);
+                          } else {
+                            setActiveTab(tab.id);
+                          }
+                        }}
                         className={`
                           w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           ${

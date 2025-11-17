@@ -120,7 +120,7 @@ export class MultiTenantRAGEngine {
 
       // Single API call for batch (instead of N calls)
       const embeddingResponse = await getOpenAI().embeddings.create({
-        model: "text-embedding-3-large",
+        model: "text-embedding-3-small",
         input: batchChunks.map(c => c.content), // Array of texts
         dimensions: 1536,
       });
@@ -192,7 +192,7 @@ export class MultiTenantRAGEngine {
 
     // Generate query embedding
     const embeddingResponse = await getOpenAI().embeddings.create({
-      model: "text-embedding-3-large",
+      model: "text-embedding-3-small",
       input: queryText,
       dimensions: 1536,
     });

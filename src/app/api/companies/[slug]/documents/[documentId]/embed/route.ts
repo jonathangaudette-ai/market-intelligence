@@ -124,7 +124,7 @@ export async function POST(
       success: true,
       vectorsCreated: vectorCount,
       totalChunks: chunks.length,
-      model: "text-embedding-3-large",
+      model: "text-embedding-3-small",
       dimensions: 1536,
       batched: true,
       estimatedApiCalls: Math.ceil(chunks.length / 100), // vs chunks.length before

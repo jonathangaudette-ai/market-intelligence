@@ -40,7 +40,7 @@ export default function DashboardLayout({
     { name: "RFP Assistant", href: `/companies/${slug}/rfps`, icon: FileCheck },
     { name: "Bibliothèque RFP", href: `/companies/${slug}/rfps/library`, icon: Database },
     { name: "Knowledge Base", href: `/companies/${slug}/knowledge-base`, icon: BookOpen },
-    { name: "Concurrents", href: `/companies/${slug}/competitors`, icon: Users },
+    // { name: "Concurrents", href: `/companies/${slug}/competitors`, icon: Users }, // Hidden temporarily
     { name: "Paramètres", href: `/companies/${slug}/settings`, icon: Settings },
   ];
 

@@ -93,7 +93,7 @@ const prompts = [
 console.log('Total prompts found:', prompts.length);
 console.log('');
 
-const byPriority = {
+const byPriority: Record<string, typeof prompts> = {
   'P0': [],
   'P1': [],
   'P2': []

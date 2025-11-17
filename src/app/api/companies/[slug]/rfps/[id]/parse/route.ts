@@ -4,8 +4,33 @@ import { rfps, rfpQuestions } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { requireRFPAuthWithSlug } from '@/lib/rfp/auth';
 import { parseDocument } from '@/lib/rfp/parser/parser-service';
-import { extractQuestionsInBatches, validateQuestions } from '@/lib/rfp/parser/question-extractor';
+import {
+  extractQuestionsInBatches,
+  validateQuestions,
+  type ExtractedQuestion,
+  type ProgressCallback,
+} from '@/lib/rfp/parser/question-extractor';
 import { categorizeQuestionsBatch } from '@/lib/rfp/ai/claude';
+import { getPromptService } from '@/lib/prompts/service';
+import { PROMPT_KEYS } from '@/types/prompts';
+import { shouldUseDatabase } from '@/lib/prompts/feature-flags';
+import OpenAI from 'openai';
+import { GPT5_CONFIGS } from '@/lib/constants/ai-models';
+
+// Lazy initialization
+let _openai: OpenAI | null = null;
+
+function getOpenAI() {
+  if (!_openai) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not set');
+    }
+    _openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  return _openai;
+}
 
 // Increase timeout to 13 minutes for large RFP documents (requires Vercel Pro + Fluid Compute)
 // With Fluid Compute: Pro plan can go up to 800s (13 min)
@@ -153,39 +178,71 @@ export async function POST(
         textLength: parsedDoc.text.length,
       });
 
-      const extractedQuestions = await extractQuestionsInBatches(
-        parsedDoc.text,
-        {
-          onProgress: async (current, total, questionsFound, newQuestions) => {
-            // Update progress in database (including total on first call)
-            await db
-              .update(rfps)
-              .set({
-                parsingProgressCurrent: current,
-                parsingProgressTotal: total,
-                questionsExtracted: questionsFound,
-                updatedAt: new Date(),
-              })
-              .where(eq(rfps.id, id));
+      // Use configurable prompt system if enabled
+      const useConfigurablePrompts = shouldUseDatabase(company.id, PROMPT_KEYS.QUESTION_EXTRACT);
+      console.log(`[RFP ${id}] Using configurable prompts for extraction: ${useConfigurablePrompts}`);
 
-            console.log(`[RFP ${id}] Progress: ${current}/${total} batches, ${questionsFound} questions extracted (${newQuestions.length} in this batch)`);
+      const extractedQuestions = useConfigurablePrompts
+        ? await extractQuestionsWithPromptService(
+            company.id,
+            parsedDoc.text,
+            {
+              onProgress: async (current, total, questionsFound, newQuestions) => {
+                await db
+                  .update(rfps)
+                  .set({
+                    parsingProgressCurrent: current,
+                    parsingProgressTotal: total,
+                    questionsExtracted: questionsFound,
+                    updatedAt: new Date(),
+                  })
+                  .where(eq(rfps.id, id));
 
-            // Log: Batch progress with newly extracted questions for real-time preview
-            await addParsingLog(
-              id,
-              'progress',
-              'extracting',
-              `Batch ${current}/${total} traité`,
-              {
-                batchNumber: current,
-                totalBatches: total,
-                questionsFound: questionsFound,
-                questions: newQuestions, // Include actual questions for real-time preview
-              }
-            );
-          }
-        }
-      );
+                console.log(`[RFP ${id}] Progress: ${current}/${total} batches, ${questionsFound} questions extracted (${newQuestions.length} in this batch)`);
+
+                await addParsingLog(
+                  id,
+                  'progress',
+                  'extracting',
+                  `Batch ${current}/${total} traité`,
+                  {
+                    batchNumber: current,
+                    totalBatches: total,
+                    questionsFound: questionsFound,
+                    questions: newQuestions,
+                  }
+                );
+              },
+            }
+          )
+        : await extractQuestionsInBatches(parsedDoc.text, {
+            onProgress: async (current, total, questionsFound, newQuestions) => {
+              await db
+                .update(rfps)
+                .set({
+                  parsingProgressCurrent: current,
+                  parsingProgressTotal: total,
+                  questionsExtracted: questionsFound,
+                  updatedAt: new Date(),
+                })
+                .where(eq(rfps.id, id));
+
+              console.log(`[RFP ${id}] Progress: ${current}/${total} batches, ${questionsFound} questions extracted (${newQuestions.length} in this batch)`);
+
+              await addParsingLog(
+                id,
+                'progress',
+                'extracting',
+                `Batch ${current}/${total} traité`,
+                {
+                  batchNumber: current,
+                  totalBatches: total,
+                  questionsFound: questionsFound,
+                  questions: newQuestions,
+                }
+              );
+            },
+          });
 
       const validQuestions = validateQuestions(extractedQuestions);
       console.log(`[RFP ${id}] Extracted ${validQuestions.length} questions`);
@@ -263,4 +320,109 @@ export async function POST(
       { status: 500 }
     );
   }
+}
+
+/**
+ * Extract questions using Configurable Prompt System
+ * Reproduces the batching logic from extractQuestionsInBatches but uses PromptService
+ */
+async function extractQuestionsWithPromptService(
+  companyId: string,
+  text: string,
+  options?: {
+    onProgress?: ProgressCallback;
+  }
+): Promise<ExtractedQuestion[]> {
+  console.log(`[Prompt Service] Extracting questions for company ${companyId}...`);
+
+  // Same batching logic as original function
+  const MAX_SINGLE_REQUEST = 100000; // ~25k tokens
+  const LARGE_BATCH_SIZE = 30000; // ~7.5k tokens per batch
+
+  let batches: string[] = [];
+
+  if (text.length < MAX_SINGLE_REQUEST) {
+    console.log(`Document size: ${text.length} chars - processing in single request`);
+    batches = [text];
+  } else {
+    console.log(`Document size: ${text.length} chars - splitting into 30k batches`);
+    let currentIndex = 0;
+    while (currentIndex < text.length) {
+      batches.push(text.substring(currentIndex, currentIndex + LARGE_BATCH_SIZE));
+      currentIndex += LARGE_BATCH_SIZE;
+    }
+  }
+
+  console.log(
+    `Processing ${batches.length} batch${batches.length > 1 ? 'es' : ''} for question extraction`
+  );
+
+  // Get the prompt template from PromptService
+  const promptService = getPromptService();
+  const template = await promptService.getPrompt(companyId, PROMPT_KEYS.QUESTION_EXTRACT);
+
+  console.log(`[Prompt Service] Using prompt: ${template.name} (v${template.version})`);
+
+  const allQuestions: ExtractedQuestion[] = [];
+
+  // Process each batch
+  for (let i = 0; i < batches.length; i++) {
+    const batchText = batches[i];
+
+    console.log(`[Prompt Service] Processing batch ${i + 1}/${batches.length} (${batchText.length} chars)`);
+
+    // Render the prompt with variables
+    const variables = {
+      text: batchText,
+      maxQuestions: undefined, // No limit
+      sectionTitle: undefined,
+    };
+
+    const rendered = promptService.renderPromptWithVariables(template, variables);
+
+    // Call OpenAI (GPT-5) with the rendered prompt
+    const openai = getOpenAI();
+
+    try {
+      const response = await openai.chat.completions.create({
+        model: 'gpt-5',
+        messages: [
+          ...(rendered.system ? [{ role: 'system' as const, content: rendered.system }] : []),
+          { role: 'user' as const, content: rendered.user },
+        ],
+        modalities: ['text'],
+        reasoning: GPT5_CONFIGS.extraction.reasoning,
+        text: GPT5_CONFIGS.extraction.text,
+      });
+
+      const content = response.choices[0]?.message?.content;
+      if (!content) {
+        throw new Error('No content in GPT-5 response');
+      }
+
+      // Parse JSON response
+      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) {
+        console.warn(`[Prompt Service] No JSON array found in batch ${i + 1}, skipping`);
+        continue;
+      }
+
+      const batchQuestions = JSON.parse(jsonMatch[0]) as ExtractedQuestion[];
+      allQuestions.push(...batchQuestions);
+
+      console.log(`[Prompt Service] Batch ${i + 1} extracted ${batchQuestions.length} questions`);
+
+      // Call progress callback
+      if (options?.onProgress) {
+        await options.onProgress(i + 1, batches.length, allQuestions.length, batchQuestions);
+      }
+    } catch (error) {
+      console.error(`[Prompt Service] Error processing batch ${i + 1}:`, error);
+      // Continue to next batch instead of throwing
+    }
+  }
+
+  console.log(`[Prompt Service] Total extracted: ${allQuestions.length} questions`);
+
+  return allQuestions;
 }

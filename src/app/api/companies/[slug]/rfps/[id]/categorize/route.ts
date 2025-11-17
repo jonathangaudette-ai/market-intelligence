@@ -5,6 +5,25 @@ import { eq, sql } from 'drizzle-orm';
 import { requireRFPAuthWithSlug } from '@/lib/rfp/auth';
 import { categorizeQuestionsBatch } from '@/lib/rfp/ai/claude';
 import { generateIntelligenceBrief } from '@/lib/rfp/intelligence-brief';
+import { getPromptService } from '@/lib/prompts/service';
+import { PROMPT_KEYS } from '@/types/prompts';
+import { shouldUseDatabase } from '@/lib/prompts/feature-flags';
+import Anthropic from '@anthropic-ai/sdk';
+
+// Lazy initialization
+let _anthropic: Anthropic | null = null;
+
+function getAnthropic() {
+  if (!_anthropic) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error('ANTHROPIC_API_KEY is not set');
+    }
+    _anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    });
+  }
+  return _anthropic;
+}
 
 // Increase timeout to 13 minutes for categorization (separate from extraction)
 export const maxDuration = 800;
@@ -116,13 +135,25 @@ export async function POST(
         try {
           console.log(`[RFP ${id}] Categorizing batch ${Math.floor(batchStart / BATCH_SIZE) + 1}/${Math.ceil(extractedQuestions.length / BATCH_SIZE)} (questions ${batchStart + 1}-${batchEnd})`);
 
+          // Use configurable prompt system if enabled
+          const useConfigurablePrompts = shouldUseDatabase(company.id, PROMPT_KEYS.QUESTION_CATEGORIZE_BATCH);
+          console.log(`[RFP ${id}] Using configurable prompts for categorization: ${useConfigurablePrompts}`);
+
           // Categorize entire batch with ONE API call
-          const categorizations = await categorizeQuestionsBatch(
-            batch.map((q: any, idx: number) => ({
-              questionText: q.questionText,
-              index: idx
-            }))
-          );
+          const categorizations = useConfigurablePrompts
+            ? await categorizeWithPromptService(
+                company.id,
+                batch.map((q: any, idx: number) => ({
+                  questionText: q.questionText,
+                  index: idx,
+                }))
+              )
+            : await categorizeQuestionsBatch(
+                batch.map((q: any, idx: number) => ({
+                  questionText: q.questionText,
+                  index: idx,
+                }))
+              );
 
           // Save all questions in this batch
           for (let i = 0; i < batch.length; i++) {
@@ -297,4 +328,75 @@ export async function POST(
       { status: 500 }
     );
   }
+}
+
+/**
+ * Categorize questions using Configurable Prompt System
+ * Uses PromptService to retrieve company-specific or default prompts from database
+ */
+async function categorizeWithPromptService(
+  companyId: string,
+  questions: Array<{ questionText: string; index: number }>
+): Promise<
+  Array<{
+    category: string;
+    tags: string[];
+    difficulty: 'easy' | 'medium' | 'hard';
+    estimatedMinutes: number;
+  }>
+> {
+  console.log(`[Prompt Service] Categorizing ${questions.length} questions for company ${companyId}...`);
+
+  // Get the prompt template from PromptService
+  const promptService = getPromptService();
+  const template = await promptService.getPrompt(companyId, PROMPT_KEYS.QUESTION_CATEGORIZE_BATCH);
+
+  console.log(`[Prompt Service] Using prompt: ${template.name} (v${template.version})`);
+
+  // Prepare variables for template rendering
+  const variables = {
+    questions: questions.map((q) => ({
+      questionText: q.questionText,
+      index: q.index,
+    })),
+  };
+
+  // Render the prompt with variables
+  const rendered = promptService.renderPromptWithVariables(template, variables);
+
+  console.log(
+    `[Prompt Service] Rendered prompt (system: ${rendered.system?.length || 0} chars, user: ${rendered.user.length} chars)`
+  );
+
+  // Call Claude with the rendered prompt
+  const anthropic = getAnthropic();
+  const response = await anthropic.messages.create({
+    model: rendered.model || 'claude-sonnet-4-5-20250929',
+    max_tokens: rendered.maxTokens || 4000,
+    temperature: rendered.temperature !== null ? rendered.temperature : 0.3,
+    system: rendered.system,
+    messages: [
+      {
+        role: 'user',
+        content: rendered.user,
+      },
+    ],
+  });
+
+  const textContent = response.content.find((block) => block.type === 'text');
+  if (!textContent || textContent.type !== 'text') {
+    throw new Error('No text content in Claude response');
+  }
+
+  // Parse JSON response
+  const jsonMatch = textContent.text.match(/\[[\s\S]*\]/);
+  if (!jsonMatch) {
+    throw new Error('No JSON array found in Claude response');
+  }
+
+  const categorizations = JSON.parse(jsonMatch[0]);
+
+  console.log(`[Prompt Service] Successfully categorized ${categorizations.length} questions`);
+
+  return categorizations;
 }

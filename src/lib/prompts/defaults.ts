@@ -537,6 +537,391 @@ Return JSON with matched pairs and confidence scores.`,
 });
 
 /**
+ * RAG Chat Synthesis
+ * Priority: P0 - Critical
+ * Purpose: Synthesize RAG results into conversational chat responses
+ */
+const RAG_CHAT_SYNTHESIS_VARIABLES: PromptVariable[] = [
+  {
+    key: 'query',
+    description: 'User query to answer',
+    required: true,
+    type: 'string',
+    example: 'What is our pricing model?',
+  },
+  {
+    key: 'context',
+    description: 'Retrieved context from knowledge base',
+    required: true,
+    type: 'string',
+  },
+  {
+    key: 'dateContext',
+    description: 'Current date context for time-sensitive queries',
+    required: false,
+    type: 'string',
+  },
+  {
+    key: 'conversationHistory',
+    description: 'Previous conversation turns',
+    required: false,
+    type: 'array',
+  },
+];
+
+const RAG_CHAT_SYNTHESIS_PROMPT = createDefaultPrompt({
+  promptKey: PROMPT_KEYS.RAG_CHAT_SYNTHESIS,
+  category: PROMPT_CATEGORIES.CHAT,
+  name: 'RAG Chat Synthesis',
+  description: 'Synthesize retrieved context into conversational chat responses',
+  systemPrompt: `You are a helpful AI assistant that answers questions about a company using their internal knowledge base.
+
+Your responses should be:
+- Accurate and grounded in the provided context
+- Conversational and natural
+- Concise but complete
+- Helpful and actionable
+
+If the context doesn't contain the answer, say so politely. Never make up information.`,
+  userPromptTemplate: `{{#if conversationHistory}}Previous conversation:
+{{#each conversationHistory}}{{role}}: {{content}}
+
+{{/each}}{{/if}}User Question: {{query}}
+
+{{#if dateContext}}Today's Date: {{dateContext}}{{/if}}
+
+Relevant Context from Knowledge Base:
+{{context}}
+
+Please provide a helpful, accurate response based on the context above.`,
+  modelId: 'claude-sonnet-4-5-20250929',
+  temperature: 0.7,
+  maxTokens: 2000,
+  variables: RAG_CHAT_SYNTHESIS_VARIABLES,
+});
+
+/**
+ * Document Analysis Support
+ * Priority: P1 - High
+ * Purpose: Analyze uploaded support documents and extract key information
+ */
+const DOCUMENT_ANALYSIS_SUPPORT_VARIABLES: PromptVariable[] = [
+  {
+    key: 'filename',
+    description: 'Name of the uploaded file',
+    required: true,
+    type: 'string',
+    example: 'case-study-acme.pdf',
+  },
+  {
+    key: 'extractedText',
+    description: 'Text extracted from the document',
+    required: true,
+    type: 'string',
+  },
+];
+
+const DOCUMENT_ANALYSIS_SUPPORT_PROMPT = createDefaultPrompt({
+  promptKey: PROMPT_KEYS.DOCUMENT_ANALYSIS_SUPPORT,
+  category: PROMPT_CATEGORIES.DOCUMENT_ANALYSIS,
+  name: 'Document Analysis - Support Documents',
+  description: 'Analyze uploaded support documents (case studies, whitepapers, etc.) and extract structured information',
+  systemPrompt: `You are an expert at analyzing business documents and extracting structured information.
+
+Analyze the document and extract:
+1. Document type (case study, whitepaper, proposal, technical doc, etc.)
+2. Key topics and themes
+3. Main insights or findings
+4. Relevant entities (companies, products, people, technologies)
+5. Actionable takeaways
+
+Return your analysis as structured JSON.`,
+  userPromptTemplate: `Analyze this document: "{{filename}}"
+
+Content ({{extractedText.length}} characters):
+{{extractedText}}
+
+Provide a structured analysis in JSON format:
+{
+  "documentType": "case_study | whitepaper | proposal | technical_doc | other",
+  "title": "extracted or inferred title",
+  "summary": "2-3 sentence summary",
+  "topics": ["topic1", "topic2", ...],
+  "entities": {
+    "companies": ["..."],
+    "products": ["..."],
+    "technologies": ["..."]
+  },
+  "keyInsights": ["insight1", "insight2", ...],
+  "relevantFor": ["rfp_questions", "sales_enablement", "competitive_intel", ...]
+}`,
+  modelId: 'claude-haiku-4-5-20251001',
+  temperature: 0.5,
+  maxTokens: 3000,
+  variables: DOCUMENT_ANALYSIS_SUPPORT_VARIABLES,
+});
+
+/**
+ * Content Type Detection
+ * Priority: P1 - High
+ * Purpose: Detect what type of content a question is asking for
+ */
+const CONTENT_TYPE_DETECT_VARIABLES: PromptVariable[] = [
+  {
+    key: 'questionText',
+    description: 'The RFP question text',
+    required: true,
+    type: 'string',
+    example: 'Please provide 2-3 customer case studies',
+  },
+];
+
+const CONTENT_TYPE_DETECT_PROMPT = createDefaultPrompt({
+  promptKey: PROMPT_KEYS.CONTENT_TYPE_DETECT,
+  category: PROMPT_CATEGORIES.QUESTION_ANALYSIS,
+  name: 'Content Type Detection',
+  description: 'Detect what type of content a question is requesting (case study, pricing, technical details, etc.)',
+  systemPrompt: `You are an expert at analyzing RFP questions and identifying what type of content they're requesting.
+
+Content types:
+- case_study: Customer success stories, testimonials
+- pricing: Pricing models, cost breakdowns
+- technical: Technical architecture, specifications
+- methodology: Process, approach, frameworks
+- team: Team structure, bios, qualifications
+- timeline: Project schedules, delivery timelines
+- compliance: Certifications, security, legal
+- references: Customer references, contact information
+
+Return JSON with content type and confidence.`,
+  userPromptTemplate: `What type of content is this question requesting?
+
+Question: {{questionText}}
+
+Return JSON:
+{
+  "contentType": "case_study | pricing | technical | methodology | team | timeline | compliance | references | other",
+  "confidence": 0.0-1.0,
+  "reasoning": "brief explanation"
+}`,
+  modelId: 'claude-haiku-4-5-20251001',
+  temperature: 0.3,
+  maxTokens: 300,
+  variables: CONTENT_TYPE_DETECT_VARIABLES,
+});
+
+/**
+ * Intelligence Brief
+ * Priority: P2 - Medium
+ * Purpose: Generate executive-level intelligence briefing for an RFP
+ */
+const INTELLIGENCE_BRIEF_VARIABLES: PromptVariable[] = [
+  {
+    key: 'title',
+    description: 'RFP title',
+    required: true,
+    type: 'string',
+    example: 'Digital Transformation Consulting RFP',
+  },
+  {
+    key: 'clientName',
+    description: 'Client organization name',
+    required: false,
+    type: 'string',
+  },
+  {
+    key: 'clientIndustry',
+    description: 'Client industry',
+    required: false,
+    type: 'string',
+  },
+  {
+    key: 'questions',
+    description: 'Array of RFP questions with categories',
+    required: true,
+    type: 'array',
+  },
+  {
+    key: 'deadline',
+    description: 'Submission deadline',
+    required: false,
+    type: 'string',
+  },
+  {
+    key: 'dealValue',
+    description: 'Estimated deal value',
+    required: false,
+    type: 'string',
+  },
+];
+
+const INTELLIGENCE_BRIEF_PROMPT = createDefaultPrompt({
+  promptKey: PROMPT_KEYS.INTELLIGENCE_BRIEF,
+  category: PROMPT_CATEGORIES.INTELLIGENCE,
+  name: 'Intelligence Brief - RFP Overview',
+  description: 'Generate executive-level intelligence briefing summarizing an RFP opportunity',
+  systemPrompt: `You are an expert business analyst creating executive intelligence briefings for RFP opportunities.
+
+Your brief should provide:
+1. Executive summary (2-3 paragraphs)
+2. Opportunity assessment
+3. Question breakdown by category
+4. Strategic considerations
+5. Risk factors and mitigation
+6. Recommended approach
+
+Keep it concise and actionable for executives.`,
+  userPromptTemplate: `Generate an intelligence brief for this RFP opportunity:
+
+**RFP Title:** {{title}}
+{{#if clientName}}**Client:** {{clientName}}{{/if}}
+{{#if clientIndustry}}**Industry:** {{clientIndustry}}{{/if}}
+{{#if deadline}}**Deadline:** {{deadline}}{{/if}}
+{{#if dealValue}}**Estimated Value:** {{dealValue}}{{/if}}
+
+**Questions ({{questions.length}} total):**
+{{#each questions}}{{@index}}. [{{category}}] {{questionText}}
+{{/each}}
+
+Provide a strategic intelligence brief covering:
+- Executive Summary
+- Opportunity Assessment (fit, win probability)
+- Question Breakdown (complexity, gaps, strengths)
+- Strategic Recommendations
+- Risk Factors`,
+  modelId: 'claude-sonnet-4-5-20250929',
+  temperature: 0.6,
+  maxTokens: 3000,
+  variables: INTELLIGENCE_BRIEF_VARIABLES,
+});
+
+/**
+ * Document Preprocessing
+ * Priority: P1 - High
+ * Purpose: Clean and normalize raw document text before processing
+ */
+const DOCUMENT_PREPROCESS_VARIABLES: PromptVariable[] = [
+  {
+    key: 'rawText',
+    description: 'Raw extracted text from document',
+    required: true,
+    type: 'string',
+  },
+  {
+    key: 'fileName',
+    description: 'Original file name',
+    required: true,
+    type: 'string',
+  },
+  {
+    key: 'fileType',
+    description: 'File type (pdf, docx, etc.)',
+    required: false,
+    type: 'string',
+  },
+  {
+    key: 'dateContext',
+    description: 'Document date context',
+    required: false,
+    type: 'string',
+  },
+];
+
+const DOCUMENT_PREPROCESS_PROMPT = createDefaultPrompt({
+  promptKey: PROMPT_KEYS.DOCUMENT_PREPROCESS,
+  category: PROMPT_CATEGORIES.DOCUMENT_ANALYSIS,
+  name: 'Document Preprocessing',
+  description: 'Clean and normalize raw document text, removing artifacts and formatting issues',
+  systemPrompt: `You are a document preprocessing expert. Your task is to clean and normalize raw text extracted from documents.
+
+Tasks:
+1. Remove OCR artifacts and formatting noise
+2. Fix broken words and sentences
+3. Preserve document structure (sections, lists, tables)
+4. Remove excessive whitespace
+5. Standardize formatting
+6. Preserve important metadata
+
+Return the cleaned text ready for further processing.`,
+  userPromptTemplate: `Clean and normalize this document text.
+
+File: {{fileName}}{{#if fileType}} ({{fileType}}){{/if}}
+{{#if dateContext}}Date: {{dateContext}}{{/if}}
+
+Raw Text ({{rawText.length}} characters):
+{{rawText}}
+
+Return cleaned, well-structured text preserving the original meaning and structure but removing artifacts and noise.`,
+  modelId: 'claude-haiku-4-5-20251001',
+  temperature: 0.3,
+  maxTokens: 8000,
+  variables: DOCUMENT_PREPROCESS_VARIABLES,
+});
+
+/**
+ * RFP Response Legacy
+ * Priority: P3 - Low (deprecated, kept for backward compatibility)
+ * Purpose: Legacy RFP response generation (pre-RAG)
+ */
+const RFP_RESPONSE_LEGACY_VARIABLES: PromptVariable[] = [
+  {
+    key: 'question',
+    description: 'The RFP question to answer',
+    required: true,
+    type: 'string',
+  },
+  {
+    key: 'context',
+    description: 'Context information',
+    required: true,
+    type: 'string',
+  },
+  {
+    key: 'clientName',
+    description: 'Client name',
+    required: false,
+    type: 'string',
+  },
+  {
+    key: 'clientIndustry',
+    description: 'Client industry',
+    required: false,
+    type: 'string',
+  },
+  {
+    key: 'additionalInstructions',
+    description: 'Additional user instructions',
+    required: false,
+    type: 'string',
+  },
+];
+
+const RFP_RESPONSE_LEGACY_PROMPT = createDefaultPrompt({
+  promptKey: PROMPT_KEYS.RFP_RESPONSE_LEGACY,
+  category: PROMPT_CATEGORIES.RFP_GENERATION,
+  name: 'RFP Response Generation (Legacy)',
+  description: '[DEPRECATED] Legacy RFP response generation - use RFP_RESPONSE_MAIN instead',
+  systemPrompt: `You are an RFP response writer. Generate professional responses to RFP questions.
+
+Note: This is a legacy prompt. New implementations should use RFP_RESPONSE_MAIN.`,
+  userPromptTemplate: `Question: {{question}}
+
+{{#if clientName}}Client: {{clientName}}{{/if}}
+{{#if clientIndustry}}Industry: {{clientIndustry}}{{/if}}
+
+Context:
+{{context}}
+
+{{#if additionalInstructions}}Instructions: {{additionalInstructions}}{{/if}}
+
+Provide a professional response.`,
+  modelId: 'claude-sonnet-4-5-20250929',
+  temperature: 0.7,
+  maxTokens: 3000,
+  variables: RFP_RESPONSE_LEGACY_VARIABLES,
+});
+
+/**
  * All default prompts
  *
  * Maps prompt key to default template
@@ -545,16 +930,24 @@ export const DEFAULT_PROMPTS = new Map<string, Omit<PromptTemplate, 'id' | 'comp
   // P0 - Critical
   [PROMPT_KEYS.RFP_RESPONSE_MAIN, RFP_RESPONSE_MAIN_PROMPT],
   [PROMPT_KEYS.QUESTION_EXTRACT, QUESTION_EXTRACTION_PROMPT],
+  [PROMPT_KEYS.RAG_CHAT_SYNTHESIS, RAG_CHAT_SYNTHESIS_PROMPT],
 
   // P1 - High
   [PROMPT_KEYS.QUESTION_CATEGORIZE_SINGLE, QUESTION_CATEGORIZATION_PROMPT],
   [PROMPT_KEYS.QUESTION_CATEGORIZE_BATCH, QUESTION_CATEGORIZATION_BATCH_PROMPT],
   [PROMPT_KEYS.HISTORICAL_MATCH_QA, HISTORICAL_RFP_MATCHING_PROMPT],
   [PROMPT_KEYS.AI_ENRICHMENT, AI_ENRICHMENT_PROMPT],
+  [PROMPT_KEYS.DOCUMENT_ANALYSIS_SUPPORT, DOCUMENT_ANALYSIS_SUPPORT_PROMPT],
+  [PROMPT_KEYS.CONTENT_TYPE_DETECT, CONTENT_TYPE_DETECT_PROMPT],
+  [PROMPT_KEYS.DOCUMENT_PREPROCESS, DOCUMENT_PREPROCESS_PROMPT],
 
   // P2 - Medium
   [PROMPT_KEYS.COMPETITIVE_POSITIONING, COMPETITIVE_POSITIONING_PROMPT],
   [PROMPT_KEYS.HISTORICAL_PARSE_RESPONSE, HISTORICAL_RFP_RESPONSE_PARSING_PROMPT],
+  [PROMPT_KEYS.INTELLIGENCE_BRIEF, INTELLIGENCE_BRIEF_PROMPT],
+
+  // P3 - Low (deprecated)
+  [PROMPT_KEYS.RFP_RESPONSE_LEGACY, RFP_RESPONSE_LEGACY_PROMPT],
 ]);
 
 /**

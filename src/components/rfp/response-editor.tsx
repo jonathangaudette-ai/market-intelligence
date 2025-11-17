@@ -98,6 +98,22 @@ export function ResponseEditor({
   const wordCount = editor?.storage.characterCount.words() || 0;
   const isOverLimit = wordLimit ? wordCount > wordLimit : false;
 
+  // Update editor content when initialContent changes
+  useEffect(() => {
+    if (!editor) return;
+
+    // Only update if we have actual content to load
+    if (initialContent) {
+      const currentContent = editor.getHTML();
+      const isCurrentlyEmpty = !currentContent || currentContent === '<p></p>' || currentContent.trim() === '';
+
+      // Update if current content is empty OR if content is different
+      if (isCurrentlyEmpty || currentContent !== initialContent) {
+        editor.commands.setContent(initialContent);
+      }
+    }
+  }, [editor, initialContent]);
+
   // Auto-save functionality
   useEffect(() => {
     if (!editor || !autoSave) return;

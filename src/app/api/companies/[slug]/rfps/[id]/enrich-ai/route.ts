@@ -9,7 +9,27 @@ import { DualQueryRetrievalEngine } from '@/lib/rag/dual-query-engine';
 import {
   generateAIEnrichment,
   type EnrichmentContext,
+  type AIEnrichmentResult,
 } from '@/lib/rfp/services/ai-enrichment.service';
+import { getPromptService } from '@/lib/prompts/service';
+import { PROMPT_KEYS } from '@/types/prompts';
+import { shouldUseDatabase } from '@/lib/prompts/feature-flags';
+import Anthropic from '@anthropic-ai/sdk';
+
+// Lazy initialization
+let _anthropic: Anthropic | null = null;
+
+function getAnthropic() {
+  if (!_anthropic) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error('ANTHROPIC_API_KEY is not set');
+    }
+    _anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    });
+  }
+  return _anthropic;
+}
 
 /**
  * POST /api/companies/[slug]/rfps/[id]/enrich-ai
@@ -128,12 +148,17 @@ export async function POST(
       knowledgeBaseChunks: knowledgeBaseChunks.length > 0 ? knowledgeBaseChunks : undefined,
     };
 
-    // Step 3: Generate AI enrichment using Claude Haiku 4.5
-    const enrichmentResult = await generateAIEnrichment(enrichmentContext, {
-      useCache: true,
-      retryWithSonnet: true,
-      model: 'haiku', // Start with Haiku (fast and cheap)
-    });
+    // Step 3: Generate AI enrichment (with configurable prompt system)
+    const useConfigurablePrompts = shouldUseDatabase(rfp.companyId, PROMPT_KEYS.AI_ENRICHMENT);
+    console.log(`[AI Enrichment] Using configurable prompts: ${useConfigurablePrompts}`);
+
+    const enrichmentResult = useConfigurablePrompts
+      ? await generateEnrichmentWithPromptService(rfp.companyId, enrichmentContext)
+      : await generateAIEnrichment(enrichmentContext, {
+          useCache: true,
+          retryWithSonnet: true,
+          model: 'haiku', // Start with Haiku (fast and cheap)
+        });
 
     console.log(
       `[AI Enrichment] Generated enrichment with confidence: ${enrichmentResult.confidence} using ${enrichmentResult.model}`
@@ -184,4 +209,78 @@ export async function POST(
       { status: 500 }
     );
   }
+}
+
+/**
+ * Generate AI enrichment using Configurable Prompt System
+ * Uses PromptService to retrieve company-specific or default prompts from database
+ */
+async function generateEnrichmentWithPromptService(
+  companyId: string,
+  context: EnrichmentContext
+): Promise<AIEnrichmentResult> {
+  console.log(`[Prompt Service] Retrieving AI_ENRICHMENT prompt for company ${companyId}...`);
+
+  // Get the prompt template from PromptService
+  const promptService = getPromptService();
+  const template = await promptService.getPrompt(companyId, PROMPT_KEYS.AI_ENRICHMENT);
+
+  console.log(`[Prompt Service] Using prompt: ${template.name} (v${template.version})`);
+
+  // Prepare variables for template rendering
+  const variables = {
+    clientName: context.clientName,
+    clientIndustry: context.clientIndustry,
+    rfpText: context.rfpText,
+    linkedinData: context.linkedinData,
+    existingEnrichment: context.existingEnrichment,
+    knowledgeBaseChunks: context.knowledgeBaseChunks,
+  };
+
+  // Render the prompt with variables
+  const rendered = promptService.renderPromptWithVariables(template, variables);
+
+  console.log(
+    `[Prompt Service] Rendered prompt (system: ${rendered.system?.length || 0} chars, user: ${rendered.user.length} chars)`
+  );
+
+  // Call Claude with the rendered prompt
+  const anthropic = getAnthropic();
+  const response = await anthropic.messages.create({
+    model: rendered.model || 'claude-haiku-4-5-20251001',
+    max_tokens: rendered.maxTokens || 4096,
+    temperature: rendered.temperature !== null ? rendered.temperature : 0.7,
+    system: rendered.system,
+    messages: [
+      {
+        role: 'user',
+        content: rendered.user,
+      },
+    ],
+  });
+
+  const textContent = response.content.find((block) => block.type === 'text');
+  if (!textContent || textContent.type !== 'text') {
+    throw new Error('No text content in Claude response');
+  }
+
+  // Parse JSON response
+  const jsonMatch = textContent.text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error('No JSON found in Claude response');
+  }
+
+  const enrichment = JSON.parse(jsonMatch[0]);
+
+  console.log(`[Prompt Service] Enrichment generated successfully (confidence: ${enrichment.confidence})`);
+
+  return {
+    clientBackground: enrichment.clientBackground,
+    keyNeeds: enrichment.keyNeeds,
+    constraints: enrichment.constraints,
+    relationships: enrichment.relationships,
+    customNotes: enrichment.customNotes,
+    confidence: enrichment.confidence || 0.8,
+    model: rendered.model || 'claude-haiku-4-5-20251001',
+  };
 }

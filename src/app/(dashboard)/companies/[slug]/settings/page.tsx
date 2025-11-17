@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,14 +23,17 @@ import {
   DollarSign,
   Star,
   Loader2,
+  Database,
+  FileCode,
+  ArrowRight,
 } from "lucide-react";
 import { AI_MODELS, AI_MODEL_METADATA, type AIModelId } from "@/types/company";
+import Link from "next/link";
 
 type Tab = "general" | "team" | "integrations" | "notifications" | "security" | "prompts";
 
 export default function SettingsPage() {
   const params = useParams();
-  const router = useRouter();
   const slug = params.slug as string;
 
   const [activeTab, setActiveTab] = useState<Tab>("general");
@@ -41,6 +44,10 @@ export default function SettingsPage() {
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [settingsError, setSettingsError] = useState<string | null>(null);
   const [settingsSuccess, setSettingsSuccess] = useState(false);
+
+  // Prompts state
+  const [prompts, setPrompts] = useState<any[]>([]);
+  const [promptsLoading, setPromptsLoading] = useState(false);
 
   // Load current settings
   useEffect(() => {
@@ -65,6 +72,28 @@ export default function SettingsPage() {
       loadSettings();
     }
   }, [slug]);
+
+  // Load prompts when prompts tab is active
+  useEffect(() => {
+    async function loadPrompts() {
+      if (activeTab !== 'prompts') return;
+
+      try {
+        setPromptsLoading(true);
+        const response = await fetch(`/api/companies/${slug}/prompts`);
+        if (response.ok) {
+          const data = await response.json();
+          setPrompts(data.prompts || []);
+        }
+      } catch (error) {
+        console.error('Failed to load prompts:', error);
+      } finally {
+        setPromptsLoading(false);
+      }
+    }
+
+    loadPrompts();
+  }, [activeTab, slug]);
 
   // Save AI model settings
   const handleSaveAIModel = async () => {
@@ -189,13 +218,7 @@ export default function SettingsPage() {
                     return (
                       <button
                         key={tab.id}
-                        onClick={() => {
-                          if (tab.id === "prompts") {
-                            router.push(`/companies/${slug}/settings/prompts`);
-                          } else {
-                            setActiveTab(tab.id);
-                          }
-                        }}
+                        onClick={() => setActiveTab(tab.id)}
                         className={`
                           w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           ${
@@ -650,6 +673,122 @@ export default function SettingsPage() {
                     </div>
                   </CardContent>
                 </Card>
+              </>
+            )}
+
+            {/* Prompts IA */}
+            {activeTab === "prompts" && (
+              <>
+                {promptsLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-teal-600" />
+                  </div>
+                ) : (
+                  <>
+                    {/* Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardDescription>Total Prompts</CardDescription>
+                          <CardTitle className="text-3xl">{prompts.length}</CardTitle>
+                        </CardHeader>
+                      </Card>
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardDescription>Base de données</CardDescription>
+                          <CardTitle className="text-3xl text-green-600">
+                            {prompts.filter((p) => p.usesDatabase).length}
+                          </CardTitle>
+                        </CardHeader>
+                      </Card>
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardDescription>Par défaut</CardDescription>
+                          <CardTitle className="text-3xl text-blue-600">
+                            {prompts.filter((p) => !p.usesDatabase).length}
+                          </CardTitle>
+                        </CardHeader>
+                      </Card>
+                    </div>
+
+                    {/* Prompts List */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Prompts IA configurables</CardTitle>
+                        <CardDescription>
+                          Personnalisez les prompts utilisés pour la génération de réponses RFP et l'analyse de documents
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {prompts.map((prompt) => (
+                            <div
+                              key={prompt.id}
+                              className="p-4 border border-gray-200 rounded-lg hover:border-teal-300 transition-colors"
+                            >
+                              <div className="space-y-3">
+                                <div>
+                                  <h4 className="text-sm font-semibold text-gray-900">
+                                    {prompt.name}
+                                  </h4>
+                                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                                    {prompt.description || 'Aucune description'}
+                                  </p>
+                                </div>
+
+                                <div className="flex gap-2">
+                                  <Badge
+                                    variant="outline"
+                                    className={
+                                      prompt.usesDatabase
+                                        ? 'bg-green-500/10 text-green-700 border-green-300'
+                                        : 'bg-blue-500/10 text-blue-700 border-blue-300'
+                                    }
+                                  >
+                                    {prompt.usesDatabase ? (
+                                      <>
+                                        <Database className="w-3 h-3 mr-1" />
+                                        Base de données
+                                      </>
+                                    ) : (
+                                      <>
+                                        <FileCode className="w-3 h-3 mr-1" />
+                                        Défaut
+                                      </>
+                                    )}
+                                  </Badge>
+                                  <Badge variant="outline" className="text-xs">
+                                    v{prompt.version}
+                                  </Badge>
+                                </div>
+
+                                {prompt.modelId && (
+                                  <div className="text-xs text-gray-600">
+                                    <span className="font-medium">Modèle:</span>{' '}
+                                    <code className="font-mono">{prompt.modelId}</code>
+                                  </div>
+                                )}
+
+                                <Link href={`/companies/${slug}/settings/prompts/${prompt.promptKey}`}>
+                                  <Button variant="outline" size="sm" className="w-full gap-2">
+                                    Modifier
+                                    <ArrowRight className="w-3 h-3" />
+                                  </Button>
+                                </Link>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {prompts.length === 0 && (
+                          <div className="text-center py-8 text-gray-500">
+                            <p className="text-sm">Aucun prompt configuré</p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </>
+                )}
               </>
             )}
           </div>

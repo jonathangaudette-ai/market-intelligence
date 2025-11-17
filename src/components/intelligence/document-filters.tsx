@@ -95,7 +95,14 @@ const FILTER_OPTIONS: FilterOption[] = [
   },
 ];
 
-const DEFAULT_FILTERS: DocumentFilterId[] = ["company_info", "knowledge_base"];
+const DEFAULT_FILTERS: DocumentFilterId[] = [
+  "company_info",
+  "knowledge_base",
+  "rfp_won",
+  "rfp_all",
+  "competitive",
+  "product",
+];
 
 interface DocumentFiltersProps {
   selectedFilters: DocumentFilterId[];

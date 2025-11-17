@@ -99,7 +99,11 @@ export default function IntelligencePage() {
   const [selectedFilters, setSelectedFilters] = useState<DocumentFilterId[]>([
     "company_info",
     "knowledge_base",
-  ]); // Default filters
+    "rfp_won",
+    "rfp_all",
+    "competitive",
+    "product",
+  ]); // All 6 categories selected by default
 
   // Load messages and conversationId from sessionStorage on mount
   useEffect(() => {
@@ -248,20 +252,13 @@ export default function IntelligencePage() {
     return "Autre";
   };
 
-  const quickPrompts = [
-    "Quelles sont les forces de nos principaux concurrents?",
-    "Résume les dernières nouvelles sur Competitor X",
-    "Compare nos prix avec ceux de Competitor Y",
-    "Quels sont les signaux d'embauche chez nos concurrents?",
-  ];
-
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Intelligence Concurrentielle</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Intelligence</h1>
             <p className="text-sm text-gray-600 mt-1">
               Posez vos questions stratégiques - Alimenté par Claude Sonnet 4.5
             </p>
@@ -388,26 +385,6 @@ export default function IntelligencePage() {
               )}
             </div>
           </ScrollArea>
-
-          {/* Quick Prompts */}
-          {messages.length === 1 && (
-            <div className="mb-4">
-              <p className="text-sm font-medium text-gray-700 mb-3">
-                Questions suggérées:
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {quickPrompts.map((prompt, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setInput(prompt)}
-                    className="text-left px-4 py-3 bg-white border border-gray-200 rounded-lg hover:border-teal-300 hover:bg-teal-50 transition-colors text-sm text-gray-700"
-                  >
-                    {prompt}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Input */}
           <Card className="border-2 border-teal-200">

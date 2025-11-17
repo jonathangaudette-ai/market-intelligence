@@ -372,21 +372,22 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
                     : 'Sélectionner tout'}
                 </span>
               </div>
-              {selectedQuestionIds.length > 0 && (
-                <div className="flex items-center gap-2">
-                  {selectedQuestionIds.length === MAX_BULK_SELECTION && (
-                    <Badge variant="secondary">Maximum ({MAX_BULK_SELECTION}/{MAX_BULK_SELECTION})</Badge>
-                  )}
-                  <Button
-                    onClick={() => setShowBulkGenerate(true)}
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <Sparkles className="h-4 w-4" />
-                    Générer ({selectedQuestionIds.length})
-                  </Button>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                {selectedQuestionIds.length === MAX_BULK_SELECTION && (
+                  <Badge variant="secondary">Maximum ({MAX_BULK_SELECTION}/{MAX_BULK_SELECTION})</Badge>
+                )}
+                <Button
+                  onClick={() => setShowBulkGenerate(true)}
+                  size="sm"
+                  className="gap-2"
+                  disabled={selectedQuestionIds.length === 0}
+                >
+                  <Sparkles className="h-4 w-4" />
+                  {selectedQuestionIds.length > 0
+                    ? `Générer (${selectedQuestionIds.length})`
+                    : 'Générer en bulk'}
+                </Button>
+              </div>
             </div>
           )}
 
@@ -555,14 +556,16 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
         onResponseSaved={handleResponseSaved}
       />
 
-      {/* Bulk Actions Bar */}
-      <BulkActionsBar
-        selectedQuestionIds={selectedQuestionIds}
-        rfpId={rfpId}
-        slug={slug}
-        onClearSelection={clearSelection}
-        onActionComplete={() => mutate()}
-      />
+      {/* Bulk Actions Bar - Hidden when bulk generator is active */}
+      {!showBulkGenerate && (
+        <BulkActionsBar
+          selectedQuestionIds={selectedQuestionIds}
+          rfpId={rfpId}
+          slug={slug}
+          onClearSelection={clearSelection}
+          onActionComplete={() => mutate()}
+        />
+      )}
     </div>
   );
 }

@@ -29,6 +29,11 @@ export function EnrichmentForm({ rfpId, slug, initialData }: EnrichmentFormProps
   const [linkedInSuccess, setLinkedInSuccess] = useState(false);
   const [linkedInError, setLinkedInError] = useState<string | null>(null);
 
+  // AI enrichment state
+  const [isEnrichingAI, setIsEnrichingAI] = useState(false);
+  const [aiSuccess, setAiSuccess] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     clientBackground: initialData?.clientBackground || '',
     keyNeeds: initialData?.keyNeeds || '',
@@ -110,6 +115,44 @@ export function EnrichmentForm({ rfpId, slug, initialData }: EnrichmentFormProps
     }
   };
 
+  const handleAIEnrich = async () => {
+    setIsEnrichingAI(true);
+    setAiError(null);
+    setAiSuccess(false);
+
+    try {
+      const response = await fetch(`/api/companies/${slug}/rfps/${rfpId}/enrich-ai`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || error.message || 'Failed to generate AI enrichment');
+      }
+
+      const data = await response.json();
+
+      // Update form data with AI-generated enrichment
+      if (data.enrichment) {
+        setFormData({
+          clientBackground: data.enrichment.clientBackground || '',
+          keyNeeds: data.enrichment.keyNeeds || '',
+          constraints: data.enrichment.constraints || '',
+          relationships: data.enrichment.relationships || '',
+          customNotes: data.enrichment.customNotes || '',
+        });
+      }
+
+      setAiSuccess(true);
+      setTimeout(() => setAiSuccess(false), 5000);
+    } catch (error) {
+      console.error('Failed to generate AI enrichment:', error);
+      setAiError(error instanceof Error ? error.message : 'Failed to generate enrichment');
+    } finally {
+      setIsEnrichingAI(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -124,26 +167,65 @@ export function EnrichmentForm({ rfpId, slug, initialData }: EnrichmentFormProps
             </CardDescription>
           </div>
 
-          {/* LinkedIn Enrich Button */}
-          <Button
-            onClick={handleLinkedInEnrich}
-            disabled={isEnrichingLinkedIn}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            {isEnrichingLinkedIn ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Enrichissement...
-              </>
-            ) : (
-              <>
-                <Linkedin className="h-4 w-4 text-blue-600" />
-                Enrichir avec LinkedIn
-              </>
-            )}
-          </Button>
+          {/* Enrichment Buttons */}
+          <div className="flex items-center gap-2">
+            {/* AI Enrich Button */}
+            <Button
+              onClick={handleAIEnrich}
+              disabled={isEnrichingAI}
+              variant="default"
+              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700"
+            >
+              {isEnrichingAI ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Analyse en cours...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" />
+                  Enrichir avec IA
+                </>
+              )}
+            </Button>
+
+            {/* LinkedIn Enrich Button */}
+            <Button
+              onClick={handleLinkedInEnrich}
+              disabled={isEnrichingLinkedIn}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              {isEnrichingLinkedIn ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Enrichissement...
+                </>
+              ) : (
+                <>
+                  <Linkedin className="h-4 w-4 text-blue-600" />
+                  Enrichir avec LinkedIn
+                </>
+              )}
+            </Button>
+          </div>
         </div>
+
+        {/* AI enrichment status messages */}
+        {aiSuccess && (
+          <div className="mt-3 bg-green-50 border border-green-200 rounded-md p-3">
+            <p className="text-sm text-green-700">
+              ✓ Enrichissement IA généré avec succès! Les champs ont été remplis automatiquement.
+            </p>
+          </div>
+        )}
+        {aiError && (
+          <div className="mt-3 bg-red-50 border border-red-200 rounded-md p-3">
+            <p className="text-sm text-red-700">
+              ❌ Erreur lors de l'enrichissement IA: {aiError}
+            </p>
+          </div>
+        )}
 
         {/* LinkedIn status messages */}
         {linkedInSuccess && (

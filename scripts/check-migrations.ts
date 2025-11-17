@@ -1,25 +1,26 @@
-import postgres from 'postgres';
-
-const sql = postgres(process.env.DATABASE_URL!);
+import { db } from '../src/db';
+import { sql } from 'drizzle-orm';
 
 async function checkMigrations() {
+  console.log('\n📋 Checking applied migrations in database:\n');
+
   try {
-    const migrations = await sql`
-      SELECT * FROM __drizzle_migrations
-      ORDER BY created_at
-    `;
+    const result = await db.execute(sql`
+      SELECT id, hash, created_at
+      FROM drizzle.__drizzle_migrations
+      ORDER BY created_at DESC
+      LIMIT 10
+    `);
 
     console.log('Applied migrations:');
-    migrations.forEach((m: any) => {
-      console.log(`- ${m.hash} (created: ${m.created_at})`);
-    });
-
-    await sql.end();
+    console.log('==================');
+    console.log(result);
+    console.log('\n');
   } catch (error) {
     console.error('Error checking migrations:', error);
-    await sql.end();
-    process.exit(1);
   }
+
+  process.exit(0);
 }
 
 checkMigrations();

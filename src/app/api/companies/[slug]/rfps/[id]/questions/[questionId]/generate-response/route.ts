@@ -10,6 +10,9 @@ import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { getAIModelOrDefault, type CompanySettings } from '@/types/company';
 import { DualQueryRetrievalEngine } from '@/lib/rag/dual-query-engine';
+import { getPromptService } from '@/lib/prompts/service';
+import { PROMPT_KEYS } from '@/types/prompts';
+import { shouldUseDatabase } from '@/lib/prompts/feature-flags';
 
 const GenerateRequestSchema = z.object({
   mode: z.enum(['standard', 'with_context', 'manual']).default('with_context'),
@@ -302,16 +305,33 @@ RFP CONTEXT:
       contextSources.push('manual');
     }
 
-    // Step 4: Generate response using Claude
+    // Step 4: Generate response using Claude (with configurable prompt system)
     console.log(`[Generate Response] Generating response with ${aiModel}...`);
-    const responseText = await generateResponseWithClaude(
-      question.questionText,
-      contextText,
-      question.wordLimit,
-      question.category || 'general',
-      mode,
-      aiModel
-    );
+
+    // Check if we should use the new configurable prompt system
+    const useConfigurablePrompts = shouldUseDatabase(rfp.companyId, PROMPT_KEYS.RFP_RESPONSE_MAIN);
+    console.log(`[Generate Response] Using configurable prompts: ${useConfigurablePrompts}`);
+
+    const responseText = useConfigurablePrompts
+      ? await generateResponseWithPromptService(
+          question.questionText,
+          contextText,
+          question.wordLimit,
+          question.category || 'general',
+          mode,
+          aiModel,
+          rfp.companyId,
+          rfp.clientName || undefined,
+          rfp.clientIndustry || undefined
+        )
+      : await generateResponseWithClaude(
+          question.questionText,
+          contextText,
+          question.wordLimit,
+          question.category || 'general',
+          mode,
+          aiModel
+        );
 
     console.log(`[Generate Response] Response generated (${responseText.length} chars)`);
 
@@ -429,7 +449,69 @@ async function generateEmbedding(text: string): Promise<number[]> {
  */
 
 /**
- * Generate response using Claude
+ * Generate response using Claude with Configurable Prompt System
+ * Uses PromptService to retrieve company-specific or default prompts from database
+ */
+async function generateResponseWithPromptService(
+  questionText: string,
+  contextText: string,
+  wordLimit: number | null,
+  category: string,
+  mode: 'standard' | 'with_context' | 'manual',
+  aiModel: string,
+  companyId: string,
+  clientName?: string,
+  clientIndustry?: string
+): Promise<string> {
+  console.log(`[Prompt Service] Retrieving prompt for company ${companyId}...`);
+
+  // Get the prompt template from PromptService
+  const promptService = getPromptService();
+  const template = await promptService.getPrompt(companyId, PROMPT_KEYS.RFP_RESPONSE_MAIN);
+
+  console.log(`[Prompt Service] Using prompt: ${template.name} (v${template.version})`);
+
+  // Prepare variables for template rendering
+  const variables = {
+    question: questionText,
+    context: contextText,
+    clientName: clientName || undefined,
+    clientIndustry: clientIndustry || undefined,
+    // We don't have additionalInstructions in this context, so leave it undefined
+  };
+
+  // Render the prompt with variables
+  const rendered = promptService.renderPromptWithVariables(template, variables);
+
+  console.log(`[Prompt Service] Rendered prompt (system: ${rendered.system?.length || 0} chars, user: ${rendered.user.length} chars)`);
+
+  // Call Claude with the rendered prompt
+  const response = await anthropic.messages.create({
+    model: rendered.model || aiModel,
+    max_tokens: rendered.maxTokens || (wordLimit ? wordLimit * 8 : 4000),
+    temperature: rendered.temperature !== null ? rendered.temperature : 0.3,
+    system: rendered.system,
+    messages: [
+      {
+        role: 'user',
+        content: rendered.user,
+      },
+    ],
+  });
+
+  const textContent = response.content.find(block => block.type === 'text');
+  if (!textContent || textContent.type !== 'text') {
+    throw new Error('No text content in Claude response');
+  }
+
+  console.log(`[Prompt Service] Response generated successfully (${textContent.text.length} chars)`);
+
+  return textContent.text.trim();
+}
+
+/**
+ * Generate response using Claude (Legacy - Hardcoded Prompt)
+ * This function uses the original hardcoded prompt and will be gradually phased out
  */
 async function generateResponseWithClaude(
   questionText: string,

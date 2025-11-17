@@ -1,4 +1,4 @@
-import { pgTable, varchar, timestamp, boolean, integer, text, jsonb, uniqueIndex, uuid as pgUuid } from "drizzle-orm/pg-core";
+import { pgTable, varchar, timestamp, boolean, integer, text, jsonb, uniqueIndex, uuid as pgUuid, numeric } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { v4 as uuidv4 } from 'uuid';
@@ -27,6 +27,54 @@ export const companies = pgTable("companies", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+// Prompt Templates table (for configurable AI prompts)
+export const promptTemplates = pgTable(
+  "prompt_templates",
+  {
+    id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
+    companyId: varchar("company_id", { length: 255 })
+      .notNull()
+      .references(() => companies.id, { onDelete: "cascade" }),
+
+    // Prompt identification
+    promptKey: varchar("prompt_key", { length: 255 }).notNull(),
+    category: varchar("category", { length: 100 }).notNull(),
+
+    // Prompt content
+    systemPrompt: text("system_prompt"),
+    userPromptTemplate: text("user_prompt_template").notNull(),
+
+    // Configuration overrides
+    modelId: varchar("model_id", { length: 100 }),
+    temperature: numeric("temperature", { precision: 3, scale: 2 }),
+    maxTokens: integer("max_tokens"),
+
+    // Metadata
+    name: varchar("name", { length: 255 }).notNull(),
+    description: text("description"),
+    variables: jsonb("variables").$type<Array<{
+      key: string;
+      description: string;
+      required: boolean;
+      defaultValue?: string;
+      type: 'string' | 'number' | 'boolean' | 'array' | 'object';
+      example?: string;
+    }>>(),
+
+    // Versioning
+    version: integer("version").notNull().default(1),
+    isActive: boolean("is_active").notNull().default(true),
+
+    // Audit
+    createdBy: varchar("created_by", { length: 255 }),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    companyPromptIdx: uniqueIndex("company_prompt_idx").on(table.companyId, table.promptKey),
+  })
+);
 
 // Company members table (junction table)
 export const companyMembers = pgTable(

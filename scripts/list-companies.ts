@@ -1,34 +1,27 @@
-import postgres from 'postgres';
-
-const sql = postgres(process.env.DATABASE_URL!);
+import { db } from '../src/db';
+import { companies } from '../src/db/schema';
 
 async function listCompanies() {
+  console.log('\n📋 Listing companies in database:\n');
+
   try {
-    const companies = await sql`
-      SELECT c.id, c.name, c.slug, c.is_active,
-             COUNT(cm.id) as member_count
-      FROM companies c
-      LEFT JOIN company_members cm ON cm.company_id = c.id
-      GROUP BY c.id, c.name, c.slug, c.is_active
-      ORDER BY c.created_at DESC
-    `;
+    const allCompanies = await db.select().from(companies);
 
-    console.log('📊 Compagnies disponibles:\n');
-    companies.forEach((c: any, i: number) => {
-      console.log(`${i + 1}. ${c.name}`);
-      console.log(`   Slug: ${c.slug}`);
-      console.log(`   Membres: ${c.member_count}`);
-      console.log(`   Actif: ${c.is_active ? '✅' : '❌'}`);
-      console.log(`   URL: /companies/${c.slug}/dashboard`);
-      console.log('');
-    });
-
-    await sql.end();
+    if (allCompanies.length === 0) {
+      console.log('❌ No companies found in database\n');
+    } else {
+      console.log(`Found ${allCompanies.length} companies:\n`);
+      for (const company of allCompanies) {
+        console.log(`  - ${company.name} (slug: ${company.slug}, id: ${company.id})`);
+      }
+      console.log('\n');
+    }
   } catch (error) {
     console.error('Error listing companies:', error);
-    await sql.end();
     process.exit(1);
   }
+
+  process.exit(0);
 }
 
 listCompanies();

@@ -2,7 +2,6 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
+import { Textarea } from '@/components/ui/textarea';
 import {
   ArrowLeft,
   Save,
@@ -20,23 +20,9 @@ import {
   FileCode,
   Eye,
   History,
-  Loader2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-
-// Dynamically import Monaco Editor with no SSR
-const Editor = dynamic(
-  () => import('@monaco-editor/react').then((mod) => mod.default),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex items-center justify-center h-[300px] bg-muted rounded">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    ),
-  }
-);
 
 interface PromptTemplate {
   id: string;
@@ -352,18 +338,12 @@ export default function PromptEditorPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Editor
-                height="300px"
-                defaultLanguage="markdown"
+              <Textarea
                 value={systemPrompt}
-                onChange={(value) => setSystemPrompt(value || '')}
-                theme="vs-light"
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  lineNumbers: 'on',
-                  wordWrap: 'on',
-                }}
+                onChange={(e) => setSystemPrompt(e.target.value)}
+                placeholder="Enter system prompt..."
+                className="min-h-[300px] font-mono text-sm"
+                rows={12}
               />
             </CardContent>
           </Card>
@@ -377,18 +357,12 @@ export default function PromptEditorPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Editor
-                height="400px"
-                defaultLanguage="markdown"
+              <Textarea
                 value={userPromptTemplate}
-                onChange={(value) => setUserPromptTemplate(value || '')}
-                theme="vs-light"
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  lineNumbers: 'on',
-                  wordWrap: 'on',
-                }}
+                onChange={(e) => setUserPromptTemplate(e.target.value)}
+                placeholder="Enter user prompt template with {{variables}}..."
+                className="min-h-[400px] font-mono text-sm"
+                rows={16}
               />
             </CardContent>
           </Card>

@@ -1,4 +1,4 @@
-const url = 'https://market-intelligence-kappa.vercel.app/api/companies/groupe-dissan/documents?limit=10';
+const url = 'https://market-intelligence-kappa.vercel.app/api/companies/my-company/documents?limit=10';
 const response = await fetch(url);
 
 if (!response.ok) {

@@ -22,7 +22,7 @@ export const companies = pgTable("companies", {
   logo: varchar("logo", { length: 500 }),
   isActive: boolean("is_active").notNull().default(true),
   settings: jsonb("settings").$type<{
-    aiModel?: 'claude-sonnet-4-5-20250929' | 'claude-4-5-haiku-20250514';
+    aiModel?: 'claude-sonnet-4-5-20250929' | 'claude-haiku-4-5-20251001';
   }>(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

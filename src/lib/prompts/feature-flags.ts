@@ -18,15 +18,15 @@ import { PROMPT_KEYS } from '@/types/prompts';
  * For now, hardcoded for Phase 0
  */
 const FEATURE_FLAGS: Map<PromptKey, PromptFeatureFlag> = new Map([
-  // RFP Response Main - PILOT PROMPT (Phase 2) - ✅ ENABLED FOR TESTING
+  // RFP Response Main - ✅ ENABLED FOR ALL COMPANIES (100% ROLLOUT)
   [
     PROMPT_KEYS.RFP_RESPONSE_MAIN,
     {
       promptKey: PROMPT_KEYS.RFP_RESPONSE_MAIN,
       useDatabase: true, // ✅ Enabled for database prompts
-      rolloutPercentage: 0, // 0% rollout for general population
-      enabledForCompanies: ['frsdw7gue8zoq0znguttl1un'], // ✅ Dissan enabled for testing
-      enabled: true, // ✅ Global enable (controlled by allowlist)
+      rolloutPercentage: 100, // 🚀 100% rollout - ALL COMPANIES
+      enabledForCompanies: [], // No allowlist needed with 100% rollout
+      enabled: true, // ✅ Global enable
     },
   ],
 

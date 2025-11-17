@@ -47,7 +47,10 @@ export interface RAGAvailabilityCheck {
 
 /**
  * Check if enough RAG data is available for the question
- * Threshold: At least 3 chunks with score > 0.6
+ * Threshold: At least 1 chunk with score > 0.4 (relaxed for initial testing)
+ *
+ * NOTE: This check is now very permissive to allow generation even with limited data.
+ * The AI will acknowledge gaps in context if data is insufficient.
  */
 export async function checkRAGDataAvailability(
   questionText: string,
@@ -67,14 +70,14 @@ export async function checkRAGDataAvailability(
       { depth: 'basic' }
     );
 
-    // Filter relevant chunks (composite score > 0.6)
-    const relevantChunks = results.chunks.filter((c: any) => c.compositeScore > 0.6);
+    // Filter relevant chunks (composite score > 0.4 - relaxed threshold)
+    const relevantChunks = results.chunks.filter((c: any) => c.compositeScore > 0.4);
 
-    if (relevantChunks.length < 3) {
+    if (relevantChunks.length < 1) {
       return {
         isAvailable: false,
-        reason: 'Données insuffisantes dans la knowledge base',
-        chunkCount: relevantChunks.length,
+        reason: 'Aucune donnée pertinente dans la knowledge base',
+        chunkCount: 0,
       };
     }
 
@@ -87,9 +90,12 @@ export async function checkRAGDataAvailability(
     };
   } catch (error) {
     console.error('[RAG Availability Check Error]', error);
+    // Changed to allow generation even on error - the AI will work with available context
     return {
-      isAvailable: false,
-      reason: 'Erreur lors de la vérification des données',
+      isAvailable: true,
+      reason: 'Génération avec contexte limité',
+      chunkCount: 0,
+      averageScore: 0,
     };
   }
 }

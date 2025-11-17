@@ -30,7 +30,6 @@ import {
 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AssignmentButton } from './assignment-button';
-import { BulkActionsBar } from './bulk-actions-bar';
 import { SourceIndicatorBadge } from './source-indicator-badge';
 import { InlineBulkGenerator } from './inline-bulk-generator';
 import { toast } from 'sonner';
@@ -555,17 +554,6 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
         onOpenChange={setIsModalOpen}
         onResponseSaved={handleResponseSaved}
       />
-
-      {/* Bulk Actions Bar - Hidden when bulk generator is active */}
-      {!showBulkGenerate && (
-        <BulkActionsBar
-          selectedQuestionIds={selectedQuestionIds}
-          rfpId={rfpId}
-          slug={slug}
-          onClearSelection={clearSelection}
-          onActionComplete={() => mutate()}
-        />
-      )}
     </div>
   );
 }

@@ -39,6 +39,7 @@ export interface HistoricalImportInput {
     industry: string;
     submittedAt: Date;
     result: 'won' | 'lost' | 'pending';
+    qualityScore?: number; // User-provided quality score (0-100)
     dealValue?: number;
     outcomeNotes?: string;
   };
@@ -320,6 +321,7 @@ export async function importHistoricalRfp(
       submittedAt: input.metadata.submittedAt,
       result: input.metadata.result,
       dealValue: input.metadata.dealValue,
+      qualityScore: input.metadata.qualityScore, // Use user-provided quality score
       outcomeNotes: input.metadata.outcomeNotes,
       extractedText: rfpText,
       parsingStatus: 'completed',
@@ -352,12 +354,16 @@ export async function importHistoricalRfp(
       });
     }
 
-    // 8. Calculate quality score
-    console.log('[Import] Calculating quality score...');
-    const qualityScore = await calculateRfpQualityScore(rfp.id);
-    await db.update(rfps)
-      .set({ qualityScore })
-      .where(eq(rfps.id, rfp.id));
+    // 8. Calculate quality score (only if not provided by user)
+    if (!input.metadata.qualityScore) {
+      console.log('[Import] Calculating quality score automatically...');
+      const qualityScore = await calculateRfpQualityScore(rfp.id);
+      await db.update(rfps)
+        .set({ qualityScore })
+        .where(eq(rfps.id, rfp.id));
+    } else {
+      console.log(`[Import] Using user-provided quality score: ${input.metadata.qualityScore}`);
+    }
 
     console.log(`[Import] ✅ Import completed! RFP ID: ${rfp.id}`);
     console.log(`[Import] Auto-accepted: ${autoAccepted.length}, Needs review: ${needsReview.length}`);

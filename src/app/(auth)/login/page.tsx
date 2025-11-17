@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,14 +14,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-  const { data: session, status } = useSession();
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      router.push("/companies/demo-company/dashboard");
-    }
-  }, [status, session, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,30 +40,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
-  // Show loading while checking authentication
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-blue-50">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-teal-600 mx-auto mb-4" />
-          <p className="text-gray-600">Vérification de la session...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render login form if already authenticated (will redirect)
-  if (status === "authenticated") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-blue-50">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-teal-600 mx-auto mb-4" />
-          <p className="text-gray-600">Redirection...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-blue-50 p-4">

@@ -12,7 +12,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { Upload, FileText, X, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Upload, FileText, X } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DocumentUploadProgressModal } from "./document-upload-progress-modal";
 
 interface SupportDocsUploadProps {
   companySlug: string;
@@ -108,13 +109,8 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
   const [contentType, setContentType] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-  const [uploading, setUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState<{
-    status: "idle" | "uploading" | "analyzing" | "completed" | "error";
-    message?: string;
-    documentId?: string;
-  }>({ status: "idle" });
   const [dragActive, setDragActive] = useState(false);
+  const [showProgressModal, setShowProgressModal] = useState(false);
 
   // Handle file selection
   const handleFileSelect = useCallback((file: File) => {
@@ -131,7 +127,6 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
     }
 
     setSelectedFile(file);
-    setUploadStatus({ status: "idle" });
   }, []);
 
   // Handle drag and drop
@@ -173,139 +168,10 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
-  // Handle upload
-  const handleUpload = async () => {
+  // Handle upload - now just opens the progress modal
+  const handleUpload = () => {
     if (!selectedFile) return;
-
-    setUploading(true);
-    setUploadStatus({ status: "uploading", message: "Upload en cours..." });
-
-    try {
-      // Map category to backend fields
-      const mapping = CATEGORY_MAPPING[documentCategory];
-
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      formData.append("documentPurpose", mapping.documentPurpose);
-      formData.append("documentType", mapping.documentType);
-      if (mapping.isHistoricalRfp) formData.append("isHistoricalRfp", "true");
-      if (mapping.rfpOutcome) formData.append("rfpOutcome", mapping.rfpOutcome);
-      if (contentType) formData.append("contentType", contentType);
-      if (tags.length > 0) formData.append("tags", JSON.stringify(tags));
-
-      const uploadUrl = `/api/companies/${companySlug}/knowledge-base/upload`;
-      console.log('[SupportDocsUpload] Uploading to:', uploadUrl, 'companySlug:', companySlug);
-
-      const response = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Upload échoué");
-      }
-
-      const result = await response.json();
-
-      setUploadStatus({
-        status: "analyzing",
-        message: "Analyse du document avec Claude Haiku 4.5...",
-        documentId: result.documentId,
-      });
-
-      // Poll for analysis completion
-      await pollAnalysisStatus(result.documentId);
-
-      setUploadStatus({
-        status: "completed",
-        message: "Document analysé et indexé avec succès!",
-      });
-
-      toast.success("Document téléversé et analysé avec succès!");
-
-      // Reset form
-      setTimeout(() => {
-        setSelectedFile(null);
-        setContentType("");
-        setTags([]);
-        setUploadStatus({ status: "idle" });
-        onUploadComplete();
-      }, 2000);
-    } catch (error) {
-      console.error("Upload error:", error);
-      setUploadStatus({
-        status: "error",
-        message: error instanceof Error ? error.message : "Erreur lors de l'upload",
-      });
-      toast.error(error instanceof Error ? error.message : "Erreur lors de l'upload");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  // Poll analysis status
-  const pollAnalysisStatus = async (documentId: string) => {
-    const maxAttempts = 300; // 300 seconds max (5 minutes) - increased for larger documents
-    let attempts = 0;
-
-    while (attempts < maxAttempts) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      try {
-        const response = await fetch(`/api/companies/${companySlug}/knowledge-base/upload?documentId=${documentId}`);
-        if (!response.ok) continue;
-
-        const data = await response.json();
-
-        if (data.status === "completed") {
-          return;
-        } else if (data.status === "failed") {
-          throw new Error("L'analyse du document a échoué");
-        }
-      } catch (error) {
-        console.error("Polling error:", error);
-      }
-
-      attempts++;
-    }
-
-    throw new Error("Timeout lors de l'analyse du document");
-  };
-
-  const getStatusDisplay = () => {
-    switch (uploadStatus.status) {
-      case "uploading":
-        return (
-          <div className="flex items-center gap-2 text-teal-600">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="text-sm">{uploadStatus.message}</span>
-          </div>
-        );
-      case "analyzing":
-        return (
-          <div className="flex items-center gap-2 text-teal-600">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="text-sm">{uploadStatus.message}</span>
-          </div>
-        );
-      case "completed":
-        return (
-          <div className="flex items-center gap-2 text-green-600">
-            <CheckCircle2 className="h-4 w-4" />
-            <span className="text-sm">{uploadStatus.message}</span>
-          </div>
-        );
-      case "error":
-        return (
-          <div className="flex items-center gap-2 text-red-600">
-            <AlertCircle className="h-4 w-4" />
-            <span className="text-sm">{uploadStatus.message}</span>
-          </div>
-        );
-      default:
-        return null;
-    }
+    setShowProgressModal(true);
   };
 
   return (
@@ -343,7 +209,6 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
                   variant="ghost"
                   size="sm"
                   onClick={() => setSelectedFile(null)}
-                  disabled={uploading}
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -365,7 +230,6 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
                   onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
                   className="hidden"
                   id="file-upload"
-                  disabled={uploading}
                 />
                 <Label htmlFor="file-upload">
                   <Button type="button" variant="outline" asChild>
@@ -382,7 +246,6 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
             <Select
               value={documentCategory}
               onValueChange={(value) => setDocumentCategory(value as DocumentCategory)}
-              disabled={uploading}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -419,7 +282,6 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
             <Select
               value={contentType}
               onValueChange={setContentType}
-              disabled={uploading}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Sélectionnez un type de contenu..." />
@@ -446,9 +308,8 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag())}
-                disabled={uploading}
               />
-              <Button onClick={handleAddTag} variant="outline" disabled={uploading}>
+              <Button onClick={handleAddTag} variant="outline">
                 Ajouter
               </Button>
             </div>
@@ -460,7 +321,6 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
                     <button
                       onClick={() => handleRemoveTag(tag)}
                       className="ml-1 hover:text-red-600"
-                      disabled={uploading}
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -470,34 +330,39 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
             )}
           </div>
 
-          {/* Status Display */}
-          {uploadStatus.status !== "idle" && (
-            <div className="p-4 bg-gray-50 rounded-lg">{getStatusDisplay()}</div>
-          )}
-
           {/* Upload Button */}
           <Button
             onClick={handleUpload}
-            disabled={!selectedFile || uploading}
+            disabled={!selectedFile}
             className="w-full"
             size="lg"
           >
-            {uploading ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                {uploadStatus.status === "uploading"
-                  ? "Upload en cours..."
-                  : "Analyse en cours..."}
-              </>
-            ) : (
-              <>
-                <Upload className="h-4 w-4 mr-2" />
-                Téléverser et analyser
-              </>
-            )}
+            <Upload className="h-4 w-4 mr-2" />
+            Téléverser et analyser
           </Button>
         </div>
       </CardContent>
+
+      {/* Progress Modal */}
+      {showProgressModal && selectedFile && (
+        <DocumentUploadProgressModal
+          isOpen={showProgressModal}
+          onClose={() => setShowProgressModal(false)}
+          file={selectedFile}
+          companySlug={companySlug}
+          documentCategory={documentCategory}
+          contentType={contentType}
+          tags={tags}
+          onComplete={() => {
+            setShowProgressModal(false);
+            setSelectedFile(null);
+            setContentType("");
+            setTags([]);
+            onUploadComplete();
+            toast.success("Document téléversé avec succès!");
+          }}
+        />
+      )}
     </Card>
   );
 }

@@ -51,7 +51,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 /**
  * POST /api/companies/[slug]/knowledge-base/upload
  *
- * Upload a support document to the knowledge base
+ * Upload a support document to the knowledge base with real-time streaming progress
  */
 export async function POST(
   request: NextRequest,
@@ -74,7 +74,7 @@ export async function POST(
     const companyId = company.company.id;
     console.log('[KnowledgeBaseUpload] Company ID:', companyId);
 
-    // 2. Parse form data
+    // 3. Parse form data
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
     const documentPurpose = formData.get('documentPurpose') as string | null;
@@ -116,7 +116,7 @@ export async function POST(
         type: file.type,
         documentType: documentType || undefined,
         sourceUrl: blob.url,
-        status: 'pending', // Will be updated after analysis
+        status: 'pending',
         documentPurpose: (documentPurpose as any) || 'rfp_support',
         contentType: contentType || undefined,
         contentTypeTags: tags.length > 0 ? tags : undefined,
@@ -133,24 +133,45 @@ export async function POST(
 
     console.log(`[KnowledgeBaseUpload] Created document record: ${document.id}`);
 
-    // 7. Trigger async analysis (don't wait for completion)
-    triggerDocumentAnalysis(document.id, blob.url, file.name).catch((error) => {
-      console.error(
-        `[KnowledgeBaseUpload] Async analysis failed for ${document.id}:`,
-        error
-      );
-    });
+    // 7. Setup SSE (Server-Sent Events) for real-time progress
+    const encoder = new TextEncoder();
+    const stream = new TransformStream();
+    const writer = stream.writable.getWriter();
 
-    // 8. Return success response
-    return NextResponse.json(
-      {
-        documentId: document.id,
-        name: file.name,
-        status: 'pending',
-        message: 'Document uploaded successfully. Analysis in progress.',
+    // Helper to send SSE event
+    const sendEvent = async (data: any) => {
+      await writer.write(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+    };
+
+    // 8. Process document with real-time events
+    (async () => {
+      try {
+        await processDocumentWithEvents(
+          document.id,
+          blob.url,
+          file.name,
+          sendEvent
+        );
+      } catch (error) {
+        console.error('[KnowledgeBaseUpload] Processing error:', error);
+        await sendEvent({
+          type: 'error',
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+      } finally {
+        await writer.close();
+      }
+    })();
+
+    // 9. Return SSE response
+    return new Response(stream.readable, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache, no-transform',
+        'Connection': 'keep-alive',
+        'X-Accel-Buffering': 'no',
       },
-      { status: 200 }
-    );
+    });
   } catch (error) {
     console.error('[KnowledgeBaseUpload] Error:', error);
     return NextResponse.json(
@@ -195,24 +216,33 @@ function validateFile(file: File): { valid: boolean; error?: string } {
 }
 
 /**
- * Trigger async document analysis
+ * Process document with real-time SSE events
  *
  * This function:
  * 1. Fetches the document from Blob storage
- * 2. Extracts text (using appropriate parser for file type)
- * 3. Runs Claude analysis
- * 4. Updates database with results
- * 5. Triggers embedding creation
+ * 2. Extracts text (with progress events)
+ * 3. Runs Claude analysis (with progress events)
+ * 4. Creates embeddings (with progress events)
+ * 5. Indexes in Pinecone (with progress events)
  */
-async function triggerDocumentAnalysis(
+async function processDocumentWithEvents(
   documentId: string,
   blobUrl: string,
-  filename: string
+  filename: string,
+  sendEvent: (data: any) => Promise<void>
 ): Promise<void> {
+  const startTime = Date.now();
   console.log(`[DocumentAnalysis] Starting analysis for ${documentId}`);
 
   try {
-    // 1. Update status to processing
+    // Emit upload_complete event
+    await sendEvent({
+      type: 'upload_complete',
+      documentId,
+      blobUrl,
+    });
+
+    // Update status to processing
     await db
       .update(documents)
       .set({
@@ -223,55 +253,71 @@ async function triggerDocumentAnalysis(
       })
       .where(eq(documents.id, documentId));
 
-    // 2. Fetch document from blob
+    // STEP 1: Extract text
+    await sendEvent({ type: 'step_start', step: 'extracting' });
+
     const response = await fetch(blobUrl);
     if (!response.ok) {
       throw new Error(`Failed to fetch document: ${response.statusText}`);
     }
 
     const buffer = await response.arrayBuffer();
-
-    // 3. Extract text (simplified - in production use proper PDF/DOCX parsers)
     const text = await extractText(buffer, filename);
 
-    console.log(
-      `[DocumentAnalysis] Extracted ${text.length} characters from ${filename}`
-    );
+    console.log(`[DocumentAnalysis] Extracted ${text.length} characters from ${filename}`);
 
-    // 4. Analyze with Claude
+    const wordCount = text.split(/\s+/).length;
+    const pageCount = Math.ceil(text.length / 3000);
+
+    await sendEvent({
+      type: 'step_complete',
+      step: 'extracting',
+      result: {
+        textLength: text.length,
+        pageCount,
+        wordCount,
+      },
+    });
+
+    // STEP 2: Analyze with Claude
+    await sendEvent({
+      type: 'step_start',
+      step: 'analyzing',
+      model: 'claude-haiku-4-5-20251001',
+    });
+
     const analysis = await analyzeDocument(text, filename, {
       useCache: true,
       retryWithSonnet: true,
     });
 
-    console.log(
-      `[DocumentAnalysis] Analysis complete: ${analysis.documentType} (${analysis.confidence})`
-    );
+    console.log(`[DocumentAnalysis] Analysis complete: ${analysis.documentType} (${analysis.confidence})`);
 
-    // 5. Calculate text statistics
-    const wordCount = text.split(/\s+/).length;
-    const pageCount = Math.ceil(text.length / 3000); // Rough estimate: ~3000 chars per page
+    await sendEvent({
+      type: 'step_complete',
+      step: 'analyzing',
+      result: {
+        documentType: analysis.documentType,
+        confidence: analysis.confidence,
+      },
+    });
 
-    // 5.5. Read current document to preserve user-selected values
+    // Read current document to preserve user-selected values
     const [currentDoc] = await db
       .select()
       .from(documents)
       .where(eq(documents.id, documentId))
       .limit(1);
 
-    // Only use AI recommendations if user didn't already set these values
     const finalDocumentPurpose = currentDoc?.documentPurpose || analysis.recommendedPurpose;
     const finalContentType = currentDoc?.contentType || analysis.documentType;
     const finalContentTypeTags = currentDoc?.contentTypeTags || analysis.contentTypeTags;
 
-    console.log(`[DocumentAnalysis] Preserving user selections: purpose=${finalDocumentPurpose}, contentType=${finalContentType}`);
-
-    // 6. Update document with analysis results AND extracted text (but keep status as 'processing')
-    // ✅ PRESERVE user-selected categories, only use AI recommendations as fallback
+    // Update document with analysis results
     await db
       .update(documents)
       .set({
-        status: 'processing', // Keep as processing until embeddings are created
+        status: 'processing',
         documentPurpose: finalDocumentPurpose as any,
         contentType: finalContentType,
         contentTypeTags: finalContentTypeTags,
@@ -279,12 +325,10 @@ async function triggerDocumentAnalysis(
         analysisConfidence: Math.round(analysis.confidence * 100),
         metadata: {
           blobUrl,
-          // Extraction data
           extractedText: text,
           pageCount,
           wordCount,
           extractedAt: new Date().toISOString(),
-          // Analysis data
           analysis: {
             documentType: analysis.documentType,
             confidence: analysis.confidence,
@@ -296,11 +340,7 @@ async function triggerDocumentAnalysis(
       })
       .where(eq(documents.id, documentId));
 
-    console.log(
-      `[DocumentAnalysis] Document ${documentId} analysis saved to database`
-    );
-
-    // 7. Create embeddings and index in Pinecone (Phase 1 Day 6-7)
+    // STEP 3: Create embeddings and index in Pinecone
     const [doc] = await db
       .select()
       .from(documents)
@@ -308,15 +348,16 @@ async function triggerDocumentAnalysis(
       .limit(1);
 
     if (doc) {
-      await createDocumentEmbeddings(
+      await createDocumentEmbeddingsWithEvents(
         documentId,
         doc.companyId,
         text,
         filename,
-        analysis
+        analysis,
+        sendEvent
       );
 
-      // 8. Mark document as completed AFTER successful embedding creation
+      // Mark document as completed
       await db
         .update(documents)
         .set({
@@ -324,11 +365,19 @@ async function triggerDocumentAnalysis(
         })
         .where(eq(documents.id, documentId));
 
-      console.log(`[DocumentAnalysis] Document ${documentId} completed successfully with embeddings`);
+      console.log(`[DocumentAnalysis] Document ${documentId} completed successfully`);
+
+      // Emit completion event
+      const totalTime = Math.round((Date.now() - startTime) / 1000);
+      await sendEvent({
+        type: 'complete',
+        documentId,
+        totalTime,
+      });
     }
 
   } catch (error) {
-    console.error(`[DocumentAnalysis] Error analyzing ${documentId}:`, error);
+    console.error(`[DocumentAnalysis] Error processing ${documentId}:`, error);
 
     // Update status to failed
     await db
@@ -338,6 +387,14 @@ async function triggerDocumentAnalysis(
         errorMessage: error instanceof Error ? error.message : 'Unknown error',
       })
       .where(eq(documents.id, documentId));
+
+    // Emit error event
+    await sendEvent({
+      type: 'error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+
+    throw error;
   }
 }
 
@@ -383,10 +440,9 @@ async function extractText(buffer: ArrayBuffer, filename: string): Promise<strin
 }
 
 /**
- * Create embeddings for a support document and index in Pinecone
- * Phase 1 Day 6-7 - Support Docs RAG v4.0
+ * Create embeddings for a support document and index in Pinecone with real-time events
  */
-async function createDocumentEmbeddings(
+async function createDocumentEmbeddingsWithEvents(
   documentId: string,
   companyId: string,
   text: string,
@@ -396,12 +452,13 @@ async function createDocumentEmbeddings(
     recommendedPurpose: 'rfp_support' | 'rfp_response' | 'company_info';
     contentTypeTags: string[];
     suggestedCategories: Array<{ category: string; confidence: number }>;
-  }
+  },
+  sendEvent: (data: any) => Promise<void>
 ): Promise<void> {
   console.log(`[CreateEmbeddings] Starting embedding creation for ${documentId}`);
 
   try {
-    // 1. Fetch document from DB to get REAL metadata (user-selected categories)
+    // Fetch document from DB to get REAL metadata
     const [dbDoc] = await db
       .select()
       .from(documents)
@@ -412,24 +469,54 @@ async function createDocumentEmbeddings(
       throw new Error(`Document ${documentId} not found in database`);
     }
 
-    // Extract REAL values from user selection (not AI recommendations)
     const realDocumentPurpose = dbDoc.documentPurpose || analysis.recommendedPurpose;
     const realDocumentType = dbDoc.documentType || 'rfp_support_doc';
     const realIsHistoricalRfp = dbDoc.isHistoricalRfp || false;
     const realRfpOutcome = (dbDoc.metadata as any)?.rfpOutcome;
 
-    console.log(`[CreateEmbeddings] Using REAL metadata: purpose=${realDocumentPurpose}, type=${realDocumentType}, historical=${realIsHistoricalRfp}, outcome=${realRfpOutcome}`);
-
-    // 2. Chunk the text into smaller pieces (~1000 characters with overlap)
+    // Chunk the text
     const chunks = chunkText(text, 1000, 200);
     console.log(`[CreateEmbeddings] Created ${chunks.length} chunks`);
 
-    // 3. Generate embeddings for all chunks
+    // STEP 3: Generate embeddings
+    await sendEvent({
+      type: 'step_start',
+      step: 'embedding',
+      chunkCount: chunks.length,
+    });
+
     const chunkTexts = chunks.map(c => c.text);
-    const embeddings = await generateEmbeddings(chunkTexts);
+
+    // Generate embeddings in batches with progress updates
+    const embeddings: number[][] = [];
+    const embeddingBatchSize = 10;
+
+    for (let i = 0; i < chunkTexts.length; i += embeddingBatchSize) {
+      const batch = chunkTexts.slice(i, i + embeddingBatchSize);
+      const batchEmbeddings = await generateEmbeddings(batch);
+      embeddings.push(...batchEmbeddings);
+
+      const progress = Math.min(Math.round(((i + embeddingBatchSize) / chunkTexts.length) * 100), 100);
+      await sendEvent({
+        type: 'step_progress',
+        step: 'embedding',
+        progress,
+        current: Math.min(i + embeddingBatchSize, chunkTexts.length),
+        total: chunkTexts.length,
+      });
+    }
+
     console.log(`[CreateEmbeddings] Generated ${embeddings.length} embeddings`);
 
-    // 4. Prepare vectors for Pinecone
+    await sendEvent({
+      type: 'step_complete',
+      step: 'embedding',
+      result: {
+        embeddingCount: embeddings.length,
+      },
+    });
+
+    // STEP 4: Index in Pinecone
     const namespace = getRFPNamespace();
     const primaryCategory = analysis.suggestedCategories[0]?.category || 'general';
 
@@ -437,27 +524,17 @@ async function createDocumentEmbeddings(
       id: `${documentId}-chunk-${idx}`,
       values: embeddings[idx],
       metadata: {
-        // Core identifiers
         documentId,
         tenant_id: companyId,
-
-        // ✅ USE REAL VALUES FROM USER SELECTION (not hardcoded!)
         documentType: realDocumentType,
         documentPurpose: realDocumentPurpose,
         isHistoricalRfp: realIsHistoricalRfp,
         ...(realRfpOutcome && { rfpOutcome: realRfpOutcome }),
-
-        // Support Docs RAG v4.0 fields
         contentType: analysis.documentType,
-        // Add primary category and 'general' to ensure it's found by DualQueryEngine
         contentTypeTags: [primaryCategory, 'general', ...analysis.contentTypeTags],
-
-        // Content
         text: chunk.text,
         title: filename,
         category: primaryCategory,
-
-        // Metadata
         chunkIndex: idx,
         totalChunks: chunks.length,
         startChar: chunk.start,
@@ -466,17 +543,38 @@ async function createDocumentEmbeddings(
       } as Record<string, any>,
     }));
 
-    // 4. Upsert to Pinecone in batches
-    const batchSize = 100;
-    for (let i = 0; i < vectors.length; i += batchSize) {
-      const batch = vectors.slice(i, i + batchSize);
+    await sendEvent({
+      type: 'step_start',
+      step: 'indexing',
+      vectorCount: vectors.length,
+    });
+
+    // Upsert to Pinecone in batches with progress
+    const pineBatchSize = 100;
+    for (let i = 0; i < vectors.length; i += pineBatchSize) {
+      const batch = vectors.slice(i, i + pineBatchSize);
       await namespace.upsert(batch);
-      console.log(`[CreateEmbeddings] Indexed batch ${i / batchSize + 1} (${batch.length} vectors)`);
+
+      const progress = Math.min(Math.round(((i + pineBatchSize) / vectors.length) * 100), 100);
+      await sendEvent({
+        type: 'step_progress',
+        step: 'indexing',
+        progress,
+        current: Math.min(i + pineBatchSize, vectors.length),
+        total: vectors.length,
+      });
+
+      console.log(`[CreateEmbeddings] Indexed batch ${i / pineBatchSize + 1} (${batch.length} vectors)`);
     }
+
+    await sendEvent({
+      type: 'step_complete',
+      step: 'indexing',
+    });
 
     console.log(`[CreateEmbeddings] Successfully indexed ${vectors.length} chunks for ${documentId}`);
 
-    // 5. Update document metadata with chunks information
+    // Update document metadata
     const [currentDoc] = await db
       .select()
       .from(documents)
@@ -498,7 +596,7 @@ async function createDocumentEmbeddings(
               startIndex: chunk.start,
               endIndex: chunk.end,
               content: chunk.text,
-              tokens: Math.ceil(chunk.text.length / 4), // Rough estimate: 1 token ≈ 4 chars
+              tokens: Math.ceil(chunk.text.length / 4),
             })),
             chunkedAt: new Date().toISOString(),
             embeddedAt: new Date().toISOString(),
@@ -548,24 +646,21 @@ function chunkText(
 /**
  * GET /api/companies/[slug]/knowledge-base/upload
  *
- * Get upload status for a specific document
+ * DEPRECATED: This endpoint is no longer needed since we use SSE streaming.
+ * Kept for backward compatibility but will be removed in future version.
  */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // 1. Extract slug from params
     const { slug } = await params;
-
-    // 2. Verify authentication
     const authResult = await requireAuth('viewer', slug);
     if (!authResult.success) return authResult.error;
 
     const { company } = authResult.data;
     const companyId = company.company.id;
 
-    // 3. Get document ID from query params
     const { searchParams } = new URL(request.url);
     const documentId = searchParams.get('documentId');
 
@@ -576,7 +671,6 @@ export async function GET(
       );
     }
 
-    // 4. Fetch document and verify ownership
     const [document] = await db
       .select()
       .from(documents)
@@ -587,7 +681,6 @@ export async function GET(
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
     }
 
-    // 5. Verify document belongs to company
     if (document.companyId !== companyId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }

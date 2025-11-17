@@ -1,0 +1,48 @@
+--- a/src/app/api/companies/[slug]/prompts/[promptKey]/route.ts
++++ b/src/app/api/companies/[slug]/prompts/[promptKey]/route.ts
+@@ -35,11 +35,12 @@ export async function GET(
+       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+     }
+ 
+-    const company = await getCompanyBySlug(params.slug, session.user.id);
+-    if (!company) {
++    const result = await getCompanyBySlug(params.slug);
++    if (!result) {
+       return NextResponse.json({ error: 'Company not found' }, { status: 404 });
+     }
+ 
++    const { company } = result;
+     const promptService = getPromptService();
+     const prompt = await promptService.getPrompt(company.id, params.promptKey as PromptKey);
+ 
+@@ -73,11 +74,12 @@ export async function POST(
+       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+     }
+ 
+-    const company = await getCompanyBySlug(params.slug, session.user.id);
+-    if (!company) {
++    const result = await getCompanyBySlug(params.slug);
++    if (!result) {
+       return NextResponse.json({ error: 'Company not found' }, { status: 404 });
+     }
+ 
++    const { company } = result;
+     const body = await request.json();
+     const data = SavePromptSchema.parse(body);
+ 
+@@ -85,12 +87,12 @@ export async function POST(
+ 
+     // Save the prompt (creates new version)
+     const savedPrompt = await promptService.savePrompt(
+       company.id,
+       params.promptKey as PromptKey,
+       data,
+-      session.user.email || session.user.id
++      session.user.email || session.user.id || 'unknown'
+     );
+ 
+     // Invalidate cache
+-    promptService.invalidateCache(company.id, params.promptKey as PromptKey);
++    promptService.cache.invalidate(company.id, params.promptKey as PromptKey);
+ 
+     return NextResponse.json({

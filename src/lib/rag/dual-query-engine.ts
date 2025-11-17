@@ -166,15 +166,38 @@ export class DualQueryRetrievalEngine {
     topK: number
   ) {
     try {
+      // Try with full filters first (including contentTypeTags)
+      try {
+        const results = await this.namespace.query({
+          vector: queryEmbedding,
+          topK,
+          filter: {
+            tenant_id: { $eq: companyId },
+            documentPurpose: { $eq: 'rfp_support' },
+            contentTypeTags: { $in: [category, 'general'] },
+          },
+          includeMetadata: true,
+        });
+
+        if (results.matches.length > 0) {
+          return results.matches.map((match: any) => ({
+            id: match.id,
+            text: (match.metadata as RFPVectorMetadata)?.text || '',
+            score: match.score || 0,
+            metadata: match.metadata as RFPVectorMetadata,
+          }));
+        }
+      } catch (filterError) {
+        console.warn('[DualQueryEngine] contentTypeTags filter failed, trying fallback without it');
+      }
+
+      // Fallback: Query without contentTypeTags filter (for backward compatibility)
       const results = await this.namespace.query({
         vector: queryEmbedding,
         topK,
         filter: {
           tenant_id: { $eq: companyId },
           documentPurpose: { $eq: 'rfp_support' },
-          // Use contentTypeTags to match category
-          // Note: Pinecone supports $in for array fields
-          contentTypeTags: { $in: [category, 'general'] },
         },
         includeMetadata: true,
       });
@@ -200,13 +223,38 @@ export class DualQueryRetrievalEngine {
     topK: number
   ) {
     try {
+      // Try with full filters first (including isHistoricalRfp)
+      try {
+        const results = await this.namespace.query({
+          vector: queryEmbedding,
+          topK,
+          filter: {
+            tenant_id: { $eq: companyId },
+            documentPurpose: { $eq: 'rfp_response' },
+            isHistoricalRfp: { $eq: true },
+          },
+          includeMetadata: true,
+        });
+
+        if (results.matches.length > 0) {
+          return results.matches.map((match: any) => ({
+            id: match.id,
+            text: (match.metadata as RFPVectorMetadata)?.text || '',
+            score: match.score || 0,
+            metadata: match.metadata as RFPVectorMetadata,
+          }));
+        }
+      } catch (filterError) {
+        console.warn('[DualQueryEngine] isHistoricalRfp filter failed, trying fallback without it');
+      }
+
+      // Fallback: Query without isHistoricalRfp filter (for backward compatibility)
       const results = await this.namespace.query({
         vector: queryEmbedding,
         topK,
         filter: {
           tenant_id: { $eq: companyId },
           documentPurpose: { $eq: 'rfp_response' },
-          isHistoricalRfp: { $eq: true },
         },
         includeMetadata: true,
       });

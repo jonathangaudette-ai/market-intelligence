@@ -46,6 +46,9 @@ export const AI_MODEL_METADATA: Record<AIModelId, AIModelMetadata> = {
 // Company settings type
 export interface CompanySettings {
   aiModel?: AIModelId;
+  website?: string;
+  description?: string;
+  industry?: string;
 }
 
 // Helper function to validate AI model ID

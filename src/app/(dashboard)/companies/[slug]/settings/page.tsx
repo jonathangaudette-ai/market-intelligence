@@ -38,12 +38,21 @@ export default function SettingsPage() {
 
   const [activeTab, setActiveTab] = useState<Tab>("general");
 
+  // Company info state
+  const [companyName, setCompanyName] = useState('');
+  const [website, setWebsite] = useState('');
+  const [description, setDescription] = useState('');
+  const [industry, setIndustry] = useState('');
+
   // AI Model settings state
   const [aiModel, setAiModel] = useState<AIModelId>(AI_MODELS.SONNET_4_5);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [isSavingCompanyInfo, setIsSavingCompanyInfo] = useState(false);
   const [settingsError, setSettingsError] = useState<string | null>(null);
+  const [companyInfoError, setCompanyInfoError] = useState<string | null>(null);
   const [settingsSuccess, setSettingsSuccess] = useState(false);
+  const [companyInfoSuccess, setCompanyInfoSuccess] = useState(false);
 
   // Prompts state
   const [prompts, setPrompts] = useState<any[]>([]);
@@ -57,6 +66,14 @@ export default function SettingsPage() {
         const response = await fetch(`/api/companies/${slug}/settings`);
         if (response.ok) {
           const data = await response.json();
+
+          // Load company info
+          if (data.name) setCompanyName(data.name);
+          if (data.settings?.website) setWebsite(data.settings.website);
+          if (data.settings?.description) setDescription(data.settings.description);
+          if (data.settings?.industry) setIndustry(data.settings.industry);
+
+          // Load AI model
           if (data.settings?.aiModel) {
             setAiModel(data.settings.aiModel);
           }
@@ -94,6 +111,38 @@ export default function SettingsPage() {
 
     loadPrompts();
   }, [activeTab, slug]);
+
+  // Save company info
+  const handleSaveCompanyInfo = async () => {
+    try {
+      setIsSavingCompanyInfo(true);
+      setCompanyInfoError(null);
+      setCompanyInfoSuccess(false);
+
+      const response = await fetch(`/api/companies/${slug}/settings`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: companyName,
+          website: website || '',
+          description: description,
+          industry: industry,
+        }),
+      });
+
+      if (response.ok) {
+        setCompanyInfoSuccess(true);
+        setTimeout(() => setCompanyInfoSuccess(false), 3000);
+      } else {
+        const error = await response.json();
+        setCompanyInfoError(error.error || 'Échec de la sauvegarde');
+      }
+    } catch (error) {
+      setCompanyInfoError('Échec de la sauvegarde des informations');
+    } finally {
+      setIsSavingCompanyInfo(false);
+    }
+  };
 
   // Save AI model settings
   const handleSaveAIModel = async () => {
@@ -251,42 +300,98 @@ export default function SettingsPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        Nom de la compagnie
-                      </label>
-                      <Input placeholder="Demo Company" defaultValue="Demo Company" />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        Site web
-                      </label>
-                      <Input
-                        type="url"
-                        placeholder="https://example.com"
-                        defaultValue="https://democompany.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        Description
-                      </label>
-                      <Textarea
-                        placeholder="Décrivez votre entreprise..."
-                        rows={4}
-                        defaultValue="Plateforme d'intelligence concurrentielle alimentée par l'IA"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        Industrie
-                      </label>
-                      <Input placeholder="SaaS, Technology, etc." defaultValue="SaaS" />
-                    </div>
-                    <div className="flex justify-end gap-2 pt-4">
-                      <Button variant="outline">Annuler</Button>
-                      <Button>Enregistrer les modifications</Button>
-                    </div>
+                    {isLoadingSettings ? (
+                      <div className="flex items-center justify-center py-8">
+                        <Loader2 className="h-6 w-6 animate-spin text-teal-600" />
+                      </div>
+                    ) : (
+                      <>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">
+                            Nom de la compagnie
+                          </label>
+                          <Input
+                            placeholder="Nom de votre compagnie"
+                            value={companyName}
+                            onChange={(e) => setCompanyName(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">
+                            Site web
+                          </label>
+                          <Input
+                            type="url"
+                            placeholder="https://example.com"
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">
+                            Description
+                          </label>
+                          <Textarea
+                            placeholder="Décrivez votre entreprise..."
+                            rows={4}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">
+                            Industrie
+                          </label>
+                          <Input
+                            placeholder="SaaS, Technology, etc."
+                            value={industry}
+                            onChange={(e) => setIndustry(e.target.value)}
+                          />
+                        </div>
+
+                        {/* Status messages */}
+                        {companyInfoError && (
+                          <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                            <p className="text-sm text-red-700">{companyInfoError}</p>
+                          </div>
+                        )}
+
+                        {companyInfoSuccess && (
+                          <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                            <p className="text-sm text-green-700 flex items-center gap-2">
+                              <Check className="h-4 w-4" />
+                              Informations enregistrées avec succès
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="flex justify-end gap-2 pt-4">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              // Reset to original values - reload from server
+                              window.location.reload();
+                            }}
+                            disabled={isSavingCompanyInfo}
+                          >
+                            Annuler
+                          </Button>
+                          <Button
+                            onClick={handleSaveCompanyInfo}
+                            disabled={isSavingCompanyInfo}
+                          >
+                            {isSavingCompanyInfo ? (
+                              <>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                Enregistrement...
+                              </>
+                            ) : (
+                              'Enregistrer les modifications'
+                            )}
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </CardContent>
                 </Card>
 

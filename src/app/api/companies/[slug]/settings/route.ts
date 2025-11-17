@@ -10,6 +10,10 @@ import { AI_MODELS, type CompanySettings } from '@/types/company';
 // Validation schema for settings update
 const SettingsUpdateSchema = z.object({
   aiModel: z.enum([AI_MODELS.SONNET_4_5, AI_MODELS.HAIKU_4_5]).optional(),
+  name: z.string().min(1).optional(),
+  website: z.string().url().optional().or(z.literal('')),
+  description: z.string().optional(),
+  industry: z.string().optional(),
 });
 
 /**
@@ -33,6 +37,7 @@ export async function GET(
     const [company] = await db
       .select({
         id: companies.id,
+        name: companies.name,
         settings: companies.settings,
       })
       .from(companies)
@@ -66,6 +71,7 @@ export async function GET(
     }
 
     return NextResponse.json({
+      name: company.name,
       settings: company.settings || {},
     });
   } catch (error) {
@@ -108,12 +114,13 @@ export async function PUT(
       );
     }
 
-    const newSettings = validation.data;
+    const { name: newName, website, description, industry, aiModel } = validation.data;
 
     // Get company
     const [company] = await db
       .select({
         id: companies.id,
+        name: companies.name,
         settings: companies.settings,
       })
       .from(companies)
@@ -150,24 +157,39 @@ export async function PUT(
     const currentSettings = (company.settings as CompanySettings) || {};
     const updatedSettings: CompanySettings = {
       ...currentSettings,
-      ...newSettings,
     };
 
-    // Update company settings
+    // Update settings fields if provided
+    if (aiModel !== undefined) updatedSettings.aiModel = aiModel;
+    if (website !== undefined) updatedSettings.website = website;
+    if (description !== undefined) updatedSettings.description = description;
+    if (industry !== undefined) updatedSettings.industry = industry;
+
+    // Prepare update object
+    const updateData: any = {
+      settings: updatedSettings,
+      updatedAt: new Date(),
+    };
+
+    // Update company name if provided
+    if (newName !== undefined) {
+      updateData.name = newName;
+    }
+
+    // Update company settings (and optionally name)
     const [updatedCompany] = await db
       .update(companies)
-      .set({
-        settings: updatedSettings,
-        updatedAt: new Date(),
-      })
+      .set(updateData)
       .where(eq(companies.id, company.id))
       .returning({
         id: companies.id,
+        name: companies.name,
         settings: companies.settings,
       });
 
     return NextResponse.json({
       success: true,
+      name: updatedCompany.name,
       settings: updatedCompany.settings,
     });
   } catch (error) {

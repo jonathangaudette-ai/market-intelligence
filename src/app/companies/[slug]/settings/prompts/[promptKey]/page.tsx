@@ -26,14 +26,17 @@ import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
 // Dynamically import Monaco Editor with no SSR
-const Editor = dynamic(() => import('@monaco-editor/react'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center h-[300px] bg-muted rounded">
-      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-    </div>
-  ),
-});
+const Editor = dynamic(
+  () => import('@monaco-editor/react').then((mod) => mod.default),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-[300px] bg-muted rounded">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    ),
+  }
+);
 
 interface PromptTemplate {
   id: string;

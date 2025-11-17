@@ -19,7 +19,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FileText, Database, Sparkles, TrendingUp, Loader2 } from "lucide-react";
 import { SupportDocsUpload } from "@/components/knowledge-base/support-docs-upload";
 import { SupportDocsList } from "@/components/knowledge-base/support-docs-list";
-import { InsightsPanel } from "@/components/knowledge-base/insights-panel";
 import { PerformanceMetrics } from "@/components/knowledge-base/performance-metrics";
 import { ContentDistribution } from "@/components/knowledge-base/content-distribution";
 
@@ -145,14 +144,6 @@ export default function KnowledgeBasePage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-        {/* Insights Panel */}
-        {!loadingAnalytics && analytics && analytics.insights.length > 0 && (
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Insights actionnables</h2>
-            <InsightsPanel insights={analytics.insights} />
-          </div>
-        )}
-
         {/* Performance Metrics */}
         {!loadingAnalytics && analytics && (
           <div>

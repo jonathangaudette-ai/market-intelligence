@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,10 +20,20 @@ import {
   FileCode,
   Eye,
   History,
+  Loader2,
 } from 'lucide-react';
 import Link from 'next/link';
-import Editor from '@monaco-editor/react';
 import { useToast } from '@/hooks/use-toast';
+
+// Dynamically import Monaco Editor with no SSR
+const Editor = dynamic(() => import('@monaco-editor/react'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-[300px] bg-muted rounded">
+      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+    </div>
+  ),
+});
 
 interface PromptTemplate {
   id: string;

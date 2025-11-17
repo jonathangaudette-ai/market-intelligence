@@ -384,6 +384,7 @@ async function extractQuestionsWithPromptService(
     const openai = getOpenAI();
 
     try {
+      // GPT-5 specific parameters not yet in OpenAI SDK types
       const response = await openai.chat.completions.create({
         model: 'gpt-5',
         messages: [
@@ -393,7 +394,7 @@ async function extractQuestionsWithPromptService(
         modalities: ['text'],
         reasoning: GPT5_CONFIGS.extraction.reasoning,
         text: GPT5_CONFIGS.extraction.text,
-      });
+      } as any);
 
       const content = response.choices[0]?.message?.content;
       if (!content) {

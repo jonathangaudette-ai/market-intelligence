@@ -246,7 +246,7 @@ export function SupportDocsUpload({ companySlug, onUploadComplete }: SupportDocs
 
   // Poll analysis status
   const pollAnalysisStatus = async (documentId: string) => {
-    const maxAttempts = 60; // 60 seconds max
+    const maxAttempts = 300; // 300 seconds max (5 minutes) - increased for larger documents
     let attempts = 0;
 
     while (attempts < maxAttempts) {

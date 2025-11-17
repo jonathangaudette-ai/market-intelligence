@@ -20,6 +20,10 @@ import { analyzeDocument } from '@/lib/rfp/services/document-analysis.service';
 import { generateEmbeddings } from '@/lib/rfp/ai/embeddings';
 import { getRFPNamespace } from '@/lib/rfp/pinecone';
 
+// Allow long execution time for document analysis and embedding creation (5 minutes)
+// This is especially important for larger documents (PDFs >1MB)
+export const maxDuration = 300;
+
 /**
  * Upload schema validation
  */

@@ -1,44 +1,91 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   TrendingUp,
   TrendingDown,
-  Building2,
   FileText,
   MessageSquare,
-  Users,
   Clock,
   CheckCircle2,
   AlertCircle,
   ArrowRight,
   Sparkles,
   Target,
-  Zap,
+  Trophy,
+  DollarSign,
+  BarChart3,
+  BookOpen,
+  Lightbulb,
+  FileCheck,
+  Brain,
 } from "lucide-react";
+
+interface RFPStats {
+  pipeline: {
+    activeRfps: number;
+    totalValue: number;
+    avgCompletion: number;
+    urgentCount: number;
+  };
+  questions: {
+    total: number;
+    answered: number;
+    pending: number;
+    aiGeneratedPercent: number;
+    avgConfidence: number;
+    pendingReview: number;
+  };
+  documents: {
+    total: number;
+    completed: number;
+    processing: number;
+    failed: number;
+    avgConfidence: number;
+    totalChunks: number;
+  };
+  historical: {
+    total: number;
+    won: number;
+    lost: number;
+    winRate: number;
+    totalDealValue: number;
+    avgDealSize: number;
+    avgQualityScore: number;
+    totalReuse: number;
+  };
+  winRate: {
+    current: number;
+    historical: number;
+    recentWon: number;
+    recentLost: number;
+    period: string;
+  };
+}
 
 export default function DashboardPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
 
   const [loading, setLoading] = useState(true);
-  const [statsData, setStatsData] = useState<any>(null);
+  const [rfpStats, setRfpStats] = useState<RFPStats | null>(null);
 
-  // Load stats from API
+  // Load RFP stats from API
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const response = await fetch(`/api/companies/${slug}/stats`);
+        const response = await fetch(`/api/companies/${slug}/rfp-stats`);
         if (response.ok) {
           const data = await response.json();
-          setStatsData(data);
+          setRfpStats(data);
         }
       } catch (error) {
-        console.error("Error loading stats:", error);
+        console.error("Error loading RFP stats:", error);
       } finally {
         setLoading(false);
       }
@@ -47,120 +94,68 @@ export default function DashboardPage() {
     loadStats();
   }, [slug]);
 
-  // Build stats array from API data
-  const stats = statsData ? [
+  // Format currency
+  const formatCurrency = (value: number) => {
+    if (value >= 1000000) {
+      return `${(value / 1000000).toFixed(1)}M$`;
+    } else if (value >= 1000) {
+      return `${(value / 1000).toFixed(0)}K$`;
+    }
+    return `${value}$`;
+  };
+
+  // Build stats cards from RFP data
+  const stats = rfpStats ? [
     {
-      label: "Messages IA",
-      value: statsData.messages.current.toString(),
-      change: `${statsData.messages.change >= 0 ? "+" : ""}${statsData.messages.change}%`,
-      trend: statsData.messages.trend as "up" | "down",
-      icon: MessageSquare,
+      label: "RFPs Actifs",
+      value: rfpStats.pipeline.activeRfps.toString(),
+      change: rfpStats.pipeline.urgentCount > 0 ? `${rfpStats.pipeline.urgentCount} urgents` : "Aucun urgent",
+      trend: rfpStats.pipeline.urgentCount > 0 ? "down" : "up" as const,
+      icon: FileText,
       color: "teal",
+      urgent: rfpStats.pipeline.urgentCount > 0,
     },
     {
-      label: "Concurrents actifs",
-      value: statsData.competitors.active.toString(),
-      change: "",
+      label: "Valeur Pipeline",
+      value: formatCurrency(rfpStats.pipeline.totalValue),
+      change: rfpStats.pipeline.activeRfps > 0 ? `${rfpStats.pipeline.activeRfps} opportunités` : "",
       trend: "up" as const,
-      icon: Users,
+      icon: DollarSign,
       color: "blue",
     },
     {
-      label: "Documents analysés",
-      value: statsData.documents.total.toString(),
-      change: `+${statsData.documents.currentMonth}`,
-      trend: "up" as const,
-      icon: FileText,
+      label: "Complétion Moyenne",
+      value: `${rfpStats.pipeline.avgCompletion}%`,
+      change: rfpStats.pipeline.avgCompletion >= 75 ? "Bon progrès" : "À compléter",
+      trend: rfpStats.pipeline.avgCompletion >= 75 ? "up" : "down" as const,
+      icon: BarChart3,
       color: "purple",
     },
     {
-      label: "Signaux détectés",
-      value: statsData.signals.total.toString(),
-      change: `${statsData.signals.new} nouveaux`,
-      trend: "up" as const,
-      icon: Target,
-      color: "orange",
-    },
-    {
-      label: "Taux de réponse",
-      value: `${statsData.responseRate}%`,
-      change: "",
-      trend: "up" as const,
-      icon: CheckCircle2,
+      label: "Win Rate (90j)",
+      value: `${rfpStats.winRate.current}%`,
+      change: `${rfpStats.winRate.recentWon}W / ${rfpStats.winRate.recentLost}L`,
+      trend: rfpStats.winRate.current >= 50 ? "up" : "down" as const,
+      icon: Trophy,
       color: "green",
     },
     {
-      label: "Temps moyen",
-      value: statsData.avgProcessingTime || "2.3s",
-      change: "",
-      trend: "down" as const,
-      icon: Zap,
+      label: "Génération IA",
+      value: `${rfpStats.questions.aiGeneratedPercent}%`,
+      change: `Conf: ${rfpStats.questions.avgConfidence}%`,
+      trend: "up" as const,
+      icon: Brain,
+      color: "orange",
+    },
+    {
+      label: "Bibliothèque Historique",
+      value: rfpStats.historical.total.toString(),
+      change: `${rfpStats.historical.totalReuse} réutilisations`,
+      trend: "up" as const,
+      icon: BookOpen,
       color: "yellow",
     },
   ] : [];
-
-  const recentActivity = [
-    {
-      id: "1",
-      type: "document",
-      title: "Nouveau document analysé",
-      description: "rapport-q4-competitor-x.pdf",
-      time: "Il y a 2 heures",
-      icon: FileText,
-      color: "bg-teal-100 text-teal-600",
-    },
-    {
-      id: "2",
-      type: "message",
-      title: "Question posée par John Doe",
-      description: "Quelles sont les forces de Competitor X?",
-      time: "Il y a 3 heures",
-      icon: MessageSquare,
-      color: "bg-teal-100 text-teal-600",
-    },
-    {
-      id: "3",
-      type: "competitor",
-      title: "Concurrent ajouté",
-      description: "New Startup ajouté à la liste de surveillance",
-      time: "Il y a 5 heures",
-      icon: Building2,
-      color: "bg-teal-50 text-teal-600",
-    },
-    {
-      id: "4",
-      type: "signal",
-      title: "Signal détecté",
-      description: "Competitor Y a publié 5 nouvelles offres d'emploi",
-      time: "Il y a 1 jour",
-      icon: AlertCircle,
-      color: "bg-yellow-100 text-yellow-600",
-    },
-  ];
-
-  const insights = [
-    {
-      title: "Tendance d'embauche",
-      description: "3 concurrents ont augmenté leur recrutement de 40% ce mois-ci",
-      action: "Voir détails",
-      badge: "Haute priorité",
-      badgeVariant: "destructive" as const,
-    },
-    {
-      title: "Nouvelle fonctionnalité",
-      description: "Competitor X a lancé une feature d'IA similaire à la vôtre",
-      action: "Analyser",
-      badge: "Moyen",
-      badgeVariant: "warning" as const,
-    },
-    {
-      title: "Changement de prix",
-      description: "Competitor Y a réduit ses prix de 15%",
-      action: "Comparer",
-      badge: "À surveiller",
-      badgeVariant: "default" as const,
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -169,14 +164,14 @@ export default function DashboardPage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div>
-              <h1 className="text-2xl font-bold">Dashboard</h1>
+              <h1 className="text-2xl font-bold">Dashboard RFP</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Vue d'ensemble de votre intelligence concurrentielle
+                Vue d'ensemble de vos appels d'offres et réponses
               </p>
             </div>
             <Badge variant="default" className="gap-1">
               <Sparkles className="h-3 w-3" />
-              Tous les systèmes opérationnels
+              Système opérationnel
             </Badge>
           </div>
         </div>
@@ -184,167 +179,350 @@ export default function DashboardPage() {
 
       {/* Content */}
       <div className="container mx-auto py-8 space-y-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
-            const trendColor = stat.trend === "up" ? "text-green-600" : "text-red-600";
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+              <p className="text-sm text-muted-foreground">Chargement des statistiques...</p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+                const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
+                const trendColor = stat.trend === "up" ? "text-green-600" : "text-red-600";
 
-            return (
-              <Card key={stat.label} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
-                    <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-900 flex items-center justify-center">
-                      <Icon className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-                    </div>
-                  </div>
-                  <div className="flex items-end justify-between">
-                    <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
-                    <div className={`flex items-center gap-1 text-sm font-medium ${trendColor}`}>
-                      <TrendIcon className="h-4 w-4" />
-                      <span>{stat.change}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                return (
+                  <Card
+                    key={stat.label}
+                    className={`hover:shadow-md transition-shadow ${stat.urgent ? 'border-red-300 bg-red-50/50' : ''}`}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
+                        <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-900 flex items-center justify-center">
+                          <Icon className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+                        </div>
+                      </div>
+                      <div className="flex items-end justify-between">
+                        <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
+                        <div className={`flex items-center gap-1 text-sm font-medium ${trendColor}`}>
+                          <TrendIcon className="h-4 w-4" />
+                          <span className="text-xs">{stat.change}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Activity */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Activité récente</CardTitle>
-                <CardDescription>
-                  Dernières actions et événements détectés
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentActivity.map((activity) => {
-                    const Icon = activity.icon;
-                    return (
-                      <div
-                        key={activity.id}
-                        className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted transition-colors"
-                      >
-                        <div className={`w-10 h-10 rounded-lg ${activity.color} flex items-center justify-center flex-shrink-0`}>
-                          <Icon className="h-5 w-5" />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Pipeline RFP */}
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Pipeline RFP</CardTitle>
+                    <CardDescription>
+                      État des appels d'offres en cours
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {rfpStats && rfpStats.pipeline.activeRfps > 0 ? (
+                      <div className="space-y-4">
+                        {/* Summary row */}
+                        <div className="flex items-center justify-between p-4 bg-teal-50 rounded-lg">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-lg bg-teal-100 flex items-center justify-center">
+                              <FileText className="h-6 w-6 text-teal-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">Total actif</p>
+                              <p className="text-2xl font-bold">{rfpStats.pipeline.activeRfps} RFPs</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-medium text-muted-foreground">Valeur totale</p>
+                            <p className="text-2xl font-bold text-teal-600">
+                              {formatCurrency(rfpStats.pipeline.totalValue)}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium">
-                            {activity.title}
-                          </p>
-                          <p className="text-sm text-muted-foreground truncate">
-                            {activity.description}
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {activity.time}
-                          </p>
+
+                        {/* Questions stats */}
+                        <div className="grid grid-cols-3 gap-4 p-4 border rounded-lg">
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">Questions totales</p>
+                            <p className="text-2xl font-bold">{rfpStats.questions.total}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">Répondues</p>
+                            <p className="text-2xl font-bold text-green-600">
+                              {rfpStats.questions.answered}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">En attente</p>
+                            <p className="text-2xl font-bold text-orange-600">
+                              {rfpStats.questions.pending}
+                            </p>
+                          </div>
                         </div>
-                        <Button variant="ghost" size="sm">
-                          <ArrowRight className="h-4 w-4" />
+
+                        {/* Urgent alerts */}
+                        {rfpStats.pipeline.urgentCount > 0 && (
+                          <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                            <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                            <div className="flex-1">
+                              <p className="font-semibold text-sm text-red-900">
+                                {rfpStats.pipeline.urgentCount} RFP{rfpStats.pipeline.urgentCount > 1 ? 's' : ''} avec échéance urgente
+                              </p>
+                              <p className="text-xs text-red-700 mt-1">
+                                Échéance dans moins de 7 jours
+                              </p>
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => router.push(`/companies/${slug}/rfps`)}
+                            >
+                              Voir
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* Review pending */}
+                        {rfpStats.questions.pendingReview > 0 && (
+                          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start gap-3">
+                            <FileCheck className="h-5 w-5 text-yellow-600 mt-0.5" />
+                            <div className="flex-1">
+                              <p className="font-semibold text-sm text-yellow-900">
+                                {rfpStats.questions.pendingReview} réponse{rfpStats.questions.pendingReview > 1 ? 's' : ''} à reviewer
+                              </p>
+                              <p className="text-xs text-yellow-700 mt-1">
+                                Réponses en attente d'approbation
+                              </p>
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => router.push(`/companies/${slug}/rfps`)}
+                            >
+                              Reviewer
+                            </Button>
+                          </div>
+                        )}
+
+                        <Button
+                          className="w-full gap-2"
+                          variant="outline"
+                          onClick={() => router.push(`/companies/${slug}/rfps`)}
+                        >
+                          <FileText className="h-4 w-4" />
+                          Voir tous les RFPs
+                          <ArrowRight className="h-4 w-4 ml-auto" />
                         </Button>
                       </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Insights */}
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Insights clés</CardTitle>
-                <CardDescription>
-                  Alertes et signaux importants
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {insights.map((insight, idx) => (
-                    <div
-                      key={idx}
-                      className="p-4 rounded-lg border hover:border-teal-600 transition-colors"
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <h4 className="text-sm font-semibold">
-                          {insight.title}
-                        </h4>
-                        <Badge variant={insight.badgeVariant} className="text-xs">
-                          {insight.badge}
-                        </Badge>
+                    ) : (
+                      <div className="text-center py-12">
+                        <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Aucun RFP actif pour le moment
+                        </p>
+                        <Button
+                          onClick={() => router.push(`/companies/${slug}/rfps`)}
+                        >
+                          Créer un RFP
+                        </Button>
                       </div>
-                      <p className="text-xs text-muted-foreground mb-3">
-                        {insight.description}
-                      </p>
-                      <Button variant="link" size="sm" className="p-0 h-auto">
-                        {insight.action} →
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
 
-            {/* Quick Actions */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle>Actions rapides</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Button className="w-full justify-start gap-2" variant="outline">
-                  <MessageSquare className="h-4 w-4" />
-                  Poser une question
-                </Button>
-                <Button className="w-full justify-start gap-2" variant="outline">
-                  <FileText className="h-4 w-4" />
-                  Ajouter un document
-                </Button>
-                <Button className="w-full justify-start gap-2" variant="outline">
-                  <Building2 className="h-4 w-4" />
-                  Ajouter un concurrent
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+              {/* Right Column */}
+              <div className="space-y-6">
+                {/* Performance Historique */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Trophy className="h-5 w-5 text-green-600" />
+                      Performance Historique
+                    </CardTitle>
+                    <CardDescription>
+                      Résultats passés et bibliothèque
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {rfpStats && rfpStats.historical.total > 0 ? (
+                      <div className="space-y-4">
+                        <div className="text-center p-4 bg-green-50 rounded-lg">
+                          <p className="text-4xl font-bold text-green-600">
+                            {rfpStats.historical.winRate}%
+                          </p>
+                          <p className="text-sm text-muted-foreground mt-1">Win Rate Global</p>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            {rfpStats.historical.won}W / {rfpStats.historical.lost}L
+                          </p>
+                        </div>
 
-        {/* Performance Chart (Visual Mock) */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Utilisation de l'IA ce mois-ci</CardTitle>
-            <CardDescription>Messages et analyses par jour</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64 flex items-end justify-between gap-2">
-              {[12, 18, 15, 24, 32, 28, 35, 42, 38, 45, 52, 48, 55, 61].map((value, idx) => (
-                <div
-                  key={idx}
-                  className="flex-1 bg-gradient-to-t from-teal-600 to-teal-400 rounded-t-lg hover:from-teal-700 hover:to-teal-500 transition-colors cursor-pointer relative group"
-                  style={{ height: `${(value / 61) * 100}%` }}
-                >
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    {value} messages
-                  </div>
-                </div>
-              ))}
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">RFPs historiques</span>
+                            <span className="font-semibold">{rfpStats.historical.total}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Valeur gagnée</span>
+                            <span className="font-semibold text-green-600">
+                              {formatCurrency(rfpStats.historical.totalDealValue)}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Deal moyen</span>
+                            <span className="font-semibold">
+                              {formatCurrency(rfpStats.historical.avgDealSize)}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Score qualité</span>
+                            <span className="font-semibold">{rfpStats.historical.avgQualityScore}/100</span>
+                          </div>
+                          <div className="flex justify-between text-sm border-t pt-2">
+                            <span className="text-muted-foreground">Réutilisations</span>
+                            <span className="font-semibold text-teal-600">
+                              {rfpStats.historical.totalReuse}x
+                            </span>
+                          </div>
+                        </div>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => router.push(`/companies/${slug}/rfps/library`)}
+                        >
+                          Voir bibliothèque
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="text-center py-6">
+                        <BookOpen className="h-8 w-8 text-muted-foreground mx-auto mb-2 opacity-50" />
+                        <p className="text-xs text-muted-foreground">
+                          Aucun RFP historique
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Bibliothèque de Documents */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BookOpen className="h-5 w-5 text-purple-600" />
+                      Documents Support
+                    </CardTitle>
+                    <CardDescription>
+                      Base de connaissances indexée
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {rfpStats && (
+                      <div className="space-y-4">
+                        <div className="text-center p-4 bg-purple-50 rounded-lg">
+                          <p className="text-4xl font-bold text-purple-600">
+                            {rfpStats.documents.total}
+                          </p>
+                          <p className="text-sm text-muted-foreground mt-1">Documents indexés</p>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            {rfpStats.documents.totalChunks.toLocaleString()} chunks recherchables
+                          </p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                              <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              <span className="text-muted-foreground">Complétés</span>
+                            </div>
+                            <span className="font-semibold">{rfpStats.documents.completed}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                              <Clock className="h-4 w-4 text-blue-600" />
+                              <span className="text-muted-foreground">En traitement</span>
+                            </div>
+                            <span className="font-semibold">{rfpStats.documents.processing}</span>
+                          </div>
+                          {rfpStats.documents.failed > 0 && (
+                            <div className="flex items-center justify-between text-sm">
+                              <div className="flex items-center gap-2">
+                                <AlertCircle className="h-4 w-4 text-red-600" />
+                                <span className="text-muted-foreground">Échecs</span>
+                              </div>
+                              <span className="font-semibold text-red-600">
+                                {rfpStats.documents.failed}
+                              </span>
+                            </div>
+                          )}
+                          <div className="flex justify-between text-sm border-t pt-2">
+                            <span className="text-muted-foreground">Confidence moyenne</span>
+                            <span className="font-semibold">{rfpStats.documents.avgConfidence}%</span>
+                          </div>
+                        </div>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => router.push(`/companies/${slug}/documents`)}
+                        >
+                          Gérer documents
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Quick Actions */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Actions rapides</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Button
+                      className="w-full justify-start gap-2"
+                      variant="outline"
+                      onClick={() => router.push(`/companies/${slug}/intelligence`)}
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      Poser une question IA
+                    </Button>
+                    <Button
+                      className="w-full justify-start gap-2"
+                      variant="outline"
+                      onClick={() => router.push(`/companies/${slug}/documents`)}
+                    >
+                      <FileText className="h-4 w-4" />
+                      Uploader un document
+                    </Button>
+                    <Button
+                      className="w-full justify-start gap-2"
+                      variant="outline"
+                      onClick={() => router.push(`/companies/${slug}/rfps`)}
+                    >
+                      <Target className="h-4 w-4" />
+                      Créer un RFP
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
-            <div className="flex justify-between mt-4 text-xs text-muted-foreground">
-              <span>Semaine 1</span>
-              <span>Semaine 2</span>
-              <span>Semaine 3</span>
-              <span>Semaine 4</span>
-            </div>
-          </CardContent>
-        </Card>
+          </>
+        )}
       </div>
     </div>
   );

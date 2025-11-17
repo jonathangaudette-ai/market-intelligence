@@ -33,7 +33,9 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net https://vercel.live",
+              "script-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vercel.live",
               "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+              "style-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
               "font-src 'self' data: https://cdn.jsdelivr.net",
               "img-src 'self' data: blob: https:",
               "connect-src 'self' https://cdn.jsdelivr.net https://vercel.live wss://ws-us3.pusher.com",

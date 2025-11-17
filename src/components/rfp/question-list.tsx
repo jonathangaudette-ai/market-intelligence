@@ -26,12 +26,17 @@ import {
   Circle,
   TrendingUp,
   User,
+  Sparkles,
 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AssignmentButton } from './assignment-button';
 import { BulkActionsBar } from './bulk-actions-bar';
 import { SourceIndicatorBadge } from './source-indicator-badge';
+import { InlineBulkGenerator } from './inline-bulk-generator';
+import { toast } from 'sonner';
 import type { ContentType } from '@/types/content-types';
+
+const MAX_BULK_SELECTION = 10;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -104,6 +109,7 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuestionIds, setSelectedQuestionIds] = useState<string[]>([]);
+  const [showBulkGenerate, setShowBulkGenerate] = useState(false);
 
   const handleQuestionClick = (question: Question) => {
     setSelectedQuestion(question);
@@ -157,25 +163,45 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
     });
   }, [data?.questions, searchQuery, filterCategory, filterDifficulty, filterStatus, filterAssigned]);
 
-  // Selection handlers
-  const toggleQuestionSelection = (questionId: string) => {
-    setSelectedQuestionIds(prev =>
-      prev.includes(questionId)
-        ? prev.filter(id => id !== questionId)
-        : [...prev, questionId]
-    );
+  // Selection handlers with 10-question limit
+  const toggleQuestionSelection = (questionId: string, hasResponse: boolean) => {
+    if (hasResponse) {
+      return; // Don't allow selection of questions with responses
+    }
+
+    setSelectedQuestionIds(prev => {
+      if (prev.includes(questionId)) {
+        return prev.filter(id => id !== questionId);
+      }
+
+      if (prev.length >= MAX_BULK_SELECTION) {
+        toast.error(`Maximum ${MAX_BULK_SELECTION} questions à la fois`);
+        return prev;
+      }
+
+      return [...prev, questionId];
+    });
   };
 
   const toggleSelectAll = () => {
-    if (selectedQuestionIds.length === filteredQuestions.length) {
+    // Only select questions without responses
+    const selectableQuestions = filteredQuestions.filter(q => !q.hasResponse);
+
+    if (selectedQuestionIds.length === selectableQuestions.length) {
       setSelectedQuestionIds([]);
     } else {
-      setSelectedQuestionIds(filteredQuestions.map(q => q.id));
+      const toSelect = selectableQuestions.slice(0, MAX_BULK_SELECTION).map(q => q.id);
+      setSelectedQuestionIds(toSelect);
+
+      if (selectableQuestions.length > MAX_BULK_SELECTION) {
+        toast.warning(`Limite atteinte - ${MAX_BULK_SELECTION}/${selectableQuestions.length} sélectionnées`);
+      }
     }
   };
 
   const clearSelection = () => {
     setSelectedQuestionIds([]);
+    setShowBulkGenerate(false);
   };
 
   if (isLoading) {
@@ -334,16 +360,52 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
 
           {/* Bulk Selection */}
           {filteredQuestions.length > 0 && (
-            <div className="flex items-center gap-3 py-2 border-t border-b">
-              <Checkbox
-                checked={selectedQuestionIds.length === filteredQuestions.length}
-                onCheckedChange={toggleSelectAll}
+            <div className="flex items-center justify-between py-2 border-t border-b">
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  checked={selectedQuestionIds.length > 0 && selectedQuestionIds.length === filteredQuestions.filter(q => !q.hasResponse).length}
+                  onCheckedChange={toggleSelectAll}
+                />
+                <span className="text-sm text-gray-600">
+                  {selectedQuestionIds.length > 0
+                    ? `${selectedQuestionIds.length} sélectionnée(s)`
+                    : 'Sélectionner tout'}
+                </span>
+              </div>
+              {selectedQuestionIds.length > 0 && (
+                <div className="flex items-center gap-2">
+                  {selectedQuestionIds.length === MAX_BULK_SELECTION && (
+                    <Badge variant="secondary">Maximum ({MAX_BULK_SELECTION}/{MAX_BULK_SELECTION})</Badge>
+                  )}
+                  <Button
+                    onClick={() => setShowBulkGenerate(true)}
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    Générer ({selectedQuestionIds.length})
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Bulk Generator (Inline) */}
+          {showBulkGenerate && selectedQuestionIds.length > 0 && (
+            <div className="mb-4">
+              <InlineBulkGenerator
+                selectedQuestions={data!.questions.filter(q => selectedQuestionIds.includes(q.id))}
+                rfpId={rfpId}
+                slug={slug}
+                onComplete={() => {
+                  setShowBulkGenerate(false);
+                  setSelectedQuestionIds([]);
+                  mutate(); // Refresh questions list
+                }}
+                onCancel={() => {
+                  setShowBulkGenerate(false);
+                }}
               />
-              <span className="text-sm text-gray-600">
-                {selectedQuestionIds.length > 0
-                  ? `${selectedQuestionIds.length} sélectionnée(s)`
-                  : 'Sélectionner tout'}
-              </span>
             </div>
           )}
 
@@ -352,15 +414,21 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
             {filteredQuestions.map((question) => (
               <div
                 key={question.id}
-                className="border rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition-all"
+                className={`border rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition-all ${
+                  question.hasResponse ? 'bg-muted/30 opacity-60' : ''
+                }`}
               >
                 <div className="flex items-start gap-3">
                   {/* Checkbox */}
                   <div className="pt-1">
                     <Checkbox
                       checked={selectedQuestionIds.includes(question.id)}
-                      onCheckedChange={() => toggleQuestionSelection(question.id)}
+                      onCheckedChange={() => toggleQuestionSelection(question.id, question.hasResponse)}
                       onClick={(e) => e.stopPropagation()}
+                      disabled={
+                        question.hasResponse ||
+                        (!selectedQuestionIds.includes(question.id) && selectedQuestionIds.length >= MAX_BULK_SELECTION)
+                      }
                     />
                   </div>
 
@@ -408,10 +476,11 @@ export function QuestionList({ rfpId, slug }: QuestionListProps) {
                       </div>
 
                       <div className="flex items-center gap-2">
-                        {question.hasResponse ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-600" />
-                        ) : (
-                          <Circle className="h-5 w-5 text-gray-300" />
+                        {question.hasResponse && (
+                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                            <CheckCircle2 className="h-3 w-3 mr-1" />
+                            Réponse disponible
+                          </Badge>
                         )}
                       </div>
                     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Building2, MessageSquare, Users, Settings, LogOut, Menu, X, LayoutDashboard, FileCheck, Database, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { SuperAdminBadge } from "@/components/super-admin-badge";
 import { useSession } from "@/hooks/use-session";
 import { useSidebarStats } from "@/hooks/use-sidebar-stats";
 import { StatCardCompact } from "@/components/ui/stat-card";
+import { signOut } from "next-auth/react";
 
 export default function DashboardLayout({
   children,
@@ -22,6 +23,7 @@ export default function DashboardLayout({
   const { user } = useSession();
   const params = useParams();
   const pathname = usePathname();
+  const router = useRouter();
   const slug = params.slug as string || 'demo-company';
   const { stats, isLoading: statsLoading } = useSidebarStats(slug);
 
@@ -29,6 +31,12 @@ export default function DashboardLayout({
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
+
+  // Handle logout
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push('/login');
+  };
 
   // Note: No longer using cookies for company context
   // All APIs now extract company from slug in URL (via referer header)
@@ -142,7 +150,8 @@ export default function DashboardLayout({
               {user?.isSuperAdmin && <SuperAdminBadge />}
             </div>
             <button
-              className="text-gray-400 hover:text-gray-600"
+              onClick={handleLogout}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Se déconnecter"
             >
               <LogOut className="h-4 w-4" />

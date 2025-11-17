@@ -28,6 +28,19 @@ const nextConfig: NextConfig = {
             key: 'Permissions-Policy',
             value: 'geolocation=(), microphone=(), camera=()',
           },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net https://vercel.live",
+              "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+              "font-src 'self' data: https://cdn.jsdelivr.net",
+              "img-src 'self' data: blob: https:",
+              "connect-src 'self' https://cdn.jsdelivr.net https://vercel.live wss://ws-us3.pusher.com",
+              "worker-src 'self' blob:",
+              "child-src 'self' blob:",
+            ].join('; '),
+          },
           // Strict-Transport-Security (HSTS) - only in production
           ...(process.env.NODE_ENV === 'production'
             ? [

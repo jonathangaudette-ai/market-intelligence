@@ -53,6 +53,12 @@ const INITIAL_STEPS: UploadStep[] = [
   { id: 'indexing', label: 'Indexation dans Pinecone', status: 'pending' },
 ];
 
+interface EventLog {
+  timestamp: string;
+  message: string;
+  type: 'info' | 'success' | 'error';
+}
+
 export function DocumentUploadProgressModal(props: DocumentUploadProgressModalProps) {
   const [steps, setSteps] = useState<UploadStep[]>(INITIAL_STEPS);
   const [currentStep, setCurrentStep] = useState<Step | null>(null);
@@ -60,7 +66,9 @@ export function DocumentUploadProgressModal(props: DocumentUploadProgressModalPr
   const [error, setError] = useState<string | null>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [totalTime, setTotalTime] = useState<number | null>(null);
+  const [eventLogs, setEventLogs] = useState<EventLog[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const logsEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!props.isOpen) {
@@ -129,10 +137,25 @@ export function DocumentUploadProgressModal(props: DocumentUploadProgressModalPr
     }
   };
 
+  const addLog = (message: string, type: 'info' | 'success' | 'error' = 'info') => {
+    const timestamp = new Date().toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    setEventLogs(prev => [...prev, { timestamp, message, type }]);
+
+    // Auto-scroll to bottom
+    setTimeout(() => {
+      logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   const handleEvent = (event: any) => {
     switch (event.type) {
       case 'upload_complete':
         setDocumentId(event.documentId);
+        addLog(`✓ Document uploadé sur Vercel Blob`, 'success');
         break;
 
       case 'step_start':
@@ -143,10 +166,22 @@ export function DocumentUploadProgressModal(props: DocumentUploadProgressModalPr
           progress: 0,
         });
         setCurrentStep(event.step);
+
+        const stepLabels: Record<Step, string> = {
+          extracting: 'Début extraction du texte',
+          analyzing: `Début analyse avec ${event.model || 'Claude Haiku 4.5'}`,
+          embedding: `Début génération embeddings (${event.chunkCount || '?'} chunks)`,
+          indexing: `Début indexation Pinecone (${event.vectorCount || '?'} vecteurs)`,
+        };
+        addLog(stepLabels[event.step as Step], 'info');
         break;
 
       case 'step_progress':
         updateStep(event.step, { progress: event.progress });
+
+        if (event.current && event.total) {
+          addLog(`${event.step === 'embedding' ? 'Embeddings' : 'Indexation'}: ${event.current}/${event.total} (${event.progress}%)`, 'info');
+        }
         break;
 
       case 'step_complete':
@@ -156,12 +191,21 @@ export function DocumentUploadProgressModal(props: DocumentUploadProgressModalPr
           progress: 100,
           result: event.result,
         });
+
+        const completionMessages: Record<Step, string> = {
+          extracting: `✓ Texte extrait: ${event.result?.textLength?.toLocaleString()} caractères, ${event.result?.pageCount} pages`,
+          analyzing: `✓ Analyse complétée: ${event.result?.documentType} (${Math.round((event.result?.confidence || 0) * 100)}% confiance)`,
+          embedding: `✓ ${event.result?.embeddingCount} embeddings générés`,
+          indexing: `✓ Indexation complétée`,
+        };
+        addLog(completionMessages[event.step as Step], 'success');
         break;
 
       case 'complete':
         setIsComplete(true);
         setTotalTime(event.totalTime);
         setCurrentStep(null);
+        addLog(`✓ Traitement terminé en ${event.totalTime}s`, 'success');
         break;
 
       case 'error':
@@ -169,6 +213,7 @@ export function DocumentUploadProgressModal(props: DocumentUploadProgressModalPr
         if (event.step) {
           updateStep(event.step, { status: 'error' });
         }
+        addLog(`✗ Erreur: ${event.error}`, 'error');
         break;
     }
   };
@@ -200,6 +245,7 @@ export function DocumentUploadProgressModal(props: DocumentUploadProgressModalPr
     setError(null);
     setIsComplete(false);
     setTotalTime(null);
+    setEventLogs([]);
   };
 
   const overallProgress = calculateOverallProgress(steps);
@@ -226,6 +272,33 @@ export function DocumentUploadProgressModal(props: DocumentUploadProgressModalPr
             />
           ))}
         </div>
+
+        {/* Event Log */}
+        {eventLogs.length > 0 && (
+          <div className="my-4">
+            <h3 className="text-sm font-medium mb-2 text-gray-700">Événements en temps réel</h3>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 max-h-48 overflow-y-auto">
+              <div className="space-y-1 font-mono text-xs">
+                {eventLogs.map((log, index) => (
+                  <div
+                    key={index}
+                    className={`flex gap-2 ${
+                      log.type === 'success'
+                        ? 'text-green-700'
+                        : log.type === 'error'
+                        ? 'text-red-700'
+                        : 'text-gray-700'
+                    }`}
+                  >
+                    <span className="text-gray-400 shrink-0">{log.timestamp}</span>
+                    <span>{log.message}</span>
+                  </div>
+                ))}
+                <div ref={logsEndRef} />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Overall Progress */}
         <div className="space-y-2">

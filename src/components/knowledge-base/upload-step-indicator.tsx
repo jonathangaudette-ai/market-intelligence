@@ -41,6 +41,16 @@ export function UploadStepIndicator({ step, isActive }: UploadStepIndicatorProps
     return `${duration}s`;
   };
 
+  const getProgressText = () => {
+    if (step.status !== 'in_progress') return null;
+
+    if (step.progress !== undefined && step.progress > 0) {
+      return `${step.progress}%`;
+    }
+
+    return 'En cours...';
+  };
+
   const getResultSummary = () => {
     if (!step.result) return null;
 
@@ -73,24 +83,38 @@ export function UploadStepIndicator({ step, isActive }: UploadStepIndicatorProps
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">
           <h4 className="font-medium text-sm">{step.label}</h4>
-          {getDuration() && (
-            <span className="text-xs text-gray-500 font-mono">{getDuration()}</span>
-          )}
+          <div className="flex items-center gap-2">
+            {step.status === 'in_progress' && getProgressText() && (
+              <span className="text-xs text-teal-600 font-semibold">{getProgressText()}</span>
+            )}
+            {getDuration() && (
+              <span className="text-xs text-gray-500 font-mono">{getDuration()}</span>
+            )}
+          </div>
         </div>
 
         {step.details && (
           <p className="text-sm text-gray-600 mb-2">{step.details}</p>
         )}
 
-        {step.progress !== undefined && step.status === 'in_progress' && (
-          <div className="space-y-1">
-            <Progress value={step.progress} className="h-1.5" />
-            <span className="text-xs text-gray-500">{step.progress}%</span>
+        {step.status === 'in_progress' && !step.progress && (
+          <p className="text-xs text-teal-600 animate-pulse">Traitement en cours...</p>
+        )}
+
+        {step.progress !== undefined && step.status === 'in_progress' && step.progress > 0 && (
+          <div className="space-y-1 mt-2">
+            <Progress value={step.progress} className="h-2" />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>{step.progress}%</span>
+              {step.id === 'embedding' || step.id === 'indexing' ? (
+                <span>Traitement par batch...</span>
+              ) : null}
+            </div>
           </div>
         )}
 
         {step.status === 'completed' && getResultSummary() && (
-          <p className="text-xs text-gray-600 mt-1">{getResultSummary()}</p>
+          <p className="text-xs text-gray-600 mt-1">✓ {getResultSummary()}</p>
         )}
       </div>
     </div>

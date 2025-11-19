@@ -1,0 +1,4045 @@
+{
+  "competitorId": "uline",
+  "competitorName": "ULINE Canada",
+  "startTime": "2025-11-19T03:32:21.289Z",
+  "endTime": "2025-11-19T03:32:21.289Z",
+  "totalProducts": 576,
+  "productsScraped": 576,
+  "productsFound": 0,
+  "productsNotFound": 576,
+  "errors": 0,
+  "results": [
+    {
+      "sku": "ATL-12600",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:23.950Z"
+    },
+    {
+      "sku": "ATL-14505",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:28.191Z"
+    },
+    {
+      "sku": "ATL-14509",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:32.399Z"
+    },
+    {
+      "sku": "ATL-21801",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:36.619Z"
+    },
+    {
+      "sku": "ATL-21924",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:40.842Z"
+    },
+    {
+      "sku": "ATL-25",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:45.089Z"
+    },
+    {
+      "sku": "ATL-2501",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:49.304Z"
+    },
+    {
+      "sku": "ATL-311",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:53.606Z"
+    },
+    {
+      "sku": "ATL-315",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:57.930Z"
+    },
+    {
+      "sku": "ATL-336",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:02.134Z"
+    },
+    {
+      "sku": "ATL-36780",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:06.351Z"
+    },
+    {
+      "sku": "ATL-36781",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:10.543Z"
+    },
+    {
+      "sku": "RUB-9w32-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:14.737Z"
+    },
+    {
+      "sku": "RUB-9w32-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:18.917Z"
+    },
+    {
+      "sku": "ATL-1150",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:23.143Z"
+    },
+    {
+      "sku": "FDT-100-EH-BP",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:27.335Z"
+    },
+    {
+      "sku": "M2P-WA2026",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:31.526Z"
+    },
+    {
+      "sku": "ATL-816",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:35.783Z"
+    },
+    {
+      "sku": "ATL-816",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:40.006Z"
+    },
+    {
+      "sku": "FDT-100-EH-BP",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:44.192Z"
+    },
+    {
+      "sku": "ATL-1150",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:48.445Z"
+    },
+    {
+      "sku": "M2P-WA2026",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:52.628Z"
+    },
+    {
+      "sku": "ADV-110542",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:56.827Z"
+    },
+    {
+      "sku": "TRI-66140113",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:01.041Z"
+    },
+    {
+      "sku": "ADV-330RW",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:05.232Z"
+    },
+    {
+      "sku": "ZEP-CNPRO36",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:09.454Z"
+    },
+    {
+      "sku": "GLO-3563",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:13.681Z"
+    },
+    {
+      "sku": "GLO-3568",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:17.872Z"
+    },
+    {
+      "sku": "GLO-3560",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:22.103Z"
+    },
+    {
+      "sku": "ADV-5112AR",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:26.398Z"
+    },
+    {
+      "sku": "ADV-12174",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:30.631Z"
+    },
+    {
+      "sku": "M2P-TS-B2700",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:34.881Z"
+    },
+    {
+      "sku": "TRI-66140113",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:39.045Z"
+    },
+    {
+      "sku": "ZEP-CNPRO36",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:43.260Z"
+    },
+    {
+      "sku": "ADV-12174",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:47.492Z"
+    },
+    {
+      "sku": "M2P-TS-B2700",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:51.727Z"
+    },
+    {
+      "sku": "TRI-66120102",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:56.008Z"
+    },
+    {
+      "sku": "OLY-EBC-185",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:00.238Z"
+    },
+    {
+      "sku": "TRI-66120106",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:04.453Z"
+    },
+    {
+      "sku": "INS-SF-label-la",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:08.665Z"
+    },
+    {
+      "sku": "CON-10HL",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:13.306Z"
+    },
+    {
+      "sku": "ATL-454",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:17.593Z"
+    },
+    {
+      "sku": "ATL-761",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:21.890Z"
+    },
+    {
+      "sku": "M2P-BA-3001",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:26.231Z"
+    },
+    {
+      "sku": "RUB-2005-00--char",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:30.607Z"
+    },
+    {
+      "sku": "ATL-760",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:34.850Z"
+    },
+    {
+      "sku": "RUB-2018806",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:39.142Z"
+    },
+    {
+      "sku": "ATL-749",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:43.481Z"
+    },
+    {
+      "sku": "ATL-765",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:47.838Z"
+    },
+    {
+      "sku": "M2P-DP-L802",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:52.151Z"
+    },
+    {
+      "sku": "VIL-158848",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:56.451Z"
+    },
+    {
+      "sku": "ATL-175",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:00.715Z"
+    },
+    {
+      "sku": "M2P-BA-3001",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:05.026Z"
+    },
+    {
+      "sku": "M2P-DP-L802",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:09.283Z"
+    },
+    {
+      "sku": "VIL-158848",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:13.489Z"
+    },
+    {
+      "sku": "ATL-175",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:17.875Z"
+    },
+    {
+      "sku": "INS-AC-2532",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:22.161Z"
+    },
+    {
+      "sku": "INS-AC-BA9708D",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:26.511Z"
+    },
+    {
+      "sku": "ATL-454",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:30.796Z"
+    },
+    {
+      "sku": "ATL-761",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:35.019Z"
+    },
+    {
+      "sku": "ATL-760",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:39.226Z"
+    },
+    {
+      "sku": "ATL-749",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:43.791Z"
+    },
+    {
+      "sku": "ATL-765",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:48.155Z"
+    },
+    {
+      "sku": "ATL-795",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:52.459Z"
+    },
+    {
+      "sku": "ATL-796",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:56.727Z"
+    },
+    {
+      "sku": "M2P-BA-3000",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:00.950Z"
+    },
+    {
+      "sku": "ATL-763",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:05.275Z"
+    },
+    {
+      "sku": "RUB-2005-00--char",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:09.576Z"
+    },
+    {
+      "sku": "RUB-2018806",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:13.805Z"
+    },
+    {
+      "sku": "M2P-DP-L950",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:18.117Z"
+    },
+    {
+      "sku": "ATL-4K",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:22.415Z"
+    },
+    {
+      "sku": "RUB-2531-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:26.751Z"
+    },
+    {
+      "sku": "ATL-10182",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:31.039Z"
+    },
+    {
+      "sku": "INS-AC-DPL800",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:35.252Z"
+    },
+    {
+      "sku": "ATL-25",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:39.516Z"
+    },
+    {
+      "sku": "ATL-2501",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:43.729Z"
+    },
+    {
+      "sku": "ATL-315",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:48.003Z"
+    },
+    {
+      "sku": "ATL-336",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:52.312Z"
+    },
+    {
+      "sku": "ATL-5317",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:56.631Z"
+    },
+    {
+      "sku": "ATL-5352",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:00.939Z"
+    },
+    {
+      "sku": "ATL-823",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:05.169Z"
+    },
+    {
+      "sku": "ATL-906",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:09.455Z"
+    },
+    {
+      "sku": "BAL-s60v",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:13.659Z"
+    },
+    {
+      "sku": "ATL-318",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:18.150Z"
+    },
+    {
+      "sku": "ATL-398",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:22.488Z"
+    },
+    {
+      "sku": "ATL-315",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:26.751Z"
+    },
+    {
+      "sku": "ATL-318",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:30.972Z"
+    },
+    {
+      "sku": "ATL-387",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:35.187Z"
+    },
+    {
+      "sku": "ATL-5314",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:39.403Z"
+    },
+    {
+      "sku": "ATL-336",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:43.624Z"
+    },
+    {
+      "sku": "ATL-5317",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:47.914Z"
+    },
+    {
+      "sku": "ATL-5352",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:52.286Z"
+    },
+    {
+      "sku": "ATL-398",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:56.573Z"
+    },
+    {
+      "sku": "M2P-BR-UT60709",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:00.809Z"
+    },
+    {
+      "sku": "ATL-99101",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:05.035Z"
+    },
+    {
+      "sku": "ATL-101",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:09.242Z"
+    },
+    {
+      "sku": "ATL-85",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:13.555Z"
+    },
+    {
+      "sku": "ATL-99100",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:17.893Z"
+    },
+    {
+      "sku": "ATL-99021",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:22.237Z"
+    },
+    {
+      "sku": "M2P-PA-M1080",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:26.531Z"
+    },
+    {
+      "sku": "M2P-PA-W1120",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:30.798Z"
+    },
+    {
+      "sku": "RUB-7480-00--yel",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:35.021Z"
+    },
+    {
+      "sku": "RUB-q930-00--bl",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:39.238Z"
+    },
+    {
+      "sku": "M2P-PA-UT10",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:43.468Z"
+    },
+    {
+      "sku": "INS-AC-0080YE",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:47.853Z"
+    },
+    {
+      "sku": "M2P-PA-M1080",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:52.170Z"
+    },
+    {
+      "sku": "M2P-PA-W1120",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:56.482Z"
+    },
+    {
+      "sku": "RUB-q930-00--bl",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:00.726Z"
+    },
+    {
+      "sku": "M2P-PA-UT10",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:04.946Z"
+    },
+    {
+      "sku": "RUB-7480-00--yel",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:09.122Z"
+    },
+    {
+      "sku": "INS-AC-0080YE",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:13.316Z"
+    },
+    {
+      "sku": "INS-AC-0038YE",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:17.529Z"
+    },
+    {
+      "sku": "INS-AC-7577YE",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:21.717Z"
+    },
+    {
+      "sku": "MAT-MNR654",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:25.903Z"
+    },
+    {
+      "sku": "MAT-3R654",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:30.084Z"
+    },
+    {
+      "sku": "MAT-PTFM3554",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:34.434Z"
+    },
+    {
+      "sku": "MAT-MNR654",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:38.723Z"
+    },
+    {
+      "sku": "MAT-3R654",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:42.910Z"
+    },
+    {
+      "sku": "MAT-PTFM3554",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:47.132Z"
+    },
+    {
+      "sku": "RUB-1881749",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:51.318Z"
+    },
+    {
+      "sku": "RUB-1966719--yel",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:55.499Z"
+    },
+    {
+      "sku": "RUB-4403-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:59.711Z"
+    },
+    {
+      "sku": "RUB-9t16-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:03.902Z"
+    },
+    {
+      "sku": "RUB-9t78-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:08.110Z"
+    },
+    {
+      "sku": "RUB-9w73-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:12.371Z"
+    },
+    {
+      "sku": "rub-4300-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:16.574Z"
+    },
+    {
+      "sku": "RUB-3154-88--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:20.776Z"
+    },
+    {
+      "sku": "M2P-CA-M1801",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:24.998Z"
+    },
+    {
+      "sku": "RUB-6179-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:29.204Z"
+    },
+    {
+      "sku": "RUB-9t85-00-bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:33.458Z"
+    },
+    {
+      "sku": "RUB-9t16-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:37.645Z"
+    },
+    {
+      "sku": "RUB-9w73-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:41.842Z"
+    },
+    {
+      "sku": "rub-4300-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:46.059Z"
+    },
+    {
+      "sku": "RUB-1881749",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:50.248Z"
+    },
+    {
+      "sku": "RUB-1966719--yel",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:54.489Z"
+    },
+    {
+      "sku": "RUB-9t78-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:58.681Z"
+    },
+    {
+      "sku": "RUB-3154-88--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:02.875Z"
+    },
+    {
+      "sku": "M2P-CA-M1801",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:07.087Z"
+    },
+    {
+      "sku": "RUB-6179-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:11.294Z"
+    },
+    {
+      "sku": "RUB-9t85-00-bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:15.661Z"
+    },
+    {
+      "sku": "M2P-TL-101",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:19.907Z"
+    },
+    {
+      "sku": "INS-AC-0007",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:24.125Z"
+    },
+    {
+      "sku": "RUB-4403-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:28.323Z"
+    },
+    {
+      "sku": "RUB-2646-00--bla",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:32.509Z"
+    },
+    {
+      "sku": "SAN-3165WH",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:36.703Z"
+    },
+    {
+      "sku": "ATL-F132",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:40.936Z"
+    },
+    {
+      "sku": "EMM-9033081",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:45.151Z"
+    },
+    {
+      "sku": "ECG-EG-A-K01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:49.365Z"
+    },
+    {
+      "sku": "ECG-EG-A-K03",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:53.549Z"
+    },
+    {
+      "sku": "ECG-EG-A-SS01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:57.754Z"
+    },
+    {
+      "sku": "ECG-EG-A-TS01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:01.941Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:06.123Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5-R1",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:10.305Z"
+    },
+    {
+      "sku": "ECG-EG-N-C001",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:14.508Z"
+    },
+    {
+      "sku": "ECG-EG-N-C003",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:18.722Z"
+    },
+    {
+      "sku": "SAN-3165WH",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:22.924Z"
+    },
+    {
+      "sku": "ATL-F132",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:27.144Z"
+    },
+    {
+      "sku": "EMM-9033081",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:31.365Z"
+    },
+    {
+      "sku": "ECG-EG-A-K01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:35.559Z"
+    },
+    {
+      "sku": "ECG-EG-A-K03",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:39.781Z"
+    },
+    {
+      "sku": "ECG-EG-A-SS01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:43.977Z"
+    },
+    {
+      "sku": "ECG-EG-A-TS01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:48.173Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:52.392Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5-R1",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:56.578Z"
+    },
+    {
+      "sku": "ECG-EG-N-C001",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:00.769Z"
+    },
+    {
+      "sku": "ECG-EG-N-C003",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:04.964Z"
+    },
+    {
+      "sku": "ATL-21801",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:09.203Z"
+    },
+    {
+      "sku": "ATL-21924",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:13.566Z"
+    },
+    {
+      "sku": "ATL-311",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:17.854Z"
+    },
+    {
+      "sku": "ATL-36780",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:22.064Z"
+    },
+    {
+      "sku": "ATL-36781",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:26.286Z"
+    },
+    {
+      "sku": "ATL-60340",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:30.470Z"
+    },
+    {
+      "sku": "ATL-60695",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:34.672Z"
+    },
+    {
+      "sku": "MMM-70071279759",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:38.899Z"
+    },
+    {
+      "sku": "MMM-F-ESH-18PAD",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:43.100Z"
+    },
+    {
+      "sku": "RUB-Q050-00--0000",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:47.309Z"
+    },
+    {
+      "sku": "RUB-q416-00--bl00",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:51.556Z"
+    },
+    {
+      "sku": "RUB-q630-00--bl00",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:55.874Z"
+    },
+    {
+      "sku": "ATL-21801",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:00.123Z"
+    },
+    {
+      "sku": "ATL-311",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:04.429Z"
+    },
+    {
+      "sku": "RUB-q850-00--black",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:08.716Z"
+    },
+    {
+      "sku": "RUB-Q852-00--WH00",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:12.996Z"
+    },
+    {
+      "sku": "RUB-Q853-00--WH00",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:17.269Z"
+    },
+    {
+      "sku": "RUB-q851-00--gr00",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:21.628Z"
+    },
+    {
+      "sku": "ATL-425",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:25.936Z"
+    },
+    {
+      "sku": "ADV-30050",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:30.209Z"
+    },
+    {
+      "sku": "ATL-426",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:34.460Z"
+    },
+    {
+      "sku": "ATL-310",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:38.681Z"
+    },
+    {
+      "sku": "MMM-70071279759",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:42.962Z"
+    },
+    {
+      "sku": "MMM-F-ESH-18PAD",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:47.284Z"
+    },
+    {
+      "sku": "RUB-Q050-00--0000",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:51.740Z"
+    },
+    {
+      "sku": "RUB-q630-00--bl00",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:56.005Z"
+    },
+    {
+      "sku": "ATL-12600",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:00.237Z"
+    },
+    {
+      "sku": "ATL-14509",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:04.468Z"
+    },
+    {
+      "sku": "ATL-5106",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:08.718Z"
+    },
+    {
+      "sku": "BAL-l6336r",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:13.020Z"
+    },
+    {
+      "sku": "M2P-HW-160M",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:17.433Z"
+    },
+    {
+      "sku": "M2P-HW-7002W",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:21.787Z"
+    },
+    {
+      "sku": "M2P-HW-7003A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:26.018Z"
+    },
+    {
+      "sku": "M2P-MW-SWC32-GR",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:30.262Z"
+    },
+    {
+      "sku": "RUB-2018823",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:34.512Z"
+    },
+    {
+      "sku": "RUB-q900-88--yel",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:38.801Z"
+    },
+    {
+      "sku": "ATL-1620",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:43.162Z"
+    },
+    {
+      "sku": "ATL-1624",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:47.477Z"
+    },
+    {
+      "sku": "ATL-14509",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:51.797Z"
+    },
+    {
+      "sku": "BAL-l6336r",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:56.129Z"
+    },
+    {
+      "sku": "RUB-q900-88--yel",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:00.398Z"
+    },
+    {
+      "sku": "UNG-WNK04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:04.637Z"
+    },
+    {
+      "sku": "AVM-2409277001",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:08.854Z"
+    },
+    {
+      "sku": "CHE-CCCFS19GW4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:13.164Z"
+    },
+    {
+      "sku": "CHE-CCCV100008",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:17.689Z"
+    },
+    {
+      "sku": "CHE-CCSDCTOG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:21.975Z"
+    },
+    {
+      "sku": "CHE-CCSNUTOG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:26.190Z"
+    },
+    {
+      "sku": "CHE-CCSVCPGG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:30.431Z"
+    },
+    {
+      "sku": "CHE-CCSWRBXG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:34.658Z"
+    },
+    {
+      "sku": "CHE-CCSWUBXG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:38.880Z"
+    },
+    {
+      "sku": "DAN-BV3-0161-039",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:43.160Z"
+    },
+    {
+      "sku": "DAN-NU1-0008-041",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:47.558Z"
+    },
+    {
+      "sku": "DAN-SL1-0006-013",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:51.851Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-037",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:56.063Z"
+    },
+    {
+      "sku": "INN-15201",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:00.305Z"
+    },
+    {
+      "sku": "CHE-CCSBULEG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:04.539Z"
+    },
+    {
+      "sku": "HOS-SC500TSC",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:08.800Z"
+    },
+    {
+      "sku": "LAW-34157",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:13.158Z"
+    },
+    {
+      "sku": "ZEP-178754",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:17.538Z"
+    },
+    {
+      "sku": "HOS-96687",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:21.846Z"
+    },
+    {
+      "sku": "CHE-CCSBULEG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:26.076Z"
+    },
+    {
+      "sku": "DEB-10159",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:30.289Z"
+    },
+    {
+      "sku": "LAV-098029",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:34.524Z"
+    },
+    {
+      "sku": "DUS-53732",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:38.764Z"
+    },
+    {
+      "sku": "LAW-34180",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:43.163Z"
+    },
+    {
+      "sku": "LAW-34157",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:47.416Z"
+    },
+    {
+      "sku": "DIV-101104392",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:51.718Z"
+    },
+    {
+      "sku": "LAW-34524",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:55.952Z"
+    },
+    {
+      "sku": "DIV-101103669",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:00.181Z"
+    },
+    {
+      "sku": "INN-16966",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:04.406Z"
+    },
+    {
+      "sku": "SPR-875",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:08.633Z"
+    },
+    {
+      "sku": "DEB-10168",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:13.020Z"
+    },
+    {
+      "sku": "DIV-101103669",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:17.316Z"
+    },
+    {
+      "sku": "INN-16966",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:21.595Z"
+    },
+    {
+      "sku": "SPR-875",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:25.838Z"
+    },
+    {
+      "sku": "DEB-10168",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:30.102Z"
+    },
+    {
+      "sku": "AVM-2409277001",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:34.359Z"
+    },
+    {
+      "sku": "CHE-CCCFS19GW4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:38.695Z"
+    },
+    {
+      "sku": "CHE-CCSNUTOG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:42.998Z"
+    },
+    {
+      "sku": "DIV-5032386",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:47.290Z"
+    },
+    {
+      "sku": "DIV-5104731",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:51.623Z"
+    },
+    {
+      "sku": "MMM-C-10096-21OZ",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:55.913Z"
+    },
+    {
+      "sku": "PAR-PARMATIC4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:00.169Z"
+    },
+    {
+      "sku": "INS-SF-GRUNGE-4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:04.403Z"
+    },
+    {
+      "sku": "INO-FIB16-946",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:08.628Z"
+    },
+    {
+      "sku": "PSS-POWDER-20",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:12.858Z"
+    },
+    {
+      "sku": "INO-gl13-4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:17.059Z"
+    },
+    {
+      "sku": "CHE-CCSDCTOG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:21.243Z"
+    },
+    {
+      "sku": "INN-15162",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:25.416Z"
+    },
+    {
+      "sku": "INN-16028",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:29.635Z"
+    },
+    {
+      "sku": "INN-16399",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:33.824Z"
+    },
+    {
+      "sku": "CHE-CCSECFLG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:38.048Z"
+    },
+    {
+      "sku": "CHE-CCCCL10G04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:42.241Z"
+    },
+    {
+      "sku": "DIV-3172668",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:46.442Z"
+    },
+    {
+      "sku": "DIV-5499058",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:50.627Z"
+    },
+    {
+      "sku": "INN-15162",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:54.946Z"
+    },
+    {
+      "sku": "INN-16028",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:59.119Z"
+    },
+    {
+      "sku": "INN-16399",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:03.311Z"
+    },
+    {
+      "sku": "CHE-CCSECFLG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:07.484Z"
+    },
+    {
+      "sku": "DIV-3172668",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:11.689Z"
+    },
+    {
+      "sku": "SPR-293",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:15.922Z"
+    },
+    {
+      "sku": "RML-11258439",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:20.103Z"
+    },
+    {
+      "sku": "SPR-031",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:24.338Z"
+    },
+    {
+      "sku": "COB-050-1349",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:28.523Z"
+    },
+    {
+      "sku": "DIV-101106957",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:32.697Z"
+    },
+    {
+      "sku": "SPR-CL880",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:36.888Z"
+    },
+    {
+      "sku": "CHE-CCSDCTOG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:41.116Z"
+    },
+    {
+      "sku": "CHE-CCCCL10G04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:45.321Z"
+    },
+    {
+      "sku": "DIV-5499058",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:49.504Z"
+    },
+    {
+      "sku": "CHE-CCSWRBXG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:53.709Z"
+    },
+    {
+      "sku": "CHE-CCSWUBXG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:57.906Z"
+    },
+    {
+      "sku": "RML-11894498",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:02.105Z"
+    },
+    {
+      "sku": "DIV-03970",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:06.338Z"
+    },
+    {
+      "sku": "SPR-CL50",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:10.546Z"
+    },
+    {
+      "sku": "DEB-10146",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:14.731Z"
+    },
+    {
+      "sku": "SCJ-WINDEX-539G",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:18.950Z"
+    },
+    {
+      "sku": "SPR-848",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:23.139Z"
+    },
+    {
+      "sku": "SPR-CL50",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:27.383Z"
+    },
+    {
+      "sku": "SCJ-WINDEX-539G",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:31.582Z"
+    },
+    {
+      "sku": "SPR-848",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:35.759Z"
+    },
+    {
+      "sku": "INO-aes100",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:39.973Z"
+    },
+    {
+      "sku": "CHE-CCSWUBXG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:44.172Z"
+    },
+    {
+      "sku": "DEB-10146",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:48.351Z"
+    },
+    {
+      "sku": "CHE-CCSWRBXG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:52.544Z"
+    },
+    {
+      "sku": "RML-11894498",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:56.731Z"
+    },
+    {
+      "sku": "DIV-03970",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:00.907Z"
+    },
+    {
+      "sku": "REC-53-394X52",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:05.117Z"
+    },
+    {
+      "sku": "INS-SF-KRYSTA-4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:09.322Z"
+    },
+    {
+      "sku": "DAN-BV3-0161-039",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:13.533Z"
+    },
+    {
+      "sku": "DAN-NU1-0008-041",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:17.832Z"
+    },
+    {
+      "sku": "DAN-SL1-0006-013",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:22.084Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-037",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:26.376Z"
+    },
+    {
+      "sku": "DAN-SL1-0151-037",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:30.583Z"
+    },
+    {
+      "sku": "DAN-002-0003-045",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:34.793Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-039",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:38.994Z"
+    },
+    {
+      "sku": "DHS-TPPW-BB125",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:43.185Z"
+    },
+    {
+      "sku": "DAN-001-0152-036",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:47.386Z"
+    },
+    {
+      "sku": "FOR-151355",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:51.588Z"
+    },
+    {
+      "sku": "DAN-BV3-0161-039",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:55.778Z"
+    },
+    {
+      "sku": "DAN-NU1-0008-041",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:59.969Z"
+    },
+    {
+      "sku": "DAN-SL1-0006-013",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:04.187Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-037",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:08.415Z"
+    },
+    {
+      "sku": "DAN-SL1-0151-037",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:12.611Z"
+    },
+    {
+      "sku": "DAN-002-0003-045",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:16.831Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-039",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:21.028Z"
+    },
+    {
+      "sku": "DHS-TPPW-BB125",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:25.228Z"
+    },
+    {
+      "sku": "DAN-001-0152-036",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:29.445Z"
+    },
+    {
+      "sku": "FOR-151355",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:33.633Z"
+    },
+    {
+      "sku": "JIG-JIG1201+",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:37.834Z"
+    },
+    {
+      "sku": "JIG-JIG1601+",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:42.032Z"
+    },
+    {
+      "sku": "ZEP-037647",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:46.220Z"
+    },
+    {
+      "sku": "ZEP-085647",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:50.446Z"
+    },
+    {
+      "sku": "ZEP-G24447",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:54.715Z"
+    },
+    {
+      "sku": "ZEP-P84647",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:59.032Z"
+    },
+    {
+      "sku": "ZEP-Q06854",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:03.465Z"
+    },
+    {
+      "sku": "ZEP-374311C",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:07.751Z"
+    },
+    {
+      "sku": "ZEP-037647",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:12.023Z"
+    },
+    {
+      "sku": "ZEP-G24447",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:16.352Z"
+    },
+    {
+      "sku": "ZEP-P84647",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:20.638Z"
+    },
+    {
+      "sku": "ZEP-Q06854",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:32.462Z"
+    },
+    {
+      "sku": "HYG-11025",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:36.800Z"
+    },
+    {
+      "sku": "ZEP-M60323",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:41.058Z"
+    },
+    {
+      "sku": "INO-shp1-378",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:45.369Z"
+    },
+    {
+      "sku": "CHE-CCCV100008",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:49.684Z"
+    },
+    {
+      "sku": "CHE-CCSVCPGG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:53.955Z"
+    },
+    {
+      "sku": "DIV-04678",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:58.369Z"
+    },
+    {
+      "sku": "OLY-4412036",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:02.733Z"
+    },
+    {
+      "sku": "OLY-4412036",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:07.015Z"
+    },
+    {
+      "sku": "INO-ch6-950",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:11.262Z"
+    },
+    {
+      "sku": "INN-15238",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:15.602Z"
+    },
+    {
+      "sku": "DIV-04678",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:19.964Z"
+    },
+    {
+      "sku": "HYG-15025",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:24.252Z"
+    },
+    {
+      "sku": "DIV-100839421",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:28.520Z"
+    },
+    {
+      "sku": "INO-shp5-946",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:32.786Z"
+    },
+    {
+      "sku": "PRG-02664",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:37.117Z"
+    },
+    {
+      "sku": "CHE-CCCSUNE018",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:41.381Z"
+    },
+    {
+      "sku": "PRG-02500",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:45.655Z"
+    },
+    {
+      "sku": "DIV-100905320",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:49.957Z"
+    },
+    {
+      "sku": "DIV-100905391",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:54.212Z"
+    },
+    {
+      "sku": "DIV-100905392",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:58.471Z"
+    },
+    {
+      "sku": "OLY-4877105",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:03.002Z"
+    },
+    {
+      "sku": "DIV-100905320",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:07.330Z"
+    },
+    {
+      "sku": "DIV-100905391",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:11.530Z"
+    },
+    {
+      "sku": "DIV-100905392",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:15.740Z"
+    },
+    {
+      "sku": "PRG-02664",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:19.959Z"
+    },
+    {
+      "sku": "CHE-CCCSUNE018",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:24.333Z"
+    },
+    {
+      "sku": "PRG-02500",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:28.713Z"
+    },
+    {
+      "sku": "CHE-CCSLEFRG04",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:32.997Z"
+    },
+    {
+      "sku": "OLY-4262040",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:37.374Z"
+    },
+    {
+      "sku": "PRG-49340",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:41.650Z"
+    },
+    {
+      "sku": "INO-WSH3-4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:46.016Z"
+    },
+    {
+      "sku": "INO-WSH5-1",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:50.243Z"
+    },
+    {
+      "sku": "LAW-75150",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:54.495Z"
+    },
+    {
+      "sku": "ZEP-Q14054",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:58.747Z"
+    },
+    {
+      "sku": "RUB-1793547",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:03.144Z"
+    },
+    {
+      "sku": "TRI-56202",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:07.513Z"
+    },
+    {
+      "sku": "HOS-07918",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:11.726Z"
+    },
+    {
+      "sku": "COB-170-1092",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:15.932Z"
+    },
+    {
+      "sku": "SPR-SW575",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:20.172Z"
+    },
+    {
+      "sku": "WAT-33-2960",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:24.384Z"
+    },
+    {
+      "sku": "TRI-56202",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:28.580Z"
+    },
+    {
+      "sku": "HOS-07918",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:32.942Z"
+    },
+    {
+      "sku": "SPR-SW575",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:37.362Z"
+    },
+    {
+      "sku": "WAT-33-2960",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:41.608Z"
+    },
+    {
+      "sku": "WAT-1045176",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:45.835Z"
+    },
+    {
+      "sku": "SPR-SW586",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:50.090Z"
+    },
+    {
+      "sku": "SPR-106W",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:54.297Z"
+    },
+    {
+      "sku": "SPR-165",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:58.520Z"
+    },
+    {
+      "sku": "WAT-1045374",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:03.016Z"
+    },
+    {
+      "sku": "INO-aes400",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:07.375Z"
+    },
+    {
+      "sku": "RUB-1793547",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:11.597Z"
+    },
+    {
+      "sku": "ZEP-WATW6100",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:15.820Z"
+    },
+    {
+      "sku": "INO-OL32-6100",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:20.120Z"
+    },
+    {
+      "sku": "ZEP-Q14054",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:24.427Z"
+    },
+    {
+      "sku": "COB-170-1092",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:28.769Z"
+    },
+    {
+      "sku": "DEG-12435A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:33.066Z"
+    },
+    {
+      "sku": "DEG-12435A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:37.423Z"
+    },
+    {
+      "sku": "DEB-GPF3LDQ",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:41.709Z"
+    },
+    {
+      "sku": "DEB-PRO1LDS",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:46.071Z"
+    },
+    {
+      "sku": "DEB-SUN1LDS",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:50.298Z"
+    },
+    {
+      "sku": "GOJ-7772-02-CAN00",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:54.550Z"
+    },
+    {
+      "sku": "DIV-100907872",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:58.788Z"
+    },
+    {
+      "sku": "OLY-4413104",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:02.984Z"
+    },
+    {
+      "sku": "DEB-GPF3LDQ",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:07.205Z"
+    },
+    {
+      "sku": "DEB-PRO1LDS",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:11.470Z"
+    },
+    {
+      "sku": "DEB-SUN1LDS",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:15.738Z"
+    },
+    {
+      "sku": "AVM-0000011770",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:20.051Z"
+    },
+    {
+      "sku": "DEB-951",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:24.295Z"
+    },
+    {
+      "sku": "KUT-9908zpl",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:28.528Z"
+    },
+    {
+      "sku": "SAN-SF900TBK",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:32.754Z"
+    },
+    {
+      "sku": "SAN-S900TBK",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:36.940Z"
+    },
+    {
+      "sku": "WAY-FAEWS1416F",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:41.121Z"
+    },
+    {
+      "sku": "KMC-91565",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:45.419Z"
+    },
+    {
+      "sku": "GOJ-1911-02",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:49.650Z"
+    },
+    {
+      "sku": "TEC-401543",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:53.844Z"
+    },
+    {
+      "sku": "CHE-CCCBFXXGW4",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:58.048Z"
+    },
+    {
+      "sku": "CLA-56265505",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:02.272Z"
+    },
+    {
+      "sku": "CLA-9084705010",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:06.545Z"
+    },
+    {
+      "sku": "CLA-CLARKE1500",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:10.836Z"
+    },
+    {
+      "sku": "CLA-CLARKE20DS",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:15.019Z"
+    },
+    {
+      "sku": "CLA-CLARKE430C",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:19.341Z"
+    },
+    {
+      "sku": "CLA-MAXXI35PKG",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:23.593Z"
+    },
+    {
+      "sku": "HAG-477",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:27.792Z"
+    },
+    {
+      "sku": "MIC-M60K3",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:32.250Z"
+    },
+    {
+      "sku": "NAC-8026080",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:36.594Z"
+    },
+    {
+      "sku": "PRO-107128",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:40.850Z"
+    },
+    {
+      "sku": "SNT-SC3700A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:45.076Z"
+    },
+    {
+      "sku": "SNT-SC5845B",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:49.268Z"
+    },
+    {
+      "sku": "CLA-56265505",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:53.471Z"
+    },
+    {
+      "sku": "VIP-50000545",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:57.677Z"
+    },
+    {
+      "sku": "CLA-56265504",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:01.880Z"
+    },
+    {
+      "sku": "VIP-50000545-demo",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:06.072Z"
+    },
+    {
+      "sku": "CLA-56265505",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:10.278Z"
+    },
+    {
+      "sku": "VIP-50000545",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:14.475Z"
+    },
+    {
+      "sku": "CLA-56265504",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:18.652Z"
+    },
+    {
+      "sku": "VIP-50000545-demo",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:22.871Z"
+    },
+    {
+      "sku": "KNI-7418200-01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:27.100Z"
+    },
+    {
+      "sku": "KNI-7418200-01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:31.298Z"
+    },
+    {
+      "sku": "CPL-ES15-PS",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:35.488Z"
+    },
+    {
+      "sku": "MIC-PRE-ES8+",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:39.684Z"
+    },
+    {
+      "sku": "M2P-TS-PP6000",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:43.882Z"
+    },
+    {
+      "sku": "CPL-ES15-PS",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:48.061Z"
+    },
+    {
+      "sku": "MIC-PRE-ES8+",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:52.271Z"
+    },
+    {
+      "sku": "M2P-TS-PP6000",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:56.453Z"
+    },
+    {
+      "sku": "CLA-CLARKE430C",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:00.641Z"
+    },
+    {
+      "sku": "VIP-AS5160TAGMPKG",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:04.834Z"
+    },
+    {
+      "sku": "CLA-56385412",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:09.002Z"
+    },
+    {
+      "sku": "CLA-CLARKE430C",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:13.180Z"
+    },
+    {
+      "sku": "VIP-AS5160TAGMPKG",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:17.376Z"
+    },
+    {
+      "sku": "CLA-56385412",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:21.812Z"
+    },
+    {
+      "sku": "CLA-9084705010",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:26.050Z"
+    },
+    {
+      "sku": "HAG-477",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:30.253Z"
+    },
+    {
+      "sku": "HAG-697",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:34.443Z"
+    },
+    {
+      "sku": "HAG-677",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:38.758Z"
+    },
+    {
+      "sku": "HAG-497",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:43.037Z"
+    },
+    {
+      "sku": "CLA-9084705010",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:47.219Z"
+    },
+    {
+      "sku": "HAG-697",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:51.419Z"
+    },
+    {
+      "sku": "HAG-677",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:55.624Z"
+    },
+    {
+      "sku": "HAG-477",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:59.812Z"
+    },
+    {
+      "sku": "HAG-497",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:04.007Z"
+    },
+    {
+      "sku": "CLA-MAXXI35PKG",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:08.204Z"
+    },
+    {
+      "sku": "MIC-M60K3",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:12.445Z"
+    },
+    {
+      "sku": "NAC-8026080",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:16.627Z"
+    },
+    {
+      "sku": "PRO-107128",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:20.856Z"
+    },
+    {
+      "sku": "SNT-SC3700A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:25.069Z"
+    },
+    {
+      "sku": "SNT-SC5845B",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:29.257Z"
+    },
+    {
+      "sku": "VIP-SN18WD",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:33.455Z"
+    },
+    {
+      "sku": "CLA-9060208020",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:37.630Z"
+    },
+    {
+      "sku": "CLA-107407690",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:41.830Z"
+    },
+    {
+      "sku": "CLA-107407691",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:46.010Z"
+    },
+    {
+      "sku": "CLA-56383409",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:50.211Z"
+    },
+    {
+      "sku": "PRO-107535",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:54.416Z"
+    },
+    {
+      "sku": "PRO-107315",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:58.708Z"
+    },
+    {
+      "sku": "NAC-8026080",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:02.991Z"
+    },
+    {
+      "sku": "SNT-SC3700A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:07.378Z"
+    },
+    {
+      "sku": "NAC-900779",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:11.658Z"
+    },
+    {
+      "sku": "JOV-BRW285",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:15.956Z"
+    },
+    {
+      "sku": "DUS-26332",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:20.293Z"
+    },
+    {
+      "sku": "MAK-DRC200Z",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:24.719Z"
+    },
+    {
+      "sku": "MAK-DCL184Z",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:29.020Z"
+    },
+    {
+      "sku": "MAK-DVC560PT2",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:33.235Z"
+    },
+    {
+      "sku": "MAK-Y-00309",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:37.444Z"
+    },
+    {
+      "sku": "MAK-Y-00359",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:41.655Z"
+    },
+    {
+      "sku": "CLA-107421148",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:46.031Z"
+    },
+    {
+      "sku": "SNT-SC5845B",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:50.417Z"
+    },
+    {
+      "sku": "CLA-9060208020",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:54.713Z"
+    },
+    {
+      "sku": "CLA-107407690",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:58.943Z"
+    },
+    {
+      "sku": "CLA-107407691",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:03.161Z"
+    },
+    {
+      "sku": "CLA-9060408010",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:07.355Z"
+    },
+    {
+      "sku": "SNT-61840",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:11.668Z"
+    },
+    {
+      "sku": "ATL-70143",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:16.159Z"
+    },
+    {
+      "sku": "CAS-K250",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:20.576Z"
+    },
+    {
+      "sku": "CAS-N050",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:24.961Z"
+    },
+    {
+      "sku": "CAS-N055",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:29.247Z"
+    },
+    {
+      "sku": "CAS-T116",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:33.509Z"
+    },
+    {
+      "sku": "CAS-T220",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:37.706Z"
+    },
+    {
+      "sku": "CAS-T320",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:41.921Z"
+    },
+    {
+      "sku": "CHI-911",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:46.279Z"
+    },
+    {
+      "sku": "COP-12041-25",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:50.715Z"
+    },
+    {
+      "sku": "FRO-180",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:55.032Z"
+    },
+    {
+      "sku": "HOS-HG-1-2",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:59.252Z"
+    },
+    {
+      "sku": "HOS-HG-2500",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:03.470Z"
+    },
+    {
+      "sku": "IMA-2840S",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:07.769Z"
+    },
+    {
+      "sku": "POL-3038EF125",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:12.066Z"
+    },
+    {
+      "sku": "POL-1212",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:16.347Z"
+    },
+    {
+      "sku": "IMA-2840S",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:20.714Z"
+    },
+    {
+      "sku": "POL-3038EF125",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:25.096Z"
+    },
+    {
+      "sku": "FRO-180",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:29.415Z"
+    },
+    {
+      "sku": "HOS-HG-1-2",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:33.700Z"
+    },
+    {
+      "sku": "HOS-HG-2500",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:37.908Z"
+    },
+    {
+      "sku": "SCA-461002",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:42.219Z"
+    },
+    {
+      "sku": "SCA-465500",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:46.526Z"
+    },
+    {
+      "sku": "SCA-463002",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:50.938Z"
+    },
+    {
+      "sku": "FRO-180",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:55.293Z"
+    },
+    {
+      "sku": "KMC-40407",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:59.761Z"
+    },
+    {
+      "sku": "SCA-463002",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:04.049Z"
+    },
+    {
+      "sku": "SCA-552120A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:08.333Z"
+    },
+    {
+      "sku": "INS-di-3300w",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:12.594Z"
+    },
+    {
+      "sku": "CAS-K250",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:16.805Z"
+    },
+    {
+      "sku": "CAS-N050",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:21.157Z"
+    },
+    {
+      "sku": "CAS-N055",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:25.615Z"
+    },
+    {
+      "sku": "CAS-T116",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:29.873Z"
+    },
+    {
+      "sku": "CAS-T220",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:34.069Z"
+    },
+    {
+      "sku": "CAS-T320",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:38.564Z"
+    },
+    {
+      "sku": "SCA-110292A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:42.842Z"
+    },
+    {
+      "sku": "SCA-290092A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:47.192Z"
+    },
+    {
+      "sku": "SCA-290094",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:51.399Z"
+    },
+    {
+      "sku": "SCA-510137",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:55.810Z"
+    },
+    {
+      "sku": "SCA-530137",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:00.227Z"
+    },
+    {
+      "sku": "SCA-hb1995a",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:04.526Z"
+    },
+    {
+      "sku": "CAS-T320",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:08.734Z"
+    },
+    {
+      "sku": "KRU-05629",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:12.953Z"
+    },
+    {
+      "sku": "CAS-B080",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:17.294Z"
+    },
+    {
+      "sku": "SCA-11020602",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:21.552Z"
+    },
+    {
+      "sku": "KMC-07006",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:25.937Z"
+    },
+    {
+      "sku": "SCA-12013903",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:30.416Z"
+    },
+    {
+      "sku": "CAS-B140",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:34.892Z"
+    },
+    {
+      "sku": "SCA-12021502",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:39.158Z"
+    },
+    {
+      "sku": "CAS-T260A1",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:43.380Z"
+    },
+    {
+      "sku": "SCA-160090",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:47.672Z"
+    },
+    {
+      "sku": "SCA-110292A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:51.968Z"
+    },
+    {
+      "sku": "SCA-240616",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:56.352Z"
+    },
+    {
+      "sku": "SCA-2465110",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:00.638Z"
+    },
+    {
+      "sku": "KMC-13217",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:04.821Z"
+    },
+    {
+      "sku": "KMC-17713-01",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:09.122Z"
+    },
+    {
+      "sku": "SCA-tm1601a",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:13.370Z"
+    },
+    {
+      "sku": "SCA-472880",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:17.722Z"
+    },
+    {
+      "sku": "SCA-tj0922a",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:21.978Z"
+    },
+    {
+      "sku": "KMC-04007",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:26.207Z"
+    },
+    {
+      "sku": "SCA-161990",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:30.392Z"
+    },
+    {
+      "sku": "SCA-tm6130s",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:34.586Z"
+    },
+    {
+      "sku": "SCA-2465100",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:38.789Z"
+    },
+    {
+      "sku": "SCA-tf6810",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:42.974Z"
+    },
+    {
+      "sku": "KMC-21340",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:47.164Z"
+    },
+    {
+      "sku": "CAS-F950",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:51.375Z"
+    },
+    {
+      "sku": "KRU-08301",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:55.552Z"
+    },
+    {
+      "sku": "KMC-21390",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:59.732Z"
+    },
+    {
+      "sku": "KMC-48280",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:03.977Z"
+    },
+    {
+      "sku": "INS-ts-ft100",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:08.168Z"
+    },
+    {
+      "sku": "MER-C9SSD",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:12.362Z"
+    },
+    {
+      "sku": "SCA-13247501",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:16.578Z"
+    },
+    {
+      "sku": "MER-96200",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:20.834Z"
+    },
+    {
+      "sku": "SCA-291370",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:25.144Z"
+    },
+    {
+      "sku": "WIP-SXC-25CP",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:29.396Z"
+    },
+    {
+      "sku": "SCA-192128",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:33.623Z"
+    },
+    {
+      "sku": "MER-62400",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:37.854Z"
+    },
+    {
+      "sku": "MER-C9PL",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:42.113Z"
+    },
+    {
+      "sku": "SCA-192128",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:46.366Z"
+    },
+    {
+      "sku": "SCA-130211b",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:50.611Z"
+    },
+    {
+      "sku": "SCA-291350",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:54.942Z"
+    },
+    {
+      "sku": "SCA-13247501",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:59.218Z"
+    },
+    {
+      "sku": "SCA-291370",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:03.473Z"
+    },
+    {
+      "sku": "WIP-SXC-25CP",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:07.800Z"
+    },
+    {
+      "sku": "SCA-192127",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:12.063Z"
+    },
+    {
+      "sku": "SCA-440245A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:16.274Z"
+    },
+    {
+      "sku": "SCA-510104A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:20.496Z"
+    },
+    {
+      "sku": "SCA-5301755",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:24.693Z"
+    },
+    {
+      "sku": "CHI-213",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:28.901Z"
+    },
+    {
+      "sku": "SCA-13244101",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:33.141Z"
+    },
+    {
+      "sku": "SCA-132451A",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:37.325Z"
+    },
+    {
+      "sku": "SCA-192593",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:41.537Z"
+    },
+    {
+      "sku": "MER-C9SSD",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:45.758Z"
+    },
+    {
+      "sku": "MER-96200",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:50.090Z"
+    },
+    {
+      "sku": "MER-62400",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:54.326Z"
+    },
+    {
+      "sku": "MER-C9PL",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:58.669Z"
+    },
+    {
+      "sku": "MER-96160",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:02.903Z"
+    },
+    {
+      "sku": "MER-99000",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:07.146Z"
+    },
+    {
+      "sku": "MER-91200",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:11.341Z"
+    },
+    {
+      "sku": "MER-96200R",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:15.761Z"
+    },
+    {
+      "sku": "DWI-F5495BAG800",
+      "competitorId": "uline",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:20.036Z"
+    }
+  ]
+}

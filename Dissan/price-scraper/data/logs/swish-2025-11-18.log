@@ -1,0 +1,433 @@
+2025-11-18T23:28:34.542Z INFO  [swish] Starting scraping of 5 products on Swish Maintenance...
+2025-11-18T23:28:34.543Z INFO  [swish] Initializing browser...
+2025-11-18T23:28:38.672Z INFO  [swish] Browser initialized successfully
+2025-11-18T23:28:38.672Z INFO  [swish] 
+[1/5] Processing: ATL-12600
+2025-11-18T23:28:38.673Z INFO  [swish] Scraping product: ATL-12600 - BREAKAWAY Dust mop wood handle 60''
+2025-11-18T23:28:38.673Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:28:38.673Z DEBUG [swish] Searching for SKU: ATL-12600
+2025-11-18T23:28:38.673Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-12600 (attempt 1/3)
+2025-11-18T23:28:41.364Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-12600
+2025-11-18T23:28:41.995Z DEBUG [swish] No product links found
+2025-11-18T23:28:41.995Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:28:41.995Z DEBUG [swish] Searching by name: breakaway dust mop wood handle 60'' (brand: ATL)
+2025-11-18T23:28:41.996Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20breakaway%20dust%20mop%20wood%20handle%2060'' (attempt 1/3)
+2025-11-18T23:28:43.755Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20breakaway%20dust%20mop%20wood%20handle%2060''
+2025-11-18T23:28:43.767Z DEBUG [swish] No products found in results
+2025-11-18T23:28:43.767Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:28:44.768Z INFO  [swish] 
+[2/5] Processing: ATL-14505
+2025-11-18T23:28:44.769Z INFO  [swish] Scraping product: ATL-14505 - WALL HUGGER Wall wash tool 8''
+2025-11-18T23:28:44.769Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:28:44.769Z DEBUG [swish] Searching for SKU: ATL-14505
+2025-11-18T23:28:44.769Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-14505 (attempt 1/3)
+2025-11-18T23:28:45.939Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-14505
+2025-11-18T23:28:45.952Z DEBUG [swish] No product links found
+2025-11-18T23:28:45.952Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:28:45.952Z DEBUG [swish] Searching by name: wall hugger wall wash tool 8'' (brand: ATL)
+2025-11-18T23:28:46.770Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20wash%20tool%208'' (attempt 1/3)
+2025-11-18T23:28:47.818Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20wash%20tool%208''
+2025-11-18T23:28:47.827Z DEBUG [swish] No products found in results
+2025-11-18T23:28:47.827Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:28:48.829Z INFO  [swish] 
+[3/5] Processing: ATL-14509
+2025-11-18T23:28:48.829Z INFO  [swish] Scraping product: ATL-14509 - WALL HUGGER Wall mop cotton white tie-on 8''
+2025-11-18T23:28:48.829Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:28:48.829Z DEBUG [swish] Searching for SKU: ATL-14509
+2025-11-18T23:28:48.829Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-14509 (attempt 1/3)
+2025-11-18T23:28:49.878Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-14509
+2025-11-18T23:28:49.887Z DEBUG [swish] No product links found
+2025-11-18T23:28:49.888Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:28:49.888Z DEBUG [swish] Searching by name: wall hugger wall mop cotton white tie-on 8'' (brand: ATL)
+2025-11-18T23:28:50.832Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208'' (attempt 1/3)
+2025-11-18T23:28:51.895Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208''
+2025-11-18T23:28:51.904Z DEBUG [swish] No products found in results
+2025-11-18T23:28:51.904Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:28:52.905Z INFO  [swish] 
+[4/5] Processing: ATL-21801
+2025-11-18T23:28:52.905Z INFO  [swish] Scraping product: ATL-21801 - FLEXI-DUSTER Flexible frame
+2025-11-18T23:28:52.905Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:28:52.905Z DEBUG [swish] Searching for SKU: ATL-21801
+2025-11-18T23:28:52.906Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-21801 (attempt 1/3)
+2025-11-18T23:28:53.972Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-21801
+2025-11-18T23:28:53.982Z DEBUG [swish] No product links found
+2025-11-18T23:28:53.982Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:28:53.982Z DEBUG [swish] Searching by name: flexi-duster flexible frame (brand: ATL)
+2025-11-18T23:28:54.908Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20flexi-duster%20flexible%20frame (attempt 1/3)
+2025-11-18T23:28:55.989Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20flexi-duster%20flexible%20frame
+2025-11-18T23:28:56.005Z DEBUG [swish] No products found in results
+2025-11-18T23:28:56.006Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:28:57.006Z INFO  [swish] 
+[5/5] Processing: ATL-21924
+2025-11-18T23:28:57.007Z INFO  [swish] Scraping product: ATL-21924 - Handle & Kwik Frame 60cm #21924
+2025-11-18T23:28:57.007Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:28:57.007Z DEBUG [swish] Searching for SKU: ATL-21924
+2025-11-18T23:28:57.007Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-21924 (attempt 1/3)
+2025-11-18T23:28:58.092Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-21924
+2025-11-18T23:28:58.100Z DEBUG [swish] No product links found
+2025-11-18T23:28:58.100Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:28:58.100Z DEBUG [swish] Searching by name: handle & kwik frame 60cm #21924 (brand: ATL)
+2025-11-18T23:28:59.008Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924 (attempt 1/3)
+2025-11-18T23:29:00.148Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924
+2025-11-18T23:29:00.156Z DEBUG [swish] No products found in results
+2025-11-18T23:29:00.156Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:29:01.158Z INFO  [swish] 
+============================================================
+2025-11-18T23:29:01.158Z INFO  [swish] Scraping completed for Swish Maintenance
+2025-11-18T23:29:01.158Z INFO  [swish] Total products: 5
+2025-11-18T23:29:01.158Z INFO  [swish] Found: 0 (0.0%)
+2025-11-18T23:29:01.158Z INFO  [swish] Not found: 5 (100.0%)
+2025-11-18T23:29:01.158Z INFO  [swish] Errors: 0 (0.0%)
+2025-11-18T23:29:01.158Z INFO  [swish] Duration: 0.4 minutes
+2025-11-18T23:29:01.159Z INFO  [swish] Avg time/product: 5.3s
+2025-11-18T23:29:01.159Z INFO  [swish] ============================================================
+
+2025-11-18T23:29:01.202Z INFO  [swish] Browser closed
+2025-11-18T23:45:37.169Z INFO  [swish] Starting scraping of 576 products on Swish Maintenance...
+2025-11-18T23:45:37.170Z INFO  [swish] Initializing browser...
+2025-11-18T23:45:37.674Z INFO  [swish] Browser initialized successfully
+2025-11-18T23:45:37.675Z INFO  [swish] 
+[1/576] Processing: ATL-12600
+2025-11-18T23:45:37.675Z INFO  [swish] Scraping product: ATL-12600 - BREAKAWAY Dust mop wood handle 60''
+2025-11-18T23:45:37.675Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:45:37.675Z DEBUG [swish] Searching for SKU: ATL-12600
+2025-11-18T23:45:37.675Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-12600 (attempt 1/3)
+2025-11-18T23:45:41.802Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-12600
+2025-11-18T23:45:42.455Z DEBUG [swish] No product links found
+2025-11-18T23:45:42.455Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:45:42.455Z DEBUG [swish] Searching by name: breakaway dust mop wood handle 60'' (brand: ATL)
+2025-11-18T23:45:42.455Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20breakaway%20dust%20mop%20wood%20handle%2060'' (attempt 1/3)
+2025-11-18T23:45:44.538Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20breakaway%20dust%20mop%20wood%20handle%2060''
+2025-11-18T23:45:44.874Z DEBUG [swish] No products found in results
+2025-11-18T23:45:44.874Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:45:45.875Z INFO  [swish] 
+[2/576] Processing: ATL-14505
+2025-11-18T23:45:45.876Z INFO  [swish] Scraping product: ATL-14505 - WALL HUGGER Wall wash tool 8''
+2025-11-18T23:45:45.876Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:45:45.876Z DEBUG [swish] Searching for SKU: ATL-14505
+2025-11-18T23:45:45.876Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-14505 (attempt 1/3)
+2025-11-18T23:45:47.983Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-14505
+2025-11-18T23:45:48.024Z DEBUG [swish] No product links found
+2025-11-18T23:45:48.024Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:45:48.024Z DEBUG [swish] Searching by name: wall hugger wall wash tool 8'' (brand: ATL)
+2025-11-18T23:45:48.024Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20wash%20tool%208'' (attempt 1/3)
+2025-11-18T23:45:50.129Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20wash%20tool%208''
+2025-11-18T23:45:50.175Z DEBUG [swish] No products found in results
+2025-11-18T23:45:50.175Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:45:51.176Z INFO  [swish] 
+[3/576] Processing: ATL-14509
+2025-11-18T23:45:51.177Z INFO  [swish] Scraping product: ATL-14509 - WALL HUGGER Wall mop cotton white tie-on 8''
+2025-11-18T23:45:51.177Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:45:51.177Z DEBUG [swish] Searching for SKU: ATL-14509
+2025-11-18T23:45:51.177Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-14509 (attempt 1/3)
+2025-11-18T23:45:53.259Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-14509
+2025-11-18T23:45:53.881Z DEBUG [swish] No product links found
+2025-11-18T23:45:53.881Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:45:53.881Z DEBUG [swish] Searching by name: wall hugger wall mop cotton white tie-on 8'' (brand: ATL)
+2025-11-18T23:45:53.881Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208'' (attempt 1/3)
+2025-11-18T23:45:55.934Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208''
+2025-11-18T23:45:56.307Z DEBUG [swish] No products found in results
+2025-11-18T23:45:56.307Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:45:57.309Z INFO  [swish] 
+[4/576] Processing: ATL-21801
+2025-11-18T23:45:57.309Z INFO  [swish] Scraping product: ATL-21801 - FLEXI-DUSTER Flexible frame
+2025-11-18T23:45:57.310Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:45:57.310Z DEBUG [swish] Searching for SKU: ATL-21801
+2025-11-18T23:45:57.310Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-21801 (attempt 1/3)
+2025-11-18T23:45:59.436Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-21801
+2025-11-18T23:45:59.893Z DEBUG [swish] No product links found
+2025-11-18T23:45:59.894Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:45:59.894Z DEBUG [swish] Searching by name: flexi-duster flexible frame (brand: ATL)
+2025-11-18T23:45:59.894Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20flexi-duster%20flexible%20frame (attempt 1/3)
+2025-11-18T23:46:02.158Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20flexi-duster%20flexible%20frame
+2025-11-18T23:46:03.395Z DEBUG [swish] No products found in results
+2025-11-18T23:46:03.396Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:04.398Z INFO  [swish] 
+[5/576] Processing: ATL-21924
+2025-11-18T23:46:04.398Z INFO  [swish] Scraping product: ATL-21924 - Handle & Kwik Frame 60cm #21924
+2025-11-18T23:46:04.398Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:04.398Z DEBUG [swish] Searching for SKU: ATL-21924
+2025-11-18T23:46:04.398Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-21924 (attempt 1/3)
+2025-11-18T23:46:06.464Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-21924
+2025-11-18T23:46:07.083Z DEBUG [swish] No product links found
+2025-11-18T23:46:07.084Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:07.084Z DEBUG [swish] Searching by name: handle & kwik frame 60cm #21924 (brand: ATL)
+2025-11-18T23:46:07.084Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924 (attempt 1/3)
+2025-11-18T23:46:09.167Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924
+2025-11-18T23:46:09.430Z DEBUG [swish] No products found in results
+2025-11-18T23:46:09.430Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:10.432Z INFO  [swish] 
+[6/576] Processing: ATL-25
+2025-11-18T23:46:10.432Z INFO  [swish] Scraping product: ATL-25 - Bowl brush polypropylene turks head
+2025-11-18T23:46:10.433Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:10.433Z DEBUG [swish] Searching for SKU: ATL-25
+2025-11-18T23:46:10.433Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-25 (attempt 1/3)
+2025-11-18T23:46:12.575Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-25
+2025-11-18T23:46:13.676Z DEBUG [swish] No product links found
+2025-11-18T23:46:13.676Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:13.677Z DEBUG [swish] Searching by name: bowl brush polypropylene turks head (brand: ATL)
+2025-11-18T23:46:13.677Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20bowl%20brush%20polypropylene%20turks%20head (attempt 1/3)
+2025-11-18T23:46:15.792Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20bowl%20brush%20polypropylene%20turks%20head
+2025-11-18T23:46:16.713Z DEBUG [swish] No products found in results
+2025-11-18T23:46:16.714Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:17.715Z INFO  [swish] 
+[7/576] Processing: ATL-2501
+2025-11-18T23:46:17.716Z INFO  [swish] Scraping product: ATL-2501 - Threaded 15/16'' handle metal black 48''
+2025-11-18T23:46:17.716Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:17.716Z DEBUG [swish] Searching for SKU: ATL-2501
+2025-11-18T23:46:17.716Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-2501 (attempt 1/3)
+2025-11-18T23:46:19.886Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-2501
+2025-11-18T23:46:19.985Z DEBUG [swish] No product links found
+2025-11-18T23:46:19.985Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:19.985Z DEBUG [swish] Searching by name: threaded 15/16'' handle metal black 48'' (brand: ATL)
+2025-11-18T23:46:19.985Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20threaded%2015%2F16''%20handle%20metal%20black%2048'' (attempt 1/3)
+2025-11-18T23:46:22.987Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20threaded%2015%2F16''%20handle%20metal%20black%2048''
+2025-11-18T23:46:23.464Z DEBUG [swish] No products found in results
+2025-11-18T23:46:23.464Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:24.468Z INFO  [swish] 
+[8/576] Processing: ATL-311
+2025-11-18T23:46:24.468Z INFO  [swish] Scraping product: ATL-311 - WOOLY WONDER Flexible duster lambswool telescopic 30''-44''
+2025-11-18T23:46:24.468Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:24.468Z DEBUG [swish] Searching for SKU: ATL-311
+2025-11-18T23:46:24.468Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-311 (attempt 1/3)
+2025-11-18T23:46:26.520Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-311
+2025-11-18T23:46:27.341Z DEBUG [swish] No product links found
+2025-11-18T23:46:27.342Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:27.342Z DEBUG [swish] Searching by name: wooly wonder flexible duster lambswool telescopic 30''-44'' (brand: ATL)
+2025-11-18T23:46:27.342Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wooly%20wonder%20flexible%20duster%20lambswool%20telescopic%2030''-44'' (attempt 1/3)
+2025-11-18T23:46:29.384Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wooly%20wonder%20flexible%20duster%20lambswool%20telescopic%2030''-44''
+2025-11-18T23:46:29.439Z DEBUG [swish] No products found in results
+2025-11-18T23:46:29.439Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:30.440Z INFO  [swish] 
+[9/576] Processing: ATL-315
+2025-11-18T23:46:30.440Z INFO  [swish] Scraping product: ATL-315 - Vehicule brush rectangular acid-resistant 10''
+2025-11-18T23:46:30.440Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:30.440Z DEBUG [swish] Searching for SKU: ATL-315
+2025-11-18T23:46:30.441Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-315 (attempt 1/3)
+2025-11-18T23:46:38.172Z INFO  [swish] Starting scraping of 576 products on Swish Maintenance...
+2025-11-18T23:46:38.172Z INFO  [swish] Initializing browser...
+2025-11-18T23:46:38.418Z INFO  [swish] Browser initialized successfully
+2025-11-18T23:46:38.419Z INFO  [swish] 
+[1/576] Processing: ATL-12600
+2025-11-18T23:46:38.419Z INFO  [swish] Scraping product: ATL-12600 - BREAKAWAY Dust mop wood handle 60''
+2025-11-18T23:46:38.419Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:38.419Z DEBUG [swish] Searching for SKU: ATL-12600
+2025-11-18T23:46:38.419Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-12600 (attempt 1/3)
+2025-11-18T23:46:41.072Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-12600
+2025-11-18T23:46:43.216Z DEBUG [swish] No product links found
+2025-11-18T23:46:43.216Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:43.216Z DEBUG [swish] Searching by name: breakaway dust mop wood handle 60'' (brand: ATL)
+2025-11-18T23:46:43.216Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20breakaway%20dust%20mop%20wood%20handle%2060'' (attempt 1/3)
+2025-11-18T23:46:45.146Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20breakaway%20dust%20mop%20wood%20handle%2060''
+2025-11-18T23:46:45.183Z DEBUG [swish] No products found in results
+2025-11-18T23:46:45.183Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:46.183Z INFO  [swish] 
+[2/576] Processing: ATL-14505
+2025-11-18T23:46:46.183Z INFO  [swish] Scraping product: ATL-14505 - WALL HUGGER Wall wash tool 8''
+2025-11-18T23:46:46.184Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:46.184Z DEBUG [swish] Searching for SKU: ATL-14505
+2025-11-18T23:46:46.184Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-14505 (attempt 1/3)
+2025-11-18T23:46:48.090Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-14505
+2025-11-18T23:46:48.671Z DEBUG [swish] No product links found
+2025-11-18T23:46:48.671Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:48.672Z DEBUG [swish] Searching by name: wall hugger wall wash tool 8'' (brand: ATL)
+2025-11-18T23:46:48.672Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20wash%20tool%208'' (attempt 1/3)
+2025-11-18T23:46:50.485Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20wash%20tool%208''
+2025-11-18T23:46:50.518Z DEBUG [swish] No products found in results
+2025-11-18T23:46:50.518Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:51.519Z INFO  [swish] 
+[3/576] Processing: ATL-14509
+2025-11-18T23:46:51.520Z INFO  [swish] Scraping product: ATL-14509 - WALL HUGGER Wall mop cotton white tie-on 8''
+2025-11-18T23:46:51.520Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:51.520Z DEBUG [swish] Searching for SKU: ATL-14509
+2025-11-18T23:46:51.520Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-14509 (attempt 1/3)
+2025-11-18T23:46:53.427Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-14509
+2025-11-18T23:46:53.787Z DEBUG [swish] No product links found
+2025-11-18T23:46:53.788Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:53.788Z DEBUG [swish] Searching by name: wall hugger wall mop cotton white tie-on 8'' (brand: ATL)
+2025-11-18T23:46:53.788Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208'' (attempt 1/3)
+2025-11-18T23:46:55.862Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208''
+2025-11-18T23:46:55.895Z DEBUG [swish] No products found in results
+2025-11-18T23:46:55.895Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:46:56.896Z INFO  [swish] 
+[4/576] Processing: ATL-21801
+2025-11-18T23:46:56.896Z INFO  [swish] Scraping product: ATL-21801 - FLEXI-DUSTER Flexible frame
+2025-11-18T23:46:56.897Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:46:56.897Z DEBUG [swish] Searching for SKU: ATL-21801
+2025-11-18T23:46:56.897Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-21801 (attempt 1/3)
+2025-11-18T23:46:58.714Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-21801
+2025-11-18T23:46:59.237Z DEBUG [swish] No product links found
+2025-11-18T23:46:59.237Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:46:59.237Z DEBUG [swish] Searching by name: flexi-duster flexible frame (brand: ATL)
+2025-11-18T23:46:59.237Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20flexi-duster%20flexible%20frame (attempt 1/3)
+2025-11-18T23:47:01.147Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20flexi-duster%20flexible%20frame
+2025-11-18T23:47:02.014Z DEBUG [swish] No products found in results
+2025-11-18T23:47:02.015Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:03.017Z INFO  [swish] 
+[5/576] Processing: ATL-21924
+2025-11-18T23:47:03.017Z INFO  [swish] Scraping product: ATL-21924 - Handle & Kwik Frame 60cm #21924
+2025-11-18T23:47:03.017Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:03.017Z DEBUG [swish] Searching for SKU: ATL-21924
+2025-11-18T23:47:03.018Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-21924 (attempt 1/3)
+2025-11-18T23:47:04.996Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-21924
+2025-11-18T23:47:05.762Z DEBUG [swish] No product links found
+2025-11-18T23:47:05.763Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:05.763Z DEBUG [swish] Searching by name: handle & kwik frame 60cm #21924 (brand: ATL)
+2025-11-18T23:47:05.764Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924 (attempt 1/3)
+2025-11-18T23:47:07.598Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924
+2025-11-18T23:47:07.645Z DEBUG [swish] No products found in results
+2025-11-18T23:47:07.645Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:08.649Z INFO  [swish] 
+[6/576] Processing: ATL-25
+2025-11-18T23:47:08.652Z INFO  [swish] Scraping product: ATL-25 - Bowl brush polypropylene turks head
+2025-11-18T23:47:08.652Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:08.652Z DEBUG [swish] Searching for SKU: ATL-25
+2025-11-18T23:47:08.652Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-25 (attempt 1/3)
+2025-11-18T23:47:10.456Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-25
+2025-11-18T23:47:11.545Z DEBUG [swish] No product links found
+2025-11-18T23:47:11.545Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:11.546Z DEBUG [swish] Searching by name: bowl brush polypropylene turks head (brand: ATL)
+2025-11-18T23:47:11.546Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20bowl%20brush%20polypropylene%20turks%20head (attempt 1/3)
+2025-11-18T23:47:13.347Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20bowl%20brush%20polypropylene%20turks%20head
+2025-11-18T23:47:14.258Z DEBUG [swish] No products found in results
+2025-11-18T23:47:14.259Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:15.259Z INFO  [swish] 
+[7/576] Processing: ATL-2501
+2025-11-18T23:47:15.260Z INFO  [swish] Scraping product: ATL-2501 - Threaded 15/16'' handle metal black 48''
+2025-11-18T23:47:15.260Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:15.260Z DEBUG [swish] Searching for SKU: ATL-2501
+2025-11-18T23:47:15.260Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-2501 (attempt 1/3)
+2025-11-18T23:47:17.055Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-2501
+2025-11-18T23:47:17.956Z DEBUG [swish] No product links found
+2025-11-18T23:47:17.956Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:17.956Z DEBUG [swish] Searching by name: threaded 15/16'' handle metal black 48'' (brand: ATL)
+2025-11-18T23:47:17.956Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20threaded%2015%2F16''%20handle%20metal%20black%2048'' (attempt 1/3)
+2025-11-18T23:47:19.800Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20threaded%2015%2F16''%20handle%20metal%20black%2048''
+2025-11-18T23:47:19.821Z DEBUG [swish] No products found in results
+2025-11-18T23:47:19.821Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:20.822Z INFO  [swish] 
+[8/576] Processing: ATL-311
+2025-11-18T23:47:20.822Z INFO  [swish] Scraping product: ATL-311 - WOOLY WONDER Flexible duster lambswool telescopic 30''-44''
+2025-11-18T23:47:20.823Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:20.823Z DEBUG [swish] Searching for SKU: ATL-311
+2025-11-18T23:47:20.823Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-311 (attempt 1/3)
+2025-11-18T23:47:22.611Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-311
+2025-11-18T23:47:23.283Z DEBUG [swish] No product links found
+2025-11-18T23:47:23.283Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:23.283Z DEBUG [swish] Searching by name: wooly wonder flexible duster lambswool telescopic 30''-44'' (brand: ATL)
+2025-11-18T23:47:23.283Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20wooly%20wonder%20flexible%20duster%20lambswool%20telescopic%2030''-44'' (attempt 1/3)
+2025-11-18T23:47:25.112Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20wooly%20wonder%20flexible%20duster%20lambswool%20telescopic%2030''-44''
+2025-11-18T23:47:25.139Z DEBUG [swish] No products found in results
+2025-11-18T23:47:25.140Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:26.141Z INFO  [swish] 
+[9/576] Processing: ATL-315
+2025-11-18T23:47:26.141Z INFO  [swish] Scraping product: ATL-315 - Vehicule brush rectangular acid-resistant 10''
+2025-11-18T23:47:26.142Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:26.142Z DEBUG [swish] Searching for SKU: ATL-315
+2025-11-18T23:47:26.142Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-315 (attempt 1/3)
+2025-11-18T23:47:28.018Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-315
+2025-11-18T23:47:28.770Z DEBUG [swish] No product links found
+2025-11-18T23:47:28.770Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:28.770Z DEBUG [swish] Searching by name: vehicule brush rectangular acid-resistant 10'' (brand: ATL)
+2025-11-18T23:47:28.770Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20vehicule%20brush%20rectangular%20acid-resistant%2010'' (attempt 1/3)
+2025-11-18T23:47:31.002Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20vehicule%20brush%20rectangular%20acid-resistant%2010''
+2025-11-18T23:47:31.863Z DEBUG [swish] No products found in results
+2025-11-18T23:47:31.864Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:32.865Z INFO  [swish] 
+[10/576] Processing: ATL-336
+2025-11-18T23:47:32.865Z INFO  [swish] Scraping product: ATL-336 - Scrub brush rectangular union fibre with squeegee 11''
+2025-11-18T23:47:32.865Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:32.865Z DEBUG [swish] Searching for SKU: ATL-336
+2025-11-18T23:47:32.866Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-336 (attempt 1/3)
+2025-11-18T23:47:34.946Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-336
+2025-11-18T23:47:35.805Z DEBUG [swish] No product links found
+2025-11-18T23:47:35.805Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:35.805Z DEBUG [swish] Searching by name: scrub brush rectangular union fibre with squeegee 11'' (brand: ATL)
+2025-11-18T23:47:35.805Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20scrub%20brush%20rectangular%20union%20fibre%20with%20squeegee%2011'' (attempt 1/3)
+2025-11-18T23:47:37.987Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20scrub%20brush%20rectangular%20union%20fibre%20with%20squeegee%2011''
+2025-11-18T23:47:38.265Z DEBUG [swish] No products found in results
+2025-11-18T23:47:38.265Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:39.267Z INFO  [swish] 
+[11/576] Processing: ATL-36780
+2025-11-18T23:47:39.267Z INFO  [swish] Scraping product: ATL-36780 - KWIK Handle aluminium 60''
+2025-11-18T23:47:39.268Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:39.268Z DEBUG [swish] Searching for SKU: ATL-36780
+2025-11-18T23:47:39.268Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-36780 (attempt 1/3)
+2025-11-18T23:47:41.379Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-36780
+2025-11-18T23:47:42.007Z DEBUG [swish] No product links found
+2025-11-18T23:47:42.008Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:42.008Z DEBUG [swish] Searching by name: kwik handle aluminium 60'' (brand: ATL)
+2025-11-18T23:47:42.008Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20kwik%20handle%20aluminium%2060'' (attempt 1/3)
+2025-11-18T23:47:44.057Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20kwik%20handle%20aluminium%2060''
+2025-11-18T23:47:45.097Z DEBUG [swish] No products found in results
+2025-11-18T23:47:45.098Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:46.099Z INFO  [swish] 
+[12/576] Processing: ATL-36781
+2025-11-18T23:47:46.100Z INFO  [swish] Scraping product: ATL-36781 - KWIK Telescopic handle aluminium 40''-67''
+2025-11-18T23:47:46.100Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:46.101Z DEBUG [swish] Searching for SKU: ATL-36781
+2025-11-18T23:47:46.101Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-36781 (attempt 1/3)
+2025-11-18T23:47:48.207Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-36781
+2025-11-18T23:47:48.891Z DEBUG [swish] No product links found
+2025-11-18T23:47:48.891Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:48.891Z DEBUG [swish] Searching by name: kwik telescopic handle aluminium 40''-67'' (brand: ATL)
+2025-11-18T23:47:48.892Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20kwik%20telescopic%20handle%20aluminium%2040''-67'' (attempt 1/3)
+2025-11-18T23:47:51.094Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20kwik%20telescopic%20handle%20aluminium%2040''-67''
+2025-11-18T23:47:51.456Z DEBUG [swish] No products found in results
+2025-11-18T23:47:51.456Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:52.457Z INFO  [swish] 
+[13/576] Processing: RUB-9w32-00--bla
+2025-11-18T23:47:52.458Z INFO  [swish] Scraping product: RUB-9w32-00--bla - INFINITY Wall mount smoking receptacle – stainless steel/black
+2025-11-18T23:47:52.458Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:52.458Z DEBUG [swish] Searching for SKU: RUB-9w32-00--bla
+2025-11-18T23:47:52.458Z DEBUG [swish] Navigating to https://swish.ca/search?q=RUB-9w32-00--bla (attempt 1/3)
+2025-11-18T23:47:54.563Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=RUB-9w32-00--bla
+2025-11-18T23:47:54.816Z DEBUG [swish] No product links found
+2025-11-18T23:47:54.817Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:54.817Z DEBUG [swish] Searching by name: infinity wall mount smoking receptacle – stainless steel/black (brand: RUB)
+2025-11-18T23:47:54.817Z DEBUG [swish] Navigating to https://swish.ca/search?q=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack (attempt 1/3)
+2025-11-18T23:47:56.857Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack
+2025-11-18T23:47:57.069Z DEBUG [swish] No products found in results
+2025-11-18T23:47:57.069Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:47:58.071Z INFO  [swish] 
+[14/576] Processing: RUB-9w32-00--bla
+2025-11-18T23:47:58.072Z INFO  [swish] Scraping product: RUB-9w32-00--bla - INFINITY Wall mount smoking receptacle – stainless steel/black
+2025-11-18T23:47:58.072Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:47:58.072Z DEBUG [swish] Searching for SKU: RUB-9w32-00--bla
+2025-11-18T23:47:58.072Z DEBUG [swish] Navigating to https://swish.ca/search?q=RUB-9w32-00--bla (attempt 1/3)
+2025-11-18T23:47:59.892Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=RUB-9w32-00--bla
+2025-11-18T23:47:59.912Z DEBUG [swish] No product links found
+2025-11-18T23:47:59.912Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:47:59.912Z DEBUG [swish] Searching by name: infinity wall mount smoking receptacle – stainless steel/black (brand: RUB)
+2025-11-18T23:48:00.072Z DEBUG [swish] Navigating to https://swish.ca/search?q=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack (attempt 1/3)
+2025-11-18T23:48:01.861Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack
+2025-11-18T23:48:01.900Z DEBUG [swish] No products found in results
+2025-11-18T23:48:01.901Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:48:02.902Z INFO  [swish] 
+[15/576] Processing: ATL-1150
+2025-11-18T23:48:02.902Z INFO  [swish] Scraping product: ATL-1150 - HYDRO THRUST Toilet plunger
+2025-11-18T23:48:02.903Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:48:02.903Z DEBUG [swish] Searching for SKU: ATL-1150
+2025-11-18T23:48:02.903Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL-1150 (attempt 1/3)
+2025-11-18T23:48:05.261Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL-1150
+2025-11-18T23:48:05.331Z DEBUG [swish] No product links found
+2025-11-18T23:48:05.331Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:48:05.332Z DEBUG [swish] Searching by name: hydro thrust toilet plunger (brand: ATL)
+2025-11-18T23:48:05.332Z DEBUG [swish] Navigating to https://swish.ca/search?q=ATL%20hydro%20thrust%20toilet%20plunger (attempt 1/3)
+2025-11-18T23:48:08.106Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=ATL%20hydro%20thrust%20toilet%20plunger
+2025-11-18T23:48:08.983Z DEBUG [swish] No products found in results
+2025-11-18T23:48:08.983Z INFO  [swish] ✗ Product not found on Swish Maintenance
+2025-11-18T23:48:09.985Z INFO  [swish] 
+[16/576] Processing: FDT-100-EH-BP
+2025-11-18T23:48:09.985Z INFO  [swish] Scraping product: FDT-100-EH-BP - Horizontale Surface Mount (EZMount Backer Palte Included) Ligth Gray
+2025-11-18T23:48:09.985Z DEBUG [swish] Step 1: Searching by SKU...
+2025-11-18T23:48:09.986Z DEBUG [swish] Searching for SKU: FDT-100-EH-BP
+2025-11-18T23:48:09.986Z DEBUG [swish] Navigating to https://swish.ca/search?q=FDT-100-EH-BP (attempt 1/3)
+2025-11-18T23:48:12.081Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=FDT-100-EH-BP
+2025-11-18T23:48:12.277Z DEBUG [swish] No product links found
+2025-11-18T23:48:12.277Z DEBUG [swish] Step 2: Searching by name + brand...
+2025-11-18T23:48:12.278Z DEBUG [swish] Searching by name: horizontale surface mount (ezmount backer palte included) ligth gray (brand: FDT)
+2025-11-18T23:48:12.278Z DEBUG [swish] Navigating to https://swish.ca/search?q=FDT%20horizontale%20surface%20mount%20(ezmount%20backer%20palte%20included)%20ligth%20gray (attempt 1/3)
+2025-11-18T23:48:14.340Z DEBUG [swish] Successfully navigated to https://swish.ca/search?q=FDT%20horizontale%20surface%20mount%20(ezmount%20backer%20palte%20included)%20ligth%20gray
+2025-11-18T23:48:14.409Z DEBUG [swish] No products found in results
+2025-11-18T23:48:14.409Z INFO  [swish] ✗ Product not found on Swish Maintenance

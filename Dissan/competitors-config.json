@@ -1,0 +1,449 @@
+{
+  "competitors": [
+    {
+      "id": "swish",
+      "name": "Swish Maintenance",
+      "url": "https://swish.ca",
+      "priority": 1,
+      "enabled": true,
+      "coverage": "National (13 emplacements)",
+      "notes": "Leader produits verts, depuis 1956",
+      "search": {
+        "url": "https://swish.ca/search",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "input[name='q']",
+        "searchButton": "button[type='submit']",
+        "productList": "li.klevuProduct",
+        "productLink": ".kuName a",
+        "productName": ".kuName",
+        "productSku": ".ku-sku",
+        "productPrice": "[class*='Price']",
+        "noResults": ".kuNoResultMessage"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .next-page",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "grainger",
+      "name": "Grainger Canada",
+      "url": "https://grainger.ca",
+      "priority": 1,
+      "enabled": true,
+      "coverage": "National",
+      "notes": "125+ ans, spécialiste MRO, 100,000+ produits",
+      "search": {
+        "url": "https://www.grainger.ca/en/search",
+        "method": "GET",
+        "param": "searchQuery"
+      },
+      "selectors": {
+        "searchBox": "#searchBar",
+        "searchButton": "button.search-btn",
+        "productList": ".product-list .product-item",
+        "productLink": "a.product-details-link",
+        "productName": ".product-name",
+        "productSku": ".product-number",
+        "productPrice": ".product-price span.price",
+        "noResults": ".no-results"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .next",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2500,
+        "productDelay": 1500
+      }
+    },
+    {
+      "id": "uline",
+      "name": "ULINE Canada",
+      "url": "https://uline.ca",
+      "priority": 1,
+      "enabled": true,
+      "coverage": "National (14 emplacements NA)",
+      "notes": "43,000+ produits, livraison même jour",
+      "search": {
+        "url": "https://www.uline.ca/BL_1090/Search",
+        "method": "GET",
+        "param": "keywords"
+      },
+      "selectors": {
+        "searchBox": "#searchInput",
+        "searchButton": "button.search-submit",
+        "productList": ".product-results .product",
+        "productLink": "a.product-link",
+        "productName": ".product-title",
+        "productSku": ".product-model",
+        "productPrice": ".product-pricing .price",
+        "noResults": ".no-results-found"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pager .next-page",
+        "maxPages": 3
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "bunzl",
+      "name": "Bunzl Cleaning & Hygiene",
+      "url": "https://bunzlch.ca",
+      "priority": 1,
+      "enabled": true,
+      "coverage": "National",
+      "notes": "Plus grand distributeur Canada",
+      "search": {
+        "url": "https://bunzlch.ca/search",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "input[name='q']",
+        "searchButton": "button.search-btn",
+        "productList": ".search-results .product",
+        "productLink": "a.product-url",
+        "productName": "h3.product-name",
+        "productSku": ".sku",
+        "productPrice": ".price-box .price",
+        "noResults": ".no-results"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .next",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "imperial-dade",
+      "name": "Imperial Dade Canada",
+      "url": "https://imperialdade.com",
+      "priority": 1,
+      "enabled": true,
+      "coverage": "National (35 emplacements)",
+      "notes": "135 ans, 1500 employés",
+      "search": {
+        "url": "https://www.imperialdade.com/search",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "#search-field",
+        "searchButton": "button.search-submit",
+        "productList": ".product-grid .product-item",
+        "productLink": "a.product-link",
+        "productName": ".product-title",
+        "productSku": ".product-sku",
+        "productPrice": ".price .amount",
+        "noResults": ".no-results"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .next-link",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2500,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "cleanitsupply",
+      "name": "CleanItSupply Canada",
+      "url": "https://cleanitsupply.ca",
+      "priority": 2,
+      "enabled": true,
+      "coverage": "National",
+      "notes": "Prix de gros, large sélection",
+      "search": {
+        "url": "https://www.cleanitsupply.ca/search",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "input.search-box",
+        "searchButton": "button.search-btn",
+        "productList": ".products .product-item",
+        "productLink": "a.product-link",
+        "productName": ".product-name",
+        "productSku": ".sku-number",
+        "productPrice": ".product-price",
+        "noResults": ".no-products-found"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .next",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "united-canada",
+      "name": "United Canada Inc.",
+      "url": "https://unitedcanadainc.com",
+      "priority": 2,
+      "enabled": true,
+      "coverage": "National (Toronto)",
+      "notes": "Multi-secteurs (médical, janitorial)",
+      "search": {
+        "url": "https://www.unitedcanadainc.com/search",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "#search",
+        "searchButton": "button.search-button",
+        "productList": ".product-list .product",
+        "productLink": "a.product-details",
+        "productName": ".product-title",
+        "productSku": ".product-code",
+        "productPrice": ".price-value",
+        "noResults": ".empty-results"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".paginator .next",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "nexday",
+      "name": "NexDay Supply",
+      "url": "https://nexdaysupply.ca",
+      "priority": 2,
+      "enabled": true,
+      "coverage": "National",
+      "notes": "Distributeur gros, livraison rapide",
+      "search": {
+        "url": "https://nexdaysupply.ca/search",
+        "method": "GET",
+        "param": "search"
+      },
+      "selectors": {
+        "searchBox": "input[name='search']",
+        "searchButton": "button.btn-search",
+        "productList": ".products-grid .item",
+        "productLink": "a.product-image",
+        "productName": "h2.product-name",
+        "productSku": ".product-sku",
+        "productPrice": ".price-box .price",
+        "noResults": ".note-msg"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pages .next",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "cleanspot",
+      "name": "Clean Spot",
+      "url": "https://cleanspot.ca",
+      "priority": 2,
+      "enabled": true,
+      "coverage": "National",
+      "notes": "Rabais jusqu'à 35% grossistes",
+      "search": {
+        "url": "https://www.cleanspot.ca/search",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "#SearchBar",
+        "searchButton": "button.search-submit",
+        "productList": ".product-grid .grid-item",
+        "productLink": "a.product-card",
+        "productName": ".product-title",
+        "productSku": ".product-sku",
+        "productPrice": ".product-price .money",
+        "noResults": ".no-results"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .next",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "checkers",
+      "name": "Checkers Cleaning Supply",
+      "url": "https://checkerscleaningsupply.com",
+      "priority": 2,
+      "enabled": true,
+      "coverage": "National",
+      "notes": "Depuis 1983, livraison même jour",
+      "search": {
+        "url": "https://www.checkerscleaningsupply.com/search",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "input.search-input",
+        "searchButton": "button.search-btn",
+        "productList": ".product-listing .product",
+        "productLink": "a.product-name",
+        "productName": ".name",
+        "productSku": ".sku",
+        "productPrice": ".price .value",
+        "noResults": ".no-results-message"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .next-page",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "vto",
+      "name": "V-TO inc.",
+      "url": "https://vto.qc.ca",
+      "priority": 3,
+      "enabled": true,
+      "coverage": "Québec",
+      "notes": "Fabricant + distributeur, 3e génération",
+      "search": {
+        "url": "https://vto.qc.ca",
+        "method": "GET",
+        "param": "s"
+      },
+      "selectors": {
+        "searchBox": "input[type='search']",
+        "searchButton": "button[type='submit']",
+        "productList": ".wc-block-product-template",
+        "productLink": "a[href*='/produit/']",
+        "productName": ".wp-block-post-title",
+        "productSku": ".sku",
+        "productPrice": ".woocommerce-Price-amount",
+        "noResults": ".wc-block-grid__no-products-found"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .suivant",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "lalema",
+      "name": "Lalema Express",
+      "url": "https://lalemaexpress.com",
+      "priority": 3,
+      "enabled": true,
+      "coverage": "Québec (Montréal)",
+      "notes": "Catalogue complet en ligne",
+      "search": {
+        "url": "https://www.lalemaexpress.com/recherche",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "input.recherche",
+        "searchButton": "button.btn-recherche",
+        "productList": ".produits .produit",
+        "productLink": "a.lien-produit",
+        "productName": ".nom-produit",
+        "productSku": ".code-produit",
+        "productPrice": ".prix",
+        "noResults": ".aucun-resultat"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pagination .suivant",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    },
+    {
+      "id": "sanidepot",
+      "name": "SaniDépôt Québec",
+      "url": "https://sani-depot.ca",
+      "priority": 3,
+      "enabled": true,
+      "coverage": "Québec",
+      "notes": "90+ ans expérience",
+      "search": {
+        "url": "https://www.sani-depot.ca/recherche",
+        "method": "GET",
+        "param": "q"
+      },
+      "selectors": {
+        "searchBox": "#search-input",
+        "searchButton": "button.search-btn",
+        "productList": ".product-items .product-item",
+        "productLink": "a.product-item-link",
+        "productName": ".product-item-name",
+        "productSku": ".product-item-sku",
+        "productPrice": ".price",
+        "noResults": ".message.empty"
+      },
+      "pagination": {
+        "enabled": true,
+        "selector": ".pages .next",
+        "maxPages": 5
+      },
+      "rateLimiting": {
+        "requestDelay": 2000,
+        "productDelay": 1000
+      }
+    }
+  ],
+  "globalSettings": {
+    "maxRetries": 3,
+    "timeout": 30000,
+    "userAgents": [
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    ],
+    "checkpointInterval": 50,
+    "defaultRateLimiting": {
+      "requestDelay": 2000,
+      "productDelay": 1000
+    }
+  }
+}

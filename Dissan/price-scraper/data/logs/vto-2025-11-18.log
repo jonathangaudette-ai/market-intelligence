@@ -1,0 +1,532 @@
+2025-11-18T23:42:36.233Z INFO  [vto] Starting scraping of 576 products on V-TO inc....
+2025-11-18T23:42:36.233Z INFO  [vto] Initializing browser...
+2025-11-18T23:42:36.839Z INFO  [vto] Browser initialized successfully
+2025-11-18T23:42:36.839Z INFO  [vto] 
+[1/576] Processing: ATL-12600
+2025-11-18T23:42:36.839Z INFO  [vto] Scraping product: ATL-12600 - BREAKAWAY Dust mop wood handle 60''
+2025-11-18T23:42:36.840Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:42:36.840Z DEBUG [vto] Searching for SKU: ATL-12600
+2025-11-18T23:42:36.840Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-12600 (attempt 1/3)
+2025-11-18T23:42:38.796Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-12600
+2025-11-18T23:42:38.813Z DEBUG [vto] No product items found
+2025-11-18T23:42:38.814Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:42:38.814Z DEBUG [vto] Searching by name: breakaway dust mop wood handle 60'' (brand: ATL)
+2025-11-18T23:42:38.840Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20breakaway%20dust%20mop%20wood%20handle%2060'' (attempt 1/3)
+2025-11-18T23:42:40.216Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20breakaway%20dust%20mop%20wood%20handle%2060''
+2025-11-18T23:42:40.228Z DEBUG [vto] No products found in results
+2025-11-18T23:42:40.228Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:42:41.229Z INFO  [vto] 
+[2/576] Processing: ATL-14505
+2025-11-18T23:42:41.230Z INFO  [vto] Scraping product: ATL-14505 - WALL HUGGER Wall wash tool 8''
+2025-11-18T23:42:41.230Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:42:41.230Z DEBUG [vto] Searching for SKU: ATL-14505
+2025-11-18T23:42:41.230Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-14505 (attempt 1/3)
+2025-11-18T23:42:42.520Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-14505
+2025-11-18T23:42:42.536Z DEBUG [vto] No product items found
+2025-11-18T23:42:42.536Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:42:42.536Z DEBUG [vto] Searching by name: wall hugger wall wash tool 8'' (brand: ATL)
+2025-11-18T23:42:43.232Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20wall%20hugger%20wall%20wash%20tool%208'' (attempt 1/3)
+2025-11-18T23:42:44.513Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20wall%20hugger%20wall%20wash%20tool%208''
+2025-11-18T23:42:44.531Z DEBUG [vto] No products found in results
+2025-11-18T23:42:44.531Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:42:45.534Z INFO  [vto] 
+[3/576] Processing: ATL-14509
+2025-11-18T23:42:45.534Z INFO  [vto] Scraping product: ATL-14509 - WALL HUGGER Wall mop cotton white tie-on 8''
+2025-11-18T23:42:45.535Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:42:45.535Z DEBUG [vto] Searching for SKU: ATL-14509
+2025-11-18T23:42:45.535Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-14509 (attempt 1/3)
+2025-11-18T23:42:46.823Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-14509
+2025-11-18T23:42:46.839Z DEBUG [vto] No product items found
+2025-11-18T23:42:46.839Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:42:46.839Z DEBUG [vto] Searching by name: wall hugger wall mop cotton white tie-on 8'' (brand: ATL)
+2025-11-18T23:42:47.543Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208'' (attempt 1/3)
+2025-11-18T23:42:48.913Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20wall%20hugger%20wall%20mop%20cotton%20white%20tie-on%208''
+2025-11-18T23:42:48.931Z DEBUG [vto] No products found in results
+2025-11-18T23:42:48.931Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:42:49.933Z INFO  [vto] 
+[4/576] Processing: ATL-21801
+2025-11-18T23:42:49.933Z INFO  [vto] Scraping product: ATL-21801 - FLEXI-DUSTER Flexible frame
+2025-11-18T23:42:49.934Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:42:49.934Z DEBUG [vto] Searching for SKU: ATL-21801
+2025-11-18T23:42:49.934Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-21801 (attempt 1/3)
+2025-11-18T23:42:51.240Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-21801
+2025-11-18T23:42:51.251Z DEBUG [vto] No product items found
+2025-11-18T23:42:51.251Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:42:51.251Z DEBUG [vto] Searching by name: flexi-duster flexible frame (brand: ATL)
+2025-11-18T23:42:51.934Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20flexi-duster%20flexible%20frame (attempt 1/3)
+2025-11-18T23:42:53.329Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20flexi-duster%20flexible%20frame
+2025-11-18T23:42:53.340Z DEBUG [vto] No products found in results
+2025-11-18T23:42:53.341Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:42:54.341Z INFO  [vto] 
+[5/576] Processing: ATL-21924
+2025-11-18T23:42:54.347Z INFO  [vto] Scraping product: ATL-21924 - Handle & Kwik Frame 60cm #21924
+2025-11-18T23:42:54.347Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:42:54.347Z DEBUG [vto] Searching for SKU: ATL-21924
+2025-11-18T23:42:54.347Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-21924 (attempt 1/3)
+2025-11-18T23:42:55.645Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-21924
+2025-11-18T23:42:55.654Z DEBUG [vto] No product items found
+2025-11-18T23:42:55.654Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:42:55.654Z DEBUG [vto] Searching by name: handle & kwik frame 60cm #21924 (brand: ATL)
+2025-11-18T23:42:56.349Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924 (attempt 1/3)
+2025-11-18T23:42:57.796Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20handle%20%26%20kwik%20frame%2060cm%20%2321924
+2025-11-18T23:42:57.807Z DEBUG [vto] No products found in results
+2025-11-18T23:42:57.808Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:42:58.808Z INFO  [vto] 
+[6/576] Processing: ATL-25
+2025-11-18T23:42:58.809Z INFO  [vto] Scraping product: ATL-25 - Bowl brush polypropylene turks head
+2025-11-18T23:42:58.809Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:42:58.809Z DEBUG [vto] Searching for SKU: ATL-25
+2025-11-18T23:42:58.809Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-25 (attempt 1/3)
+2025-11-18T23:43:00.135Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-25
+2025-11-18T23:43:00.152Z DEBUG [vto] No product items found
+2025-11-18T23:43:00.152Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:00.153Z DEBUG [vto] Searching by name: bowl brush polypropylene turks head (brand: ATL)
+2025-11-18T23:43:00.810Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20bowl%20brush%20polypropylene%20turks%20head (attempt 1/3)
+2025-11-18T23:43:02.200Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20bowl%20brush%20polypropylene%20turks%20head
+2025-11-18T23:43:02.214Z DEBUG [vto] No products found in results
+2025-11-18T23:43:02.214Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:03.215Z INFO  [vto] 
+[7/576] Processing: ATL-2501
+2025-11-18T23:43:03.215Z INFO  [vto] Scraping product: ATL-2501 - Threaded 15/16'' handle metal black 48''
+2025-11-18T23:43:03.216Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:03.216Z DEBUG [vto] Searching for SKU: ATL-2501
+2025-11-18T23:43:03.216Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-2501 (attempt 1/3)
+2025-11-18T23:43:04.575Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-2501
+2025-11-18T23:43:04.587Z DEBUG [vto] No product items found
+2025-11-18T23:43:04.587Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:04.587Z DEBUG [vto] Searching by name: threaded 15/16'' handle metal black 48'' (brand: ATL)
+2025-11-18T23:43:05.217Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20threaded%2015%2F16''%20handle%20metal%20black%2048'' (attempt 1/3)
+2025-11-18T23:43:06.542Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20threaded%2015%2F16''%20handle%20metal%20black%2048''
+2025-11-18T23:43:06.556Z DEBUG [vto] No products found in results
+2025-11-18T23:43:06.556Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:07.558Z INFO  [vto] 
+[8/576] Processing: ATL-311
+2025-11-18T23:43:07.564Z INFO  [vto] Scraping product: ATL-311 - WOOLY WONDER Flexible duster lambswool telescopic 30''-44''
+2025-11-18T23:43:07.564Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:07.564Z DEBUG [vto] Searching for SKU: ATL-311
+2025-11-18T23:43:07.564Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-311 (attempt 1/3)
+2025-11-18T23:43:08.847Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-311
+2025-11-18T23:43:08.874Z DEBUG [vto] No product items found
+2025-11-18T23:43:08.874Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:08.874Z DEBUG [vto] Searching by name: wooly wonder flexible duster lambswool telescopic 30''-44'' (brand: ATL)
+2025-11-18T23:43:09.567Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20wooly%20wonder%20flexible%20duster%20lambswool%20telescopic%2030''-44'' (attempt 1/3)
+2025-11-18T23:43:10.870Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20wooly%20wonder%20flexible%20duster%20lambswool%20telescopic%2030''-44''
+2025-11-18T23:43:10.883Z DEBUG [vto] No products found in results
+2025-11-18T23:43:10.884Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:11.884Z INFO  [vto] 
+[9/576] Processing: ATL-315
+2025-11-18T23:43:11.885Z INFO  [vto] Scraping product: ATL-315 - Vehicule brush rectangular acid-resistant 10''
+2025-11-18T23:43:11.885Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:11.885Z DEBUG [vto] Searching for SKU: ATL-315
+2025-11-18T23:43:11.885Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-315 (attempt 1/3)
+2025-11-18T23:43:13.257Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-315
+2025-11-18T23:43:13.276Z DEBUG [vto] No product items found
+2025-11-18T23:43:13.276Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:13.276Z DEBUG [vto] Searching by name: vehicule brush rectangular acid-resistant 10'' (brand: ATL)
+2025-11-18T23:43:13.886Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20vehicule%20brush%20rectangular%20acid-resistant%2010'' (attempt 1/3)
+2025-11-18T23:43:15.270Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20vehicule%20brush%20rectangular%20acid-resistant%2010''
+2025-11-18T23:43:15.287Z DEBUG [vto] No products found in results
+2025-11-18T23:43:15.287Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:16.288Z INFO  [vto] 
+[10/576] Processing: ATL-336
+2025-11-18T23:43:16.294Z INFO  [vto] Scraping product: ATL-336 - Scrub brush rectangular union fibre with squeegee 11''
+2025-11-18T23:43:16.294Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:16.294Z DEBUG [vto] Searching for SKU: ATL-336
+2025-11-18T23:43:16.294Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-336 (attempt 1/3)
+2025-11-18T23:43:17.661Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-336
+2025-11-18T23:43:17.673Z DEBUG [vto] No product items found
+2025-11-18T23:43:17.673Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:17.673Z DEBUG [vto] Searching by name: scrub brush rectangular union fibre with squeegee 11'' (brand: ATL)
+2025-11-18T23:43:18.295Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20scrub%20brush%20rectangular%20union%20fibre%20with%20squeegee%2011'' (attempt 1/3)
+2025-11-18T23:43:19.674Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20scrub%20brush%20rectangular%20union%20fibre%20with%20squeegee%2011''
+2025-11-18T23:43:19.687Z DEBUG [vto] No products found in results
+2025-11-18T23:43:19.687Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:20.688Z INFO  [vto] 
+[11/576] Processing: ATL-36780
+2025-11-18T23:43:20.689Z INFO  [vto] Scraping product: ATL-36780 - KWIK Handle aluminium 60''
+2025-11-18T23:43:20.689Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:20.690Z DEBUG [vto] Searching for SKU: ATL-36780
+2025-11-18T23:43:20.690Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-36780 (attempt 1/3)
+2025-11-18T23:43:21.968Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-36780
+2025-11-18T23:43:21.991Z DEBUG [vto] No product items found
+2025-11-18T23:43:21.991Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:21.991Z DEBUG [vto] Searching by name: kwik handle aluminium 60'' (brand: ATL)
+2025-11-18T23:43:22.690Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20kwik%20handle%20aluminium%2060'' (attempt 1/3)
+2025-11-18T23:43:24.055Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20kwik%20handle%20aluminium%2060''
+2025-11-18T23:43:24.067Z DEBUG [vto] No products found in results
+2025-11-18T23:43:24.067Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:25.068Z INFO  [vto] 
+[12/576] Processing: ATL-36781
+2025-11-18T23:43:25.068Z INFO  [vto] Scraping product: ATL-36781 - KWIK Telescopic handle aluminium 40''-67''
+2025-11-18T23:43:25.069Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:25.069Z DEBUG [vto] Searching for SKU: ATL-36781
+2025-11-18T23:43:25.069Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-36781 (attempt 1/3)
+2025-11-18T23:43:26.358Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-36781
+2025-11-18T23:43:26.369Z DEBUG [vto] No product items found
+2025-11-18T23:43:26.369Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:26.369Z DEBUG [vto] Searching by name: kwik telescopic handle aluminium 40''-67'' (brand: ATL)
+2025-11-18T23:43:27.069Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20kwik%20telescopic%20handle%20aluminium%2040''-67'' (attempt 1/3)
+2025-11-18T23:43:28.489Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20kwik%20telescopic%20handle%20aluminium%2040''-67''
+2025-11-18T23:43:28.504Z DEBUG [vto] No products found in results
+2025-11-18T23:43:28.505Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:29.506Z INFO  [vto] 
+[13/576] Processing: RUB-9w32-00--bla
+2025-11-18T23:43:29.506Z INFO  [vto] Scraping product: RUB-9w32-00--bla - INFINITY Wall mount smoking receptacle – stainless steel/black
+2025-11-18T23:43:29.507Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:29.507Z DEBUG [vto] Searching for SKU: RUB-9w32-00--bla
+2025-11-18T23:43:29.507Z DEBUG [vto] Navigating to https://vto.qc.ca?s=RUB-9w32-00--bla (attempt 1/3)
+2025-11-18T23:43:30.857Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=RUB-9w32-00--bla
+2025-11-18T23:43:30.872Z DEBUG [vto] No product items found
+2025-11-18T23:43:30.872Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:30.872Z DEBUG [vto] Searching by name: infinity wall mount smoking receptacle – stainless steel/black (brand: RUB)
+2025-11-18T23:43:31.509Z DEBUG [vto] Navigating to https://vto.qc.ca?s=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack (attempt 1/3)
+2025-11-18T23:43:32.831Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack
+2025-11-18T23:43:32.843Z DEBUG [vto] No products found in results
+2025-11-18T23:43:32.844Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:33.846Z INFO  [vto] 
+[14/576] Processing: RUB-9w32-00--bla
+2025-11-18T23:43:33.846Z INFO  [vto] Scraping product: RUB-9w32-00--bla - INFINITY Wall mount smoking receptacle – stainless steel/black
+2025-11-18T23:43:33.847Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:33.847Z DEBUG [vto] Searching for SKU: RUB-9w32-00--bla
+2025-11-18T23:43:33.847Z DEBUG [vto] Navigating to https://vto.qc.ca?s=RUB-9w32-00--bla (attempt 1/3)
+2025-11-18T23:43:35.237Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=RUB-9w32-00--bla
+2025-11-18T23:43:35.253Z DEBUG [vto] No product items found
+2025-11-18T23:43:35.253Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:35.253Z DEBUG [vto] Searching by name: infinity wall mount smoking receptacle – stainless steel/black (brand: RUB)
+2025-11-18T23:43:35.848Z DEBUG [vto] Navigating to https://vto.qc.ca?s=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack (attempt 1/3)
+2025-11-18T23:43:37.128Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=RUB%20infinity%20wall%20mount%20smoking%20receptacle%20%E2%80%93%20stainless%20steel%2Fblack
+2025-11-18T23:43:37.148Z DEBUG [vto] No products found in results
+2025-11-18T23:43:37.148Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:38.150Z INFO  [vto] 
+[15/576] Processing: ATL-1150
+2025-11-18T23:43:38.151Z INFO  [vto] Scraping product: ATL-1150 - HYDRO THRUST Toilet plunger
+2025-11-18T23:43:38.152Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:38.152Z DEBUG [vto] Searching for SKU: ATL-1150
+2025-11-18T23:43:38.153Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-1150 (attempt 1/3)
+2025-11-18T23:43:39.466Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-1150
+2025-11-18T23:43:39.477Z DEBUG [vto] No product items found
+2025-11-18T23:43:39.477Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:39.477Z DEBUG [vto] Searching by name: hydro thrust toilet plunger (brand: ATL)
+2025-11-18T23:43:40.155Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20hydro%20thrust%20toilet%20plunger (attempt 1/3)
+2025-11-18T23:43:41.558Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20hydro%20thrust%20toilet%20plunger
+2025-11-18T23:43:41.574Z DEBUG [vto] No products found in results
+2025-11-18T23:43:41.574Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:42.575Z INFO  [vto] 
+[16/576] Processing: FDT-100-EH-BP
+2025-11-18T23:43:42.576Z INFO  [vto] Scraping product: FDT-100-EH-BP - Horizontale Surface Mount (EZMount Backer Palte Included) Ligth Gray
+2025-11-18T23:43:42.576Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:42.576Z DEBUG [vto] Searching for SKU: FDT-100-EH-BP
+2025-11-18T23:43:42.576Z DEBUG [vto] Navigating to https://vto.qc.ca?s=FDT-100-EH-BP (attempt 1/3)
+2025-11-18T23:43:44.178Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=FDT-100-EH-BP
+2025-11-18T23:43:44.193Z DEBUG [vto] No product items found
+2025-11-18T23:43:44.194Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:44.194Z DEBUG [vto] Searching by name: horizontale surface mount (ezmount backer palte included) ligth gray (brand: FDT)
+2025-11-18T23:43:44.577Z DEBUG [vto] Navigating to https://vto.qc.ca?s=FDT%20horizontale%20surface%20mount%20(ezmount%20backer%20palte%20included)%20ligth%20gray (attempt 1/3)
+2025-11-18T23:43:46.084Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=FDT%20horizontale%20surface%20mount%20(ezmount%20backer%20palte%20included)%20ligth%20gray
+2025-11-18T23:43:46.096Z DEBUG [vto] No products found in results
+2025-11-18T23:43:46.096Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:47.097Z INFO  [vto] 
+[17/576] Processing: M2P-WA2026
+2025-11-18T23:43:47.102Z INFO  [vto] Scraping product: M2P-WA2026 - Heavy duty bowl plunger
+2025-11-18T23:43:47.102Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:47.102Z DEBUG [vto] Searching for SKU: M2P-WA2026
+2025-11-18T23:43:47.102Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P-WA2026 (attempt 1/3)
+2025-11-18T23:43:48.383Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P-WA2026
+2025-11-18T23:43:48.398Z DEBUG [vto] No product items found
+2025-11-18T23:43:48.398Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:48.398Z DEBUG [vto] Searching by name: heavy duty bowl plunger (brand: M2P)
+2025-11-18T23:43:49.102Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P%20heavy%20duty%20bowl%20plunger (attempt 1/3)
+2025-11-18T23:43:50.434Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P%20heavy%20duty%20bowl%20plunger
+2025-11-18T23:43:50.454Z DEBUG [vto] No products found in results
+2025-11-18T23:43:50.454Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:51.455Z INFO  [vto] 
+[18/576] Processing: ATL-816
+2025-11-18T23:43:51.456Z INFO  [vto] Scraping product: ATL-816 - Bowl brush caddy
+2025-11-18T23:43:51.456Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:51.457Z DEBUG [vto] Searching for SKU: ATL-816
+2025-11-18T23:43:51.457Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-816 (attempt 1/3)
+2025-11-18T23:43:52.813Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-816
+2025-11-18T23:43:52.837Z DEBUG [vto] No product items found
+2025-11-18T23:43:52.837Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:52.837Z DEBUG [vto] Searching by name: bowl brush caddy (brand: ATL)
+2025-11-18T23:43:53.460Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20bowl%20brush%20caddy (attempt 1/3)
+2025-11-18T23:43:54.732Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20bowl%20brush%20caddy
+2025-11-18T23:43:54.748Z DEBUG [vto] No products found in results
+2025-11-18T23:43:54.749Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:43:55.750Z INFO  [vto] 
+[19/576] Processing: ATL-816
+2025-11-18T23:43:55.751Z INFO  [vto] Scraping product: ATL-816 - Bowl brush caddy
+2025-11-18T23:43:55.751Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:43:55.751Z DEBUG [vto] Searching for SKU: ATL-816
+2025-11-18T23:43:55.751Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-816 (attempt 1/3)
+2025-11-18T23:43:57.091Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-816
+2025-11-18T23:43:57.106Z DEBUG [vto] No product items found
+2025-11-18T23:43:57.106Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:43:57.106Z DEBUG [vto] Searching by name: bowl brush caddy (brand: ATL)
+2025-11-18T23:43:57.752Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20bowl%20brush%20caddy (attempt 1/3)
+2025-11-18T23:43:59.024Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20bowl%20brush%20caddy
+2025-11-18T23:43:59.053Z DEBUG [vto] No products found in results
+2025-11-18T23:43:59.053Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:00.054Z INFO  [vto] 
+[20/576] Processing: FDT-100-EH-BP
+2025-11-18T23:44:00.055Z INFO  [vto] Scraping product: FDT-100-EH-BP - Horizontale Surface Mount (EZMount Backer Palte Included) Ligth Gray
+2025-11-18T23:44:00.055Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:00.055Z DEBUG [vto] Searching for SKU: FDT-100-EH-BP
+2025-11-18T23:44:00.056Z DEBUG [vto] Navigating to https://vto.qc.ca?s=FDT-100-EH-BP (attempt 1/3)
+2025-11-18T23:44:01.455Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=FDT-100-EH-BP
+2025-11-18T23:44:01.471Z DEBUG [vto] No product items found
+2025-11-18T23:44:01.472Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:01.472Z DEBUG [vto] Searching by name: horizontale surface mount (ezmount backer palte included) ligth gray (brand: FDT)
+2025-11-18T23:44:02.058Z DEBUG [vto] Navigating to https://vto.qc.ca?s=FDT%20horizontale%20surface%20mount%20(ezmount%20backer%20palte%20included)%20ligth%20gray (attempt 1/3)
+2025-11-18T23:44:03.456Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=FDT%20horizontale%20surface%20mount%20(ezmount%20backer%20palte%20included)%20ligth%20gray
+2025-11-18T23:44:03.471Z DEBUG [vto] No products found in results
+2025-11-18T23:44:03.471Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:04.472Z INFO  [vto] 
+[21/576] Processing: ATL-1150
+2025-11-18T23:44:04.473Z INFO  [vto] Scraping product: ATL-1150 - HYDRO THRUST Toilet plunger
+2025-11-18T23:44:04.474Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:04.474Z DEBUG [vto] Searching for SKU: ATL-1150
+2025-11-18T23:44:04.474Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL-1150 (attempt 1/3)
+2025-11-18T23:44:05.733Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL-1150
+2025-11-18T23:44:05.743Z DEBUG [vto] No product items found
+2025-11-18T23:44:05.743Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:05.743Z DEBUG [vto] Searching by name: hydro thrust toilet plunger (brand: ATL)
+2025-11-18T23:44:06.475Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ATL%20hydro%20thrust%20toilet%20plunger (attempt 1/3)
+2025-11-18T23:44:07.771Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ATL%20hydro%20thrust%20toilet%20plunger
+2025-11-18T23:44:07.788Z DEBUG [vto] No products found in results
+2025-11-18T23:44:07.788Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:08.789Z INFO  [vto] 
+[22/576] Processing: M2P-WA2026
+2025-11-18T23:44:08.790Z INFO  [vto] Scraping product: M2P-WA2026 - Heavy duty bowl plunger
+2025-11-18T23:44:08.791Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:08.791Z DEBUG [vto] Searching for SKU: M2P-WA2026
+2025-11-18T23:44:08.792Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P-WA2026 (attempt 1/3)
+2025-11-18T23:44:10.070Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P-WA2026
+2025-11-18T23:44:10.080Z DEBUG [vto] No product items found
+2025-11-18T23:44:10.080Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:10.080Z DEBUG [vto] Searching by name: heavy duty bowl plunger (brand: M2P)
+2025-11-18T23:44:10.794Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P%20heavy%20duty%20bowl%20plunger (attempt 1/3)
+2025-11-18T23:44:12.160Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P%20heavy%20duty%20bowl%20plunger
+2025-11-18T23:44:12.174Z DEBUG [vto] No products found in results
+2025-11-18T23:44:12.174Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:13.177Z INFO  [vto] 
+[23/576] Processing: ADV-110542
+2025-11-18T23:44:13.178Z INFO  [vto] Scraping product: ADV-110542 - Chemical resistant trigger sprayer for 32 Oz. bottle grey
+2025-11-18T23:44:13.179Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:13.179Z DEBUG [vto] Searching for SKU: ADV-110542
+2025-11-18T23:44:13.179Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV-110542 (attempt 1/3)
+2025-11-18T23:44:14.590Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV-110542
+2025-11-18T23:44:14.600Z DEBUG [vto] No product items found
+2025-11-18T23:44:14.600Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:14.600Z DEBUG [vto] Searching by name: chemical resistant trigger sprayer for 32 oz. bottle grey (brand: ADV)
+2025-11-18T23:44:15.180Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV%20chemical%20resistant%20trigger%20sprayer%20for%2032%20oz.%20bottle%20grey (attempt 1/3)
+2025-11-18T23:44:16.696Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV%20chemical%20resistant%20trigger%20sprayer%20for%2032%20oz.%20bottle%20grey
+2025-11-18T23:44:16.709Z DEBUG [vto] No products found in results
+2025-11-18T23:44:16.710Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:17.714Z INFO  [vto] 
+[24/576] Processing: TRI-66140113
+2025-11-18T23:44:17.714Z INFO  [vto] Scraping product: TRI-66140113 - Loc top for 946 mL bottle
+2025-11-18T23:44:17.715Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:17.715Z DEBUG [vto] Searching for SKU: TRI-66140113
+2025-11-18T23:44:17.715Z DEBUG [vto] Navigating to https://vto.qc.ca?s=TRI-66140113 (attempt 1/3)
+2025-11-18T23:44:19.088Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=TRI-66140113
+2025-11-18T23:44:19.099Z DEBUG [vto] No product items found
+2025-11-18T23:44:19.100Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:19.100Z DEBUG [vto] Searching by name: loc top for 946 ml bottle (brand: TRI)
+2025-11-18T23:44:19.716Z DEBUG [vto] Navigating to https://vto.qc.ca?s=TRI%20loc%20top%20for%20946%20ml%20bottle (attempt 1/3)
+2025-11-18T23:44:21.131Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=TRI%20loc%20top%20for%20946%20ml%20bottle
+2025-11-18T23:44:21.160Z DEBUG [vto] No products found in results
+2025-11-18T23:44:21.161Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:22.161Z INFO  [vto] 
+[25/576] Processing: ADV-330RW
+2025-11-18T23:44:22.161Z INFO  [vto] Scraping product: ADV-330RW - ADVANTAGE High output trigger sprayer Red/White 9.5'' 3.4mL
+2025-11-18T23:44:22.162Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:22.162Z DEBUG [vto] Searching for SKU: ADV-330RW
+2025-11-18T23:44:22.162Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV-330RW (attempt 1/3)
+2025-11-18T23:44:23.488Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV-330RW
+2025-11-18T23:44:23.504Z DEBUG [vto] No product items found
+2025-11-18T23:44:23.504Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:23.504Z DEBUG [vto] Searching by name: advantage high output trigger sprayer red/white 9.5'' 3.4ml (brand: ADV)
+2025-11-18T23:44:24.164Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV%20advantage%20high%20output%20trigger%20sprayer%20red%2Fwhite%209.5''%203.4ml (attempt 1/3)
+2025-11-18T23:44:25.637Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV%20advantage%20high%20output%20trigger%20sprayer%20red%2Fwhite%209.5''%203.4ml
+2025-11-18T23:44:25.656Z DEBUG [vto] No products found in results
+2025-11-18T23:44:25.656Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:26.657Z INFO  [vto] 
+[26/576] Processing: ZEP-CNPRO36
+2025-11-18T23:44:26.658Z INFO  [vto] Scraping product: ZEP-CNPRO36 - ZEP Professional sprayer 32 oz
+2025-11-18T23:44:26.658Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:26.658Z DEBUG [vto] Searching for SKU: ZEP-CNPRO36
+2025-11-18T23:44:26.659Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ZEP-CNPRO36 (attempt 1/3)
+2025-11-18T23:44:27.955Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ZEP-CNPRO36
+2025-11-18T23:44:27.971Z DEBUG [vto] No product items found
+2025-11-18T23:44:27.972Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:27.972Z DEBUG [vto] Searching by name: zep professional sprayer 32 oz (brand: ZEP)
+2025-11-18T23:44:28.663Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ZEP%20zep%20professional%20sprayer%2032%20oz (attempt 1/3)
+2025-11-18T23:44:29.971Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ZEP%20zep%20professional%20sprayer%2032%20oz
+2025-11-18T23:44:29.991Z DEBUG [vto] No products found in results
+2025-11-18T23:44:29.991Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:30.992Z INFO  [vto] 
+[27/576] Processing: GLO-3563
+2025-11-18T23:44:30.995Z INFO  [vto] Scraping product: GLO-3563 - GLOBE COMMERCIAL PRODUCTS Trigger Sprayer - High Output - Green - 9.25" Tube
+2025-11-18T23:44:30.995Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:30.995Z DEBUG [vto] Searching for SKU: GLO-3563
+2025-11-18T23:44:30.996Z DEBUG [vto] Navigating to https://vto.qc.ca?s=GLO-3563 (attempt 1/3)
+2025-11-18T23:44:32.387Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=GLO-3563
+2025-11-18T23:44:32.402Z DEBUG [vto] No product items found
+2025-11-18T23:44:32.402Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:32.402Z DEBUG [vto] Searching by name: globe commercial products trigger sprayer - high output - green - 9.25" tube (brand: GLO)
+2025-11-18T23:44:32.997Z DEBUG [vto] Navigating to https://vto.qc.ca?s=GLO%20globe%20commercial%20products%20trigger%20sprayer%20-%20high%20output%20-%20green%20-%209.25%22%20tube (attempt 1/3)
+2025-11-18T23:44:34.370Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=GLO%20globe%20commercial%20products%20trigger%20sprayer%20-%20high%20output%20-%20green%20-%209.25%22%20tube
+2025-11-18T23:44:34.380Z DEBUG [vto] No products found in results
+2025-11-18T23:44:34.380Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:35.386Z INFO  [vto] 
+[28/576] Processing: GLO-3568
+2025-11-18T23:44:35.386Z INFO  [vto] Scraping product: GLO-3568 - GLOBE COMMERCIAL PRODUCTS Sprayer Set Bottles 32oz Sprayer Set - Blue 9.25"" Tube
+2025-11-18T23:44:35.387Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:35.387Z DEBUG [vto] Searching for SKU: GLO-3568
+2025-11-18T23:44:35.387Z DEBUG [vto] Navigating to https://vto.qc.ca?s=GLO-3568 (attempt 1/3)
+2025-11-18T23:44:36.660Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=GLO-3568
+2025-11-18T23:44:36.674Z DEBUG [vto] No product items found
+2025-11-18T23:44:36.674Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:36.674Z DEBUG [vto] Searching by name: globe commercial products sprayer set bottles 32oz sprayer set - blue 9.25"" tube (brand: GLO)
+2025-11-18T23:44:37.388Z DEBUG [vto] Navigating to https://vto.qc.ca?s=GLO%20globe%20commercial%20products%20sprayer%20set%20bottles%2032oz%20sprayer%20set%20-%20blue%209.25%22%22%20tube (attempt 1/3)
+2025-11-18T23:44:38.710Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=GLO%20globe%20commercial%20products%20sprayer%20set%20bottles%2032oz%20sprayer%20set%20-%20blue%209.25%22%22%20tube
+2025-11-18T23:44:38.728Z DEBUG [vto] No products found in results
+2025-11-18T23:44:38.729Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:39.729Z INFO  [vto] 
+[29/576] Processing: GLO-3560
+2025-11-18T23:44:39.729Z INFO  [vto] Scraping product: GLO-3560 - Chemical Resistant  Trigger Sprayer 9.25" Tube  Grey
+2025-11-18T23:44:39.730Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:39.730Z DEBUG [vto] Searching for SKU: GLO-3560
+2025-11-18T23:44:39.730Z DEBUG [vto] Navigating to https://vto.qc.ca?s=GLO-3560 (attempt 1/3)
+2025-11-18T23:44:41.028Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=GLO-3560
+2025-11-18T23:44:41.045Z DEBUG [vto] No product items found
+2025-11-18T23:44:41.045Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:41.045Z DEBUG [vto] Searching by name: chemical resistant trigger sprayer 9.25" tube grey (brand: GLO)
+2025-11-18T23:44:41.732Z DEBUG [vto] Navigating to https://vto.qc.ca?s=GLO%20chemical%20resistant%20trigger%20sprayer%209.25%22%20tube%20grey (attempt 1/3)
+2025-11-18T23:44:43.259Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=GLO%20chemical%20resistant%20trigger%20sprayer%209.25%22%20tube%20grey
+2025-11-18T23:44:43.273Z DEBUG [vto] No products found in results
+2025-11-18T23:44:43.273Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:44.274Z INFO  [vto] 
+[30/576] Processing: ADV-5112AR
+2025-11-18T23:44:44.275Z INFO  [vto] Scraping product: ADV-5112AR - Acid resistant trigger sprayer for 32 Oz. bottle black and gold
+2025-11-18T23:44:44.275Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:44.275Z DEBUG [vto] Searching for SKU: ADV-5112AR
+2025-11-18T23:44:44.275Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV-5112AR (attempt 1/3)
+2025-11-18T23:44:45.630Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV-5112AR
+2025-11-18T23:44:45.647Z DEBUG [vto] No product items found
+2025-11-18T23:44:45.647Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:45.647Z DEBUG [vto] Searching by name: acid resistant trigger sprayer for 32 oz. bottle black and gold (brand: ADV)
+2025-11-18T23:44:46.276Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV%20acid%20resistant%20trigger%20sprayer%20for%2032%20oz.%20bottle%20black%20and%20gold (attempt 1/3)
+2025-11-18T23:44:47.622Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV%20acid%20resistant%20trigger%20sprayer%20for%2032%20oz.%20bottle%20black%20and%20gold
+2025-11-18T23:44:47.642Z DEBUG [vto] No products found in results
+2025-11-18T23:44:47.642Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:48.646Z INFO  [vto] 
+[31/576] Processing: ADV-12174
+2025-11-18T23:44:48.646Z INFO  [vto] Scraping product: ADV-12174 - Graduated plain bottle 24oz
+2025-11-18T23:44:48.647Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:48.647Z DEBUG [vto] Searching for SKU: ADV-12174
+2025-11-18T23:44:48.647Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV-12174 (attempt 1/3)
+2025-11-18T23:44:50.006Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV-12174
+2025-11-18T23:44:50.033Z DEBUG [vto] No product items found
+2025-11-18T23:44:50.033Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:50.033Z DEBUG [vto] Searching by name: graduated plain bottle 24oz (brand: ADV)
+2025-11-18T23:44:50.648Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV%20graduated%20plain%20bottle%2024oz (attempt 1/3)
+2025-11-18T23:44:52.068Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV%20graduated%20plain%20bottle%2024oz
+2025-11-18T23:44:52.080Z DEBUG [vto] No products found in results
+2025-11-18T23:44:52.080Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:53.080Z INFO  [vto] 
+[32/576] Processing: M2P-TS-B2700
+2025-11-18T23:44:53.080Z INFO  [vto] Scraping product: M2P-TS-B2700 - Jug cap white 38/400
+2025-11-18T23:44:53.081Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:53.081Z DEBUG [vto] Searching for SKU: M2P-TS-B2700
+2025-11-18T23:44:53.081Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P-TS-B2700 (attempt 1/3)
+2025-11-18T23:44:54.424Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P-TS-B2700
+2025-11-18T23:44:54.439Z DEBUG [vto] No product items found
+2025-11-18T23:44:54.439Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:54.439Z DEBUG [vto] Searching by name: jug cap white 38/400 (brand: M2P)
+2025-11-18T23:44:55.083Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P%20jug%20cap%20white%2038%2F400 (attempt 1/3)
+2025-11-18T23:44:56.372Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P%20jug%20cap%20white%2038%2F400
+2025-11-18T23:44:56.394Z DEBUG [vto] No products found in results
+2025-11-18T23:44:56.395Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:44:57.397Z INFO  [vto] 
+[33/576] Processing: TRI-66140113
+2025-11-18T23:44:57.398Z INFO  [vto] Scraping product: TRI-66140113 - Loc top for 946 mL bottle
+2025-11-18T23:44:57.399Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:44:57.400Z DEBUG [vto] Searching for SKU: TRI-66140113
+2025-11-18T23:44:57.400Z DEBUG [vto] Navigating to https://vto.qc.ca?s=TRI-66140113 (attempt 1/3)
+2025-11-18T23:44:58.719Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=TRI-66140113
+2025-11-18T23:44:58.734Z DEBUG [vto] No product items found
+2025-11-18T23:44:58.734Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:44:58.734Z DEBUG [vto] Searching by name: loc top for 946 ml bottle (brand: TRI)
+2025-11-18T23:44:59.402Z DEBUG [vto] Navigating to https://vto.qc.ca?s=TRI%20loc%20top%20for%20946%20ml%20bottle (attempt 1/3)
+2025-11-18T23:45:00.728Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=TRI%20loc%20top%20for%20946%20ml%20bottle
+2025-11-18T23:45:00.739Z DEBUG [vto] No products found in results
+2025-11-18T23:45:00.740Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:45:01.740Z INFO  [vto] 
+[34/576] Processing: ZEP-CNPRO36
+2025-11-18T23:45:01.740Z INFO  [vto] Scraping product: ZEP-CNPRO36 - ZEP Professional sprayer 32 oz
+2025-11-18T23:45:01.741Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:45:01.741Z DEBUG [vto] Searching for SKU: ZEP-CNPRO36
+2025-11-18T23:45:01.741Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ZEP-CNPRO36 (attempt 1/3)
+2025-11-18T23:45:03.153Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ZEP-CNPRO36
+2025-11-18T23:45:03.165Z DEBUG [vto] No product items found
+2025-11-18T23:45:03.165Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:45:03.165Z DEBUG [vto] Searching by name: zep professional sprayer 32 oz (brand: ZEP)
+2025-11-18T23:45:03.743Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ZEP%20zep%20professional%20sprayer%2032%20oz (attempt 1/3)
+2025-11-18T23:45:05.310Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ZEP%20zep%20professional%20sprayer%2032%20oz
+2025-11-18T23:45:05.322Z DEBUG [vto] No products found in results
+2025-11-18T23:45:05.322Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:45:06.323Z INFO  [vto] 
+[35/576] Processing: ADV-12174
+2025-11-18T23:45:06.324Z INFO  [vto] Scraping product: ADV-12174 - Graduated plain bottle 24oz
+2025-11-18T23:45:06.324Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:45:06.324Z DEBUG [vto] Searching for SKU: ADV-12174
+2025-11-18T23:45:06.324Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV-12174 (attempt 1/3)
+2025-11-18T23:45:07.737Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV-12174
+2025-11-18T23:45:07.752Z DEBUG [vto] No product items found
+2025-11-18T23:45:07.752Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:45:07.752Z DEBUG [vto] Searching by name: graduated plain bottle 24oz (brand: ADV)
+2025-11-18T23:45:08.325Z DEBUG [vto] Navigating to https://vto.qc.ca?s=ADV%20graduated%20plain%20bottle%2024oz (attempt 1/3)
+2025-11-18T23:45:09.646Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=ADV%20graduated%20plain%20bottle%2024oz
+2025-11-18T23:45:09.663Z DEBUG [vto] No products found in results
+2025-11-18T23:45:09.664Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:45:10.664Z INFO  [vto] 
+[36/576] Processing: M2P-TS-B2700
+2025-11-18T23:45:10.664Z INFO  [vto] Scraping product: M2P-TS-B2700 - Jug cap white 38/400
+2025-11-18T23:45:10.665Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:45:10.665Z DEBUG [vto] Searching for SKU: M2P-TS-B2700
+2025-11-18T23:45:10.665Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P-TS-B2700 (attempt 1/3)
+2025-11-18T23:45:11.921Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P-TS-B2700
+2025-11-18T23:45:11.932Z DEBUG [vto] No product items found
+2025-11-18T23:45:11.932Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:45:11.932Z DEBUG [vto] Searching by name: jug cap white 38/400 (brand: M2P)
+2025-11-18T23:45:12.666Z DEBUG [vto] Navigating to https://vto.qc.ca?s=M2P%20jug%20cap%20white%2038%2F400 (attempt 1/3)
+2025-11-18T23:45:14.084Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=M2P%20jug%20cap%20white%2038%2F400
+2025-11-18T23:45:14.097Z DEBUG [vto] No products found in results
+2025-11-18T23:45:14.098Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:45:15.098Z INFO  [vto] 
+[37/576] Processing: TRI-66120102
+2025-11-18T23:45:15.099Z INFO  [vto] Scraping product: TRI-66120102 - Cylindrical bottle 120 mL
+2025-11-18T23:45:15.099Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:45:15.099Z DEBUG [vto] Searching for SKU: TRI-66120102
+2025-11-18T23:45:15.099Z DEBUG [vto] Navigating to https://vto.qc.ca?s=TRI-66120102 (attempt 1/3)
+2025-11-18T23:45:16.463Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=TRI-66120102
+2025-11-18T23:45:16.478Z DEBUG [vto] No product items found
+2025-11-18T23:45:16.478Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:45:16.478Z DEBUG [vto] Searching by name: cylindrical bottle 120 ml (brand: TRI)
+2025-11-18T23:45:17.099Z DEBUG [vto] Navigating to https://vto.qc.ca?s=TRI%20cylindrical%20bottle%20120%20ml (attempt 1/3)
+2025-11-18T23:45:18.391Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=TRI%20cylindrical%20bottle%20120%20ml
+2025-11-18T23:45:18.405Z DEBUG [vto] No products found in results
+2025-11-18T23:45:18.405Z INFO  [vto] ✗ Product not found on V-TO inc.
+2025-11-18T23:45:19.406Z INFO  [vto] 
+[38/576] Processing: OLY-EBC-185
+2025-11-18T23:45:19.406Z INFO  [vto] Scraping product: OLY-EBC-185 - Top for 4 L & 10L  container
+2025-11-18T23:45:19.406Z DEBUG [vto] Step 1: Searching by SKU...
+2025-11-18T23:45:19.406Z DEBUG [vto] Searching for SKU: OLY-EBC-185
+2025-11-18T23:45:19.406Z DEBUG [vto] Navigating to https://vto.qc.ca?s=OLY-EBC-185 (attempt 1/3)
+2025-11-18T23:45:20.682Z DEBUG [vto] Successfully navigated to https://vto.qc.ca?s=OLY-EBC-185
+2025-11-18T23:45:20.695Z DEBUG [vto] No product items found
+2025-11-18T23:45:20.696Z DEBUG [vto] Step 2: Searching by name + brand...
+2025-11-18T23:45:20.696Z DEBUG [vto] Searching by name: top for 4 l & 10l container (brand: OLY)
+2025-11-18T23:45:21.406Z DEBUG [vto] Navigating to https://vto.qc.ca?s=OLY%20top%20for%204%20l%20%26%2010l%20container (attempt 1/3)

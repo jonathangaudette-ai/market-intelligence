@@ -1,0 +1,39 @@
+{
+  "name": "dissan-price-scraper",
+  "version": "1.0.0",
+  "description": "Web scraper for competitor price analysis - Dissan catalog",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "tsx src/main.ts",
+    "scrape:all": "tsx src/main.ts --all",
+    "scrape:priority1": "tsx src/main.ts --priority 1",
+    "scrape:priority2": "tsx src/main.ts --priority 2",
+    "scrape:priority3": "tsx src/main.ts --priority 3",
+    "scrape:site": "tsx src/main.ts --site",
+    "scrape:test": "tsx src/main.ts --test",
+    "scrape:update": "tsx src/main.ts --update",
+    "analyze": "tsx ../scripts/consolidate-prices.ts",
+    "consolidate": "tsx ../scripts/consolidate-prices.ts",
+    "test:setup": "tsx src/test-setup.ts"
+  },
+  "keywords": [
+    "web-scraping",
+    "price-analysis",
+    "competitor-intelligence",
+    "playwright"
+  ],
+  "author": "Dissan",
+  "license": "MIT",
+  "dependencies": {
+    "exceljs": "^4.3.0",
+    "playwright": "^1.40.0",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "string-similarity": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}

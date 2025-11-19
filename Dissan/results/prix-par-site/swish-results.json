@@ -1,0 +1,4515 @@
+{
+  "competitorId": "swish",
+  "competitorName": "Swish Maintenance",
+  "startTime": "2025-11-19T03:54:31.432Z",
+  "endTime": "2025-11-19T03:54:31.432Z",
+  "totalProducts": 576,
+  "productsScraped": 576,
+  "productsFound": 94,
+  "productsNotFound": 482,
+  "errors": 0,
+  "results": [
+    {
+      "sku": "ATL-12600",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:24.797Z"
+    },
+    {
+      "sku": "ATL-14505",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:31.193Z"
+    },
+    {
+      "sku": "ATL-14509",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:37.268Z"
+    },
+    {
+      "sku": "ATL-21801",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/hook-loop-flat-mop-frame-grey-18",
+      "productName": "",
+      "confidence": 0.65,
+      "timestamp": "2025-11-19T02:51:47.212Z"
+    },
+    {
+      "sku": "ATL-21924",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:51:53.288Z"
+    },
+    {
+      "sku": "ATL-25",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:00.635Z"
+    },
+    {
+      "sku": "ATL-2501",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:06.853Z"
+    },
+    {
+      "sku": "ATL-311",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:13.047Z"
+    },
+    {
+      "sku": "ATL-315",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:19.231Z"
+    },
+    {
+      "sku": "ATL-336",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:25.667Z"
+    },
+    {
+      "sku": "ATL-36780",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/kwik-system-extendable-handle-39-67",
+      "productName": "",
+      "confidence": 0.7500000000000001,
+      "timestamp": "2025-11-19T02:52:34.835Z"
+    },
+    {
+      "sku": "ATL-36781",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:40.470Z"
+    },
+    {
+      "sku": "RUB-9w32-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:45.989Z"
+    },
+    {
+      "sku": "RUB-9w32-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:52:50.847Z"
+    },
+    {
+      "sku": "ATL-1150",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/hydroforce-toilet-plunger-large",
+      "productName": "",
+      "confidence": 0.8500000000000001,
+      "timestamp": "2025-11-19T02:53:00.071Z"
+    },
+    {
+      "sku": "FDT-100-EH-BP",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:05.671Z"
+    },
+    {
+      "sku": "M2P-WA2026",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/plunger",
+      "productName": "",
+      "confidence": 0.8500000000000001,
+      "timestamp": "2025-11-19T02:53:15.094Z"
+    },
+    {
+      "sku": "ATL-816",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/toilet-bowl-brush-caddy-white-4",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:53:25.151Z"
+    },
+    {
+      "sku": "ATL-816",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/toilet-bowl-brush-caddy-white-4",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:53:33.405Z"
+    },
+    {
+      "sku": "FDT-100-EH-BP",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:53:38.415Z"
+    },
+    {
+      "sku": "ATL-1150",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/hydroforce-toilet-plunger-large",
+      "productName": "",
+      "confidence": 0.8500000000000001,
+      "timestamp": "2025-11-19T02:53:47.309Z"
+    },
+    {
+      "sku": "M2P-WA2026",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/plunger",
+      "productName": "",
+      "confidence": 0.8500000000000001,
+      "timestamp": "2025-11-19T02:53:55.453Z"
+    },
+    {
+      "sku": "ADV-110542",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:01.485Z"
+    },
+    {
+      "sku": "TRI-66140113",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:07.535Z"
+    },
+    {
+      "sku": "ADV-330RW",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:13.828Z"
+    },
+    {
+      "sku": "ZEP-CNPRO36",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/full-function-power-sprayer-1-5l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:54:23.294Z"
+    },
+    {
+      "sku": "GLO-3563",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:29.445Z"
+    },
+    {
+      "sku": "GLO-3568",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:34.914Z"
+    },
+    {
+      "sku": "GLO-3560",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:41.068Z"
+    },
+    {
+      "sku": "ADV-5112AR",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:54:47.274Z"
+    },
+    {
+      "sku": "ADV-12174",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/graduated-cleaning-bottle-clear-946ml",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:54:57.030Z"
+    },
+    {
+      "sku": "M2P-TS-B2700",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/easy-breezy-bouffant-cap-white-24-1000-cs",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:55:06.640Z"
+    },
+    {
+      "sku": "TRI-66140113",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:11.969Z"
+    },
+    {
+      "sku": "ZEP-CNPRO36",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/full-function-power-sprayer-1-5l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:55:19.787Z"
+    },
+    {
+      "sku": "ADV-12174",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/graduated-cleaning-bottle-clear-946ml",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:55:28.406Z"
+    },
+    {
+      "sku": "M2P-TS-B2700",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/easy-breezy-bouffant-cap-white-24-1000-cs",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:55:36.137Z"
+    },
+    {
+      "sku": "TRI-66120102",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-7-disinfectant-spray-wipe-bottle-710ml",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:55:46.351Z"
+    },
+    {
+      "sku": "OLY-EBC-185",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:55:52.873Z"
+    },
+    {
+      "sku": "TRI-66120106",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-7-disinfectant-spray-wipe-bottle-710ml",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T02:56:01.885Z"
+    },
+    {
+      "sku": "INS-SF-label-la",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:07.409Z"
+    },
+    {
+      "sku": "CON-10HL",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:13.851Z"
+    },
+    {
+      "sku": "ATL-454",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/trailblazer-angled-broom-head-9-5",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:56:23.376Z"
+    },
+    {
+      "sku": "ATL-761",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/corn-whisk-hand-broom-3-string",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:56:32.912Z"
+    },
+    {
+      "sku": "M2P-BA-3001",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:38.620Z"
+    },
+    {
+      "sku": "RUB-2005-00--char",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:44.050Z"
+    },
+    {
+      "sku": "ATL-760",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:50.468Z"
+    },
+    {
+      "sku": "RUB-2018806",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:56:56.332Z"
+    },
+    {
+      "sku": "ATL-749",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:02.478Z"
+    },
+    {
+      "sku": "ATL-765",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:08.376Z"
+    },
+    {
+      "sku": "M2P-DP-L802",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:14.422Z"
+    },
+    {
+      "sku": "VIL-158848",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/oskar-broom-with-dustpan-red-11",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:57:23.833Z"
+    },
+    {
+      "sku": "ATL-175",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:29.688Z"
+    },
+    {
+      "sku": "M2P-BA-3001",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:35.655Z"
+    },
+    {
+      "sku": "M2P-DP-L802",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:40.882Z"
+    },
+    {
+      "sku": "VIL-158848",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/oskar-broom-with-dustpan-red-11",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:57:47.628Z"
+    },
+    {
+      "sku": "ATL-175",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:53.656Z"
+    },
+    {
+      "sku": "INS-AC-2532",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:57:59.339Z"
+    },
+    {
+      "sku": "INS-AC-BA9708D",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:05.500Z"
+    },
+    {
+      "sku": "ATL-454",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/trailblazer-angled-broom-head-9-5",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:58:14.478Z"
+    },
+    {
+      "sku": "ATL-761",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/corn-whisk-hand-broom-3-string",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:58:22.424Z"
+    },
+    {
+      "sku": "ATL-760",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:28.034Z"
+    },
+    {
+      "sku": "ATL-749",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:33.453Z"
+    },
+    {
+      "sku": "ATL-765",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:39.068Z"
+    },
+    {
+      "sku": "ATL-795",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:45.443Z"
+    },
+    {
+      "sku": "ATL-796",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:51.235Z"
+    },
+    {
+      "sku": "M2P-BA-3000",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:58:57.271Z"
+    },
+    {
+      "sku": "ATL-763",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:03.493Z"
+    },
+    {
+      "sku": "RUB-2005-00--char",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:08.597Z"
+    },
+    {
+      "sku": "RUB-2018806",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:14.531Z"
+    },
+    {
+      "sku": "M2P-DP-L950",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:20.625Z"
+    },
+    {
+      "sku": "ATL-4K",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:27.287Z"
+    },
+    {
+      "sku": "RUB-2531-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:32.791Z"
+    },
+    {
+      "sku": "ATL-10182",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:39.173Z"
+    },
+    {
+      "sku": "INS-AC-DPL800",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/ergo-grip-lobby-dust-pan-black-12",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T02:59:48.454Z"
+    },
+    {
+      "sku": "ATL-25",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T02:59:55.825Z"
+    },
+    {
+      "sku": "ATL-2501",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:02.113Z"
+    },
+    {
+      "sku": "ATL-315",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/detail-grout-brush-8",
+      "productName": "",
+      "confidence": 0.8500000000000001,
+      "timestamp": "2025-11-19T03:00:12.723Z"
+    },
+    {
+      "sku": "ATL-336",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:19.185Z"
+    },
+    {
+      "sku": "ATL-5317",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:25.718Z"
+    },
+    {
+      "sku": "ATL-5352",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:32.328Z"
+    },
+    {
+      "sku": "ATL-823",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/deluxe-toilet-bowl-brush-white",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:00:46.727Z"
+    },
+    {
+      "sku": "ATL-906",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:52.992Z"
+    },
+    {
+      "sku": "BAL-s60v",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:00:58.329Z"
+    },
+    {
+      "sku": "ATL-318",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:04.457Z"
+    },
+    {
+      "sku": "ATL-398",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:11.029Z"
+    },
+    {
+      "sku": "ATL-315",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/detail-grout-brush-8",
+      "productName": "",
+      "confidence": 0.8500000000000001,
+      "timestamp": "2025-11-19T03:01:20.107Z"
+    },
+    {
+      "sku": "ATL-318",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:25.790Z"
+    },
+    {
+      "sku": "ATL-387",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:32.292Z"
+    },
+    {
+      "sku": "ATL-5314",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:38.388Z"
+    },
+    {
+      "sku": "ATL-336",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:44.014Z"
+    },
+    {
+      "sku": "ATL-5317",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:49.366Z"
+    },
+    {
+      "sku": "ATL-5352",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:01:54.798Z"
+    },
+    {
+      "sku": "ATL-398",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:00.757Z"
+    },
+    {
+      "sku": "M2P-BR-UT60709",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:06.610Z"
+    },
+    {
+      "sku": "ATL-99101",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:12.245Z"
+    },
+    {
+      "sku": "ATL-101",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/bi-level-scrub-brush-10",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:02:22.109Z"
+    },
+    {
+      "sku": "ATL-85",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/medium-fibre-counter-brush-7-5",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:02:32.780Z"
+    },
+    {
+      "sku": "ATL-99100",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/detail-grout-brush-8",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:02:41.721Z"
+    },
+    {
+      "sku": "ATL-99021",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:47.737Z"
+    },
+    {
+      "sku": "M2P-PA-M1080",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:02:53.903Z"
+    },
+    {
+      "sku": "M2P-PA-W1120",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:00.540Z"
+    },
+    {
+      "sku": "RUB-7480-00--yel",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:06.320Z"
+    },
+    {
+      "sku": "RUB-q930-00--bl",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:12.225Z"
+    },
+    {
+      "sku": "M2P-PA-UT10",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:18.673Z"
+    },
+    {
+      "sku": "INS-AC-0080YE",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:24.827Z"
+    },
+    {
+      "sku": "M2P-PA-M1080",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:30.413Z"
+    },
+    {
+      "sku": "M2P-PA-W1120",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/wavebrake-bucket-down-press-wringer-yellow-35qt",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:03:40.128Z"
+    },
+    {
+      "sku": "RUB-q930-00--bl",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:45.037Z"
+    },
+    {
+      "sku": "M2P-PA-UT10",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:50.864Z"
+    },
+    {
+      "sku": "RUB-7480-00--yel",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:03:55.749Z"
+    },
+    {
+      "sku": "INS-AC-0080YE",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:01.679Z"
+    },
+    {
+      "sku": "INS-AC-0038YE",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:08.189Z"
+    },
+    {
+      "sku": "INS-AC-7577YE",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:14.750Z"
+    },
+    {
+      "sku": "MAT-MNR654",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:21.571Z"
+    },
+    {
+      "sku": "MAT-3R654",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:27.764Z"
+    },
+    {
+      "sku": "MAT-PTFM3554",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:44.712Z"
+    },
+    {
+      "sku": "MAT-MNR654",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:04:55.783Z"
+    },
+    {
+      "sku": "MAT-3R654",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:00.323Z"
+    },
+    {
+      "sku": "MAT-PTFM3554",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:04.975Z"
+    },
+    {
+      "sku": "RUB-1881749",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:09.599Z"
+    },
+    {
+      "sku": "RUB-1966719--yel",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:20.706Z"
+    },
+    {
+      "sku": "RUB-4403-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:25.286Z"
+    },
+    {
+      "sku": "RUB-9t16-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:29.816Z"
+    },
+    {
+      "sku": "RUB-9t78-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:34.346Z"
+    },
+    {
+      "sku": "RUB-9w73-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:38.913Z"
+    },
+    {
+      "sku": "rub-4300-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:43.468Z"
+    },
+    {
+      "sku": "RUB-3154-88--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:48.160Z"
+    },
+    {
+      "sku": "M2P-CA-M1801",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:05:55.883Z"
+    },
+    {
+      "sku": "RUB-6179-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:00.337Z"
+    },
+    {
+      "sku": "RUB-9t85-00-bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:04.930Z"
+    },
+    {
+      "sku": "RUB-9t16-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:09.306Z"
+    },
+    {
+      "sku": "RUB-9w73-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:13.687Z"
+    },
+    {
+      "sku": "rub-4300-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:18.071Z"
+    },
+    {
+      "sku": "RUB-1881749",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:22.602Z"
+    },
+    {
+      "sku": "RUB-1966719--yel",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:38.668Z"
+    },
+    {
+      "sku": "RUB-9t78-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:06:53.254Z"
+    },
+    {
+      "sku": "RUB-3154-88--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:02.208Z"
+    },
+    {
+      "sku": "M2P-CA-M1801",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:17.044Z"
+    },
+    {
+      "sku": "RUB-6179-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:31.683Z"
+    },
+    {
+      "sku": "RUB-9t85-00-bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:07:46.176Z"
+    },
+    {
+      "sku": "M2P-TL-101",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:00.801Z"
+    },
+    {
+      "sku": "INS-AC-0007",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:16.042Z"
+    },
+    {
+      "sku": "RUB-4403-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:25.432Z"
+    },
+    {
+      "sku": "RUB-2646-00--bla",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:30.143Z"
+    },
+    {
+      "sku": "SAN-3165WH",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:34.905Z"
+    },
+    {
+      "sku": "ATL-F132",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:39.493Z"
+    },
+    {
+      "sku": "EMM-9033081",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:43.998Z"
+    },
+    {
+      "sku": "ECG-EG-A-K01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:48.518Z"
+    },
+    {
+      "sku": "ECG-EG-A-K03",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:53.028Z"
+    },
+    {
+      "sku": "ECG-EG-A-SS01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:08:57.626Z"
+    },
+    {
+      "sku": "ECG-EG-A-TS01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:02.234Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:06.892Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5-R1",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:11.583Z"
+    },
+    {
+      "sku": "ECG-EG-N-C001",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:16.097Z"
+    },
+    {
+      "sku": "ECG-EG-N-C003",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:20.614Z"
+    },
+    {
+      "sku": "SAN-3165WH",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:25.313Z"
+    },
+    {
+      "sku": "ATL-F132",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:29.917Z"
+    },
+    {
+      "sku": "EMM-9033081",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:36.834Z"
+    },
+    {
+      "sku": "ECG-EG-A-K01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:42.374Z"
+    },
+    {
+      "sku": "ECG-EG-A-K03",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:48.008Z"
+    },
+    {
+      "sku": "ECG-EG-A-SS01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:53.729Z"
+    },
+    {
+      "sku": "ECG-EG-A-TS01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:09:59.492Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:05.316Z"
+    },
+    {
+      "sku": "ECG-EG-CPLA-CS6.5-R1",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:10.752Z"
+    },
+    {
+      "sku": "ECG-EG-N-C001",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:16.285Z"
+    },
+    {
+      "sku": "ECG-EG-N-C003",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:21.733Z"
+    },
+    {
+      "sku": "ATL-21801",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:27.612Z"
+    },
+    {
+      "sku": "ATL-21924",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:33.701Z"
+    },
+    {
+      "sku": "ATL-311",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:39.863Z"
+    },
+    {
+      "sku": "ATL-36780",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:45.928Z"
+    },
+    {
+      "sku": "ATL-36781",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:51.866Z"
+    },
+    {
+      "sku": "ATL-60340",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:10:57.922Z"
+    },
+    {
+      "sku": "ATL-60695",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:05.383Z"
+    },
+    {
+      "sku": "MMM-70071279759",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:11:15.298Z"
+    },
+    {
+      "sku": "MMM-F-ESH-18PAD",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:21.019Z"
+    },
+    {
+      "sku": "RUB-Q050-00--0000",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:26.557Z"
+    },
+    {
+      "sku": "RUB-q416-00--bl00",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:32.132Z"
+    },
+    {
+      "sku": "RUB-q630-00--bl00",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:37.700Z"
+    },
+    {
+      "sku": "ATL-21801",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/hook-loop-flat-mop-frame-grey-18",
+      "productName": "",
+      "confidence": 0.65,
+      "timestamp": "2025-11-19T03:11:46.949Z"
+    },
+    {
+      "sku": "ATL-311",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:52.554Z"
+    },
+    {
+      "sku": "RUB-q850-00--black",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:11:58.017Z"
+    },
+    {
+      "sku": "RUB-Q852-00--WH00",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:03.989Z"
+    },
+    {
+      "sku": "RUB-Q853-00--WH00",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:09.538Z"
+    },
+    {
+      "sku": "RUB-q851-00--gr00",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:15.351Z"
+    },
+    {
+      "sku": "ATL-425",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:21.995Z"
+    },
+    {
+      "sku": "ADV-30050",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:28.547Z"
+    },
+    {
+      "sku": "ATL-426",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:34.959Z"
+    },
+    {
+      "sku": "ATL-310",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:41.624Z"
+    },
+    {
+      "sku": "MMM-70071279759",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:12:50.187Z"
+    },
+    {
+      "sku": "MMM-F-ESH-18PAD",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:12:57.021Z"
+    },
+    {
+      "sku": "RUB-Q050-00--0000",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/hillyard-multi-flo-xp-water-based-gym-finish-system",
+      "productName": "",
+      "confidence": 0.7500000000000001,
+      "timestamp": "2025-11-19T03:13:05.931Z"
+    },
+    {
+      "sku": "RUB-q630-00--bl00",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:10.823Z"
+    },
+    {
+      "sku": "ATL-12600",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:17.391Z"
+    },
+    {
+      "sku": "ATL-14509",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:23.403Z"
+    },
+    {
+      "sku": "ATL-5106",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:29.806Z"
+    },
+    {
+      "sku": "BAL-l6336r",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:35.602Z"
+    },
+    {
+      "sku": "M2P-HW-160M",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/knob-handleuirv005100",
+      "productName": "",
+      "confidence": 0.7500000000000001,
+      "timestamp": "2025-11-19T03:13:45.651Z"
+    },
+    {
+      "sku": "M2P-HW-7002W",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:52.739Z"
+    },
+    {
+      "sku": "M2P-HW-7003A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:13:59.089Z"
+    },
+    {
+      "sku": "M2P-MW-SWC32-GR",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:05.103Z"
+    },
+    {
+      "sku": "RUB-2018823",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:11.728Z"
+    },
+    {
+      "sku": "RUB-q900-88--yel",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:17.489Z"
+    },
+    {
+      "sku": "ATL-1620",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:24.253Z"
+    },
+    {
+      "sku": "ATL-1624",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:38.455Z"
+    },
+    {
+      "sku": "ATL-14509",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:44.010Z"
+    },
+    {
+      "sku": "BAL-l6336r",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:14:49.202Z"
+    },
+    {
+      "sku": "RUB-q900-88--yel",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/wavebrake-bucket-down-press-wringer-yellow-35qt",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:14:58.282Z"
+    },
+    {
+      "sku": "UNG-WNK04",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:15:10.049Z"
+    },
+    {
+      "sku": "AVM-2409277001",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:15.580Z"
+    },
+    {
+      "sku": "CHE-CCCFS19GW4",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/reverse-resistor",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:15:25.626Z"
+    },
+    {
+      "sku": "CHE-CCCV100008",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:31.537Z"
+    },
+    {
+      "sku": "CHE-CCSDCTOG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:37.333Z"
+    },
+    {
+      "sku": "CHE-CCSNUTOG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:43.030Z"
+    },
+    {
+      "sku": "CHE-CCSVCPGG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:48.725Z"
+    },
+    {
+      "sku": "CHE-CCSWRBXG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:54.146Z"
+    },
+    {
+      "sku": "CHE-CCSWUBXG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:15:59.940Z"
+    },
+    {
+      "sku": "DAN-BV3-0161-039",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:05.839Z"
+    },
+    {
+      "sku": "DAN-NU1-0008-041",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:11.547Z"
+    },
+    {
+      "sku": "DAN-SL1-0006-013",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:16.968Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-037",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:23.152Z"
+    },
+    {
+      "sku": "INN-15201",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:29.848Z"
+    },
+    {
+      "sku": "CHE-CCSBULEG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:35.754Z"
+    },
+    {
+      "sku": "HOS-SC500TSC",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:41.792Z"
+    },
+    {
+      "sku": "LAW-34157",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:47.817Z"
+    },
+    {
+      "sku": "ZEP-178754",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:53.286Z"
+    },
+    {
+      "sku": "HOS-96687",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:16:59.242Z"
+    },
+    {
+      "sku": "CHE-CCSBULEG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:04.306Z"
+    },
+    {
+      "sku": "DEB-10159",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:10.900Z"
+    },
+    {
+      "sku": "LAV-098029",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:16.850Z"
+    },
+    {
+      "sku": "DUS-53732",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:22.498Z"
+    },
+    {
+      "sku": "LAW-34180",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:28.589Z"
+    },
+    {
+      "sku": "LAW-34157",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:33.855Z"
+    },
+    {
+      "sku": "DIV-101104392",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:39.336Z"
+    },
+    {
+      "sku": "LAW-34524",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:48.906Z"
+    },
+    {
+      "sku": "DIV-101103669",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:17:54.735Z"
+    },
+    {
+      "sku": "INN-16966",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:00.784Z"
+    },
+    {
+      "sku": "SPR-875",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:06.747Z"
+    },
+    {
+      "sku": "DEB-10168",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:13.102Z"
+    },
+    {
+      "sku": "DIV-101103669",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:18.639Z"
+    },
+    {
+      "sku": "INN-16966",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:24.527Z"
+    },
+    {
+      "sku": "SPR-875",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-dust-mop-treatment-3-78l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:18:33.630Z"
+    },
+    {
+      "sku": "DEB-10168",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/es-spray-trigger-green",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:18:43.280Z"
+    },
+    {
+      "sku": "AVM-2409277001",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:18:48.295Z"
+    },
+    {
+      "sku": "CHE-CCCFS19GW4",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/reverse-resistor",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:18:56.201Z"
+    },
+    {
+      "sku": "CHE-CCSNUTOG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:01.241Z"
+    },
+    {
+      "sku": "DIV-5032386",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:07.232Z"
+    },
+    {
+      "sku": "DIV-5104731",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-eternity-floor-finish-18-9l",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:19:18.470Z"
+    },
+    {
+      "sku": "MMM-C-10096-21OZ",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:23.817Z"
+    },
+    {
+      "sku": "PAR-PARMATIC4",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-dish-detergent-4l",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:19:33.127Z"
+    },
+    {
+      "sku": "INS-SF-GRUNGE-4",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-dish-detergent-4l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:19:42.299Z"
+    },
+    {
+      "sku": "INO-FIB16-946",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:49.080Z"
+    },
+    {
+      "sku": "PSS-POWDER-20",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:19:55.583Z"
+    },
+    {
+      "sku": "INO-gl13-4",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:02.300Z"
+    },
+    {
+      "sku": "CHE-CCSDCTOG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:07.287Z"
+    },
+    {
+      "sku": "INN-15162",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:13.618Z"
+    },
+    {
+      "sku": "INN-16028",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:19.527Z"
+    },
+    {
+      "sku": "INN-16399",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:26.324Z"
+    },
+    {
+      "sku": "CHE-CCSECFLG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:32.033Z"
+    },
+    {
+      "sku": "CHE-CCCCL10G04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:37.705Z"
+    },
+    {
+      "sku": "DIV-3172668",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-3-all-purpose-concentrated-cleaner-2x4-73l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:20:48.089Z"
+    },
+    {
+      "sku": "DIV-5499058",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:53.723Z"
+    },
+    {
+      "sku": "INN-15162",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:20:59.492Z"
+    },
+    {
+      "sku": "INN-16028",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:06.249Z"
+    },
+    {
+      "sku": "INN-16399",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:12.339Z"
+    },
+    {
+      "sku": "CHE-CCSECFLG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:17.223Z"
+    },
+    {
+      "sku": "DIV-3172668",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-3-all-purpose-concentrated-cleaner-2x4-73l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:21:25.603Z"
+    },
+    {
+      "sku": "SPR-293",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:31.547Z"
+    },
+    {
+      "sku": "RML-11258439",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-13-winter-wash-neutral-floor-cleaner-4-73l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:21:40.742Z"
+    },
+    {
+      "sku": "SPR-031",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:46.696Z"
+    },
+    {
+      "sku": "COB-050-1349",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:52.091Z"
+    },
+    {
+      "sku": "DIV-101106957",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:21:57.310Z"
+    },
+    {
+      "sku": "SPR-CL880",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:03.664Z"
+    },
+    {
+      "sku": "CHE-CCSDCTOG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:08.555Z"
+    },
+    {
+      "sku": "CHE-CCCCL10G04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:13.601Z"
+    },
+    {
+      "sku": "DIV-5499058",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:18.423Z"
+    },
+    {
+      "sku": "CHE-CCSWRBXG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:23.381Z"
+    },
+    {
+      "sku": "CHE-CCSWUBXG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:28.162Z"
+    },
+    {
+      "sku": "RML-11894498",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:33.592Z"
+    },
+    {
+      "sku": "DIV-03970",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:40.356Z"
+    },
+    {
+      "sku": "SPR-CL50",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:46.329Z"
+    },
+    {
+      "sku": "DEB-10146",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:52.935Z"
+    },
+    {
+      "sku": "SCJ-WINDEX-539G",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:22:58.796Z"
+    },
+    {
+      "sku": "SPR-848",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/deep-cleaning-disinfecting",
+      "productName": "",
+      "confidence": 0.7500000000000001,
+      "timestamp": "2025-11-19T03:23:08.211Z"
+    },
+    {
+      "sku": "SPR-CL50",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:13.473Z"
+    },
+    {
+      "sku": "SCJ-WINDEX-539G",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-disinfectant-spray-439g",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:23:22.961Z"
+    },
+    {
+      "sku": "SPR-848",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/deep-cleaning-disinfecting",
+      "productName": "",
+      "confidence": 0.7500000000000001,
+      "timestamp": "2025-11-19T03:23:31.352Z"
+    },
+    {
+      "sku": "INO-aes100",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:39.395Z"
+    },
+    {
+      "sku": "CHE-CCSWUBXG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:44.472Z"
+    },
+    {
+      "sku": "DEB-10146",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:50.593Z"
+    },
+    {
+      "sku": "CHE-CCSWRBXG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:23:55.399Z"
+    },
+    {
+      "sku": "RML-11894498",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:00.373Z"
+    },
+    {
+      "sku": "DIV-03970",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:06.159Z"
+    },
+    {
+      "sku": "REC-53-394X52",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:12.413Z"
+    },
+    {
+      "sku": "INS-SF-KRYSTA-4",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-crystal-floor-finish-3-78-l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:24:21.503Z"
+    },
+    {
+      "sku": "DAN-BV3-0161-039",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:26.301Z"
+    },
+    {
+      "sku": "DAN-NU1-0008-041",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:31.143Z"
+    },
+    {
+      "sku": "DAN-SL1-0006-013",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:36.144Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-037",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:41.177Z"
+    },
+    {
+      "sku": "DAN-SL1-0151-037",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:46.739Z"
+    },
+    {
+      "sku": "DAN-002-0003-045",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:52.208Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-039",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:24:57.482Z"
+    },
+    {
+      "sku": "DHS-TPPW-BB125",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:03.263Z"
+    },
+    {
+      "sku": "DAN-001-0152-036",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:08.721Z"
+    },
+    {
+      "sku": "FOR-151355",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:14.614Z"
+    },
+    {
+      "sku": "DAN-BV3-0161-039",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:19.560Z"
+    },
+    {
+      "sku": "DAN-NU1-0008-041",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:24.419Z"
+    },
+    {
+      "sku": "DAN-SL1-0006-013",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:29.321Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-037",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:34.201Z"
+    },
+    {
+      "sku": "DAN-SL1-0151-037",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:39.142Z"
+    },
+    {
+      "sku": "DAN-002-0003-045",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:44.009Z"
+    },
+    {
+      "sku": "DAN-SL1-0157-039",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:48.906Z"
+    },
+    {
+      "sku": "DHS-TPPW-BB125",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:53.805Z"
+    },
+    {
+      "sku": "DAN-001-0152-036",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:25:58.660Z"
+    },
+    {
+      "sku": "FOR-151355",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:03.829Z"
+    },
+    {
+      "sku": "JIG-JIG1201+",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:09.216Z"
+    },
+    {
+      "sku": "JIG-JIG1601+",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:14.783Z"
+    },
+    {
+      "sku": "ZEP-037647",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:20.628Z"
+    },
+    {
+      "sku": "ZEP-085647",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-13-winter-wash-neutral-floor-cleaner-4-73l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:26:28.595Z"
+    },
+    {
+      "sku": "ZEP-G24447",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-food-service-2000-sanitizer-2-x-4-73l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:26:37.949Z"
+    },
+    {
+      "sku": "ZEP-P84647",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-facto-at34-aluminum-cleaner-brightener-concentrate-18-9l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:26:47.076Z"
+    },
+    {
+      "sku": "ZEP-Q06854",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:52.324Z"
+    },
+    {
+      "sku": "ZEP-374311C",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:26:58.575Z"
+    },
+    {
+      "sku": "ZEP-037647",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:03.588Z"
+    },
+    {
+      "sku": "ZEP-G24447",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-food-service-2000-sanitizer-2-x-4-73l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:27:11.814Z"
+    },
+    {
+      "sku": "ZEP-P84647",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-facto-at34-aluminum-cleaner-brightener-concentrate-18-9l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:27:19.537Z"
+    },
+    {
+      "sku": "ZEP-Q06854",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:24.877Z"
+    },
+    {
+      "sku": "HYG-11025",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:30.490Z"
+    },
+    {
+      "sku": "ZEP-M60323",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:36.459Z"
+    },
+    {
+      "sku": "INO-shp1-378",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:42.780Z"
+    },
+    {
+      "sku": "CHE-CCCV100008",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:48.095Z"
+    },
+    {
+      "sku": "CHE-CCSVCPGG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:53.051Z"
+    },
+    {
+      "sku": "DIV-04678",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:27:59.103Z"
+    },
+    {
+      "sku": "OLY-4412036",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:06.048Z"
+    },
+    {
+      "sku": "OLY-4412036",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:11.223Z"
+    },
+    {
+      "sku": "INO-ch6-950",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:17.270Z"
+    },
+    {
+      "sku": "INN-15238",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:23.894Z"
+    },
+    {
+      "sku": "DIV-04678",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:29.830Z"
+    },
+    {
+      "sku": "HYG-15025",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:37.197Z"
+    },
+    {
+      "sku": "DIV-100839421",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:42.844Z"
+    },
+    {
+      "sku": "INO-shp5-946",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:49.323Z"
+    },
+    {
+      "sku": "PRG-02664",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:28:55.449Z"
+    },
+    {
+      "sku": "CHE-CCCSUNE018",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:00.865Z"
+    },
+    {
+      "sku": "PRG-02500",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:07.511Z"
+    },
+    {
+      "sku": "DIV-100905320",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:13.532Z"
+    },
+    {
+      "sku": "DIV-100905391",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:18.906Z"
+    },
+    {
+      "sku": "DIV-100905392",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-sparkle-glass-surface-cleaner-946ml",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:29:28.671Z"
+    },
+    {
+      "sku": "OLY-4877105",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-sequest-green-oxygen-bleach-4-x-3-78l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:29:38.318Z"
+    },
+    {
+      "sku": "DIV-100905320",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:29:43.623Z"
+    },
+    {
+      "sku": "DIV-100905391",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-sequest-laundry-enzyme-protein-detergent-18-9l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:29:52.230Z"
+    },
+    {
+      "sku": "DIV-100905392",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-sparkle-glass-surface-cleaner-946ml",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:30:00.197Z"
+    },
+    {
+      "sku": "PRG-02664",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:06.537Z"
+    },
+    {
+      "sku": "CHE-CCCSUNE018",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:11.874Z"
+    },
+    {
+      "sku": "PRG-02500",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:18.237Z"
+    },
+    {
+      "sku": "CHE-CCSLEFRG04",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:23.595Z"
+    },
+    {
+      "sku": "OLY-4262040",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:30.142Z"
+    },
+    {
+      "sku": "PRG-49340",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:36.364Z"
+    },
+    {
+      "sku": "INO-WSH3-4",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:44.305Z"
+    },
+    {
+      "sku": "INO-WSH5-1",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:50.990Z"
+    },
+    {
+      "sku": "LAW-75150",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:30:56.903Z"
+    },
+    {
+      "sku": "ZEP-Q14054",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:02.443Z"
+    },
+    {
+      "sku": "RUB-1793547",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:08.842Z"
+    },
+    {
+      "sku": "TRI-56202",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:15.368Z"
+    },
+    {
+      "sku": "HOS-07918",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:21.339Z"
+    },
+    {
+      "sku": "COB-170-1092",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:27.971Z"
+    },
+    {
+      "sku": "SPR-SW575",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:33.858Z"
+    },
+    {
+      "sku": "WAT-33-2960",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:39.972Z"
+    },
+    {
+      "sku": "TRI-56202",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:45.771Z"
+    },
+    {
+      "sku": "HOS-07918",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:51.029Z"
+    },
+    {
+      "sku": "SPR-SW575",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:31:56.453Z"
+    },
+    {
+      "sku": "WAT-33-2960",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:02.500Z"
+    },
+    {
+      "sku": "WAT-1045176",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-tropic-breeze-air-freshener-deodorizer-284g",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:32:12.249Z"
+    },
+    {
+      "sku": "SPR-SW586",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:18.959Z"
+    },
+    {
+      "sku": "SPR-106W",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:24.954Z"
+    },
+    {
+      "sku": "SPR-165",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:31.195Z"
+    },
+    {
+      "sku": "WAT-1045374",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:37.592Z"
+    },
+    {
+      "sku": "INO-aes400",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:43.047Z"
+    },
+    {
+      "sku": "RUB-1793547",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:32:49.267Z"
+    },
+    {
+      "sku": "ZEP-WATW6100",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-h80-mechanical-hand-towel-roll-dispenser-black",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:32:58.632Z"
+    },
+    {
+      "sku": "INO-OL32-6100",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-h80-mechanical-hand-towel-roll-dispenser-black",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:33:08.178Z"
+    },
+    {
+      "sku": "ZEP-Q14054",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:13.316Z"
+    },
+    {
+      "sku": "COB-170-1092",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:18.965Z"
+    },
+    {
+      "sku": "DEG-12435A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:25.248Z"
+    },
+    {
+      "sku": "DEG-12435A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:30.481Z"
+    },
+    {
+      "sku": "DEB-GPF3LDQ",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:36.591Z"
+    },
+    {
+      "sku": "DEB-PRO1LDS",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:42.930Z"
+    },
+    {
+      "sku": "DEB-SUN1LDS",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:49.182Z"
+    },
+    {
+      "sku": "GOJ-7772-02-CAN00",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:33:54.327Z"
+    },
+    {
+      "sku": "DIV-100907872",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/enviro-solutions-es42-foaming-hand-sanitizer-3-x-1-25l",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:34:04.179Z"
+    },
+    {
+      "sku": "OLY-4413104",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:34:10.368Z"
+    },
+    {
+      "sku": "DEB-GPF3LDQ",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:34:16.015Z"
+    },
+    {
+      "sku": "DEB-PRO1LDS",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/foam-eeze-bulk-foam-soap-dispenser-white-1000ml",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:34:25.772Z"
+    },
+    {
+      "sku": "DEB-SUN1LDS",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:34:31.458Z"
+    },
+    {
+      "sku": "AVM-0000011770",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:34:36.788Z"
+    },
+    {
+      "sku": "DEB-951",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/dispenser-key-es-sc",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:34:46.859Z"
+    },
+    {
+      "sku": "KUT-9908zpl",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/hand-care-dispenser-drip-tray-black",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:34:55.779Z"
+    },
+    {
+      "sku": "SAN-SF900TBK",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-h80-mechanical-hand-towel-roll-dispenser-black",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:35:04.942Z"
+    },
+    {
+      "sku": "SAN-S900TBK",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:35:10.954Z"
+    },
+    {
+      "sku": "WAY-FAEWS1416F",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:35:16.882Z"
+    },
+    {
+      "sku": "KMC-91565",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:35:22.986Z"
+    },
+    {
+      "sku": "GOJ-1911-02",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:35:29.387Z"
+    },
+    {
+      "sku": "TEC-401543",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:35:35.932Z"
+    },
+    {
+      "sku": "CHE-CCCBFXXGW4",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:35:41.073Z"
+    },
+    {
+      "sku": "CLA-56265505",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:35:47.162Z"
+    },
+    {
+      "sku": "CLA-9084705010",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/karcher-km-70-20c-manual-push-sweeper-28",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:35:55.939Z"
+    },
+    {
+      "sku": "CLA-CLARKE1500",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:36:01.449Z"
+    },
+    {
+      "sku": "CLA-CLARKE20DS",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:36:06.792Z"
+    },
+    {
+      "sku": "CLA-CLARKE430C",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:36:12.101Z"
+    },
+    {
+      "sku": "CLA-MAXXI35PKG",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-garbage-bags-strong-black-35-x47-125-cs",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:36:22.292Z"
+    },
+    {
+      "sku": "HAG-477",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:36:30.693Z"
+    },
+    {
+      "sku": "MIC-M60K3",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:36:36.522Z"
+    },
+    {
+      "sku": "NAC-8026080",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:36:42.687Z"
+    },
+    {
+      "sku": "PRO-107128",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:36:49.617Z"
+    },
+    {
+      "sku": "SNT-SC3700A",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:36:59.332Z"
+    },
+    {
+      "sku": "SNT-SC5845B",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:37:05.700Z"
+    },
+    {
+      "sku": "CLA-56265505",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:37:11.307Z"
+    },
+    {
+      "sku": "VIP-50000545",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/karcher-puzzi-10-1-carpet-extractor",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:37:21.123Z"
+    },
+    {
+      "sku": "CLA-56265504",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:37:27.437Z"
+    },
+    {
+      "sku": "VIP-50000545-demo",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:37:34.001Z"
+    },
+    {
+      "sku": "CLA-56265505",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:37:39.554Z"
+    },
+    {
+      "sku": "VIP-50000545",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/karcher-puzzi-10-1-carpet-extractor",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:37:47.272Z"
+    },
+    {
+      "sku": "CLA-56265504",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:37:52.729Z"
+    },
+    {
+      "sku": "VIP-50000545-demo",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:37:58.338Z"
+    },
+    {
+      "sku": "KNI-7418200-01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:38:05.039Z"
+    },
+    {
+      "sku": "KNI-7418200-01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:38:10.735Z"
+    },
+    {
+      "sku": "CPL-ES15-PS",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/enviro-solutions-pump-up-wide-area-sprayer-1-5l",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:38:21.020Z"
+    },
+    {
+      "sku": "MIC-PRE-ES8+",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/victory-electrostatic-backpack-sprayer-8l",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:38:30.572Z"
+    },
+    {
+      "sku": "M2P-TS-PP6000",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:38:36.865Z"
+    },
+    {
+      "sku": "CPL-ES15-PS",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/enviro-solutions-pump-up-wide-area-sprayer-1-5l",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:38:45.650Z"
+    },
+    {
+      "sku": "MIC-PRE-ES8+",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/victory-electrostatic-backpack-sprayer-8l",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:38:53.522Z"
+    },
+    {
+      "sku": "M2P-TS-PP6000",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nozzle-sprayer86376820",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:39:02.846Z"
+    },
+    {
+      "sku": "CLA-CLARKE430C",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:07.618Z"
+    },
+    {
+      "sku": "VIP-AS5160TAGMPKG",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:13.188Z"
+    },
+    {
+      "sku": "CLA-56385412",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:19.090Z"
+    },
+    {
+      "sku": "CLA-CLARKE430C",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:23.868Z"
+    },
+    {
+      "sku": "VIP-AS5160TAGMPKG",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:28.682Z"
+    },
+    {
+      "sku": "CLA-56385412",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:33.710Z"
+    },
+    {
+      "sku": "CLA-9084705010",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/karcher-km-70-20c-manual-push-sweeper-28",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:39:41.005Z"
+    },
+    {
+      "sku": "HAG-477",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:46.854Z"
+    },
+    {
+      "sku": "HAG-697",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:52.150Z"
+    },
+    {
+      "sku": "HAG-677",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:39:58.254Z"
+    },
+    {
+      "sku": "HAG-497",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:40:04.507Z"
+    },
+    {
+      "sku": "CLA-9084705010",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/karcher-km-70-20c-manual-push-sweeper-28",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:40:12.146Z"
+    },
+    {
+      "sku": "HAG-697",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:40:16.935Z"
+    },
+    {
+      "sku": "HAG-677",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:40:21.976Z"
+    },
+    {
+      "sku": "HAG-477",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:40:27.615Z"
+    },
+    {
+      "sku": "HAG-497",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:40:32.963Z"
+    },
+    {
+      "sku": "CLA-MAXXI35PKG",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-clean-green-garbage-bags-strong-black-35-x47-125-cs",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:40:40.556Z"
+    },
+    {
+      "sku": "MIC-M60K3",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:40:45.655Z"
+    },
+    {
+      "sku": "NAC-8026080",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:40:53.836Z"
+    },
+    {
+      "sku": "PRO-107128",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:41:00.893Z"
+    },
+    {
+      "sku": "SNT-SC3700A",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:41:09.118Z"
+    },
+    {
+      "sku": "SNT-SC5845B",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:41:16.676Z"
+    },
+    {
+      "sku": "VIP-SN18WD",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:41:21.878Z"
+    },
+    {
+      "sku": "CLA-9060208020",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:41:27.616Z"
+    },
+    {
+      "sku": "CLA-107407690",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:41:33.610Z"
+    },
+    {
+      "sku": "CLA-107407691",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:41:39.729Z"
+    },
+    {
+      "sku": "CLA-56383409",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:41:45.898Z"
+    },
+    {
+      "sku": "PRO-107535",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/proteam-super-coach-pro-6-backpack-vacuum-w-problade-tool-kit",
+      "productName": "",
+      "confidence": 0.6,
+      "timestamp": "2025-11-19T03:41:56.094Z"
+    },
+    {
+      "sku": "PRO-107315",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:02.082Z"
+    },
+    {
+      "sku": "NAC-8026080",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:42:10.642Z"
+    },
+    {
+      "sku": "SNT-SC3700A",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit",
+      "productName": "",
+      "confidence": 0.8,
+      "timestamp": "2025-11-19T03:42:18.513Z"
+    },
+    {
+      "sku": "NAC-900779",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:24.687Z"
+    },
+    {
+      "sku": "JOV-BRW285",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:30.311Z"
+    },
+    {
+      "sku": "DUS-26332",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:36.719Z"
+    },
+    {
+      "sku": "MAK-DRC200Z",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:42.381Z"
+    },
+    {
+      "sku": "MAK-DCL184Z",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:47.647Z"
+    },
+    {
+      "sku": "MAK-DVC560PT2",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:53.330Z"
+    },
+    {
+      "sku": "MAK-Y-00309",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:42:59.711Z"
+    },
+    {
+      "sku": "MAK-Y-00359",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:06.622Z"
+    },
+    {
+      "sku": "CLA-107421148",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:12.255Z"
+    },
+    {
+      "sku": "SNT-SC5845B",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:17.497Z"
+    },
+    {
+      "sku": "CLA-9060208020",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:22.312Z"
+    },
+    {
+      "sku": "CLA-107407690",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:27.495Z"
+    },
+    {
+      "sku": "CLA-107407691",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:32.793Z"
+    },
+    {
+      "sku": "CLA-9060408010",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:38.059Z"
+    },
+    {
+      "sku": "SNT-61840",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/janitized-jan-kacv30-2-commercial-vacuum-paper-bag-2-ply-10-pk",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:43:48.172Z"
+    },
+    {
+      "sku": "ATL-70143",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:43:53.485Z"
+    },
+    {
+      "sku": "CAS-K250",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:00.426Z"
+    },
+    {
+      "sku": "CAS-N050",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:06.898Z"
+    },
+    {
+      "sku": "CAS-N055",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:13.403Z"
+    },
+    {
+      "sku": "CAS-T116",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:19.500Z"
+    },
+    {
+      "sku": "CAS-T220",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:25.845Z"
+    },
+    {
+      "sku": "CAS-T320",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:32.502Z"
+    },
+    {
+      "sku": "CHI-911",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:38.793Z"
+    },
+    {
+      "sku": "COP-12041-25",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:45.092Z"
+    },
+    {
+      "sku": "FRO-180",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:51.547Z"
+    },
+    {
+      "sku": "HOS-HG-1-2",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:44:57.019Z"
+    },
+    {
+      "sku": "HOS-HG-2500",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:03.558Z"
+    },
+    {
+      "sku": "IMA-2840S",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:09.325Z"
+    },
+    {
+      "sku": "POL-3038EF125",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:15.472Z"
+    },
+    {
+      "sku": "POL-1212",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:23.974Z"
+    },
+    {
+      "sku": "IMA-2840S",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:28.761Z"
+    },
+    {
+      "sku": "POL-3038EF125",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:34.258Z"
+    },
+    {
+      "sku": "FRO-180",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:41.577Z"
+    },
+    {
+      "sku": "HOS-HG-1-2",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:46.866Z"
+    },
+    {
+      "sku": "HOS-HG-2500",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:45:54.733Z"
+    },
+    {
+      "sku": "SCA-461002",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:46:00.726Z"
+    },
+    {
+      "sku": "SCA-465500",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:46:06.954Z"
+    },
+    {
+      "sku": "SCA-463002",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-stainless-steel-polish-cleaner-425g",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:46:16.990Z"
+    },
+    {
+      "sku": "FRO-180",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:46:22.691Z"
+    },
+    {
+      "sku": "KMC-40407",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:46:29.082Z"
+    },
+    {
+      "sku": "SCA-463002",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/swish-stainless-steel-polish-cleaner-425g",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:46:37.655Z"
+    },
+    {
+      "sku": "SCA-552120A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:46:44.002Z"
+    },
+    {
+      "sku": "INS-di-3300w",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/tork-h2-universal-multifold-hand-towel-white-1-ply-16-x-250-sheets",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:46:54.063Z"
+    },
+    {
+      "sku": "CAS-K250",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:00.600Z"
+    },
+    {
+      "sku": "CAS-N050",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:07.232Z"
+    },
+    {
+      "sku": "CAS-N055",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:13.377Z"
+    },
+    {
+      "sku": "CAS-T116",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:19.645Z"
+    },
+    {
+      "sku": "CAS-T220",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:26.190Z"
+    },
+    {
+      "sku": "CAS-T320",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:32.856Z"
+    },
+    {
+      "sku": "SCA-110292A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:39.237Z"
+    },
+    {
+      "sku": "SCA-290092A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:45.455Z"
+    },
+    {
+      "sku": "SCA-290094",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:51.748Z"
+    },
+    {
+      "sku": "SCA-510137",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:47:57.985Z"
+    },
+    {
+      "sku": "SCA-530137",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:04.389Z"
+    },
+    {
+      "sku": "SCA-hb1995a",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:11.402Z"
+    },
+    {
+      "sku": "CAS-T320",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:17.126Z"
+    },
+    {
+      "sku": "KRU-05629",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/kleenex-professional-flat-box-facial-tissue-white-36-x-100-sheets",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:48:25.946Z"
+    },
+    {
+      "sku": "CAS-B080",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:32.737Z"
+    },
+    {
+      "sku": "SCA-11020602",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:38.896Z"
+    },
+    {
+      "sku": "KMC-07006",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:45.364Z"
+    },
+    {
+      "sku": "SCA-12013903",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:51.507Z"
+    },
+    {
+      "sku": "CAS-B140",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:48:57.401Z"
+    },
+    {
+      "sku": "SCA-12021502",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:03.672Z"
+    },
+    {
+      "sku": "CAS-T260A1",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:10.620Z"
+    },
+    {
+      "sku": "SCA-160090",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:16.536Z"
+    },
+    {
+      "sku": "SCA-110292A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:21.965Z"
+    },
+    {
+      "sku": "SCA-240616",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:27.905Z"
+    },
+    {
+      "sku": "SCA-2465110",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:34.098Z"
+    },
+    {
+      "sku": "KMC-13217",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:40.870Z"
+    },
+    {
+      "sku": "KMC-17713-01",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:47.157Z"
+    },
+    {
+      "sku": "SCA-tm1601a",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:52.399Z"
+    },
+    {
+      "sku": "SCA-472880",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:49:58.862Z"
+    },
+    {
+      "sku": "SCA-tj0922a",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:05.339Z"
+    },
+    {
+      "sku": "KMC-04007",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:11.791Z"
+    },
+    {
+      "sku": "SCA-161990",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:17.751Z"
+    },
+    {
+      "sku": "SCA-tm6130s",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:23.667Z"
+    },
+    {
+      "sku": "SCA-2465100",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:29.917Z"
+    },
+    {
+      "sku": "SCA-tf6810",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:36.015Z"
+    },
+    {
+      "sku": "KMC-21340",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:42.030Z"
+    },
+    {
+      "sku": "CAS-F950",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:48.477Z"
+    },
+    {
+      "sku": "KRU-08301",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:50:54.593Z"
+    },
+    {
+      "sku": "KMC-21390",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:51:00.855Z"
+    },
+    {
+      "sku": "KMC-48280",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:51:07.199Z"
+    },
+    {
+      "sku": "INS-ts-ft100",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/kc-surpass-facial-tissue-white-2-ply-30-x-100-sheets",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:51:16.015Z"
+    },
+    {
+      "sku": "MER-C9SSD",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/certainty-stainless-steel-floor-stand-dispenser",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:51:25.995Z"
+    },
+    {
+      "sku": "SCA-13247501",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:51:32.571Z"
+    },
+    {
+      "sku": "MER-96200",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:51:39.147Z"
+    },
+    {
+      "sku": "SCA-291370",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:51:45.307Z"
+    },
+    {
+      "sku": "WIP-SXC-25CP",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:51:51.747Z"
+    },
+    {
+      "sku": "SCA-192128",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:51:57.993Z"
+    },
+    {
+      "sku": "MER-62400",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:04.658Z"
+    },
+    {
+      "sku": "MER-C9PL",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:10.992Z"
+    },
+    {
+      "sku": "SCA-192128",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:16.560Z"
+    },
+    {
+      "sku": "SCA-130211b",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:22.476Z"
+    },
+    {
+      "sku": "SCA-291350",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:28.629Z"
+    },
+    {
+      "sku": "SCA-13247501",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:34.032Z"
+    },
+    {
+      "sku": "SCA-291370",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:39.391Z"
+    },
+    {
+      "sku": "WIP-SXC-25CP",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:44.999Z"
+    },
+    {
+      "sku": "SCA-192127",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:51.389Z"
+    },
+    {
+      "sku": "SCA-440245A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:52:57.645Z"
+    },
+    {
+      "sku": "SCA-510104A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:04.063Z"
+    },
+    {
+      "sku": "SCA-5301755",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:10.116Z"
+    },
+    {
+      "sku": "CHI-213",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:16.529Z"
+    },
+    {
+      "sku": "SCA-13244101",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:22.507Z"
+    },
+    {
+      "sku": "SCA-132451A",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:28.729Z"
+    },
+    {
+      "sku": "SCA-192593",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:34.759Z"
+    },
+    {
+      "sku": "MER-C9SSD",
+      "competitorId": "swish",
+      "found": true,
+      "matchType": "name",
+      "price": 0,
+      "currency": "CAD",
+      "url": "https://swish.ca/certainty-stainless-steel-floor-stand-dispenser",
+      "productName": "",
+      "confidence": 1,
+      "timestamp": "2025-11-19T03:53:43.214Z"
+    },
+    {
+      "sku": "MER-96200",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:48.975Z"
+    },
+    {
+      "sku": "MER-62400",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:53:54.577Z"
+    },
+    {
+      "sku": "MER-C9PL",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:54:00.193Z"
+    },
+    {
+      "sku": "MER-96160",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:54:06.328Z"
+    },
+    {
+      "sku": "MER-99000",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:54:12.775Z"
+    },
+    {
+      "sku": "MER-91200",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:54:18.707Z"
+    },
+    {
+      "sku": "MER-96200R",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:54:24.842Z"
+    },
+    {
+      "sku": "DWI-F5495BAG800",
+      "competitorId": "swish",
+      "found": false,
+      "matchType": "none",
+      "timestamp": "2025-11-19T03:54:30.301Z"
+    }
+  ]
+}

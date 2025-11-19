@@ -5,12 +5,15 @@ import { eq } from "drizzle-orm";
 import { MatchingService } from "@/lib/pricing/matching-service";
 
 // GET /api/companies/[slug]/pricing/matches
+// Optional query params: ?productId=xxx
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
     const { slug } = await context.params;
+    const { searchParams } = new URL(request.url);
+    const productId = searchParams.get("productId");
 
     // Fetch company by slug
     const [company] = await db
@@ -23,9 +26,15 @@ export async function GET(
       return NextResponse.json({ error: "Company not found" }, { status: 404 });
     }
 
-    // Get all matches for this company
+    // Get matches (all or filtered by productId)
     const matchingService = new MatchingService();
-    const matches = await matchingService.getAllMatches(company.id);
+    let matches;
+
+    if (productId) {
+      matches = await matchingService.getMatchesForProduct(productId);
+    } else {
+      matches = await matchingService.getAllMatches(company.id);
+    }
 
     return NextResponse.json({
       matches,

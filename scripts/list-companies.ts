@@ -1,25 +1,20 @@
-import { db } from '../src/db';
-import { companies } from '../src/db/schema';
+import { db } from '@/db';
+import { companies } from '@/db/schema';
 
 async function listCompanies() {
-  console.log('\n📋 Listing companies in database:\n');
+  const allCompanies = await db.select({
+    slug: companies.slug,
+    name: companies.name,
+    id: companies.id
+  }).from(companies);
 
-  try {
-    const allCompanies = await db.select().from(companies);
-
-    if (allCompanies.length === 0) {
-      console.log('❌ No companies found in database\n');
-    } else {
-      console.log(`Found ${allCompanies.length} companies:\n`);
-      for (const company of allCompanies) {
-        console.log(`  - ${company.name} (slug: ${company.slug}, id: ${company.id})`);
-      }
-      console.log('\n');
-    }
-  } catch (error) {
-    console.error('Error listing companies:', error);
-    process.exit(1);
-  }
+  console.log('\n📋 Companies in database:\n');
+  allCompanies.forEach(c => {
+    console.log(`  • Slug: ${c.slug}`);
+    console.log(`    Name: ${c.name}`);
+    console.log(`    ID: ${c.id}`);
+    console.log('');
+  });
 
   process.exit(0);
 }

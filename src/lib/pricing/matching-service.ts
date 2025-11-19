@@ -352,8 +352,24 @@ Identifie les matches équivalents et retourne le JSON array (UNIQUEMENT matches
    */
   async getMatchesForProduct(productId: string): Promise<any[]> {
     const matches = await db
-      .select()
+      .select({
+        id: pricingMatches.id,
+        productId: pricingMatches.productId,
+        competitorId: pricingMatches.competitorId,
+        competitorName: pricingCompetitors.name,
+        competitorSku: pricingMatches.competitorProductUrl, // Using URL as fallback since no dedicated SKU field
+        competitorProductName: pricingMatches.competitorProductName,
+        competitorPrice: pricingMatches.price,
+        competitorUrl: pricingMatches.competitorProductUrl,
+        matchConfidence: pricingMatches.confidenceScore,
+        lastChecked: pricingMatches.lastScrapedAt,
+        createdAt: pricingMatches.createdAt,
+      })
       .from(pricingMatches)
+      .innerJoin(
+        pricingCompetitors,
+        eq(pricingMatches.competitorId, pricingCompetitors.id)
+      )
       .where(eq(pricingMatches.productId, productId))
       .orderBy(desc(pricingMatches.confidenceScore));
 

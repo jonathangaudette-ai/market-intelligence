@@ -1,0 +1,101 @@
+sku,name,price,category,brand
+INST-TP-001-JRT,INSTINCT 2-PLY JUMBO (100% recyclé ÉcoLogo),42.50,Papiers toilette,INSTINCT
+INST-TP-002-STD,INSTINCT 2-PLY STANDARD (100% recyclé),38.00,Papiers toilette,INSTINCT
+INST-HT-001-MF,INSTINCT MULTIFOLD (Recyclé 40% ÉcoLogo),38.75,Essuie-mains,INSTINCT
+INST-HT-002-CF,INSTINCT C-FOLD (Recyclé 40%),36.50,Essuie-mains,INSTINCT
+INST-HT-003-ROLL,INSTINCT ROLL TOWEL (Rouleau contrôlé 100% recyclé),52.00,Essuie-mains,INSTINCT
+INST-NK-001-WHT,INSTINCT NAPKINS 1-PLY Blanc,42.00,Napkins,INSTINCT
+INST-NK-001-KFT,INSTINCT NAPKINS 1-PLY Kraft,38.50,Napkins,INSTINCT
+INST-NK-002-2PLY,INSTINCT NAPKINS 2-PLY Premium,58.00,Napkins,INSTINCT
+INST-PT-001-KIT,INSTINCT PAPER TOWEL KITCHEN (Recyclé 40%),48.50,Essuie-tout,INSTINCT
+INST-BAG-001-26L,INSTINCT ECO-BAGS Petits 26L,18.50,Sacs à déchets,INSTINCT
+INST-BAG-002-55L,INSTINCT ECO-BAGS Moyens 55L,24.00,Sacs à déchets,INSTINCT
+INST-BAG-003-100L,INSTINCT ECO-BAGS Grands 100L,22.50,Sacs à déchets,INSTINCT
+INST-BAG-004-55L-BLU,INSTINCT ECO-BAGS Récupération Bleu 55L,26.00,Sacs à déchets,INSTINCT
+INST-BAG-005-100L-BLU,INSTINCT ECO-BAGS Récupération Bleu 100L,24.00,Sacs à déchets,INSTINCT
+INST-BAG-006-25L-COMP,INSTINCT COMPOST-BAGS 25L (Certifié BPI),45.00,Sacs compostables,INSTINCT
+INST-BAG-007-55L-COMP,INSTINCT COMPOST-BAGS 55L (Certifié BPI),42.00,Sacs compostables,INSTINCT
+INST-FS-001-WRAP,INSTINCT FOOD WRAP (Pellicule alimentaire recyclée),28.50,Services alimentaires,INSTINCT
+INST-FS-002-DELI,INSTINCT DELI PAPER (Papier charcuterie),42.00,Services alimentaires,INSTINCT
+INO-201-GLASS,INO SOLUTIONS Nettoyant vitres concentré,18.50,Nettoyants,INO Solutions
+INO-202-FLOOR,INO SOLUTIONS Nettoyant planchers neutre pH7,22.00,Nettoyants,INO Solutions
+INO-203-MULTI,INO SOLUTIONS Nettoyant multi-surfaces tout usage,19.75,Nettoyants,INO Solutions
+INO-204-DEGREASER,INO SOLUTIONS Dégraissant cuisine heavy-duty,26.50,Nettoyants,INO Solutions
+INO-301-DISINFECT,INO SOLUTIONS Désinfectant hospitalier DIN,32.00,Désinfectants,INO Solutions
+INO-302-QUATERNARY,INO SOLUTIONS Désinfectant quaternaire ammonium,28.50,Désinfectants,INO Solutions
+INO-401-SOAP-HAND,INO SOLUTIONS Savon à mains antibactérien,24.00,Savons,INO Solutions
+INO-402-SOAP-FOAM,INO SOLUTIONS Savon mousse premium,26.50,Savons,INO Solutions
+INO-501-WAX,INO SOLUTIONS Cire plancher acrylique durable,38.00,Entretien planchers,INO Solutions
+INO-502-STRIPPER,INO SOLUTIONS Décapant plancher alcalin,34.50,Entretien planchers,INO Solutions
+INO-601-ODOR,INO SOLUTIONS Neutralisant odeurs enzymatique,22.00,Spécialisés,INO Solutions
+INO-602-CARPET,INO SOLUTIONS Nettoyant tapis extraction,29.50,Spécialisés,INO Solutions
+INST-TP-001-JRT-X2,INSTINCT 2-PLY JUMBO - Paquet 2 caisses,81.00,Papiers toilette,INSTINCT
+INST-TP-001-JRT-X4,INSTINCT 2-PLY JUMBO - Paquet 4 caisses,162.00,Papiers toilette,INSTINCT
+INST-TP-002-STD-X2,INSTINCT 2-PLY STANDARD - Paquet 2 caisses,72.00,Papiers toilette,INSTINCT
+INST-TP-002-STD-X4,INSTINCT 2-PLY STANDARD - Paquet 4 caisses,144.00,Papiers toilette,INSTINCT
+INST-HT-001-MF-X2,INSTINCT MULTIFOLD - Paquet 2 caisses,73.50,Essuie-mains,INSTINCT
+INST-HT-001-MF-X4,INSTINCT MULTIFOLD - Paquet 4 caisses,147.00,Essuie-mains,INSTINCT
+INST-HT-002-CF-X2,INSTINCT C-FOLD - Paquet 2 caisses,69.00,Essuie-mains,INSTINCT
+INST-HT-002-CF-X4,INSTINCT C-FOLD - Paquet 4 caisses,138.00,Essuie-mains,INSTINCT
+INST-HT-003-ROLL-X2,INSTINCT ROLL TOWEL - Paquet 2 caisses,99.00,Essuie-mains,INSTINCT
+INST-NK-001-WHT-X2,INSTINCT NAPKINS Blanc - Paquet 2 caisses,80.00,Napkins,INSTINCT
+INST-NK-001-KFT-X2,INSTINCT NAPKINS Kraft - Paquet 2 caisses,73.00,Napkins,INSTINCT
+INST-PT-001-KIT-X2,INSTINCT PAPER TOWEL - Paquet 2 caisses,92.00,Essuie-tout,INSTINCT
+INST-BAG-001-26L-X3,INSTINCT ECO-BAGS 26L - Lot 3 boîtes,52.50,Sacs à déchets,INSTINCT
+INST-BAG-002-55L-X3,INSTINCT ECO-BAGS 55L - Lot 3 boîtes,68.00,Sacs à déchets,INSTINCT
+INST-BAG-003-100L-X3,INSTINCT ECO-BAGS 100L - Lot 3 boîtes,63.00,Sacs à déchets,INSTINCT
+INO-201-GLASS-4L,INO SOLUTIONS Nettoyant vitres - Format 4L,68.00,Nettoyants,INO Solutions
+INO-202-FLOOR-4L,INO SOLUTIONS Nettoyant planchers - Format 4L,82.00,Nettoyants,INO Solutions
+INO-203-MULTI-4L,INO SOLUTIONS Multi-surfaces - Format 4L,72.00,Nettoyants,INO Solutions
+INO-204-DEGREASER-4L,INO SOLUTIONS Dégraissant - Format 4L,98.00,Nettoyants,INO Solutions
+INO-301-DISINFECT-4L,INO SOLUTIONS Désinfectant - Format 4L,118.00,Désinfectants,INO Solutions
+INO-302-QUATERNARY-4L,INO SOLUTIONS Quaternaire - Format 4L,105.00,Désinfectants,INO Solutions
+INO-401-SOAP-4L,INO SOLUTIONS Savon mains - Format 4L,88.00,Savons,INO Solutions
+INO-402-FOAM-4L,INO SOLUTIONS Savon mousse - Format 4L,98.00,Savons,INO Solutions
+INST-TP-003-ULT,INSTINCT 3-PLY ULTRA-SOFT (Premium confort),52.00,Papiers toilette,INSTINCT
+INST-TP-004-IND,INSTINCT INDUSTRIAL JUMBO (Extra-large 1200 pieds),58.00,Papiers toilette,INSTINCT
+INST-HT-004-SLM,INSTINCT SLIMFOLD (Compact space-saving),34.00,Essuie-mains,INSTINCT
+INST-HT-005-HARD,INSTINCT HARDWOUND ROLL (Rouleau robuste),46.00,Essuie-mains,INSTINCT
+INST-NK-003-DIN,INSTINCT DINNER NAPKINS (Grand format 17x17),64.00,Napkins,INSTINCT
+INST-NK-004-COCK,INSTINCT COCKTAIL NAPKINS (Petit format bar),28.00,Napkins,INSTINCT
+INST-PT-002-IND,INSTINCT INDUSTRIAL WIPER (Essuie-tout industriel),62.00,Essuie-tout,INSTINCT
+INST-PT-003-SHOP,INSTINCT SHOP TOWEL (Atelier mécanique),54.00,Essuie-tout,INSTINCT
+INST-BAG-008-200L,INSTINCT ECO-BAGS Extra-Grands 200L,38.00,Sacs à déchets,INSTINCT
+INST-BAG-009-55L-CLR,INSTINCT CLEAR-BAGS Transparent 55L,28.00,Sacs à déchets,INSTINCT
+INST-BAG-010-100L-CLR,INSTINCT CLEAR-BAGS Transparent 100L,32.00,Sacs à déchets,INSTINCT
+INST-BAG-011-35L-COMP,INSTINCT COMPOST Medium 35L,48.00,Sacs compostables,INSTINCT
+INST-FS-003-FOIL,INSTINCT ALUMINUM FOIL (Papier aluminium recyclé),36.00,Services alimentaires,INSTINCT
+INST-FS-004-PARCH,INSTINCT PARCHMENT PAPER (Papier parchemin),32.00,Services alimentaires,INSTINCT
+INST-FS-005-DELI-LG,INSTINCT DELI PAPER Large (12x12),48.00,Services alimentaires,INSTINCT
+INO-203-MULTI-CONC,INO SOLUTIONS Multi-surfaces Concentré 2X,32.00,Nettoyants,INO Solutions
+INO-205-BATH,INO SOLUTIONS Nettoyant salles de bain acide,24.00,Nettoyants,INO Solutions
+INO-206-WOOD,INO SOLUTIONS Nettoyant boiseries natural,28.00,Nettoyants,INO Solutions
+INO-207-STAINLESS,INO SOLUTIONS Polish acier inoxydable,22.00,Nettoyants,INO Solutions
+INO-303-VIRUCIDE,INO SOLUTIONS Virucide COVID-19 DIN,38.00,Désinfectants,INO Solutions
+INO-304-BLEACH,INO SOLUTIONS Eau de javel 6% hypochlorite,16.50,Désinfectants,INO Solutions
+INO-305-PEROXIDE,INO SOLUTIONS Peroxyde hydrogène stabilisé,29.00,Désinfectants,INO Solutions
+INO-403-DISH,INO SOLUTIONS Savon vaisselle ultra-dégraissant,21.00,Savons,INO Solutions
+INO-404-SOAP-SENS,INO SOLUTIONS Savon mains sensible sans parfum,26.00,Savons,INO Solutions
+INO-503-SEALER,INO SOLUTIONS Scellant plancher acrylique,42.00,Entretien planchers,INO Solutions
+INO-504-POLISH,INO SOLUTIONS Polish plancher haute brillance,36.00,Entretien planchers,INO Solutions
+INO-505-RESTORER,INO SOLUTIONS Restaurateur plancher abîmé,44.00,Entretien planchers,INO Solutions
+INO-603-GRAFFITI,INO SOLUTIONS Anti-graffiti biodégradable,48.00,Spécialisés,INO Solutions
+INO-604-RUST,INO SOLUTIONS Enlève-rouille non-acide,32.00,Spécialisés,INO Solutions
+INO-605-GUM,INO SOLUTIONS Enlève-gomme freeze spray,28.00,Spécialisés,INO Solutions
+INO-606-DRAIN,INO SOLUTIONS Déboucheur drain enzymatique,34.00,Spécialisés,INO Solutions
+INO-701-URINAL,INO SOLUTIONS Blocs urinoirs parfumés (Boîte 12),42.00,Désodorisants,INO Solutions
+INO-702-TOILET,INO SOLUTIONS Nettoyant bol toilette gel,18.00,Désodorisants,INO Solutions
+INO-703-AIR-FRESH,INO SOLUTIONS Aérosol rafraîchisseur air,24.00,Désodorisants,INO Solutions
+INST-TP-005-MINI,INSTINCT 2-PLY MINI ROLLS (Distributeur compact),32.00,Papiers toilette,INSTINCT
+INST-HT-006-PERF,INSTINCT PERFETTO ROLL (Italien premium),58.00,Essuie-mains,INSTINCT
+INST-BAG-012-10L,INSTINCT WASTE-BAGS Mini 10L (Poubelles bureau),15.00,Sacs à déchets,INSTINCT
+INO-208-RUST-PREV,INO SOLUTIONS Antirouille métal préventif,36.00,Nettoyants,INO Solutions
+INO-306-ALCOHOL,INO SOLUTIONS Alcool isopropylique 70%,19.00,Désinfectants,INO Solutions
+INO-405-FOAMING,INO SOLUTIONS Mousse nettoyante universelle,31.00,Savons,INO Solutions
+INO-607-MOLD,INO SOLUTIONS Anti-moisissures fongicide,38.00,Spécialisés,INO Solutions
+INO-704-GEL-ODOR,INO SOLUTIONS Gel absorbeur odeurs continue,22.00,Désodorisants,INO Solutions
+INST-TP-006-ECO,INSTINCT ECO-PLUS 1-PLY (Économique ultra),28.00,Papiers toilette,INSTINCT
+INST-NK-005-LOGO,INSTINCT NAPKINS Logo imprimé custom (Min 50 caisses),50.00,Napkins,INSTINCT
+INO-608-SCALE,INO SOLUTIONS Détartrant sanitaire acide citrique,26.00,Spécialisés,INO Solutions
+INO-705-SOLID,INO SOLUTIONS Blocs désodorisants solides,36.00,Désodorisants,INO Solutions
+INST-TP-007-MEGA,INSTINCT MEGA-ROLL 3-PLY (1500 pieds ultra-long),78.00,Papiers toilette,INSTINCT

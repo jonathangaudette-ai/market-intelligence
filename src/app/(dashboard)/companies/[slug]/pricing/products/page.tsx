@@ -248,7 +248,11 @@ export default function ProductsListPage() {
                   </TableHeader>
                   <TableBody>
                     {filteredProducts.map((product) => (
-                      <TableRow key={product.id}>
+                      <TableRow
+                        key={product.id}
+                        className="cursor-pointer hover:bg-gray-50"
+                        onClick={() => router.push(`/companies/${slug}/pricing/products/${product.id}`)}
+                      >
                         <TableCell className="font-mono text-sm">
                           {product.sku}
                         </TableCell>
@@ -279,7 +283,10 @@ export default function ProductsListPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => toggleProductStatus(product.id, product.isActive)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleProductStatus(product.id, product.isActive);
+                            }}
                           >
                             {product.isActive ? (
                               <ToggleRight className="h-4 w-4 text-green-600" />

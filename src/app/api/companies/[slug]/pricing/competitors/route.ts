@@ -92,6 +92,7 @@ export async function POST(
     const newCompetitor = {
       id: createId(),
       companyId: company.id,
+      companySlug: slug,
       name: body.name,
       websiteUrl: body.websiteUrl,
       logoUrl: body.logoUrl || null,

@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import * as XLSX from "xlsx";
 import Papa from "papaparse";
+import { head } from "@vercel/blob";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -80,10 +81,11 @@ async function processImportJob(companyId: string, jobId: string, fileId: string
     await updateStatus({ status: 'running', currentStep: 'validating', startedAt: new Date() });
     await addLog({ timestamp: new Date().toISOString(), type: 'info', message: 'Démarrage du job d\'import...' });
 
-    const fileUrl = `https://blob.vercel-storage.com/catalog-uploads/${companyId}/${fileId}.json`;
-    const fileResponse = await fetch(fileUrl);
+    // Download file from Vercel Blob using SDK (handles auth automatically)
+    const blobUrl = `https://blob.vercel-storage.com/catalog-uploads/${companyId}/${fileId}.json`;
+    const blobInfo = await head(blobUrl);
+    const fileResponse = await fetch(blobInfo.downloadUrl);
     if (!fileResponse.ok) throw new Error('Failed to fetch uploaded file');
-
     const buffer = await fileResponse.arrayBuffer();
     let rawData: Record<string, any>[] = [];
 

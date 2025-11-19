@@ -45,7 +45,41 @@ L'application utilise une **architecture slug-based** pour l'isolation multi-ten
 
 Pour plus de détails, voir [`docs/REUSABLE_MULTI_TENANT_ARCHITECTURE.md`](docs/REUSABLE_MULTI_TENANT_ARCHITECTURE.md).
 
+## 📚 Documentation
+
+- **[Guide de Déploiement Production 2025](DEPLOYMENT_PRODUCTION_2025.md)** - Guide complet et à jour
+- **[Architecture Multi-Tenant](docs/REUSABLE_MULTI_TENANT_ARCHITECTURE.md)** - Architecture slug-based
+- **[Module Pricing](module-pricing/README.md)** - Intelligence de prix concurrentiels
+- **[Worker Railway](worker/README.md)** - Worker de scraping Playwright
+
 ## Fonctionnalités
+
+### 💰 Intelligence de Prix (Pricing Module)
+
+**Surveillance automatisée des prix concurrentiels**:
+- ✅ Gestion de catalogue produits (import CSV/XLSX)
+- ✅ Surveillance de concurrents multiples
+- ✅ Scraping automatisé via Railway worker + Playwright
+- ✅ Comparaisons de prix en temps réel
+- ✅ Alertes et insights IA (GPT-5)
+- ✅ Historique et tendances de prix
+- ✅ Dashboard avec KPIs cliquables
+
+**Pages disponibles**:
+```
+/companies/[slug]/pricing                → Dashboard principal
+/companies/[slug]/pricing/products       → Catalogue produits
+/companies/[slug]/pricing/competitors    → Gestion concurrents
+/companies/[slug]/pricing/matches        → Comparaisons détaillées
+/companies/[slug]/pricing/catalog        → Import de catalogue
+/companies/[slug]/pricing/settings       → Paramètres & actions
+```
+
+**Architecture**:
+- **Next.js API Routes** → Orchestration et gestion de données
+- **Railway Worker** → Scraping web avec Playwright (headless Chromium)
+- **PostgreSQL** → Stockage produits, concurrents, matches
+- **GPT-5** → Extraction et matching intelligent
 
 ### RAG Multi-Tenant
 - ✅ Un seul index Pinecone pour tous les clients (isolation par metadata)

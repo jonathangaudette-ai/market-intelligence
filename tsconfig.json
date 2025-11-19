@@ -40,6 +40,8 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/__tests__/**",
-    "module-pricing"
+    "module-pricing",
+    "Dissan",
+    "akonovia-synthetic-data"
   ]
 }

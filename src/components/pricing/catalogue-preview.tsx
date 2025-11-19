@@ -26,6 +26,8 @@ interface PreviewData {
   rowCount: number;
   columns: ColumnMapping[];
   previewRows: Record<string, string>[];
+  existingSkusCount: number;
+  newSkusCount: number;
 }
 
 interface CataloguePreviewProps {
@@ -74,6 +76,24 @@ export function CataloguePreview({
           <CardDescription>
             Fichier: <span className="font-medium">{previewData.filename}</span> • {previewData.rowCount} lignes détectées
           </CardDescription>
+
+          {/* SKU Update Information */}
+          {previewData.existingSkusCount > 0 && (
+            <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-blue-900">
+                  <p className="font-medium">Mode UPSERT activé</p>
+                  <p className="mt-1 text-blue-700">
+                    <span className="font-semibold">{previewData.existingSkusCount}</span> produit{previewData.existingSkusCount > 1 ? 's' : ''} existant{previewData.existingSkusCount > 1 ? 's' : ''} seront mis à jour
+                    {previewData.newSkusCount > 0 && (
+                      <> • <span className="font-semibold">{previewData.newSkusCount}</span> nouveau{previewData.newSkusCount > 1 ? 'x' : ''} produit{previewData.newSkusCount > 1 ? 's' : ''} seront ajoutés</>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           {missingRequired.length > 0 ? (

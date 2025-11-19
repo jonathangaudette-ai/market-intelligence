@@ -29,6 +29,8 @@ interface PreviewData {
   rowCount: number;
   columns: ColumnMapping[];
   previewRows: Record<string, string>[];
+  existingSkusCount: number;
+  newSkusCount: number;
 }
 
 type UploadStep = 'upload' | 'preview' | 'mapping' | 'importing';

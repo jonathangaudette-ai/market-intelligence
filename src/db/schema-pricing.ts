@@ -10,7 +10,7 @@
  * Fichier destination: src/db/schema-pricing.ts
  */
 
-import { pgTable, varchar, timestamp, boolean, integer, text, jsonb, decimal, index } from "drizzle-orm/pg-core";
+import { pgTable, varchar, timestamp, boolean, integer, text, jsonb, decimal, index, unique } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { companies, users } from "./schema"; // Import existing tables
@@ -56,7 +56,9 @@ export const pricingProducts = pgTable("pricing_products", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   deletedAt: timestamp("deleted_at"), // Soft delete
 }, (table) => ({
-  companySkuIdx: index("pricing_products_company_sku_idx").on(table.companyId, table.sku),
+  // Unique constraint: one SKU per company
+  companySkuUnique: unique("pricing_products_company_sku_unique").on(table.companyId, table.sku),
+  // Indexes for performance
   categoryIdx: index("pricing_products_category_idx").on(table.category),
   brandIdx: index("pricing_products_brand_idx").on(table.brand),
   activeIdx: index("pricing_products_active_idx").on(table.isActive),

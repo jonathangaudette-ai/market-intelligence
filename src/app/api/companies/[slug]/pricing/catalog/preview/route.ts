@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { companies, pricingCatalogImports } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { companies, pricingCatalogImports, pricingProducts } from "@/db/schema";
+import { eq, inArray } from "drizzle-orm";
 import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import { createId } from "@paralleldrive/cuid2";
@@ -110,6 +110,38 @@ export async function POST(
       return mapping;
     });
 
+    // 6b. Check for existing SKUs
+    let existingSkusCount = 0;
+    let newSkusCount = rawData.length;
+
+    const skuColumn = columnMappings.find((m) => m.mappedTo === 'sku');
+    if (skuColumn) {
+      // Extract all SKU values from the uploaded file
+      const uploadedSkus = rawData
+        .map((row) => String(row[skuColumn.detectedColumn] || "").trim())
+        .filter((sku) => sku.length > 0);
+
+      if (uploadedSkus.length > 0) {
+        // Query database for existing SKUs
+        const existingProducts = await db
+          .select({ sku: pricingProducts.sku })
+          .from(pricingProducts)
+          .where(
+            eq(pricingProducts.companyId, company.id)
+          );
+
+        const existingSkuSet = new Set(existingProducts.map((p) => p.sku));
+        const uploadedSkuSet = new Set(uploadedSkus);
+
+        // Count how many uploaded SKUs already exist
+        existingSkusCount = Array.from(uploadedSkuSet).filter((sku) =>
+          existingSkuSet.has(sku)
+        ).length;
+
+        newSkusCount = uploadedSkuSet.size - existingSkusCount;
+      }
+    }
+
     // 7. Create a draft job with raw data in database (no Vercel Blob needed!)
     const draftJobId = createId();
     await db.insert(pricingCatalogImports).values({
@@ -130,6 +162,8 @@ export async function POST(
       rowCount: rawData.length,
       columns: columnMappings,
       previewRows: rawData.slice(0, 10), // First 10 rows for preview
+      existingSkusCount, // How many SKUs already exist in the database
+      newSkusCount, // How many SKUs are new
     });
   } catch (error) {
     console.error("Error processing catalog preview:", error);

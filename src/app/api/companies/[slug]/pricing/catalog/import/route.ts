@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { companies, pricingProducts, pricingCatalogImports } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 
 export const runtime = "nodejs";
@@ -150,7 +150,22 @@ async function processImportJob(companyId: string, jobId: string, columnMapping:
 
       if (productsToInsert.length > 0) {
         try {
-          await db.insert(pricingProducts).values(productsToInsert);
+          // UPSERT: Update if SKU exists, insert if new
+          await db.insert(pricingProducts)
+            .values(productsToInsert)
+            .onConflictDoUpdate({
+              target: [pricingProducts.companyId, pricingProducts.sku],
+              set: {
+                name: sql`EXCLUDED.name`,
+                nameCleaned: sql`EXCLUDED.name_cleaned`,
+                brand: sql`EXCLUDED.brand`,
+                category: sql`EXCLUDED.category`,
+                currentPrice: sql`EXCLUDED.current_price`,
+                productUrl: sql`EXCLUDED.product_url`,
+                updatedAt: sql`EXCLUDED.updated_at`,
+                isActive: sql`EXCLUDED.is_active`,
+              }
+            });
           imported += productsToInsert.length;
         } catch (error: any) {
           failed += productsToInsert.length;

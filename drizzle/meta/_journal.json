@@ -64,6 +64,13 @@
       "when": 1763088500000,
       "tag": "0008_add_prompt_templates",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1763563505744,
+      "tag": "0009_woozy_fixer",
+      "breakpoints": true
     }
   ]
 }

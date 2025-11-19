@@ -18,6 +18,7 @@ import {
   AlertCircle,
   Download,
   RefreshCw,
+  Upload,
 } from "lucide-react";
 import {
   LineChart,
@@ -183,6 +184,10 @@ export default function PricingDashboardPage() {
         }
         actions={
           <>
+            <Button variant="outline" onClick={() => router.push(`/companies/${slug}/pricing/catalog`)}>
+              <Upload className="h-4 w-4 mr-2" />
+              Importer catalogue
+            </Button>
             <Button variant="outline">
               <Download className="h-4 w-4 mr-2" />
               Exporter

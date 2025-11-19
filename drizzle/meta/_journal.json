@@ -71,6 +71,13 @@
       "when": 1763563505744,
       "tag": "0009_woozy_fixer",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1763568953184,
+      "tag": "0010_simple_omega_red",
+      "breakpoints": true
     }
   ]
 }

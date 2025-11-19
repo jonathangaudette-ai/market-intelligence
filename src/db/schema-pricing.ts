@@ -224,6 +224,52 @@ export const pricingScans = pgTable("pricing_scans", {
 }));
 
 // ============================================
+// Catalog Import Jobs (Async Task Tracking - Polling Pattern)
+// ============================================
+export const pricingCatalogImports = pgTable("pricing_catalog_imports", {
+  id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
+  companyId: varchar("company_id", { length: 255 })
+    .notNull()
+    .references(() => companies.id, { onDelete: "cascade" }),
+
+  // File info
+  filename: varchar("filename", { length: 500 }),
+  fileSize: integer("file_size"),
+
+  // Status tracking (polling pattern like RFPs)
+  status: varchar("status", { length: 50 }).default("pending"), // pending, running, completed, failed
+  currentStep: varchar("current_step", { length: 100 }),
+  progressCurrent: integer("progress_current").default(0),
+  progressTotal: integer("progress_total").default(0),
+
+  // Results
+  productsImported: integer("products_imported").default(0),
+  productsFailed: integer("products_failed").default(0),
+
+  // Error tracking
+  errorMessage: text("error_message"),
+
+  // Logs (real-time updates)
+  logs: jsonb("logs").$type<Array<{
+    timestamp: string;
+    type: 'info' | 'success' | 'error' | 'progress';
+    message: string;
+    metadata?: Record<string, any>;
+  }>>().default([]),
+
+  // Timing
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  companyIdIdx: index("pricing_catalog_imports_company_id_idx").on(table.companyId),
+  statusIdx: index("pricing_catalog_imports_status_idx").on(table.status),
+  createdAtIdx: index("pricing_catalog_imports_created_at_idx").on(table.createdAt),
+}));
+
+// ============================================
 // Alert Rules
 // ============================================
 export const pricingAlertRules = pgTable("pricing_alert_rules", {

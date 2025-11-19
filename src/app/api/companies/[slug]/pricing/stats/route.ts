@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { companies, pricingProducts, pricingCompetitors, pricingMatches, pricingAlertEvents } from "@/db/schema";
 import { eq, sql, and, gte } from "drizzle-orm";
+import { pricingCache, getStatsCacheKey } from "@/lib/pricing/cache";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,6 +19,17 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
+
+    // Check cache first (TTL: 5 minutes)
+    const cacheKey = getStatsCacheKey(slug);
+    const cached = pricingCache.get(cacheKey);
+
+    if (cached) {
+      console.log(`[PricingStats] Cache HIT for ${slug}`);
+      return NextResponse.json(cached);
+    }
+
+    console.log(`[PricingStats] Cache MISS for ${slug}, computing stats...`);
 
     // 1. Get company by slug
     const [company] = await db
@@ -130,8 +142,8 @@ export async function GET(
       competitiveAdvantage = advantages.reduce((sum, adv) => sum + adv, 0) / advantages.length;
     }
 
-    // 10. Return stats
-    return NextResponse.json({
+    // 10. Build stats object
+    const stats = {
       products: {
         total: totalProducts[0].count,
         tracked: trackedProducts[0].count,
@@ -152,7 +164,13 @@ export async function GET(
         trend: 0, // TODO Phase 4: Compare with previous 7 days
         critical: 0, // TODO Phase 4: Count severity='critical'
       },
-    });
+    };
+
+    // Cache for 5 minutes (300 seconds)
+    pricingCache.set(cacheKey, stats, 300);
+    console.log(`[PricingStats] Cached stats for ${slug} (TTL: 5min)`);
+
+    return NextResponse.json(stats);
   } catch (error) {
     console.error("Error fetching pricing stats:", error);
     return NextResponse.json(

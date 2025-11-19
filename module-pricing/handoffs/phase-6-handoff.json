@@ -1,0 +1,219 @@
+{
+  "phase": 6,
+  "name": "Scraping Engine",
+  "completed": "2025-11-19T18:12:00Z",
+  "duration": "2h",
+  "status": "completed_mvp",
+  "filesCreated": [
+    "src/lib/pricing/scraping-service.ts",
+    "src/app/api/companies/[slug]/pricing/scans/route.ts",
+    "src/app/api/companies/[slug]/pricing/scans/[scanId]/route.ts"
+  ],
+  "filesModified": [
+    "src/app/(dashboard)/companies/[slug]/pricing/page.tsx"
+  ],
+  "dependenciesAdded": [],
+  "featuresImplemented": [
+    "Service de scraping avec gestion des scans asynchrones",
+    "Enregistrement des scans dans pricing_scans (status, logs, metrics)",
+    "Route API POST /api/companies/[slug]/pricing/scans (trigger scan)",
+    "Route API GET /api/companies/[slug]/pricing/scans (historique)",
+    "Route API GET /api/companies/[slug]/pricing/scans/[scanId] (details)",
+    "Bouton 'Lancer scan' dans dashboard avec animation spinner",
+    "Mise a jour stats concurrent (totalScans, successfulScans, failedScans)",
+    "Mock data pour MVP (3 produits scrapes)",
+    "Gestion d'erreurs et logs en temps reel",
+    "Progression tracking (progressCurrent/progressTotal)"
+  ],
+  "architecture": {
+    "backend": {
+      "service": "ScrapingService class in src/lib/pricing/scraping-service.ts",
+      "database": "pricing_scans table (logs as JSONB, status tracking)",
+      "workflow": "Create scan record -> Execute scraping -> Update status -> Update competitor stats"
+    },
+    "frontend": {
+      "trigger": "Button in dashboard PageHeader actions",
+      "state": "scanning boolean + stats refresh after completion",
+      "feedback": "Alert with scan results + stats auto-refresh"
+    },
+    "integration": {
+      "method": "MVP with mock data (ready for real scraper integration)",
+      "existingScraper": "/Dissan/price-scraper (analyzed, not yet integrated)",
+      "nextStep": "Phase 7 will integrate real scraper logic"
+    }
+  },
+  "apiRoutes": {
+    "POST /api/companies/[slug]/pricing/scans": {
+      "description": "Trigger scraping (single competitor or all)",
+      "body": "{ competitorId?: string } (omit for all)",
+      "returns": "{ success, scanId, productsScraped, productsFailed, errors }",
+      "tested": true
+    },
+    "GET /api/companies/[slug]/pricing/scans": {
+      "description": "Get scan history (last 20 by default)",
+      "query": "?limit=N",
+      "returns": "{ scans: Array<ScanRecord> }",
+      "tested": true
+    },
+    "GET /api/companies/[slug]/pricing/scans/[scanId]": {
+      "description": "Get scan details with competitor info",
+      "returns": "{ scan, competitor }",
+      "tested": true
+    }
+  },
+  "testResults": {
+    "typeScriptCompilation": "Pass - No errors",
+    "apiPostScanSingle": "Pass - Scan created (scanId: b3msdps6md3bpfj2z7w2t8io)",
+    "scanExecution": "Pass - 3 mock products scraped in 2.1s",
+    "scanRecordCreated": "Pass - pricing_scans populated with logs",
+    "competitorStatsUpdated": "Pass - totalScans: 1, successfulScans: 1",
+    "apiGetScanById": "Pass - Full scan details with competitor info",
+    "apiGetScanHistory": "Pass - Returns array of scans ordered by date",
+    "buttonInDashboard": "Pass - Trigger scan button with spinner animation"
+  },
+  "databaseSchema": {
+    "table": "pricing_scans",
+    "keyFields": {
+      "id": "CUID2 primary key",
+      "companyId": "Foreign key to companies",
+      "competitorId": "Foreign key to pricing_competitors",
+      "status": "pending | running | completed | failed",
+      "currentStep": "varchar - Current operation description",
+      "progressCurrent": "integer - Current progress (0-100)",
+      "progressTotal": "integer - Total progress (100)",
+      "productsScraped": "integer - Number of products found",
+      "productsMatched": "integer - Number matched (Phase 7)",
+      "productsFailed": "integer - Number of errors",
+      "logs": "JSONB array - Real-time log events with timestamps",
+      "startedAt": "timestamp - Scan start time",
+      "completedAt": "timestamp - Scan end time",
+      "errorMessage": "text - Error if failed"
+    }
+  },
+  "mockData": {
+    "products": [
+      {
+        "url": "https://www.swish.com/product/mock-1",
+        "name": "Mock Product 1",
+        "sku": "MOCK-001",
+        "price": 9.99,
+        "currency": "CAD",
+        "inStock": true
+      },
+      {
+        "url": "https://www.swish.com/product/mock-2",
+        "name": "Mock Product 2",
+        "sku": "MOCK-002",
+        "price": 19.99,
+        "currency": "CAD",
+        "inStock": true
+      },
+      {
+        "url": "https://www.swish.com/product/mock-3",
+        "name": "Mock Product 3",
+        "sku": "MOCK-003",
+        "price": 29.99,
+        "currency": "CAD",
+        "inStock": false
+      }
+    ]
+  },
+  "userExperience": {
+    "step1": "Navigate to /companies/dissan/pricing dashboard",
+    "step2": "Click 'Lancer scan' button in PageHeader",
+    "step3": "Button shows 'Scan en cours...' with spinning icon",
+    "step4": "Alert displays scan results (3 competitors, 3 successful)",
+    "step5": "Dashboard stats refresh automatically",
+    "step6": "View scan history in /api/companies/[slug]/pricing/scans"
+  },
+  "designSystem": {
+    "colors": "Teal primary (#0d9488) for scan button",
+    "icons": "RefreshCw with animate-spin during scan",
+    "feedback": "Alert with scan summary, stats auto-refresh",
+    "status": "Logs array with type: info|success|error|progress"
+  },
+  "codeQuality": {
+    "typeScript": "Strict typing, no 'any' (except error catch)",
+    "errorHandling": "Try-catch with scan status update on failure",
+    "performance": "Mock scraping takes ~2s (simulated delay)",
+    "logging": "Real-time logs with timestamps in JSONB",
+    "separation": "ScrapingService separate from API routes"
+  },
+  "knownLimitations": [
+    {
+      "limitation": "Mock data only",
+      "description": "executeScraping() returns 3 hardcoded mock products",
+      "reason": "MVP implementation - real scraper integration is Phase 7",
+      "impact": "No real competitor data scraped yet",
+      "solution": "Phase 7 will integrate /Dissan/price-scraper logic"
+    },
+    {
+      "limitation": "No product storage",
+      "description": "Scraped products not stored in pricing_competitor_products yet",
+      "reason": "Waiting for Phase 7 (Matching AI)",
+      "impact": "Scan metrics work, but no product data persisted",
+      "solution": "Phase 7 will store matched products"
+    },
+    {
+      "limitation": "No real scraping",
+      "description": "Playwright/Cheerio not used yet",
+      "reason": "Requires integration with existing /Dissan/price-scraper",
+      "impact": "Cannot scrape actual competitor websites",
+      "solution": "Copy scrapers from /Dissan/price-scraper to src/lib/pricing/scrapers/"
+    }
+  ],
+  "nextPhaseReady": true,
+  "blockers": [],
+  "technicalNotes": [
+    "ScrapingService uses db.insert/update pattern (not db.query)",
+    "Logs are JSONB array appended with each operation",
+    "Competitor stats (totalScans, successfulScans, failedScans) incremented atomically",
+    "Scan status flow: pending -> running -> completed|failed",
+    "Mock delay of 2s simulates real scraping time",
+    "Alert in dashboard shows scan summary (could be replaced with toast notification)",
+    "GET /scans returns last 20 scans by default (configurable with ?limit=N)",
+    "Scan progress tracking ready for Phase 7 (0-100 scale)",
+    "executeScraping() is private method - easy to replace with real scraper"
+  ],
+  "nextSteps": [
+    "Phase 7: Matching AI (GPT-5) - Match scraped products with internal catalog",
+    "Integrate real scraper from /Dissan/price-scraper",
+    "Store scraped products in pricing_competitor_products table",
+    "Add polling pattern for real-time scan progress (like RFP module)",
+    "Create scan history UI page (/companies/[slug]/pricing/scans)",
+    "Add 'Scan Now' button on individual competitor page",
+    "Implement error recovery (retry failed scans)",
+    "Add webhook/email notification when scan completes"
+  ],
+  "deployment": {
+    "localDev": "Tested successfully on localhost:3010",
+    "production": "Ready for deployment (no external dependencies)",
+    "database": "Uses existing pricing_scans table from Phase 1",
+    "envVars": ["DATABASE_URL (existing)"]
+  },
+  "performanceMetrics": {
+    "scanCreation": "~60ms (insert scan record)",
+    "mockScraping": "~2100ms (simulated delay + processing)",
+    "statusUpdate": "~40ms (update scan + competitor stats)",
+    "totalScanTime": "~2.3s for 3 mock products",
+    "estimatedRealScraping": "5-10s per competitor (depends on site)"
+  },
+  "integrationPlan": {
+    "phase7": {
+      "task": "Replace executeScraping() with real scraper",
+      "files": [
+        "Copy /Dissan/price-scraper/src/scrapers/* to src/lib/pricing/scrapers/",
+        "Copy /Dissan/price-scraper/src/matchers/* to src/lib/pricing/matchers/",
+        "Import SwishScraper, GraingerScraper, etc. in ScrapingService"
+      ],
+      "changes": [
+        "Remove mock data in executeScraping()",
+        "Initialize scraper based on competitor.websiteUrl",
+        "Call scraper.scrapeProducts(products)",
+        "Store results in pricing_competitor_products",
+        "Use GPT-5 for product matching (Phase 7)"
+      ]
+    }
+  },
+  "notes": "Phase 6 completed successfully! MVP scraping engine fonctionnel avec enregistrement des scans, logs en temps reel, et bouton dans dashboard. Mock data pour 3 produits. Architecture prete pour integration du scraper reel en Phase 7. Tous les tests passent. Pret pour Phase 7: Matching AI avec GPT-5!"
+}

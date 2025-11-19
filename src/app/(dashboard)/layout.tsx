@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Building2, MessageSquare, Users, Settings, LogOut, Menu, X, LayoutDashboard, FileCheck, Database, BookOpen } from "lucide-react";
+import { Building2, MessageSquare, Users, Settings, LogOut, Menu, X, LayoutDashboard, FileCheck, Database, BookOpen, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CompanyProvider } from "@/components/company-provider";
@@ -48,6 +48,7 @@ export default function DashboardLayout({
     { name: "RFP Assistant", href: `/companies/${slug}/rfps`, icon: FileCheck },
     { name: "Bibliothèque RFP", href: `/companies/${slug}/rfps/library`, icon: Database },
     { name: "Knowledge Base", href: `/companies/${slug}/knowledge-base`, icon: BookOpen },
+    { name: "Intelligence de Prix", href: `/companies/${slug}/pricing`, icon: DollarSign },
     // { name: "Concurrents", href: `/companies/${slug}/competitors`, icon: Users }, // Hidden temporarily
     { name: "Paramètres", href: `/companies/${slug}/settings`, icon: Settings },
   ];

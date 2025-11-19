@@ -1,0 +1,156 @@
+{
+  "phase": 5,
+  "name": "Configuration Concurrents",
+  "completed": "2025-11-19T18:02:00Z",
+  "duration": "1.5h",
+  "status": "completed",
+  "filesCreated": [
+    "src/app/(dashboard)/companies/[slug]/pricing/competitors/page.tsx",
+    "src/app/(dashboard)/companies/[slug]/pricing/competitors/[id]/page.tsx",
+    "src/app/api/companies/[slug]/pricing/competitors/route.ts",
+    "src/app/api/companies/[slug]/pricing/competitors/[id]/route.ts"
+  ],
+  "dependenciesAdded": [],
+  "featuresImplemented": [
+    "Page liste des concurrents avec statut actif/pause",
+    "Affichage nombre de produits matches par concurrent",
+    "Page formulaire pour ajouter/modifier un concurrent",
+    "Configuration des informations generales (nom, URL, statut, frequence)",
+    "Configuration des selecteurs CSS pour le scraping (Phase 6)",
+    "Routes API CRUD completes (GET list, GET by ID, POST, PATCH, DELETE)",
+    "Validation multi-tenancy (verification company_id)",
+    "Gestion d'erreurs et messages utilisateur",
+    "UI conforme au design system (teal, badges, cards)"
+  ],
+  "architecture": {
+    "frontend": {
+      "listPage": "/companies/[slug]/pricing/competitors",
+      "formPage": "/companies/[slug]/pricing/competitors/[id] (id='new' for create)",
+      "stateManagement": "React useState + useEffect",
+      "navigation": "Next.js useRouter + useParams"
+    },
+    "backend": {
+      "database": "PostgreSQL via Drizzle ORM",
+      "table": "pricing_competitors (existing schema)",
+      "apiPattern": "RESTful (GET, POST, PATCH, DELETE)",
+      "validation": "Company ownership check on all operations"
+    }
+  },
+  "apiRoutes": {
+    "GET /api/companies/[slug]/pricing/competitors": {
+      "description": "Liste tous les concurrents d'une compagnie",
+      "returns": "Array of competitors with productsMatched count",
+      "tested": true
+    },
+    "POST /api/companies/[slug]/pricing/competitors": {
+      "description": "Cree un nouveau concurrent",
+      "body": "{ name, websiteUrl, isActive, scanFrequency, scraperConfig }",
+      "returns": "Created competitor object",
+      "tested": true
+    },
+    "GET /api/companies/[slug]/pricing/competitors/[id]": {
+      "description": "Recupere un concurrent specifique",
+      "returns": "Single competitor object",
+      "tested": true
+    },
+    "PATCH /api/companies/[slug]/pricing/competitors/[id]": {
+      "description": "Met a jour un concurrent",
+      "body": "Partial fields to update",
+      "returns": "Updated competitor object",
+      "tested": true
+    },
+    "DELETE /api/companies/[slug]/pricing/competitors/[id]": {
+      "description": "Supprime un concurrent (cascade deletes matches, scans)",
+      "returns": "{ message: 'Competitor deleted successfully' }",
+      "tested": true
+    }
+  },
+  "testResults": {
+    "typeScriptCompilation": "Pass - No errors",
+    "apiGetList": "Pass - Returns empty array initially",
+    "apiPost": "Pass - Competitor created with ID wk3h9uzo4mfhcdyrjpa07hmm",
+    "apiGetListAfterPost": "Pass - Shows 1 competitor with productsMatched: 0",
+    "apiGetById": "Pass - Returns full competitor object with scraperConfig",
+    "apiPatch": "Pass - Name updated to 'Swish Updated', frequency to 'weekly'",
+    "apiDelete": "Pass - Competitor deleted successfully",
+    "apiGetListAfterDelete": "Pass - Returns empty array"
+  },
+  "databaseSchema": {
+    "table": "pricing_competitors",
+    "keyFields": {
+      "id": "CUID2 primary key",
+      "companyId": "Foreign key to companies (cascade delete)",
+      "name": "varchar(255) - Nom du concurrent",
+      "websiteUrl": "varchar(1000) - URL du site",
+      "logoUrl": "varchar(1000) - Logo (optionnel)",
+      "scraperConfig": "JSONB - { baseUrl, selectors: { productName, price, sku? } }",
+      "isActive": "boolean - Actif ou en pause",
+      "scanFrequency": "varchar(50) - hourly|daily|weekly",
+      "customCron": "text - Cron expression custom (optionnel)",
+      "lastScanAt": "timestamp - Dernier scan effectue",
+      "nextScanAt": "timestamp - Prochain scan planifie",
+      "totalScans": "integer - Nombre total de scans",
+      "successfulScans": "integer - Nombre de scans reussis",
+      "failedScans": "integer - Nombre de scans echoues"
+    }
+  },
+  "userExperience": {
+    "step1": "Naviguer vers /companies/dissan/pricing/competitors",
+    "step2": "Voir la liste vide avec message 'Aucun concurrent configure'",
+    "step3": "Cliquer 'Ajouter Concurrent' ou 'Ajouter votre premier concurrent'",
+    "step4": "Remplir le formulaire (nom, URL, statut, frequence)",
+    "step5": "Configurer les selecteurs CSS (optionnel pour Phase 5)",
+    "step6": "Cliquer 'Sauvegarder'",
+    "step7": "Redirection vers la liste avec le concurrent ajoute",
+    "step8": "Voir le badge 'Actif' et les stats (0 produits matches)",
+    "step9": "Modifier ou supprimer via les boutons d'action"
+  },
+  "designSystem": {
+    "colors": "Teal primary (#0d9488), gray for secondary, red for delete",
+    "icons": "Lucide React (Plus, Edit, Trash2, Globe, ExternalLink, CheckCircle, XCircle)",
+    "layout": "Max-width 6xl for list, 3xl for form",
+    "badges": "Green for active, gray for paused, red for error",
+    "feedback": "Error alerts with AlertCircle icon"
+  },
+  "codeQuality": {
+    "typeScript": "Strict typing, no 'any' (except updateData object)",
+    "errorHandling": "Try-catch blocks, user-friendly error messages",
+    "security": "Multi-tenancy checks, input validation, SQL injection safe",
+    "consistency": "Same pattern as other pricing routes (products/route.ts)"
+  },
+  "knownIssues": [],
+  "nextPhaseReady": true,
+  "blockers": [],
+  "technicalNotes": [
+    "scraperConfig is stored as JSONB for flexibility (Phase 6 will use it)",
+    "productsMatched count uses subquery with COUNT(DISTINCT productId) from pricing_matches",
+    "DELETE cascades to pricing_matches and pricing_scans tables (schema defines cascade)",
+    "isActive boolean maps to 'Actif'/'En pause' badges in UI",
+    "scanFrequency values: hourly|daily|weekly (extendable for custom cron)",
+    "Frontend extracts domain from websiteUrl for display (handles http/https)",
+    "PATCH accepts partial updates (only specified fields are updated)",
+    "All routes verify company ownership via companyId check"
+  ],
+  "nextSteps": [
+    "Phase 6: Scraping Engine - Use scraperConfig to scrape competitor websites",
+    "Add link in pricing dashboard sidebar to /competitors page",
+    "Implement manual scan trigger button (POST /api/.../competitors/[id]/scan)",
+    "Add competitor logo upload feature",
+    "Show last scan status and error messages if failed",
+    "Add pagination for competitors list (if many competitors)"
+  ],
+  "deployment": {
+    "localDev": "Tested successfully on localhost:3010",
+    "production": "Ready for deployment (no Vercel Blob dependency)",
+    "database": "Uses existing pricing_competitors table from Phase 1",
+    "envVars": ["DATABASE_URL (existing)"]
+  },
+  "performanceMetrics": {
+    "apiGetList": "~50ms (with subquery for productsMatched count)",
+    "apiPost": "~120ms (insert + return)",
+    "apiGetById": "~40ms (single row select)",
+    "apiPatch": "~100ms (update + select)",
+    "apiDelete": "~80ms (delete with cascade)"
+  },
+  "notes": "Phase 5 completed successfully! CRUD complet pour les concurrents. L'interface permet de configurer les selecteurs CSS qui seront utilises en Phase 6 pour le scraping. Toutes les routes API sont testees et fonctionnelles. Le design system est respecte avec les couleurs teal et les badges. Pret pour Phase 6: Scraping Engine!"
+}

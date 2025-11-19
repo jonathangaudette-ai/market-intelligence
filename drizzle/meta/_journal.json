@@ -78,6 +78,13 @@
       "when": 1763568953184,
       "tag": "0010_simple_omega_red",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1763571795829,
+      "tag": "0011_pink_betty_ross",
+      "breakpoints": true
     }
   ]
 }

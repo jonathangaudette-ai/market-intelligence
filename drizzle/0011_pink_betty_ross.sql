@@ -1,0 +1,1 @@
+ALTER TABLE "pricing_catalog_imports" ADD COLUMN "raw_data" jsonb;

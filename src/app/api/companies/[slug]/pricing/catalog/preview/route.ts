@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { companies } from "@/db/schema";
+import { companies, pricingCatalogImports } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import * as XLSX from "xlsx";
 import Papa from "papaparse";
 import { createId } from "@paralleldrive/cuid2";
-import { put } from "@vercel/blob";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -111,19 +110,22 @@ export async function POST(
       return mapping;
     });
 
-    // 7. Store file in Vercel Blob for later processing
-    const fileId = createId();
-    const blob = await put(`catalog-uploads/${company.id}/${fileId}.json`, buffer, {
-      access: "public",
-      addRandomSuffix: false,
+    // 7. Create a draft job with raw data in database (no Vercel Blob needed!)
+    const draftJobId = createId();
+    await db.insert(pricingCatalogImports).values({
+      id: draftJobId,
+      companyId: company.id,
+      filename: file.name,
+      fileSize: buffer.byteLength,
+      status: 'draft', // Will be set to 'pending' when import starts
+      rawData: rawData, // Store parsed data directly in DB
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
-    // 8. Store metadata temporarily (could use Redis/cache in production)
-    // For now, we'll pass the fileId and re-parse on import
-
-    // 9. Return preview
+    // 8. Return preview with draft job ID
     return NextResponse.json({
-      fileId,
+      fileId: draftJobId, // Keeping same name for backwards compatibility
       filename: file.name,
       rowCount: rawData.length,
       columns: columnMappings,

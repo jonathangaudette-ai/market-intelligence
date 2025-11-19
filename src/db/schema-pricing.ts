@@ -257,6 +257,9 @@ export const pricingCatalogImports = pgTable("pricing_catalog_imports", {
     metadata?: Record<string, any>;
   }>>().default([]),
 
+  // Raw data from preview (avoids Vercel Blob dependency)
+  rawData: jsonb("raw_data").$type<Array<Record<string, any>>>(),
+
   // Timing
   startedAt: timestamp("started_at"),
   completedAt: timestamp("completed_at"),

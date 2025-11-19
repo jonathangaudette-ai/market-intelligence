@@ -3,9 +3,6 @@ import { db } from "@/db";
 import { companies, pricingProducts, pricingCatalogImports } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
-import * as XLSX from "xlsx";
-import Papa from "papaparse";
-import { head } from "@vercel/blob";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -45,10 +42,20 @@ export async function POST(request: NextRequest, { params }: ImportParams) {
       return NextResponse.json({ error: `Missing required field mappings: ${missingFields.join(', ')}` }, { status: 400 });
     }
 
-    const jobId = createId();
-    await db.insert(pricingCatalogImports).values({
-      id: jobId,
-      companyId: company.id,
+    // Fetch the draft job created during preview
+    const [draftJob] = await db.select().from(pricingCatalogImports).where(eq(pricingCatalogImports.id, fileId)).limit(1);
+    if (!draftJob) {
+      return NextResponse.json({ error: "Draft job not found" }, { status: 404 });
+    }
+    if (draftJob.status !== 'draft') {
+      return NextResponse.json({ error: "Job already started or completed" }, { status: 400 });
+    }
+    if (!draftJob.rawData || draftJob.rawData.length === 0) {
+      return NextResponse.json({ error: "No data found in draft job" }, { status: 400 });
+    }
+
+    // Update draft job to pending status
+    await db.update(pricingCatalogImports).set({
       status: 'pending',
       currentStep: 'initializing',
       progressCurrent: 0,
@@ -56,19 +63,18 @@ export async function POST(request: NextRequest, { params }: ImportParams) {
       productsImported: 0,
       productsFailed: 0,
       logs: [{ timestamp: new Date().toISOString(), type: 'info', message: 'Job créé, démarrage imminent...' }],
-      createdAt: new Date(),
       updatedAt: new Date(),
-    });
+    }).where(eq(pricingCatalogImports.id, fileId));
 
-    processImportJob(company.id, jobId, fileId, columnMapping).catch((err) => console.error("Background job error:", err));
-    return NextResponse.json({ jobId, status: 'pending', message: 'Import job started' });
+    processImportJob(company.id, fileId, columnMapping).catch((err) => console.error("Background job error:", err));
+    return NextResponse.json({ jobId: fileId, status: 'pending', message: 'Import job started' });
   } catch (error) {
     console.error("Error starting import job:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
-async function processImportJob(companyId: string, jobId: string, fileId: string, columnMapping: Record<string, string>) {
+async function processImportJob(companyId: string, jobId: string, columnMapping: Record<string, string>) {
   async function addLog(log: LogEvent) {
     const [job] = await db.select().from(pricingCatalogImports).where(eq(pricingCatalogImports.id, jobId)).limit(1);
     if (job) await db.update(pricingCatalogImports).set({ logs: [...(job.logs || []), log], updatedAt: new Date() }).where(eq(pricingCatalogImports.id, jobId));
@@ -81,24 +87,12 @@ async function processImportJob(companyId: string, jobId: string, fileId: string
     await updateStatus({ status: 'running', currentStep: 'validating', startedAt: new Date() });
     await addLog({ timestamp: new Date().toISOString(), type: 'info', message: 'Démarrage du job d\'import...' });
 
-    // Download file from Vercel Blob using SDK (handles auth automatically)
-    const blobUrl = `https://blob.vercel-storage.com/catalog-uploads/${companyId}/${fileId}.json`;
-    const blobInfo = await head(blobUrl);
-    const fileResponse = await fetch(blobInfo.downloadUrl);
-    if (!fileResponse.ok) throw new Error('Failed to fetch uploaded file');
-    const buffer = await fileResponse.arrayBuffer();
-    let rawData: Record<string, any>[] = [];
+    // Read rawData from the job (already parsed during preview)
+    const [job] = await db.select().from(pricingCatalogImports).where(eq(pricingCatalogImports.id, jobId)).limit(1);
+    if (!job) throw new Error('Job not found');
+    if (!job.rawData || job.rawData.length === 0) throw new Error('No data found in job');
 
-    try {
-      const text = Buffer.from(buffer).toString('utf-8');
-      const parsed = Papa.parse<Record<string, string>>(text, { header: true, skipEmptyLines: true });
-      rawData = parsed.data;
-    } catch {
-      const workbook = XLSX.read(Buffer.from(buffer), { type: "buffer" });
-      rawData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { raw: false, defval: "" });
-    }
-
-    if (rawData.length === 0) throw new Error('No data found in file');
+    const rawData: Record<string, any>[] = job.rawData;
 
     await updateStatus({ currentStep: 'importing', progressTotal: rawData.length });
     await addLog({ timestamp: new Date().toISOString(), type: 'info', message: `${rawData.length} lignes détectées, démarrage de l'import...` });

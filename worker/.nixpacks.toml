@@ -1,0 +1,14 @@
+[phases.setup]
+nixPkgs = ["nodejs-20_x", "playwright-driver", "chromium"]
+
+[phases.install]
+cmds = [
+  "npm install",
+  "npx playwright install --with-deps chromium"
+]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "node dist/index.js"

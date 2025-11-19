@@ -72,6 +72,7 @@ export const pricingCompetitors = pgTable("pricing_competitors", {
   companyId: varchar("company_id", { length: 255 })
     .notNull()
     .references(() => companies.id, { onDelete: "cascade" }),
+  companySlug: varchar("company_slug", { length: 255 }).notNull(),
 
   // Competitor Info
   name: varchar("name", { length: 255 }).notNull(),
@@ -106,6 +107,7 @@ export const pricingCompetitors = pgTable("pricing_competitors", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => ({
   companyNameIdx: index("pricing_competitors_company_name_idx").on(table.companyId, table.name),
+  companySlugIdx: index("pricing_competitors_company_slug_idx").on(table.companySlug),
 }));
 
 // ============================================

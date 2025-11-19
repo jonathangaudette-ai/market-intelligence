@@ -5,10 +5,11 @@
  */
 
 import { db } from "@/db";
-import { companies, pricingCompetitors, pricingScans } from "@/db/schema";
+import { companies, pricingCompetitors, pricingScans, pricingProducts } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { MatchingService } from "./matching-service";
+import { WorkerClient, ScrapedProduct as WorkerScrapedProduct } from "./worker-client";
 
 // ============================================================================
 // Types
@@ -53,9 +54,11 @@ export interface LogEvent {
 
 export class ScrapingService {
   private matchingService: MatchingService;
+  private workerClient: WorkerClient;
 
   constructor() {
     this.matchingService = new MatchingService();
+    this.workerClient = new WorkerClient();
   }
 
   /**
@@ -236,8 +239,8 @@ export class ScrapingService {
   }
 
   /**
-   * Execute the actual scraping logic
-   * This is a MVP implementation that will be replaced with real scraping
+   * Execute the actual scraping logic via Railway worker
+   * NEW v2: Calls Railway worker with WorkerClient
    */
   private async executeScraping(
     competitor: any,
@@ -250,92 +253,118 @@ export class ScrapingService {
     productsFailed: number;
     errors: ScrapingError[];
   }> {
-    const scrapedProducts: ScrapedProduct[] = [];
-    const errors: ScrapingError[] = [];
-
     try {
       logs.push({
         timestamp: new Date().toISOString(),
         type: "info",
-        message: `Connecting to ${competitor.websiteUrl}`,
+        message: `Calling Railway worker for ${competitor.name}`,
       });
 
       // Update scan progress
       await db
         .update(pricingScans)
         .set({
-          currentStep: "Fetching product list",
+          currentStep: "Fetching active products",
           progressCurrent: 10,
           logs: logs,
           updatedAt: new Date(),
         })
         .where(eq(pricingScans.id, scanId));
 
-      // TODO: Integrate with real scraper from /Dissan/price-scraper
-      // For now, simulate scraping with mock data
+      // Fetch active products for this company
+      const activeProducts = await db
+        .select({
+          id: pricingProducts.id,
+          sku: pricingProducts.sku,
+          name: pricingProducts.name,
+          brand: pricingProducts.brand,
+          category: pricingProducts.category,
+        })
+        .from(pricingProducts)
+        .where(
+          and(
+            eq(pricingProducts.companyId, competitor.companyId),
+            eq(pricingProducts.isActive, true)
+          )
+        );
 
-      // Simulate scraping delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Mock scraped products
-      const mockProducts: ScrapedProduct[] = [
-        {
-          url: `${competitor.websiteUrl}/product/mock-1`,
-          name: "Mock Product 1",
-          sku: "MOCK-001",
-          price: 9.99,
-          currency: "CAD",
-          inStock: true,
-        },
-        {
-          url: `${competitor.websiteUrl}/product/mock-2`,
-          name: "Mock Product 2",
-          sku: "MOCK-002",
-          price: 19.99,
-          currency: "CAD",
-          inStock: true,
-        },
-        {
-          url: `${competitor.websiteUrl}/product/mock-3`,
-          name: "Mock Product 3",
-          sku: "MOCK-003",
-          price: 29.99,
-          currency: "CAD",
-          inStock: false,
-        },
-      ];
-
-      scrapedProducts.push(...mockProducts);
+      console.log(
+        `[ScrapingService] Sending ${activeProducts.length} products to Railway worker`
+      );
 
       logs.push({
         timestamp: new Date().toISOString(),
-        type: "success",
-        message: `Successfully scraped ${mockProducts.length} products`,
-        metadata: {
-          productsFound: mockProducts.length,
-        },
+        type: "info",
+        message: `Sending ${activeProducts.length} products to Railway worker`,
       });
 
-      // Update progress
       await db
         .update(pricingScans)
         .set({
-          currentStep: "Processing scraped data",
-          progressCurrent: 80,
-          productsScraped: scrapedProducts.length,
+          currentStep: `Scraping ${competitor.name} via Railway worker`,
+          progressCurrent: 20,
           logs: logs,
           updatedAt: new Date(),
         })
         .where(eq(pricingScans.id, scanId));
 
-      // TODO: Store scraped products in pricing_competitor_products table (Phase 8 - Historique)
+      // Call Railway worker
+      const result = await this.workerClient.scrape({
+        companyId: competitor.companyId,
+        companySlug: competitor.companySlug,
+        competitorId: competitor.id,
+        competitorName: competitor.name,
+        competitorUrl: competitor.websiteUrl,
+        products: activeProducts,
+      });
+
+      logs.push({
+        timestamp: new Date().toISOString(),
+        type: result.success ? "success" : "warning",
+        message: result.success
+          ? `Railway worker completed: ${result.productsScraped} products scraped`
+          : `Railway worker completed with errors`,
+        metadata: {
+          productsFound: result.productsScraped,
+          duration: result.metadata.duration,
+          scraperType: result.metadata.scraperType,
+          workerStatus: result.metadata.workerStatus,
+        },
+      });
+
+      await db
+        .update(pricingScans)
+        .set({
+          currentStep: "Processing scraped data",
+          progressCurrent: 80,
+          productsScraped: result.productsScraped,
+          logs: logs,
+          updatedAt: new Date(),
+        })
+        .where(eq(pricingScans.id, scanId));
+
+      // Convert WorkerScrapedProduct to ScrapedProduct
+      const scrapedProducts: ScrapedProduct[] = result.scrapedProducts.map((p) => ({
+        url: p.url,
+        name: p.name,
+        sku: p.sku,
+        price: p.price,
+        currency: p.currency,
+        inStock: p.inStock,
+        imageUrl: p.imageUrl,
+        characteristics: p.characteristics,
+      }));
 
       return {
-        success: true,
+        success: result.success,
         scrapedProducts: scrapedProducts,
-        productsScraped: scrapedProducts.length,
-        productsFailed: errors.length,
-        errors,
+        productsScraped: result.productsScraped,
+        productsFailed: result.productsFailed,
+        errors: result.errors.map((e) => ({
+          url: e.url,
+          error: e.error,
+          timestamp: new Date(e.timestamp),
+        })),
       };
     } catch (error: any) {
       const scrapingError: ScrapingError = {
@@ -344,20 +373,18 @@ export class ScrapingService {
         timestamp: new Date(),
       };
 
-      errors.push(scrapingError);
-
       logs.push({
         timestamp: new Date().toISOString(),
         type: "error",
-        message: `Scraping error: ${error.message}`,
+        message: `Railway worker error: ${error.message}`,
       });
 
       return {
         success: false,
-        scrapedProducts: scrapedProducts,
-        productsScraped: scrapedProducts.length,
+        scrapedProducts: [],
+        productsScraped: 0,
         productsFailed: 1,
-        errors,
+        errors: [scrapingError],
       };
     }
   }

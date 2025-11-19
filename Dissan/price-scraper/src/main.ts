@@ -90,9 +90,9 @@ async function scrapeCompetitor(
     endTime: new Date(),
     totalProducts: products.length,
     productsScraped: results.length,
-    productsFound: results.filter((r) => r.found).length,
-    productsNotFound: results.filter((r) => !r.found && !r.error).length,
-    errors: results.filter((r) => r.error).length,
+    productsFound: results.filter((r: any) => r.found).length,
+    productsNotFound: results.filter((r: any) => !r.found && !r.error).length,
+    errors: results.filter((r: any) => r.error).length,
     results,
   };
 

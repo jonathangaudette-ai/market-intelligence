@@ -320,7 +320,7 @@ export class ScrapingService {
 
       logs.push({
         timestamp: new Date().toISOString(),
-        type: result.success ? "success" : "warning",
+        type: result.success ? "success" : "error",
         message: result.success
           ? `Railway worker completed: ${result.productsScraped} products scraped`
           : `Railway worker completed with errors`,

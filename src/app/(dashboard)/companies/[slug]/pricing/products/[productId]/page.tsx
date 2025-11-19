@@ -17,6 +17,7 @@ import {
   Target,
   ShoppingCart,
   Clock,
+  RefreshCw,
 } from "lucide-react";
 
 interface Product {
@@ -64,6 +65,7 @@ export default function ProductDetailPage() {
   const [matches, setMatches] = useState<CompetitorMatch[]>([]);
   const [analysis, setAnalysis] = useState<PricingAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
     async function fetchProductData() {
@@ -126,6 +128,74 @@ export default function ProductDetailPage() {
 
     fetchProductData();
   }, [slug, productId]);
+
+  // Handle trigger scan
+  async function handleTriggerScan() {
+    setScanning(true);
+    try {
+      const response = await fetch(`/api/companies/${slug}/pricing/scans`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}), // Scan all competitors
+      });
+
+      if (!response.ok) {
+        throw new Error("Scan failed");
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Refresh matches after scan
+        const matchesRes = await fetch(`/api/companies/${slug}/pricing/matches?productId=${productId}`);
+        if (matchesRes.ok) {
+          const matchesData = await matchesRes.json();
+          const newMatches = matchesData.matches || [];
+          setMatches(newMatches);
+
+          // Recalculate pricing analysis
+          if (newMatches.length > 0 && product?.currentPrice) {
+            const yourPrice = parseFloat(product.currentPrice);
+            const competitorPrices = newMatches.map((m: CompetitorMatch) =>
+              parseFloat(m.competitorPrice)
+            );
+
+            const minPrice = Math.min(...competitorPrices);
+            const maxPrice = Math.max(...competitorPrices);
+            const avgPrice = competitorPrices.reduce((a: number, b: number) => a + b, 0) / competitorPrices.length;
+
+            const minMatch = newMatches.find((m: CompetitorMatch) =>
+              parseFloat(m.competitorPrice) === minPrice
+            );
+            const maxMatch = newMatches.find((m: CompetitorMatch) =>
+              parseFloat(m.competitorPrice) === maxPrice
+            );
+
+            const pricePosition = ((yourPrice - minPrice) / (maxPrice - minPrice)) * 100;
+            const competitiveGap = ((yourPrice - avgPrice) / avgPrice) * 100;
+
+            setAnalysis({
+              yourPrice,
+              marketAverage: avgPrice,
+              minPrice,
+              maxPrice,
+              minCompetitor: minMatch?.competitorName || "N/A",
+              maxCompetitor: maxMatch?.competitorName || "N/A",
+              pricePosition,
+              competitiveGap,
+            });
+          }
+        }
+
+        alert(`Scan lancé avec succès!\n${data.totalCompetitors} concurrents scannés.\nSuccès: ${data.successfulScans}\nÉchecs: ${data.failedScans}`);
+      }
+    } catch (error) {
+      console.error("Error triggering scan:", error);
+      alert("Erreur lors du lancement du scan");
+    } finally {
+      setScanning(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -343,9 +413,17 @@ export default function ProductDetailPage() {
               <div className="text-center py-12 text-muted-foreground">
                 <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p className="text-lg font-medium">Aucune correspondance trouvée</p>
-                <p className="text-sm">
+                <p className="text-sm mb-4">
                   Lancez un scan pour identifier les produits équivalents
                 </p>
+                <Button
+                  onClick={handleTriggerScan}
+                  disabled={scanning}
+                  className="bg-teal-600 hover:bg-teal-700"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${scanning ? "animate-spin" : ""}`} />
+                  {scanning ? "Scan en cours..." : "Lancer scan"}
+                </Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

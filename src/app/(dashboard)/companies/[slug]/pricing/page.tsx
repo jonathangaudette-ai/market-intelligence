@@ -220,22 +220,32 @@ export default function PricingDashboardPage() {
               loading={loading}
             />
           </div>
-          <StatCard
-            label="Écart Prix Moyen"
-            value={`${stats.pricing.avgGap}%`}
-            icon={DollarSign}
-            trend={{ value: stats.pricing.trend7d, label: "7 jours", isPositive: false }}
-            iconColor="bg-blue-100 text-blue-600"
-            loading={loading}
-          />
-          <StatCard
-            label="Avantage Compétitif"
-            value={`+${stats.pricing.competitiveAdvantage}%`}
-            icon={Target}
-            trend={{ value: 1.3, label: "7 jours", isPositive: true }}
-            iconColor="bg-purple-100 text-purple-600"
-            loading={loading}
-          />
+          <div
+            className="cursor-pointer transition-transform hover:scale-105"
+            onClick={() => router.push(`/companies/${slug}/pricing/matches`)}
+          >
+            <StatCard
+              label="Écart Prix Moyen"
+              value={`${stats.pricing.avgGap}%`}
+              icon={DollarSign}
+              trend={{ value: stats.pricing.trend7d, label: "7 jours", isPositive: false }}
+              iconColor="bg-blue-100 text-blue-600"
+              loading={loading}
+            />
+          </div>
+          <div
+            className="cursor-pointer transition-transform hover:scale-105"
+            onClick={() => router.push(`/companies/${slug}/pricing/matches`)}
+          >
+            <StatCard
+              label="Avantage Compétitif"
+              value={`+${stats.pricing.competitiveAdvantage}%`}
+              icon={Target}
+              trend={{ value: 1.3, label: "7 jours", isPositive: true }}
+              iconColor="bg-purple-100 text-purple-600"
+              loading={loading}
+            />
+          </div>
           <div
             className="cursor-pointer transition-transform hover:scale-105"
             onClick={() => router.push(`/companies/${slug}/pricing/competitors`)}

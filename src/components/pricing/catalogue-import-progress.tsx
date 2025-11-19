@@ -65,7 +65,7 @@ export function CatalogueImportProgress({
         // Stop polling if completed or failed
         if (data.status === 'completed') {
           setIsPolling(false);
-          onComplete?.();
+          // Don't auto-reset - let user see the success message
         } else if (data.status === 'failed') {
           setIsPolling(false);
           onError?.(data.error || 'Import échoué');
@@ -186,23 +186,34 @@ export function CatalogueImportProgress({
 
           {/* Completed state */}
           {progress.status === 'completed' && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
-                <div>
-                  <p className="font-medium text-green-900">
-                    Import terminé avec succès
-                  </p>
-                  <p className="text-sm text-green-700 mt-1">
-                    {progress.productsImported} produits ont été importés dans votre catalogue
-                  </p>
-                  {progress.productsFailed > 0 && (
-                    <p className="text-sm text-amber-700 mt-1">
-                      {progress.productsFailed} produits ont échoué (voir les logs ci-dessous)
+            <div className="space-y-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-green-900">
+                      Import terminé avec succès
                     </p>
-                  )}
+                    <p className="text-sm text-green-700 mt-1">
+                      {progress.productsImported} produits ont été importés dans votre catalogue
+                    </p>
+                    {progress.productsFailed > 0 && (
+                      <p className="text-sm text-amber-700 mt-1">
+                        {progress.productsFailed} produits ont échoué (voir les logs ci-dessous)
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
+
+              {/* Action button */}
+              <Button
+                onClick={onComplete}
+                className="w-full bg-teal-600 hover:bg-teal-700"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Importer un autre fichier
+              </Button>
             </div>
           )}
 

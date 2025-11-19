@@ -66,8 +66,20 @@ export async function POST(request: NextRequest, { params }: ImportParams) {
       updatedAt: new Date(),
     }).where(eq(pricingCatalogImports.id, fileId));
 
-    processImportJob(company.id, fileId, columnMapping).catch((err) => console.error("Background job error:", err));
-    return NextResponse.json({ jobId: fileId, status: 'pending', message: 'Import job started' });
+    // Start processing (synchronous in serverless environment)
+    // The polling endpoint will track progress in real-time
+    await processImportJob(company.id, fileId, columnMapping);
+
+    // Fetch final status
+    const [finalJob] = await db.select().from(pricingCatalogImports).where(eq(pricingCatalogImports.id, fileId)).limit(1);
+
+    return NextResponse.json({
+      jobId: fileId,
+      status: finalJob?.status || 'completed',
+      message: 'Import completed',
+      productsImported: finalJob?.productsImported || 0,
+      productsFailed: finalJob?.productsFailed || 0
+    });
   } catch (error) {
     console.error("Error starting import job:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

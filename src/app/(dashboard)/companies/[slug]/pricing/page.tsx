@@ -236,13 +236,18 @@ export default function PricingDashboardPage() {
             iconColor="bg-purple-100 text-purple-600"
             loading={loading}
           />
-          <StatCard
-            label="Concurrents Actifs"
-            value={stats.competitors.active}
-            icon={Users}
-            iconColor="bg-orange-100 text-orange-600"
-            loading={loading}
-          />
+          <div
+            className="cursor-pointer transition-transform hover:scale-105"
+            onClick={() => router.push(`/companies/${slug}/pricing/competitors`)}
+          >
+            <StatCard
+              label="Concurrents Actifs"
+              value={stats.competitors.active}
+              icon={Users}
+              iconColor="bg-orange-100 text-orange-600"
+              loading={loading}
+            />
+          </div>
           <StatCard
             label="Alertes (7 jours)"
             value={stats.alerts.last7d}

@@ -49,6 +49,7 @@ export default function PricingDashboardPage() {
   const slug = params.slug as string;
 
   const [loading, setLoading] = useState(true);
+  const [scanning, setScanning] = useState(false);
   const [stats, setStats] = useState<Stats>({
     products: { total: 0, tracked: 0, matched: 0, coverage: 0 },
     pricing: { avgGap: 0, competitiveAdvantage: 0, trend7d: 0 },
@@ -88,7 +89,7 @@ export default function PricingDashboardPage() {
         const data = await response.json();
 
         // Transform API data to chart format
-        const chartData = transformHistoryToChart(data.history, data.yourProducts);
+        const chartData = transformHistoryToChart(data.trends);
         setPriceHistory(chartData);
       } catch (err) {
         console.error("Error loading history:", err);
@@ -102,44 +103,66 @@ export default function PricingDashboardPage() {
   }, [slug]);
 
   // Transform history data to chart format
-  function transformHistoryToChart(history: any[], yourProducts: any[]): ChartDataPoint[] {
+  function transformHistoryToChart(trends: any[]): ChartDataPoint[] {
     // Group by date
     const grouped: { [date: string]: ChartDataPoint } = {};
 
-    // Add competitor prices from history
-    history.forEach((record) => {
-      const date = record.recordedAt.split('T')[0];
+    // Process trends from API
+    trends.forEach((trend) => {
+      const date = trend.date;
       if (!grouped[date]) {
         grouped[date] = { date };
       }
 
-      // Use competitor name as key (lowercase, no spaces)
-      const competitorKey = record.competitorName.toLowerCase().replace(/\s+/g, '_');
-      const price = parseFloat(record.price);
-
-      // Average if multiple prices for same competitor on same day
-      if (grouped[date][competitorKey]) {
-        grouped[date][competitorKey] = (Number(grouped[date][competitorKey]) + price) / 2;
+      if (!trend.competitorId || trend.competitorName === null) {
+        // Your prices (competitorId is null)
+        grouped[date].vous = parseFloat(trend.avgPrice);
       } else {
-        grouped[date][competitorKey] = price;
+        // Competitor prices - use competitor name as key
+        const competitorKey = trend.competitorName.toLowerCase().replace(/\s+/g, '_');
+        grouped[date][competitorKey] = parseFloat(trend.avgPrice);
       }
     });
-
-    // Add "your" prices (use average current price as baseline for all dates)
-    if (yourProducts.length > 0) {
-      const avgYourPrice = yourProducts.reduce((sum, p) => {
-        return sum + (p.currentPrice ? parseFloat(p.currentPrice) : 0);
-      }, 0) / yourProducts.length;
-
-      Object.keys(grouped).forEach(date => {
-        grouped[date].vous = avgYourPrice;
-      });
-    }
 
     // Convert to array and sort by date
     return Object.values(grouped).sort((a, b) =>
       a.date.localeCompare(b.date)
     );
+  }
+
+  // Handle trigger scan
+  async function handleTriggerScan() {
+    setScanning(true);
+    try {
+      const response = await fetch(`/api/companies/${slug}/pricing/scans`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}), // Scan all competitors
+      });
+
+      if (!response.ok) {
+        throw new Error("Scan failed");
+      }
+
+      const data = await response.json();
+
+      // Show success message
+      if (data.success) {
+        alert(`Scan lancé avec succès!\n${data.totalCompetitors} concurrents scannés.\nSuccès: ${data.successfulScans}\nÉchecs: ${data.failedScans}`);
+
+        // Refresh stats after scan
+        const statsResponse = await fetch(`/api/companies/${slug}/pricing/stats`);
+        if (statsResponse.ok) {
+          const statsData = await statsResponse.json();
+          setStats(statsData);
+        }
+      }
+    } catch (error) {
+      console.error("Error triggering scan:", error);
+      alert("Erreur lors du lancement du scan");
+    } finally {
+      setScanning(false);
+    }
   }
 
   return (
@@ -164,9 +187,13 @@ export default function PricingDashboardPage() {
               <Download className="h-4 w-4 mr-2" />
               Exporter
             </Button>
-            <Button>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Lancer scan
+            <Button
+              onClick={handleTriggerScan}
+              disabled={scanning}
+              className="bg-teal-600 hover:bg-teal-700"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${scanning ? "animate-spin" : ""}`} />
+              {scanning ? "Scan en cours..." : "Lancer scan"}
             </Button>
           </>
         }

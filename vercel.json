@@ -10,6 +10,12 @@
       "maxDuration": 800
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron/pricing-snapshot",
+      "schedule": "0 2 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

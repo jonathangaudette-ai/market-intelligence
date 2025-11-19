@@ -159,9 +159,11 @@ export const pricingMatches = pgTable("pricing_matches", {
 // ============================================
 export const pricingHistory = pgTable("pricing_history", {
   id: varchar("id", { length: 255 }).$defaultFn(() => createId()).primaryKey(),
-  matchId: varchar("match_id", { length: 255 })
+  productId: varchar("product_id", { length: 255 })
     .notNull()
-    .references(() => pricingMatches.id, { onDelete: "cascade" }),
+    .references(() => pricingProducts.id, { onDelete: "cascade" }),
+  competitorId: varchar("competitor_id", { length: 255 })
+    .references(() => pricingCompetitors.id, { onDelete: "cascade" }), // nullable for your own prices
 
   // Historical Data
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
@@ -173,10 +175,12 @@ export const pricingHistory = pgTable("pricing_history", {
   changePercentage: decimal("change_percentage", { precision: 5, scale: 2 }),
   changeReason: varchar("change_reason", { length: 50 }), // price_drop, price_increase, promo_start
 
-  // Timestamp
+  // Timestamps
   recordedAt: timestamp("recorded_at").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 }, (table) => ({
-  matchIdIdx: index("pricing_history_match_id_idx").on(table.matchId),
+  productIdIdx: index("pricing_history_product_id_idx").on(table.productId),
+  competitorIdIdx: index("pricing_history_competitor_id_idx").on(table.competitorId),
   recordedAtIdx: index("pricing_history_recorded_at_idx").on(table.recordedAt),
 }));
 
@@ -419,6 +423,7 @@ export const pricingProductsRelations = relations(pricingProducts, ({ one, many 
     references: [companies.id],
   }),
   matches: many(pricingMatches),
+  history: many(pricingHistory),
   aiRecommendations: many(pricingAIRecommendations),
 }));
 
@@ -428,10 +433,11 @@ export const pricingCompetitorsRelations = relations(pricingCompetitors, ({ one,
     references: [companies.id],
   }),
   matches: many(pricingMatches),
+  history: many(pricingHistory),
   scans: many(pricingScans),
 }));
 
-export const pricingMatchesRelations = relations(pricingMatches, ({ one, many }) => ({
+export const pricingMatchesRelations = relations(pricingMatches, ({ one }) => ({
   product: one(pricingProducts, {
     fields: [pricingMatches.productId],
     references: [pricingProducts.id],
@@ -440,13 +446,16 @@ export const pricingMatchesRelations = relations(pricingMatches, ({ one, many })
     fields: [pricingMatches.competitorId],
     references: [pricingCompetitors.id],
   }),
-  history: many(pricingHistory),
 }));
 
 export const pricingHistoryRelations = relations(pricingHistory, ({ one }) => ({
-  match: one(pricingMatches, {
-    fields: [pricingHistory.matchId],
-    references: [pricingMatches.id],
+  product: one(pricingProducts, {
+    fields: [pricingHistory.productId],
+    references: [pricingProducts.id],
+  }),
+  competitor: one(pricingCompetitors, {
+    fields: [pricingHistory.competitorId],
+    references: [pricingCompetitors.id],
   }),
 }));
 

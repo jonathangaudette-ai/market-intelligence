@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { companies, pricingHistory, pricingProducts, pricingMatches, pricingCompetitors } from "@/db/schema";
-import { eq, and, gte, desc, sql } from "drizzle-orm";
+import { companies } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { HistoryService } from "@/lib/pricing/history-service";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,6 +13,17 @@ interface HistoryParams {
   }>;
 }
 
+/**
+ * GET /api/companies/[slug]/pricing/history
+ *
+ * Query parameters:
+ * - days: number (default: 30) - how many days of history to fetch
+ * - productId: string (optional) - get history for specific product only
+ *
+ * Returns:
+ * - If productId provided: { history: [...] } - raw history for that product
+ * - If no productId: { trends: [...] } - aggregated trends for dashboard chart
+ */
 export async function GET(
   request: NextRequest,
   { params }: HistoryParams
@@ -22,7 +34,7 @@ export async function GET(
     const days = parseInt(searchParams.get("days") || "30");
     const productId = searchParams.get("productId");
 
-    // 1. Get company
+    // Validate company exists
     const [company] = await db
       .select()
       .from(companies)
@@ -30,75 +42,44 @@ export async function GET(
       .limit(1);
 
     if (!company) {
-      return NextResponse.json({ error: "Company not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Company not found" },
+        { status: 404 }
+      );
     }
 
-    // 2. Calculate date threshold
-    const dateThreshold = new Date();
-    dateThreshold.setDate(dateThreshold.getDate() - days);
-
-    // 3. Build query - get price history with product and competitor info
-    const conditions = [
-      eq(pricingProducts.companyId, company.id),
-      gte(pricingHistory.recordedAt, dateThreshold),
-    ];
+    const historyService = new HistoryService();
 
     if (productId) {
-      conditions.push(eq(pricingHistory.matchId, productId));
-    }
+      // Return raw history for a specific product
+      const history = await historyService.getPriceHistory(productId, days);
 
-    // 4. Fetch history with joins
-    const history = await db
-      .select({
-        id: pricingHistory.id,
-        matchId: pricingHistory.matchId,
-        productId: pricingProducts.id,
-        productName: pricingProducts.name,
-        price: pricingHistory.price,
-        competitorId: pricingMatches.competitorId,
-        competitorName: pricingCompetitors.name,
-        recordedAt: pricingHistory.recordedAt,
-        inStock: pricingHistory.inStock,
-        promoActive: pricingHistory.promoActive,
-      })
-      .from(pricingHistory)
-      .innerJoin(pricingMatches, eq(pricingHistory.matchId, pricingMatches.id))
-      .innerJoin(pricingProducts, eq(pricingMatches.productId, pricingProducts.id))
-      .innerJoin(pricingCompetitors, eq(pricingMatches.competitorId, pricingCompetitors.id))
-      .where(and(...conditions))
-      .orderBy(desc(pricingHistory.recordedAt))
-      .limit(1000);
-
-    // 5. Also get "your" price history (current prices from products table over time)
-    // For MVP, we'll use the current price as a constant line
-    // In Phase 4+, we'll track product price changes separately
-    const yourProducts = await db
-      .select({
-        id: pricingProducts.id,
-        name: pricingProducts.name,
-        currentPrice: pricingProducts.currentPrice,
-        updatedAt: pricingProducts.updatedAt,
-      })
-      .from(pricingProducts)
-      .where(
-        and(
-          eq(pricingProducts.companyId, company.id),
-          eq(pricingProducts.isActive, true)
-        )
-      )
-      .limit(100);
-
-    return NextResponse.json({
-      history,
-      yourProducts,
-      meta: {
-        days,
+      return NextResponse.json({
         productId,
-        recordCount: history.length,
-      }
-    });
+        days,
+        history,
+        total: history.length,
+      });
+    } else {
+      // Return aggregated trends for dashboard
+      const trends = await historyService.getAggregatePriceTrends(company.id, days);
+
+      return NextResponse.json({
+        companyId: company.id,
+        days,
+        trends,
+        total: trends.length,
+      });
+    }
   } catch (error) {
-    console.error("Error fetching pricing history:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.error("Error fetching price history:", error);
+
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

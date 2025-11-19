@@ -30,26 +30,18 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Mock data pour MVP Phase 2
-const MOCK_STATS = {
-  products: { total: 576, tracked: 576, matched: 107, coverage: 0.185 },
-  pricing: { avgGap: -12.4, competitiveAdvantage: 8.2, trend7d: -2.1 },
-  competitors: { active: 13, total: 13 },
-  alerts: { last7d: 23, trend: 15, critical: 3 },
-};
+// Type definitions for API responses
+interface Stats {
+  products: { total: number; tracked: number; matched: number; coverage: number };
+  pricing: { avgGap: number; competitiveAdvantage: number; trend7d: number };
+  competitors: { active: number; total: number };
+  alerts: { last7d: number; trend: number; critical: number };
+}
 
-// Mock price history (30 jours)
-const MOCK_PRICE_HISTORY = Array.from({ length: 30 }, (_, i) => {
-  const date = new Date();
-  date.setDate(date.getDate() - (29 - i));
-  return {
-    date: date.toISOString().split('T')[0],
-    vous: 4.85 + Math.random() * 0.3,
-    swish: 4.10 + Math.random() * 0.2,
-    grainger: 4.75 + Math.random() * 0.25,
-    vto: 5.20 + Math.random() * 0.15,
-  };
-});
+interface ChartDataPoint {
+  date: string;
+  [key: string]: number | string;
+}
 
 export default function PricingDashboardPage() {
   const params = useParams();
@@ -57,13 +49,98 @@ export default function PricingDashboardPage() {
   const slug = params.slug as string;
 
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState(MOCK_STATS);
-  const [priceHistory, setPriceHistory] = useState(MOCK_PRICE_HISTORY);
+  const [stats, setStats] = useState<Stats>({
+    products: { total: 0, tracked: 0, matched: 0, coverage: 0 },
+    pricing: { avgGap: 0, competitiveAdvantage: 0, trend7d: 0 },
+    competitors: { active: 0, total: 0 },
+    alerts: { last7d: 0, trend: 0, critical: 0 },
+  });
+  const [priceHistory, setPriceHistory] = useState<ChartDataPoint[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  // Simulate data loading
+  // Fetch stats from API
   useEffect(() => {
-    setTimeout(() => setLoading(false), 500);
-  }, []);
+    async function fetchStats() {
+      try {
+        const response = await fetch(`/api/companies/${slug}/pricing/stats`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch stats: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setStats(data);
+      } catch (err) {
+        console.error("Error loading stats:", err);
+        setError(err instanceof Error ? err.message : "Failed to load stats");
+      }
+    }
+
+    fetchStats();
+  }, [slug]);
+
+  // Fetch price history from API
+  useEffect(() => {
+    async function fetchHistory() {
+      try {
+        const response = await fetch(`/api/companies/${slug}/pricing/history?days=30`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch history: ${response.statusText}`);
+        }
+        const data = await response.json();
+
+        // Transform API data to chart format
+        const chartData = transformHistoryToChart(data.history, data.yourProducts);
+        setPriceHistory(chartData);
+      } catch (err) {
+        console.error("Error loading history:", err);
+        setError(err instanceof Error ? err.message : "Failed to load history");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchHistory();
+  }, [slug]);
+
+  // Transform history data to chart format
+  function transformHistoryToChart(history: any[], yourProducts: any[]): ChartDataPoint[] {
+    // Group by date
+    const grouped: { [date: string]: ChartDataPoint } = {};
+
+    // Add competitor prices from history
+    history.forEach((record) => {
+      const date = record.recordedAt.split('T')[0];
+      if (!grouped[date]) {
+        grouped[date] = { date };
+      }
+
+      // Use competitor name as key (lowercase, no spaces)
+      const competitorKey = record.competitorName.toLowerCase().replace(/\s+/g, '_');
+      const price = parseFloat(record.price);
+
+      // Average if multiple prices for same competitor on same day
+      if (grouped[date][competitorKey]) {
+        grouped[date][competitorKey] = (Number(grouped[date][competitorKey]) + price) / 2;
+      } else {
+        grouped[date][competitorKey] = price;
+      }
+    });
+
+    // Add "your" prices (use average current price as baseline for all dates)
+    if (yourProducts.length > 0) {
+      const avgYourPrice = yourProducts.reduce((sum, p) => {
+        return sum + (p.currentPrice ? parseFloat(p.currentPrice) : 0);
+      }, 0) / yourProducts.length;
+
+      Object.keys(grouped).forEach(date => {
+        grouped[date].vous = avgYourPrice;
+      });
+    }
+
+    // Convert to array and sort by date
+    return Object.values(grouped).sort((a, b) =>
+      a.date.localeCompare(b.date)
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -74,7 +151,7 @@ export default function PricingDashboardPage() {
           { label: "Intelligence de Prix" },
         ]}
         title="Centre de Prix Concurrentiels"
-        description="Surveillance automatisée de 576 produits vs 13 concurrents"
+        description={`Surveillance automatisée de ${stats.products.total} produits vs ${stats.competitors.active} concurrents`}
         badge={
           <Badge variant="default" className="gap-1">
             <Sparkles className="h-3 w-3" />
@@ -161,6 +238,14 @@ export default function PricingDashboardPage() {
                 <div className="h-[300px] flex items-center justify-center text-muted-foreground">
                   Chargement...
                 </div>
+              ) : error ? (
+                <div className="h-[300px] flex items-center justify-center text-red-600">
+                  Erreur: {error}
+                </div>
+              ) : priceHistory.length === 0 ? (
+                <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                  Aucune donnée d&apos;historique disponible
+                </div>
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={priceHistory}>
@@ -179,7 +264,7 @@ export default function PricingDashboardPage() {
                       stroke="#6B7280"
                       fontSize={12}
                       tickLine={false}
-                      tickFormatter={(value) => `$${value.toFixed(2)}`}
+                      tickFormatter={(value) => `$${Number(value).toFixed(2)}`}
                     />
                     <Tooltip
                       contentStyle={{
@@ -187,41 +272,45 @@ export default function PricingDashboardPage() {
                         border: "1px solid #E5E7EB",
                         borderRadius: "8px",
                       }}
-                      formatter={(value: any) => [`$${value.toFixed(2)}`, ""]}
+                      formatter={(value: any) => [`$${Number(value).toFixed(2)}`, ""]}
                     />
                     <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="vous"
-                      name="Vous (Dissan)"
-                      stroke="#059669"
-                      strokeWidth={3}
-                      dot={false}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="swish"
-                      name="Swish"
-                      stroke="#3B82F6"
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="grainger"
-                      name="Grainger"
-                      stroke="#8B5CF6"
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="vto"
-                      name="VTO"
-                      stroke="#F97316"
-                      strokeWidth={2}
-                      dot={false}
-                    />
+
+                    {/* Your price line (always first, thicker) */}
+                    {priceHistory[0]?.vous !== undefined && (
+                      <Line
+                        type="monotone"
+                        dataKey="vous"
+                        name="Vous"
+                        stroke="#059669"
+                        strokeWidth={3}
+                        dot={false}
+                      />
+                    )}
+
+                    {/* Dynamically render competitor lines */}
+                    {priceHistory.length > 0 && Object.keys(priceHistory[0])
+                      .filter(key => key !== 'date' && key !== 'vous')
+                      .map((competitorKey, index) => {
+                        const colors = ['#3B82F6', '#8B5CF6', '#F97316', '#EF4444', '#10B981', '#F59E0B'];
+                        const competitorName = competitorKey.replace(/_/g, ' ')
+                          .split(' ')
+                          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(' ');
+
+                        return (
+                          <Line
+                            key={competitorKey}
+                            type="monotone"
+                            dataKey={competitorKey}
+                            name={competitorName}
+                            stroke={colors[index % colors.length]}
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                        );
+                      })
+                    }
                   </LineChart>
                 </ResponsiveContainer>
               )}

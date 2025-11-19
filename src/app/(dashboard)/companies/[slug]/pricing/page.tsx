@@ -207,14 +207,19 @@ export default function PricingDashboardPage() {
       <div className="container mx-auto py-8 space-y-8">
         {/* KPIs Grid - 6 cartes principales */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <StatCard
-            label="Produits Surveillés"
-            value={stats.products.total}
-            icon={ShoppingCart}
-            trend={{ value: 0, label: "vs hier", isPositive: true }}
-            iconColor="bg-teal-100 text-teal-600"
-            loading={loading}
-          />
+          <div
+            className="cursor-pointer transition-transform hover:scale-105"
+            onClick={() => router.push(`/companies/${slug}/pricing/products`)}
+          >
+            <StatCard
+              label="Produits Surveillés"
+              value={stats.products.total}
+              icon={ShoppingCart}
+              trend={{ value: 0, label: "vs hier", isPositive: true }}
+              iconColor="bg-teal-100 text-teal-600"
+              loading={loading}
+            />
+          </div>
           <StatCard
             label="Écart Prix Moyen"
             value={`${stats.pricing.avgGap}%`}

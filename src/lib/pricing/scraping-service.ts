@@ -5,8 +5,8 @@
  */
 
 import { db } from "@/db";
-import { companies, pricingCompetitors, pricingScans, pricingProducts } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { companies, pricingCompetitors, pricingScans, pricingProducts, pricingMatches } from "@/db/schema";
+import { eq, and, isNull } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { MatchingService } from "./matching-service";
 import { WorkerClient, ScrapedProduct as WorkerScrapedProduct } from "./worker-client";
@@ -288,14 +288,60 @@ export class ScrapingService {
           )
         );
 
+      // NEW v3: Fetch existing matches to use cached URLs
+      const existingMatches = await db
+        .select({
+          productId: pricingMatches.productId,
+          url: pricingMatches.competitorProductUrl,
+          needsRevalidation: pricingMatches.needsRevalidation,
+        })
+        .from(pricingMatches)
+        .where(
+          and(
+            eq(pricingMatches.competitorId, competitor.id),
+            isNull(pricingMatches.needsRevalidation)
+          )
+        );
+
+      // Separate products into direct (with cached URL) vs search (without)
+      const productsWithUrl: any[] = [];
+      const productsWithoutUrl: any[] = [];
+
+      for (const product of activeProducts) {
+        const match = existingMatches.find(m => m.productId === product.id);
+        if (match && match.url && !match.needsRevalidation) {
+          // Has cached URL - use direct scraping
+          productsWithUrl.push({
+            type: 'direct',
+            id: product.id,
+            url: match.url,
+          });
+        } else {
+          // No cached URL or needs revalidation - use search
+          productsWithoutUrl.push({
+            type: 'search',
+            id: product.id,
+            sku: product.sku,
+            name: product.name,
+            brand: product.brand,
+            category: product.category,
+          });
+        }
+      }
+
       console.log(
-        `[ScrapingService] Sending ${activeProducts.length} products to Railway worker`
+        `[ScrapingService] Optimization: ${productsWithUrl.length} direct URLs, ${productsWithoutUrl.length} search`
       );
 
       logs.push({
         timestamp: new Date().toISOString(),
         type: "info",
-        message: `Sending ${activeProducts.length} products to Railway worker`,
+        message: `Cache optimization: ${productsWithUrl.length} direct URLs, ${productsWithoutUrl.length} search`,
+        metadata: {
+          directUrls: productsWithUrl.length,
+          search: productsWithoutUrl.length,
+          optimizationRate: `${Math.round((productsWithUrl.length / activeProducts.length) * 100)}%`,
+        },
       });
 
       await db
@@ -308,14 +354,16 @@ export class ScrapingService {
         })
         .where(eq(pricingScans.id, scanId));
 
-      // Call Railway worker
+      // Call Railway worker with mixed products (worker handles both types)
+      const allProducts = [...productsWithUrl, ...productsWithoutUrl];
+
       const result = await this.workerClient.scrape({
         companyId: competitor.companyId,
         companySlug: competitor.companySlug,
         competitorId: competitor.id,
         competitorName: competitor.name,
         competitorUrl: competitor.websiteUrl,
-        products: activeProducts,
+        products: allProducts,
       });
 
       logs.push({

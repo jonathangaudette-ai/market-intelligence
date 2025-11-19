@@ -145,13 +145,54 @@ app.post('/api/scrape', async (req, res) => {
       scraperType: scraper.constructor.name,
     }, 'Scraper selected');
 
-    // Execute scraping
-    const result = await scraper.scrapeCompetitor({
-      competitorId: request.competitorId,
-      competitorName: request.competitorName,
-      competitorUrl: request.competitorUrl,
-      products: request.products,
-    });
+    // Separate products into search vs direct (NEW v3: URL cache optimization)
+    const searchProducts = request.products.filter(p => !p.type || p.type === 'search');
+    const directProducts = request.products.filter(p => p.type === 'direct');
+
+    logger.info({
+      totalProducts: request.products.length,
+      searchProducts: searchProducts.length,
+      directProducts: directProducts.length,
+    }, 'Products separated by type');
+
+    // Execute scraping (handle both types)
+    let combinedResult = {
+      scrapedProducts: [],
+      productsScraped: 0,
+      productsFailed: 0,
+      errors: [],
+    };
+
+    // Scrape direct URLs first (fast path)
+    if (directProducts.length > 0) {
+      logger.info('Executing direct URL scraping (cached URLs)');
+      const directResult = await scraper.scrapeDirect(directProducts);
+      combinedResult = {
+        scrapedProducts: [...directResult.scrapedProducts],
+        productsScraped: directResult.productsScraped,
+        productsFailed: directResult.productsFailed,
+        errors: [...directResult.errors],
+      };
+    }
+
+    // Scrape search products (slow path)
+    if (searchProducts.length > 0) {
+      logger.info('Executing search-based scraping');
+      const searchResult = await scraper.scrapeCompetitor({
+        competitorId: request.competitorId,
+        competitorName: request.competitorName,
+        competitorUrl: request.competitorUrl,
+        products: searchProducts as any[], // TODO: Fix type
+      });
+      combinedResult = {
+        scrapedProducts: [...combinedResult.scrapedProducts, ...searchResult.scrapedProducts],
+        productsScraped: combinedResult.productsScraped + searchResult.productsScraped,
+        productsFailed: combinedResult.productsFailed + searchResult.productsFailed,
+        errors: [...combinedResult.errors, ...searchResult.errors],
+      };
+    }
+
+    const result = combinedResult;
 
     const duration = Date.now() - startTime;
 

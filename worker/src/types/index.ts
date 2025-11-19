@@ -21,19 +21,41 @@ export type ScrapedProduct = z.infer<typeof ScrapedProductSchema>;
 // Scrape Request Schema
 // ============================================================================
 
+// Product schema for search mode (original)
+const SearchProductSchema = z.object({
+  type: z.literal('search').optional().default('search'),
+  id: z.string(),
+  sku: z.string(),
+  name: z.string(),
+  brand: z.string().nullable(),
+  category: z.string().nullable(),
+});
+
+// Product schema for direct URL mode (NEW - optimization)
+const DirectProductSchema = z.object({
+  type: z.literal('direct'),
+  id: z.string(),
+  url: z.string().url(), // Cached competitor product URL
+});
+
+// Union type for products
+const ProductRequestSchema = z.discriminatedUnion('type', [
+  SearchProductSchema,
+  DirectProductSchema,
+]);
+
+// Export types
+export type SearchProduct = z.infer<typeof SearchProductSchema>;
+export type DirectProduct = z.infer<typeof DirectProductSchema>;
+export type ProductRequest = z.infer<typeof ProductRequestSchema>;
+
 export const ScrapeRequestSchema = z.object({
   companyId: z.string(),
   companySlug: z.string(),
   competitorId: z.string(),
   competitorName: z.string(),
   competitorUrl: z.string().url(),
-  products: z.array(z.object({
-    id: z.string(),
-    sku: z.string(),
-    name: z.string(),
-    brand: z.string().nullable(),
-    category: z.string().nullable(),
-  })),
+  products: z.array(ProductRequestSchema),
   // NEW v2: Batch info for pagination
   batchInfo: z.object({
     batchNumber: z.number(),

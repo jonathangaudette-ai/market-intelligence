@@ -5,7 +5,7 @@
  * All company-specific scrapers extend this class.
  */
 
-import { CompetitorInfo, ScraperResult, ScrapedProduct } from '../types/index.js';
+import { CompetitorInfo, ScraperResult, ScrapedProduct, DirectProduct } from '../types/index.js';
 
 export abstract class BaseScraper {
   /**
@@ -17,6 +17,13 @@ export abstract class BaseScraper {
    * Main scraping method - must be implemented by each scraper
    */
   abstract scrapeCompetitor(competitorInfo: CompetitorInfo): Promise<ScraperResult>;
+
+  /**
+   * Direct URL scraping - optimized for cached URLs (NEW v3)
+   * Goes directly to product URL to get updated price (skips search)
+   * This method is 10x faster and skips GPT-5 matching
+   */
+  abstract scrapeDirect(products: DirectProduct[]): Promise<ScraperResult>;
 
   /**
    * Log helper with scraper name prefix

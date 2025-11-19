@@ -51,6 +51,7 @@ interface MatchResult {
 export class MatchingService {
   /**
    * Match competitor products against your catalog using GPT-5
+   * NEW v3: Skip GPT-5 for products with existing URL matches (optimization)
    */
   async matchProducts(
     companyId: string,
@@ -58,7 +59,7 @@ export class MatchingService {
     competitorProducts: CompetitorProduct[]
   ): Promise<MatchResult[]> {
     console.log(
-      `[MatchingService] Starting GPT-5 matching for ${competitorProducts.length} competitor products`
+      `[MatchingService] Starting matching for ${competitorProducts.length} competitor products`
     );
 
     if (competitorProducts.length === 0) {
@@ -66,7 +67,70 @@ export class MatchingService {
       return [];
     }
 
-    // 1. Fetch your catalog
+    // NEW v3: Fetch existing matches to skip GPT-5 for cached URLs
+    const existingMatches = await db
+      .select()
+      .from(pricingMatches)
+      .where(eq(pricingMatches.competitorId, competitorId));
+
+    console.log(
+      `[MatchingService] Found ${existingMatches.length} existing matches for this competitor`
+    );
+
+    // Separate products into two groups
+    const productsWithMatch: CompetitorProduct[] = [];
+    const productsWithoutMatch: CompetitorProduct[] = [];
+    const matches: MatchResult[] = [];
+
+    for (const product of competitorProducts) {
+      const existingMatch = existingMatches.find(
+        (m) => m.competitorProductUrl === product.url
+      );
+
+      if (existingMatch) {
+        // Product has existing match - just update price, SKIP GPT-5
+        console.log(
+          `[MatchingService] Updating price for existing match: ${product.name} (${product.url})`
+        );
+
+        // Update the match in DB
+        await db
+          .update(pricingMatches)
+          .set({
+            competitorProductName: product.name,
+            price: product.price.toString(),
+            lastScrapedAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .where(eq(pricingMatches.id, existingMatch.id));
+
+        // Add to matches result
+        matches.push({
+          productId: existingMatch.productId,
+          competitorProductUrl: product.url,
+          competitorProductName: product.name,
+          competitorPrice: product.price,
+          confidence: parseFloat(existingMatch.confidenceScore || '0'),
+          reasoning: 'Existing match (price updated without GPT-5)',
+        });
+
+        productsWithMatch.push(product);
+      } else {
+        // New product - needs GPT-5 matching
+        productsWithoutMatch.push(product);
+      }
+    }
+
+    console.log(
+      `[MatchingService] Optimization: ${productsWithMatch.length} existing matches (GPT-5 skipped), ${productsWithoutMatch.length} new products (need GPT-5)`
+    );
+
+    if (productsWithoutMatch.length === 0) {
+      console.log("[MatchingService] All products already matched - 100% cache hit!");
+      return matches;
+    }
+
+    // 1. Fetch your catalog (only for new products that need matching)
     const yourProducts = await db
       .select({
         productId: pricingProducts.id,
@@ -83,21 +147,23 @@ export class MatchingService {
       );
 
     console.log(
-      `[MatchingService] Loaded ${yourProducts.length} products from your catalog`
+      `[MatchingService] Loaded ${yourProducts.length} products from your catalog for GPT-5 matching`
     );
 
     if (yourProducts.length === 0) {
       console.log("[MatchingService] No products in your catalog to match against");
-      return [];
+      return matches;
     }
 
-    // 2. Batch matching with GPT-5
-    const matches: MatchResult[] = [];
+    // 2. Batch matching with GPT-5 (ONLY for new products)
+    console.log(
+      `[MatchingService] Running GPT-5 matching for ${productsWithoutMatch.length} new products`
+    );
 
     // Process in batches of 10 competitor products at a time
     const batchSize = 10;
-    for (let i = 0; i < competitorProducts.length; i += batchSize) {
-      const batch = competitorProducts.slice(i, i + batchSize);
+    for (let i = 0; i < productsWithoutMatch.length; i += batchSize) {
+      const batch = productsWithoutMatch.slice(i, i + batchSize);
       console.log(
         `[MatchingService] Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(competitorProducts.length / batchSize)}`
       );

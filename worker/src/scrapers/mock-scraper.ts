@@ -6,10 +6,66 @@
  */
 
 import { BaseScraper } from './base-scraper.js';
-import { CompetitorInfo, ScraperResult, ScrapedProduct } from '../types/index.js';
+import { CompetitorInfo, ScraperResult, ScrapedProduct, DirectProduct } from '../types/index.js';
 
 export class MockScraper extends BaseScraper {
   readonly scraperType = 'playwright' as const;
+
+  async scrapeDirect(products: DirectProduct[]): Promise<ScraperResult> {
+    this.log('Starting mock direct scraping (cached URLs)', {
+      productsToScrape: products.length,
+    });
+
+    // Simulate faster scraping for direct URLs
+    await new Promise((resolve) => setTimeout(resolve, 500)); // 4x faster than search
+
+    const scrapedProducts: ScrapedProduct[] = [];
+    const errors: Array<{ url: string; error: string; timestamp: string }> = [];
+
+    // Mock: 95% success rate for direct URLs (higher than search)
+    const successRate = 0.95;
+
+    for (const product of products) {
+      if (Math.random() < successRate) {
+        // Success: Product found at cached URL
+        const basePrice = 50;
+        const variance = 0.15;
+        const mockPrice = basePrice * (1 + (Math.random() * variance * 2 - variance));
+
+        scrapedProducts.push({
+          url: product.url,
+          name: `Product ${product.id} (Direct from cached URL)`,
+          sku: product.id,
+          price: Math.round(mockPrice * 100) / 100,
+          currency: 'CAD',
+          inStock: Math.random() > 0.05, // 95% in stock
+          characteristics: {
+            scrapingMethod: 'direct-url',
+          },
+        });
+      } else {
+        // Failure: URL changed or product removed (404)
+        errors.push(
+          this.createError(
+            product.url,
+            'Product not found at cached URL (404 - needs revalidation)'
+          )
+        );
+      }
+    }
+
+    this.log('Mock direct scraping completed', {
+      productsScraped: scrapedProducts.length,
+      productsFailed: errors.length,
+    });
+
+    return {
+      scrapedProducts,
+      productsScraped: scrapedProducts.length,
+      productsFailed: errors.length,
+      errors,
+    };
+  }
 
   async scrapeCompetitor(competitorInfo: CompetitorInfo): Promise<ScraperResult> {
     this.log('Starting mock scraping', {

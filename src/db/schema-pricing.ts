@@ -146,6 +146,9 @@ export const pricingMatches = pgTable("pricing_matches", {
   promoActive: boolean("promo_active").default(false),
   promoDetails: text("promo_details"),
 
+  // Cache & Revalidation
+  needsRevalidation: boolean("needs_revalidation").default(false).notNull(),
+
   // Timestamps
   lastScrapedAt: timestamp("last_scraped_at").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),

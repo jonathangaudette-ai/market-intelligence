@@ -582,3 +582,8 @@ export const rfpSourcePreferencesRelations = relations(rfpSourcePreferences, ({ 
     references: [rfps.id],
   }),
 }));
+
+// ============================================================================
+// PRICING MODULE TABLES
+// ============================================================================
+export * from './schema-pricing';

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { companies, pricingProducts, pricingMatches } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNull } from "drizzle-orm";
 
 interface BulkDeleteParams {
   params: Promise<{
@@ -38,7 +38,7 @@ export async function DELETE(
       .where(
         and(
           eq(pricingProducts.companyId, company.id),
-          eq(pricingProducts.deletedAt, null)
+          isNull(pricingProducts.deletedAt)
         )
       );
 
@@ -81,7 +81,7 @@ export async function DELETE(
       .where(
         and(
           eq(pricingProducts.companyId, company.id),
-          eq(pricingProducts.deletedAt, null)
+          isNull(pricingProducts.deletedAt)
         )
       );
 

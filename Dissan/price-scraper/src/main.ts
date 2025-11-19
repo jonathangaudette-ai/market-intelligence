@@ -4,7 +4,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import type { CompetitorConfig, CompetitorScrapingResults } from './types';
+import type { CompetitorConfig, CompetitorScrapingResults, ScrapingResult } from './types';
 import {
   getAllCompetitors,
   getCompetitorConfig,
@@ -90,9 +90,9 @@ async function scrapeCompetitor(
     endTime: new Date(),
     totalProducts: products.length,
     productsScraped: results.length,
-    productsFound: results.filter((r: any) => r.found).length,
-    productsNotFound: results.filter((r: any) => !r.found && !r.error).length,
-    errors: results.filter((r: any) => r.error).length,
+    productsFound: results.filter((r: ScrapingResult) => r.found).length,
+    productsNotFound: results.filter((r: ScrapingResult) => !r.found && !r.error).length,
+    errors: results.filter((r: ScrapingResult) => r.error).length,
     results,
   };
 

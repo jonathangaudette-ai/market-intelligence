@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { companies, pricingProducts, pricingCompetitors, pricingMatches, pricingAlertEvents } from "@/db/schema";
-import { eq, sql, and, gte } from "drizzle-orm";
+import { eq, sql, and, gte, isNull } from "drizzle-orm";
 import { pricingCache, getStatsCacheKey } from "@/lib/pricing/cache";
 
 export const runtime = "nodejs";
@@ -45,29 +45,40 @@ export async function GET(
       );
     }
 
-    // 2. Count total products
+    // 2. Count total products (exclude soft-deleted)
     const totalProducts = await db
       .select({ count: sql<number>`count(*)::int` })
       .from(pricingProducts)
-      .where(eq(pricingProducts.companyId, company.id));
+      .where(
+        and(
+          eq(pricingProducts.companyId, company.id),
+          isNull(pricingProducts.deletedAt)
+        )
+      );
 
-    // 3. Count tracked products (isActive = true)
+    // 3. Count tracked products (isActive = true, exclude soft-deleted)
     const trackedProducts = await db
       .select({ count: sql<number>`count(*)::int` })
       .from(pricingProducts)
       .where(
         and(
           eq(pricingProducts.companyId, company.id),
-          eq(pricingProducts.isActive, true)
+          eq(pricingProducts.isActive, true),
+          isNull(pricingProducts.deletedAt)
         )
       );
 
-    // 4. Count matched products
+    // 4. Count matched products (exclude soft-deleted)
     const matchedProducts = await db
       .select({ count: sql<number>`count(DISTINCT product_id)::int` })
       .from(pricingMatches)
       .innerJoin(pricingProducts, eq(pricingMatches.productId, pricingProducts.id))
-      .where(eq(pricingProducts.companyId, company.id));
+      .where(
+        and(
+          eq(pricingProducts.companyId, company.id),
+          isNull(pricingProducts.deletedAt)
+        )
+      );
 
     // 5. Count active competitors
     const activeCompetitors = await db
@@ -80,7 +91,7 @@ export async function GET(
         )
       );
 
-    // 6. Calculate average price gap
+    // 6. Calculate average price gap (exclude soft-deleted)
     const priceGaps = await db
       .select({
         yourPrice: pricingProducts.currentPrice,
@@ -88,7 +99,12 @@ export async function GET(
       })
       .from(pricingMatches)
       .innerJoin(pricingProducts, eq(pricingMatches.productId, pricingProducts.id))
-      .where(eq(pricingProducts.companyId, company.id));
+      .where(
+        and(
+          eq(pricingProducts.companyId, company.id),
+          isNull(pricingProducts.deletedAt)
+        )
+      );
 
     let avgGap = 0;
     if (priceGaps.length > 0) {
@@ -105,7 +121,7 @@ export async function GET(
       }
     }
 
-    // 7. Count alerts in last 7 days
+    // 7. Count alerts in last 7 days (exclude soft-deleted)
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
@@ -116,6 +132,7 @@ export async function GET(
       .where(
         and(
           eq(pricingProducts.companyId, company.id),
+          isNull(pricingProducts.deletedAt),
           gte(pricingAlertEvents.triggeredAt, sevenDaysAgo)
         )
       );

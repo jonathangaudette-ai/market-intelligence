@@ -125,10 +125,10 @@ export class GPT5SearchService {
 
       // Call GPT-5 Responses API with web_search tool
       const response = await openai.responses.create({
-        model: GPT5_CONFIGS.extraction.model, // 'gpt-5'
+        model: GPT5_CONFIGS.search.model, // 'gpt-5'
         tools: [{ type: "web_search" }],
         tool_choice: { type: "web_search" },
-        reasoning: GPT5_CONFIGS.extraction.reasoning, // { effort: 'minimal' }
+        reasoning: GPT5_CONFIGS.search.reasoning, // { effort: 'medium' }
         input: searchPrompt,
       } as any);
 

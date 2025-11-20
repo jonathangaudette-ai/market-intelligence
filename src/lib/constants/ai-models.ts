@@ -40,6 +40,13 @@ export const GPT5_CONFIGS = {
     reasoning: { effort: 'medium' },   // Raisonnement modéré requis
     text: { verbosity: 'medium' }
   } as GPT5Config,
+
+  // Web search pour découverte de produits concurrents
+  search: {
+    model: 'gpt-5',
+    reasoning: { effort: 'medium' },   // Effort moyen pour meilleure précision de recherche
+    text: { verbosity: 'low' }         // Réponses concises (URL seulement)
+  } as GPT5Config,
 };
 
 /**

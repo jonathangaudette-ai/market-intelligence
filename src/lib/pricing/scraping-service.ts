@@ -328,6 +328,10 @@ export class ScrapingService {
           productsWithUrl.push({
             type: 'direct',
             id: product.id,
+            sku: product.sku,
+            name: product.name,
+            brand: product.brand,
+            category: product.category,
             url: match.url,
           });
         } else {
@@ -411,6 +415,10 @@ export class ScrapingService {
             productsWithUrl.push({
               type: "direct",
               id: product.id,
+              sku: product.sku,
+              name: product.name,
+              brand: product.brand,
+              category: product.category,
               url: discovered.url,
             });
 

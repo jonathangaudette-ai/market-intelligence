@@ -67,7 +67,10 @@ export class ScrapingService {
    * @param competitorId - ID of the competitor to scrape
    * @param productId - Optional: ID of a specific product to scan (if not provided, scans all products)
    */
-  async scrapeCompetitor(competitorId: string, productId?: string): Promise<ScrapingResult> {
+  async scrapeCompetitor(
+    competitorId: string,
+    productId?: string
+  ): Promise<ScrapingResult> {
     // Fetch competitor config
     const [competitor] = await db
       .select()
@@ -122,7 +125,8 @@ export class ScrapingService {
       const scrapingResult = await this.executeScraping(
         competitor,
         scanId,
-        logs
+        logs,
+        productId
       );
 
       let productsMatched = 0;
@@ -248,7 +252,8 @@ export class ScrapingService {
   private async executeScraping(
     competitor: any,
     scanId: string,
-    logs: LogEvent[]
+    logs: LogEvent[],
+    productId?: string
   ): Promise<{
     success: boolean;
     scrapedProducts: ScrapedProduct[];

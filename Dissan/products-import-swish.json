@@ -1,0 +1,716 @@
+{
+  "companySlug": "dissan",
+  "competitor": {
+    "name": "Swish",
+    "websiteUrl": "https://swish.ca"
+  },
+  "products": [
+    {
+      "sku": "ATL-21801",
+      "name": "FLEXI-DUSTER Flexible frame",
+      "brand": "ATL",
+      "category": "Accessories",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/hook-loop-flat-mop-frame-grey-18"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-36780",
+      "name": "KWIK Handle aluminium 60''",
+      "brand": "ATL",
+      "category": "Accessories",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/kwik-system-extendable-handle-39-67"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-1150",
+      "name": "HYDRO THRUST Toilet plunger",
+      "brand": "ATL",
+      "category": "Bathroom accessories",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/hydroforce-toilet-plunger-large"
+        }
+      ]
+    },
+    {
+      "sku": "M2P-WA2026",
+      "name": "Heavy duty bowl plunger",
+      "brand": "M2P",
+      "category": "Bathroom accessories",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/plunger"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-816",
+      "name": "Bowl brush caddy",
+      "brand": "ATL",
+      "category": "Bathroom accessories",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/toilet-bowl-brush-caddy-white-4"
+        }
+      ]
+    },
+    {
+      "sku": "ZEP-CNPRO36",
+      "name": "ZEP Professional sprayer 32 oz",
+      "brand": "ZEP",
+      "category": "Bottles, pumps and sprays",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/full-function-power-sprayer-1-5l"
+        }
+      ]
+    },
+    {
+      "sku": "ADV-12174",
+      "name": "Graduated plain bottle 24oz",
+      "brand": "ADV",
+      "category": "Bottles, pumps and sprays",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/graduated-cleaning-bottle-clear-946ml"
+        }
+      ]
+    },
+    {
+      "sku": "M2P-TS-B2700",
+      "name": "Jug cap white 38/400",
+      "brand": "M2P",
+      "category": "Bottles, pumps and sprays",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/easy-breezy-bouffant-cap-white-24-1000-cs"
+        }
+      ]
+    },
+    {
+      "sku": "TRI-66120102",
+      "name": "Cylindrical bottle 120 mL",
+      "brand": "TRI",
+      "category": "Bottles",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-7-disinfectant-spray-wipe-bottle-710ml"
+        }
+      ]
+    },
+    {
+      "sku": "TRI-66120106",
+      "name": "Empty bottles 250ml",
+      "brand": "TRI",
+      "category": "Bottles",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-7-disinfectant-spray-wipe-bottle-710ml"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-454",
+      "name": "9'' Angle Broom Head Only",
+      "brand": "ATL",
+      "category": "Brooms and dust pans",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/trailblazer-angled-broom-head-9-5"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-761",
+      "name": "Husky Industrial Corn Broom",
+      "brand": "ATL",
+      "category": "Brooms and dust pans",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/corn-whisk-hand-broom-3-string"
+        }
+      ]
+    },
+    {
+      "sku": "VIL-158848",
+      "name": "OSKAR Broom with dustpan",
+      "brand": "VIL",
+      "category": "Brooms and dust pans",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/oskar-broom-with-dustpan-red-11"
+        }
+      ]
+    },
+    {
+      "sku": "INS-AC-DPL800",
+      "name": "Lobby dust pan",
+      "brand": "INS",
+      "category": "Dust pans",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/ergo-grip-lobby-dust-pan-black-12"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-823",
+      "name": "Round dual action bowl brush",
+      "brand": "ATL",
+      "category": "Brushes and handles",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/deluxe-toilet-bowl-brush-white"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-101",
+      "name": "Iron scrub brush",
+      "brand": "ATL",
+      "category": "Scrubbing brushes",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/bi-level-scrub-brush-10"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-85",
+      "name": "Counter brush synthetic fibre",
+      "brand": "ATL",
+      "category": "Scrubbing brushes",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/medium-fibre-counter-brush-7-5"
+        }
+      ]
+    },
+    {
+      "sku": "ATL-99100",
+      "name": "Summit Synthetic Slim Deck Brush",
+      "brand": "ATL",
+      "category": "Scrubbing brushes",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/detail-grout-brush-8"
+        }
+      ]
+    },
+    {
+      "sku": "MMM-70071279759",
+      "name": "Easy Shine Wax Applicator Kit",
+      "brand": "MMM",
+      "category": "Microfiber cloths and rags",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit"
+        }
+      ]
+    },
+    {
+      "sku": "M2P-HW-160M",
+      "name": "Jaws W/Metal handle",
+      "brand": "M2P",
+      "category": "Mops, handles and frames",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/knob-handleuirv005100"
+        }
+      ]
+    },
+    {
+      "sku": "UNG-WNK04",
+      "name": "SPEED CLEAN Window Starter Kit",
+      "brand": "UNG",
+      "category": "Dry dust mops",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit"
+        }
+      ]
+    },
+    {
+      "sku": "CHE-CCCFS19GW4",
+      "name": "RESISTOL SCELLANT-4LT",
+      "brand": "CHE",
+      "category": "Cleaning solutions and chemicals",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/reverse-resistor"
+        }
+      ]
+    },
+    {
+      "sku": "DIV-5104731",
+      "name": "Carefree Floor Finish  18.9L",
+      "brand": "DIV",
+      "category": "Floor maintenance",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-eternity-floor-finish-18-9l"
+        }
+      ]
+    },
+    {
+      "sku": "PAR-PARMATIC4",
+      "name": "Parmatic nettoyant neutre régulier 4L",
+      "brand": "PAR",
+      "category": "Floor maintenance",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-dish-detergent-4l"
+        }
+      ]
+    },
+    {
+      "sku": "INS-SF-GRUNGE-4",
+      "name": "GRUNGE Calcium Neutralizer 4 L",
+      "brand": "INS",
+      "category": "Calcium removal cleaner",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-dish-detergent-4l"
+        }
+      ]
+    },
+    {
+      "sku": "DIV-3172668",
+      "name": "All Purpose Cleaner J-Fill 2.5L",
+      "brand": "DIV",
+      "category": "General cleaning",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-3-all-purpose-concentrated-cleaner-2x4-73l"
+        }
+      ]
+    },
+    {
+      "sku": "RML-11258439",
+      "name": "SCALE TAMER Cleaner 3.8 L",
+      "brand": "RML",
+      "category": "General purpose cleaner",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-13-winter-wash-neutral-floor-cleaner-4-73l"
+        }
+      ]
+    },
+    {
+      "sku": "SPR-848",
+      "name": "Plastic Cleaner  539g",
+      "brand": "SPR",
+      "category": "Glass, chrome and mirror",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/deep-cleaning-disinfecting"
+        }
+      ]
+    },
+    {
+      "sku": "INS-SF-KRYSTA-4",
+      "name": "KRYSTAL Glass cleaner 4 L",
+      "brand": "INS",
+      "category": "Ready-to-use - liquid",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-crystal-floor-finish-3-78-l"
+        }
+      ]
+    },
+    {
+      "sku": "ZEP-085647",
+      "name": "ZEP MORADO SUPER CLEANER 20L",
+      "brand": "ZEP",
+      "category": "Industrial and mechanical",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-13-winter-wash-neutral-floor-cleaner-4-73l"
+        }
+      ]
+    },
+    {
+      "sku": "ZEP-G24447",
+      "name": "Blue Marvel 2000  20L",
+      "brand": "ZEP",
+      "category": "Industrial and mechanical",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-food-service-2000-sanitizer-2-x-4-73l"
+        }
+      ]
+    },
+    {
+      "sku": "ZEP-P84647",
+      "name": "ALUMINUM BRIGHT RTU 20L",
+      "brand": "ZEP",
+      "category": "Industrial and mechanical",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-facto-at34-aluminum-cleaner-brightener-concentrate-18-9l"
+        }
+      ]
+    },
+    {
+      "sku": "DIV-100905392",
+      "name": "CLAX Magic White 946ml",
+      "brand": "DIV",
+      "category": "Laundry",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-sparkle-glass-surface-cleaner-946ml"
+        }
+      ]
+    },
+    {
+      "sku": "OLY-4877105",
+      "name": "JAVEL ULTRA Bleach 6% 4L",
+      "brand": "OLY",
+      "category": "Bleach's",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-sequest-green-oxygen-bleach-4-x-3-78l"
+        }
+      ]
+    },
+    {
+      "sku": "WAT-1045176",
+      "name": "Air freshener citrus  90 days",
+      "brand": "WAT",
+      "category": "Deodorizing aerosols",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-tropic-breeze-air-freshener-deodorizer-284g"
+        }
+      ]
+    },
+    {
+      "sku": "ZEP-WATW6100",
+      "name": "TIMEWICK dispenser",
+      "brand": "ZEP",
+      "category": "Dispensers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-h80-mechanical-hand-towel-roll-dispenser-black"
+        }
+      ]
+    },
+    {
+      "sku": "INO-OL32-6100",
+      "name": "OLFA STICK Dispenser",
+      "brand": "INO",
+      "category": "Dispensers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-h80-mechanical-hand-towel-roll-dispenser-black"
+        }
+      ]
+    },
+    {
+      "sku": "DIV-100907872",
+      "name": "SOFT CARE Hand Sanitizer 1.2L",
+      "brand": "DIV",
+      "category": "Dispensers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/enviro-solutions-es42-foaming-hand-sanitizer-3-x-1-25l"
+        }
+      ]
+    },
+    {
+      "sku": "DEB-951",
+      "name": "Dispensers key 1L",
+      "brand": "DEB",
+      "category": "Dispensers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/dispenser-key-es-sc"
+        }
+      ]
+    },
+    {
+      "sku": "KUT-9908zpl",
+      "name": "Universal drip tray gray",
+      "brand": "KUT",
+      "category": "Dispensers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/hand-care-dispenser-drip-tray-black"
+        }
+      ]
+    },
+    {
+      "sku": "SAN-SF900TBK",
+      "name": "Bulk Foam Soap Dispenser, Black",
+      "brand": "SAN",
+      "category": "Dispensers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-h80-mechanical-hand-towel-roll-dispenser-black"
+        }
+      ]
+    },
+    {
+      "sku": "CLA-9084705010",
+      "name": "BSW28 walk behind sweeper",
+      "brand": "CLA",
+      "category": "Cleaning equipment",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/karcher-km-70-20c-manual-push-sweeper-28"
+        }
+      ]
+    },
+    {
+      "sku": "CLA-MAXXI35PKG",
+      "name": "MAXXI 35 PACKAGE",
+      "brand": "CLA",
+      "category": "Cleaning equipment",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-clean-green-garbage-bags-strong-black-35-x47-125-cs"
+        }
+      ]
+    },
+    {
+      "sku": "SNT-SC3700A",
+      "name": "QUIETCLEAN canister vacuum 2.84 L",
+      "brand": "SNT",
+      "category": "Cleaning equipment",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/nacecare-henry-dry-canister-vacuum-w-ast2-kit"
+        }
+      ]
+    },
+    {
+      "sku": "VIP-50000545",
+      "name": "CEX410 SELF CONT EXTRACTOR",
+      "brand": "VIP",
+      "category": "Carpet extractors",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/karcher-puzzi-10-1-carpet-extractor"
+        }
+      ]
+    },
+    {
+      "sku": "CPL-ES15-PS",
+      "name": "Pump up Sprayer 1.5L",
+      "brand": "CPL",
+      "category": "Disinfection equipments",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/enviro-solutions-pump-up-wide-area-sprayer-1-5l"
+        }
+      ]
+    },
+    {
+      "sku": "MIC-PRE-ES8+",
+      "name": "Electrostatic Sprayer 8L",
+      "brand": "MIC",
+      "category": "Disinfection equipments",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/victory-electrostatic-backpack-sprayer-8l"
+        }
+      ]
+    },
+    {
+      "sku": "PRO-107535",
+      "name": "Super Coach Pro 6 Backpack Vacuum w/ kit 107532",
+      "brand": "PRO",
+      "category": "Backpacks",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/proteam-super-coach-pro-6-backpack-vacuum-w-problade-tool-kit"
+        }
+      ]
+    },
+    {
+      "sku": "SNT-61840",
+      "name": "Hepa Dust Cup Filter",
+      "brand": "SNT",
+      "category": "Uprights",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/janitized-jan-kacv30-2-commercial-vacuum-paper-bag-2-ply-10-pk"
+        }
+      ]
+    },
+    {
+      "sku": "SCA-463002",
+      "name": "H2 XPRESS -Hand Towel Dispense - Stainless Steel",
+      "brand": "SCA",
+      "category": "Tissue dispensers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/swish-stainless-steel-polish-cleaner-425g"
+        }
+      ]
+    },
+    {
+      "sku": "INS-di-3300w",
+      "name": "Folded hand towel dispenser white 2 ply",
+      "brand": "INS",
+      "category": "Folded towel",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/tork-h2-universal-multifold-hand-towel-white-1-ply-16-x-250-sheets"
+        }
+      ]
+    },
+    {
+      "sku": "KRU-05629",
+      "name": "Mini-Max®² 2-Ply Bathroom Tissue 750'",
+      "brand": "KRU",
+      "category": "Bathroom tissue (jumbo rolls)",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/kleenex-professional-flat-box-facial-tissue-white-36-x-100-sheets"
+        }
+      ]
+    },
+    {
+      "sku": "INS-ts-ft100",
+      "name": "Facial tissue 30 x 100 sheets",
+      "brand": "INS",
+      "category": "Facial tissue",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/kc-surpass-facial-tissue-white-2-ply-30-x-100-sheets"
+        }
+      ]
+    },
+    {
+      "sku": "MER-C9SSD",
+      "name": "Stainless Steel Floor Stand",
+      "brand": "MER",
+      "category": "Wipers",
+      "isActive": true,
+      "competitors": [
+        {
+          "name": "Swish",
+          "url": "https://swish.ca/certainty-stainless-steel-floor-stand-dispenser"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalProducts": 54,
+    "importedAt": "2025-11-19T17:27:14.667298",
+    "source": "prix-competiteurs-final.xlsx"
+  }
+}

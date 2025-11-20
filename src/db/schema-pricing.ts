@@ -132,7 +132,8 @@ export const pricingMatches = pgTable("pricing_matches", {
   currency: varchar("currency", { length: 10 }).default("CAD"),
 
   // Matching Details
-  matchType: varchar("match_type", { length: 50 }).notNull(), // sku, name, characteristic
+  matchType: varchar("match_type", { length: 50 }).notNull(), // sku, name, characteristic, ai
+  matchSource: varchar("match_source", { length: 50 }).default("manual"), // gpt5-search, manual, gpt5-post-scrape, existing-cache
   confidenceScore: decimal("confidence_score", { precision: 3, scale: 2 }).notNull(),
   matchDetails: jsonb("match_details").$type<{
     matchedTypes?: string[];

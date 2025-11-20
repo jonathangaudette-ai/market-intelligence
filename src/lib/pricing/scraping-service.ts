@@ -10,6 +10,7 @@ import { eq, and, isNull } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { MatchingService } from "./matching-service";
 import { WorkerClient, ScrapedProduct as WorkerScrapedProduct } from "./worker-client";
+import { gpt5SearchService } from "./gpt5-search-service";
 
 // ============================================================================
 // Types
@@ -344,11 +345,153 @@ export class ScrapingService {
         },
       });
 
+      // NEW: GPT-5 Search Discovery for products without cached URLs
+      if (productsWithoutUrl.length > 0) {
+        logs.push({
+          timestamp: new Date().toISOString(),
+          type: "progress",
+          message: `Discovering ${productsWithoutUrl.length} product URLs with GPT-5 Search API`,
+          metadata: {
+            totalProducts: productsWithoutUrl.length,
+            step: "gpt5-search",
+          },
+        });
+
+        await db
+          .update(pricingScans)
+          .set({
+            currentStep: "Discovering product URLs with GPT-5",
+            progressCurrent: 15,
+            logs: logs,
+            updatedAt: new Date(),
+          })
+          .where(eq(pricingScans.id, scanId));
+
+        // Call GPT-5 Search Service
+        const discoveredUrls = await gpt5SearchService.discoverProductUrls(
+          {
+            id: competitor.id,
+            name: competitor.name,
+            websiteUrl: competitor.websiteUrl,
+          },
+          productsWithoutUrl.map((p) => ({
+            id: p.id,
+            sku: p.sku,
+            name: p.name,
+            brand: p.brand,
+            category: p.category,
+          }))
+        );
+
+        // Filter valid URLs (confidence >= 0.7)
+        const validUrls = discoveredUrls.filter((d) => d.url && d.confidence >= 0.7);
+
+        console.log(
+          `[ScrapingService] GPT-5 discovered ${validUrls.length}/${discoveredUrls.length} URLs`
+        );
+
+        // Convert discovered URLs to productsWithUrl format and cache
+        for (const discovered of validUrls) {
+          const product = productsWithoutUrl.find((p) => p.id === discovered.productId);
+          if (product && discovered.url) {
+            // Add to productsWithUrl for direct scraping
+            productsWithUrl.push({
+              type: "direct",
+              id: product.id,
+              url: discovered.url,
+            });
+
+            // Remove from productsWithoutUrl
+            const index = productsWithoutUrl.indexOf(product);
+            if (index > -1) {
+              productsWithoutUrl.splice(index, 1);
+            }
+
+            // Cache discovered URL in pricingMatches (upsert)
+            try {
+              await db
+                .insert(pricingMatches)
+                .values({
+                  id: createId(),
+                  productId: product.id,
+                  competitorId: competitor.id,
+                  competitorProductUrl: discovered.url,
+                  competitorProductName: "", // Will be updated after scraping
+                  price: "0.00", // Will be updated after scraping
+                  currency: "CAD",
+                  matchType: "ai",
+                  matchSource: "gpt5-search", // NEW: Track discovery source
+                  confidenceScore: discovered.confidence.toString(),
+                  matchDetails: {
+                    searchDuration: discovered.searchDuration,
+                    discoveredAt: new Date().toISOString(),
+                  } as any,
+                  needsRevalidation: false,
+                  lastScrapedAt: new Date(),
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                })
+                .onConflictDoUpdate({
+                  target: [pricingMatches.productId, pricingMatches.competitorId],
+                  set: {
+                    competitorProductUrl: discovered.url,
+                    matchSource: "gpt5-search", // NEW: Update source on conflict
+                    confidenceScore: discovered.confidence.toString(),
+                    matchDetails: {
+                      searchDuration: discovered.searchDuration,
+                      discoveredAt: new Date().toISOString(),
+                    } as any,
+                    needsRevalidation: false,
+                    updatedAt: new Date(),
+                  },
+                });
+            } catch (cacheError: any) {
+              console.error(
+                `[ScrapingService] Failed to cache URL for product ${product.id}:`,
+                cacheError.message
+              );
+              // Continue even if cache fails
+            }
+          }
+        }
+
+        // Log GPT-5 discovery results
+        const avgConfidence =
+          validUrls.length > 0
+            ? validUrls.reduce((sum, d) => sum + d.confidence, 0) / validUrls.length
+            : 0;
+
+        logs.push({
+          timestamp: new Date().toISOString(),
+          type: "success",
+          message: `GPT-5 discovered ${validUrls.length}/${discoveredUrls.length} product URLs`,
+          metadata: {
+            discovered: validUrls.length,
+            total: discoveredUrls.length,
+            failed: discoveredUrls.length - validUrls.length,
+            avgConfidence: parseFloat((avgConfidence * 100).toFixed(0)),
+            discoveryRate: parseFloat(
+              ((validUrls.length / discoveredUrls.length) * 100).toFixed(1)
+            ),
+          },
+        });
+
+        await db
+          .update(pricingScans)
+          .set({
+            currentStep: "URLs discovered, preparing to scrape",
+            progressCurrent: 25,
+            logs: logs,
+            updatedAt: new Date(),
+          })
+          .where(eq(pricingScans.id, scanId));
+      }
+
       await db
         .update(pricingScans)
         .set({
           currentStep: `Scraping ${competitor.name} via Railway worker`,
-          progressCurrent: 20,
+          progressCurrent: 30,
           logs: logs,
           updatedAt: new Date(),
         })

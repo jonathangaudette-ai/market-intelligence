@@ -38,18 +38,14 @@ export class ScraperFactory {
     switch (companySlug.toLowerCase()) {
       case 'my-company':
       case 'dissan':
-        // Dissan/My-Company: Use DissanScraperFactory
+      case 'acme-corp':
+        // Dissan/My-Company/Acme-Corp: Use DissanScraperFactory
         console.log('[ScraperFactory] Routing to DissanScraperFactory');
         return DissanScraperFactory.getScraper(competitorName, competitorUrl, scraperConfig);
 
       case 'akonovia':
         // TODO: Implement AkonoviaScraperFactory
         console.log('[ScraperFactory] AkonoviaScraperFactory not yet implemented, using MockScraper');
-        return new MockScraper();
-
-      case 'acme-corp':
-        // Example test company
-        console.log('[ScraperFactory] Test company acme-corp, using MockScraper');
         return new MockScraper();
 
       default:
@@ -74,6 +70,7 @@ export class ScraperFactory {
     return [
       'my-company', // DissanScraperFactory
       'dissan',     // DissanScraperFactory
+      'acme-corp',  // DissanScraperFactory (test company)
       // 'akonovia', // TODO: Implement
     ];
   }

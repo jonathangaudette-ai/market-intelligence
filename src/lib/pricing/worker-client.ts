@@ -27,6 +27,8 @@ const ScrapeRequestSchema = z.object({
     name: z.string(),
     brand: z.string().nullable(),
     category: z.string().nullable(),
+    url: z.string().url().optional(),
+    type: z.enum(['direct', 'search']).optional(),
   })),
   // NEW v2: Batch info for pagination
   batchInfo: z.object({

@@ -50,7 +50,7 @@ export async function POST(
       });
     } else if (body.productId) {
       // Scan a specific product across all active competitors
-      const result = await scrapingService.scrapeAllCompetitors(company.id, body.productId);
+      const result = await scrapingService.scrapeAllCompetitors(company.id, body.productId, body.skipDiscovery);
 
       return NextResponse.json({
         success: true,

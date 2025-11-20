@@ -778,7 +778,7 @@ export class ScrapingService {
    * @param companyId - Company ID
    * @param productId - Optional: if provided, scan only this specific product across all competitors
    */
-  async scrapeAllCompetitors(companyId: string, productId?: string): Promise<{
+  async scrapeAllCompetitors(companyId: string, productId?: string, skipDiscovery: boolean = false): Promise<{
     totalCompetitors: number;
     successfulScans: number;
     failedScans: number;
@@ -803,7 +803,7 @@ export class ScrapingService {
 
     for (const competitor of activeCompetitors) {
       try {
-        const result = await this.scrapeCompetitor(competitor.id, productId);
+        const result = await this.scrapeCompetitor(competitor.id, productId, skipDiscovery);
         successfulScans++;
         totalProductsMatched += result.productsMatched;
         scans.push({ scanId: result.scanId, competitorId: competitor.id });

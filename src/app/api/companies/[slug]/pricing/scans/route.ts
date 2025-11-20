@@ -34,8 +34,11 @@ export async function POST(
     const scrapingService = new ScrapingService();
 
     if (body.competitorId) {
-      // Scrape single competitor
-      const result = await scrapingService.scrapeCompetitor(body.competitorId);
+      // Scrape single competitor (optionally for a specific product)
+      const result = await scrapingService.scrapeCompetitor(
+        body.competitorId,
+        body.productId // Optional: if provided, scan only this product
+      );
 
       return NextResponse.json({
         success: result.success,
@@ -44,8 +47,20 @@ export async function POST(
         productsFailed: result.productsFailed,
         errors: result.errors,
       });
+    } else if (body.productId) {
+      // Scan a specific product across all active competitors
+      const result = await scrapingService.scrapeAllCompetitors(company.id, body.productId);
+
+      return NextResponse.json({
+        success: true,
+        message: `Scan completed for product ${body.productId}`,
+        totalCompetitors: result.totalCompetitors,
+        successfulScans: result.successfulScans,
+        failedScans: result.failedScans,
+        scans: result.scans,
+      });
     } else {
-      // Scrape all active competitors
+      // Scrape all active competitors for all products
       const result = await scrapingService.scrapeAllCompetitors(company.id);
 
       return NextResponse.json({

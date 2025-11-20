@@ -64,8 +64,10 @@ export class ScrapingService {
 
   /**
    * Scrape a specific competitor website
+   * @param competitorId - ID of the competitor to scrape
+   * @param productId - Optional: ID of a specific product to scan (if not provided, scans all products)
    */
-  async scrapeCompetitor(competitorId: string): Promise<ScrapingResult> {
+  async scrapeCompetitor(competitorId: string, productId?: string): Promise<ScrapingResult> {
     // Fetch competitor config
     const [competitor] = await db
       .select()
@@ -273,6 +275,17 @@ export class ScrapingService {
         .where(eq(pricingScans.id, scanId));
 
       // Fetch active products for this company (exclude soft-deleted)
+      // If productId is provided, only fetch that specific product
+      const productFilters = [
+        eq(pricingProducts.companyId, competitor.companyId),
+        eq(pricingProducts.isActive, true),
+        isNull(pricingProducts.deletedAt), // Exclude soft-deleted products
+      ];
+
+      if (productId) {
+        productFilters.push(eq(pricingProducts.id, productId));
+      }
+
       const activeProducts = await db
         .select({
           id: pricingProducts.id,
@@ -282,13 +295,7 @@ export class ScrapingService {
           category: pricingProducts.category,
         })
         .from(pricingProducts)
-        .where(
-          and(
-            eq(pricingProducts.companyId, competitor.companyId),
-            eq(pricingProducts.isActive, true),
-            isNull(pricingProducts.deletedAt) // Exclude soft-deleted products
-          )
-        );
+        .where(and(...productFilters));
 
       // NEW v3: Fetch existing matches to use cached URLs
       const existingMatches = await db
@@ -583,12 +590,15 @@ export class ScrapingService {
 
   /**
    * Scrape all active competitors for a company
+   * @param companyId - Company ID
+   * @param productId - Optional: if provided, scan only this specific product across all competitors
    */
-  async scrapeAllCompetitors(companyId: string): Promise<{
+  async scrapeAllCompetitors(companyId: string, productId?: string): Promise<{
     totalCompetitors: number;
     successfulScans: number;
     failedScans: number;
     totalProductsMatched: number;
+    scans?: Array<{ scanId: string; competitorId: string }>;
   }> {
     // Fetch all active competitors
     const activeCompetitors = await db
@@ -604,12 +614,14 @@ export class ScrapingService {
     let successfulScans = 0;
     let failedScans = 0;
     let totalProductsMatched = 0;
+    const scans: Array<{ scanId: string; competitorId: string }> = [];
 
     for (const competitor of activeCompetitors) {
       try {
-        const result = await this.scrapeCompetitor(competitor.id);
+        const result = await this.scrapeCompetitor(competitor.id, productId);
         successfulScans++;
         totalProductsMatched += result.productsMatched;
+        scans.push({ scanId: result.scanId, competitorId: competitor.id });
       } catch (error: any) {
         console.error(
           `Error scraping competitor ${competitor.name}:`,
@@ -624,6 +636,7 @@ export class ScrapingService {
       successfulScans,
       failedScans,
       totalProductsMatched,
+      scans,
     };
   }
 

@@ -136,7 +136,7 @@ export default function ProductDetailPage() {
       const response = await fetch(`/api/companies/${slug}/pricing/scans`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}), // Scan all competitors
+        body: JSON.stringify({ productId }), // Scan only this product across all competitors
       });
 
       if (!response.ok) {

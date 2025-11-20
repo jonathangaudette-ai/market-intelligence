@@ -79,15 +79,81 @@ export const pricingCompetitors = pgTable("pricing_competitors", {
   websiteUrl: varchar("website_url", { length: 1000 }).notNull(),
   logoUrl: varchar("logo_url", { length: 1000 }),
 
-  // Scraping Config
+  // Scraping Config (Extended for Playwright, Apify, API)
   scraperConfig: jsonb("scraper_config").$type<{
-    baseUrl: string;
-    selectors: {
-      productName: string;
-      price: string;
-      sku?: string;
+    // Scraper Type Selection
+    scraperType: 'playwright' | 'apify' | 'api';
+
+    // ========================================
+    // PLAYWRIGHT CONFIGURATION
+    // ========================================
+    playwright?: {
+      // Search Configuration
+      search: {
+        url: string;              // e.g., https://swish.ca/search
+        method: 'GET' | 'POST';   // Usually GET
+        param: string;            // Query param name (e.g., 'q', 'search', 'keyword')
+        searchBoxSelector?: string;   // If search requires filling a form
+        searchButtonSelector?: string; // If search requires clicking submit
+      };
+
+      // CSS Selectors (8 core selectors)
+      selectors: {
+        productList: string;        // Container for product list items (e.g., 'li.product')
+        productLink: string;        // Link to product detail page (e.g., 'a.product-link')
+        productName: string;        // Product name (e.g., '.product-name')
+        productSku?: string;        // SKU/model number (e.g., '.sku')
+        productPrice: string;       // Price (e.g., '.price')
+        productImage?: string;      // Product image URL (e.g., 'img.product-image')
+        inStockIndicator?: string;  // In-stock status (e.g., '.in-stock')
+        noResults?: string;         // No results message (e.g., '.no-results')
+      };
+
+      // Pagination Strategy
+      pagination?: {
+        enabled: boolean;
+        type: 'button-click' | 'url-param' | 'infinite-scroll';
+        selector?: string;          // Pagination button/link selector
+        urlPattern?: string;        // URL pattern for page parameter (e.g., '&page={page}')
+        maxPages: number;           // Safety limit (default: 5)
+      };
+
+      // Rate Limiting
+      rateLimiting?: {
+        requestDelay: number;   // Delay between requests in ms (default: 2000)
+        productDelay: number;   // Delay between products in ms (default: 1000)
+      };
+
+      // Advanced Options
+      advanced?: {
+        useProxy?: boolean;
+        requiresAuth?: boolean;
+        userAgent?: string;
+        viewport?: { width: number; height: number };
+        waitForSelector?: string;   // Wait for specific element before scraping
+      };
     };
-    pagination?: object;
+
+    // ========================================
+    // APIFY CONFIGURATION
+    // ========================================
+    apify?: {
+      actorId: string;          // Apify Actor ID (e.g., 'apify/web-scraper')
+      inputSchema: Record<string, any>; // Custom input for the actor
+    };
+
+    // ========================================
+    // API CONFIGURATION
+    // ========================================
+    api?: {
+      endpoint: string;         // API base URL
+      method: 'GET' | 'POST';
+      headers?: Record<string, string>;
+      auth?: {
+        type: 'bearer' | 'basic' | 'api-key';
+        credentials: Record<string, string>;
+      };
+    };
   }>().notNull(),
 
   isActive: boolean("is_active").notNull().default(true),

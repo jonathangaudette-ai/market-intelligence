@@ -528,6 +528,7 @@ export class ScrapingService {
         competitorName: competitor.name,
         competitorUrl: competitor.websiteUrl,
         products: allProducts,
+        scraperConfig: competitor.scraperConfig, // NEW v3: Pass scraper configuration
       });
 
       logs.push({

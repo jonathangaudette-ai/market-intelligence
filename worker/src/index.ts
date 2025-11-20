@@ -3,8 +3,9 @@ import { z } from 'zod';
 import rateLimit from 'express-rate-limit';
 import { pino } from 'pino';
 import * as Sentry from '@sentry/node';
+import '@sentry/profiling-node';
 import { ScraperFactory } from './scrapers/factory.js';
-import { ScrapeRequestSchema } from './types/index.js';
+import { ScrapeRequestSchema, ScraperResult } from './types/index.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -119,11 +120,13 @@ app.get('/metrics', (req, res) => {
 app.post('/api/scrape', async (req, res) => {
   const startTime = Date.now();
 
-  // Sentry transaction
-  const transaction = Sentry.startTransaction({
-    op: 'scrape',
-    name: 'POST /api/scrape',
-  });
+  // Sentry transaction (only if Sentry is initialized)
+  const transaction = process.env.SENTRY_DSN
+    ? Sentry.startTransaction({
+        op: 'scrape',
+        name: 'POST /api/scrape',
+      })
+    : null;
 
   try {
     logger.info('Received scrape request');
@@ -136,13 +139,20 @@ app.post('/api/scrape', async (req, res) => {
       competitorName: request.competitorName,
       productsCount: request.products.length,
       batchInfo: request.batchInfo,
+      scraperConfigType: request.scraperConfig?.scraperType || 'unknown',
     }, 'Scrape request validated');
 
-    // Get appropriate scraper
-    const scraper = ScraperFactory.getScraperForCompany(request.companySlug);
+    // Get appropriate scraper (NEW v3: uses scraperConfig)
+    const scraper = ScraperFactory.getScraper(
+      request.companySlug,
+      request.competitorName,
+      request.competitorUrl,
+      request.scraperConfig
+    );
 
     logger.info({
       scraperType: scraper.constructor.name,
+      scraperConfigType: request.scraperConfig?.scraperType,
     }, 'Scraper selected');
 
     // Separate products into search vs direct (NEW v3: URL cache optimization)
@@ -156,7 +166,7 @@ app.post('/api/scrape', async (req, res) => {
     }, 'Products separated by type');
 
     // Execute scraping (handle both types)
-    let combinedResult = {
+    let combinedResult: ScraperResult = {
       scrapedProducts: [],
       productsScraped: 0,
       productsFailed: 0,
@@ -215,8 +225,10 @@ app.post('/api/scrape', async (req, res) => {
       productsFailed: result.productsFailed,
     }, 'Scraping completed successfully');
 
-    transaction.setStatus('ok');
-    transaction.finish();
+    if (transaction) {
+      transaction.setStatus('ok');
+      transaction.finish();
+    }
 
     res.json(response);
   } catch (error: any) {
@@ -229,14 +241,18 @@ app.post('/api/scrape', async (req, res) => {
     }, 'Scraping failed');
 
     // Report to Sentry
-    Sentry.captureException(error, {
-      tags: {
-        endpoint: '/api/scrape',
-      },
-    });
+    if (process.env.SENTRY_DSN) {
+      Sentry.captureException(error, {
+        tags: {
+          endpoint: '/api/scrape',
+        },
+      });
+    }
 
-    transaction.setStatus('internal_error');
-    transaction.finish();
+    if (transaction) {
+      transaction.setStatus('internal_error');
+      transaction.finish();
+    }
 
     if (error instanceof z.ZodError) {
       return res.status(400).json({

@@ -36,6 +36,11 @@ const DirectProductSchema = z.object({
   type: z.literal('direct'),
   id: z.string(),
   url: z.string().url(), // Cached competitor product URL
+  // Optional metadata fields (useful for logging and error messages)
+  sku: z.string().optional(),
+  name: z.string().optional(),
+  brand: z.string().nullable().optional(),
+  category: z.string().nullable().optional(),
 });
 
 // Union type for products
@@ -61,6 +66,8 @@ export const ScrapeRequestSchema = z.object({
     batchNumber: z.number(),
     totalBatches: z.number(),
   }).optional(),
+  // NEW v3: Scraper configuration from database
+  scraperConfig: z.any(), // Use z.any() to avoid circular dependency with scraper-config.ts
 });
 
 export type ScrapeRequest = z.infer<typeof ScrapeRequestSchema>;

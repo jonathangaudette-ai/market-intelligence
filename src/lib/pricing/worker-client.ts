@@ -33,6 +33,8 @@ const ScrapeRequestSchema = z.object({
     batchNumber: z.number(),
     totalBatches: z.number(),
   }).optional(),
+  // NEW v3: Scraper configuration from database
+  scraperConfig: z.any(),
 });
 
 const ScrapeResponseSchema = z.object({

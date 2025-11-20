@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { companies, pricingProducts } from "@/db/schema";
-import { eq, desc, ilike, or, and, sql } from "drizzle-orm";
+import { eq, desc, ilike, or, and, sql, isNull } from "drizzle-orm";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -36,7 +36,10 @@ export async function GET(
     }
 
     // 2. Build conditions
-    const conditions = [eq(pricingProducts.companyId, company.id)];
+    const conditions = [
+      eq(pricingProducts.companyId, company.id),
+      isNull(pricingProducts.deletedAt), // Exclude soft-deleted products
+    ];
 
     if (search) {
       conditions.push(

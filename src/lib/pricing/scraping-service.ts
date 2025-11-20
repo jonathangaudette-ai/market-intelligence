@@ -468,12 +468,16 @@ export class ScrapingService {
           needsRevalidation: pricingMatches.needsRevalidation,
         })
         .from(pricingMatches)
-        .where(
-          and(
-            eq(pricingMatches.competitorId, competitor.id),
-            isNull(pricingMatches.needsRevalidation)
-          )
-        );
+        .where(eq(pricingMatches.competitorId, competitor.id));
+
+      console.log(
+        `[ScrapingService] DEBUG: Found ${existingMatches.length} existing matches for competitor ${competitor.id}`,
+        JSON.stringify(existingMatches, null, 2)
+      );
+      console.log(
+        `[ScrapingService] DEBUG: Processing ${activeProducts.length} active products`,
+        JSON.stringify(activeProducts.map(p => ({ id: p.id, sku: p.sku, name: p.name })), null, 2)
+      );
 
       // Separate products into direct (with cached URL) vs search (without)
       const productsWithUrl: any[] = [];
@@ -481,8 +485,13 @@ export class ScrapingService {
 
       for (const product of activeProducts) {
         const match = existingMatches.find(m => m.productId === product.id);
+        console.log(
+          `[ScrapingService] DEBUG: Product ${product.sku} - Match found: ${!!match}, Has URL: ${!!match?.url}, Needs revalidation: ${match?.needsRevalidation}`
+        );
+
         if (match && match.url && !match.needsRevalidation) {
           // Has cached URL - use direct scraping
+          console.log(`[ScrapingService] DEBUG: ✅ Using DIRECT scraping for ${product.sku} -> ${match.url}`);
           productsWithUrl.push({
             type: 'direct',
             id: product.id,
@@ -494,6 +503,8 @@ export class ScrapingService {
           });
         } else {
           // No cached URL or needs revalidation - use search
+          const reason = !match ? 'No match found' : !match.url ? 'No URL' : 'Needs revalidation';
+          console.log(`[ScrapingService] DEBUG: ⚠️  Using SEARCH for ${product.sku} - Reason: ${reason}`);
           productsWithoutUrl.push({
             type: 'search',
             id: product.id,

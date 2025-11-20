@@ -19,8 +19,8 @@ const __dirname = dirname(__filename);
 config({ path: join(__dirname, '..', '.env.local') });
 
 const RAILWAY_WORKER_URL = process.env.RAILWAY_WORKER_URL || 'https://pricing-worker-production.up.railway.app';
-const RAILWAY_WORKER_API_KEY = process.env.RAILWAY_WORKER_API_KEY || 'SXf4Qt3ebnq7qlEXLr5UrnBmWci6GDXl84Jhppi';
-const TEST_URL = 'https://swish.ca/products/bowl-brush-pp';
+const RAILWAY_WORKER_API_KEY = process.env.RAILWAY_WORKER_API_KEY || '6DJUUo6_uQNQf8dKkXCRsCoWN7BshC74CTGwZutr';
+const TEST_URL = 'https://swish.ca/sanitaire-extend-commercial-canister-vacuum-11';
 const COMPANY_SLUG = 'my-company';
 
 async function testDirectScrape() {
@@ -56,7 +56,7 @@ async function testDirectScrape() {
 
     const scrapeStart = Date.now();
 
-    const scrapeResponse = await fetch(`${RAILWAY_WORKER_URL}/scrape`, {
+    const scrapeResponse = await fetch(`${RAILWAY_WORKER_URL}/api/scrape`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

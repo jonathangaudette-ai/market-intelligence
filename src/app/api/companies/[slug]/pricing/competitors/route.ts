@@ -3,18 +3,12 @@ import { db } from "@/db";
 import { pricingCompetitors, pricingMatches } from "@/db/schema-pricing";
 import { eq, sql } from "drizzle-orm";
 
-interface CompetitorsParams {
-  params: {
-    slug: string;
-  };
-}
-
 export async function GET(
   request: NextRequest,
-  { params }: CompetitorsParams
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     // Get all competitors with their match counts
     const competitors = await db

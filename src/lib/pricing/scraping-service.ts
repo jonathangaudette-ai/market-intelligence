@@ -533,7 +533,8 @@ export class ScrapingService {
 
       // NEW: GPT-5 Search Discovery for products without cached URLs
       // NEW v3: Skip if skipDiscovery = true (price-only scan)
-      if (!skipDiscovery && productsWithoutUrl.length > 0) {
+      // DISABLED: User doesn't want to scrape products without URLs
+      if (false && !skipDiscovery && productsWithoutUrl.length > 0) {
         logs.push({
           timestamp: new Date().toISOString(),
           type: "progress",
@@ -688,8 +689,8 @@ export class ScrapingService {
         })
         .where(eq(pricingScans.id, scanId));
 
-      // Call Railway worker with mixed products (worker handles both types)
-      const allProducts = [...productsWithUrl, ...productsWithoutUrl];
+      // Only scrape products with cached URLs (no search mode)
+      console.log(`[ScrapingService] Scraping ONLY ${productsWithUrl.length} products with URLs (skipping ${productsWithoutUrl.length} without URLs)`);
 
       const result = await this.workerClient.scrape({
         companyId: competitor.companyId,
@@ -697,7 +698,7 @@ export class ScrapingService {
         competitorId: competitor.id,
         competitorName: competitor.name,
         competitorUrl: competitor.websiteUrl,
-        products: allProducts,
+        products: productsWithUrl, // ONLY products with URLs
         scraperConfig: competitor.scraperConfig, // NEW v3: Pass scraper configuration
       });
 

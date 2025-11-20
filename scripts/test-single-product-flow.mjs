@@ -209,11 +209,6 @@ ${product.category ? `- Category: ${product.category}` : ''}`;
       NOW(),
       NOW()
     )
-    ON CONFLICT (product_id, competitor_id) DO UPDATE SET
-      competitor_product_url = ${discoveredUrl},
-      match_source = 'gpt5-search',
-      confidence_score = ${confidence},
-      updated_at = NOW()
     RETURNING id
   `;
 

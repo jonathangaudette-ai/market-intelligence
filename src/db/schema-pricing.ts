@@ -79,10 +79,10 @@ export const pricingCompetitors = pgTable("pricing_competitors", {
   websiteUrl: varchar("website_url", { length: 1000 }).notNull(),
   logoUrl: varchar("logo_url", { length: 1000 }),
 
-  // Scraping Config (Extended for Playwright, Apify, API)
+  // Scraping Config (Extended for Playwright, Apify, API, ScrapingBee)
   scraperConfig: jsonb("scraper_config").$type<{
     // Scraper Type Selection
-    scraperType: 'playwright' | 'apify' | 'api';
+    scraperType: 'playwright' | 'apify' | 'api' | 'scrapingbee';
 
     // ========================================
     // PLAYWRIGHT CONFIGURATION
@@ -152,6 +152,39 @@ export const pricingCompetitors = pgTable("pricing_competitors", {
       auth?: {
         type: 'bearer' | 'basic' | 'api-key';
         credentials: Record<string, string>;
+      };
+    };
+
+    // ========================================
+    // SCRAPINGBEE CONFIGURATION
+    // ========================================
+    scrapingbee?: {
+      // API Parameters
+      api: {
+        premium_proxy: boolean;          // Default: true (required for Cloudflare)
+        country_code: string;            // Default: 'ca'
+        render_js: boolean;              // Default: true
+        wait: number;                    // Default: 10000 (ms)
+        block_ads: boolean;              // Default: true
+        block_resources: boolean;        // Default: false
+        wait_for?: string;               // Optional CSS selector to wait for
+        timeout: number;                 // Default: 120000 (ms)
+      };
+
+      // CSS Selectors (with fallback support)
+      selectors: {
+        productName: string[];           // Fallback selectors for product name
+        productPrice: string[];          // Fallback selectors for price
+        productSku?: string[];           // Optional: SKU selectors
+        productImage?: string[];         // Optional: Image selectors
+        availability?: string[];         // Optional: Stock status selectors
+      };
+
+      // Search Configuration
+      search: {
+        url: string;                     // Base search URL
+        method: 'GET' | 'POST';          // Default: 'GET'
+        param: string;                   // Query parameter name (e.g., 'q')
       };
     };
   }>().notNull(),

@@ -679,28 +679,63 @@ export class ScrapingService {
           .where(eq(pricingScans.id, scanId));
       }
 
-      await db
-        .update(pricingScans)
-        .set({
-          currentStep: `Scraping ${competitor.name} via Railway worker`,
-          progressCurrent: 30,
-          logs: logs,
-          updatedAt: new Date(),
-        })
-        .where(eq(pricingScans.id, scanId));
-
       // Only scrape products with cached URLs (no search mode)
       console.log(`[ScrapingService] Scraping ONLY ${productsWithUrl.length} products with URLs (skipping ${productsWithoutUrl.length} without URLs)`);
 
-      const result = await this.workerClient.scrape({
-        companyId: competitor.companyId,
-        companySlug: competitor.companySlug,
-        competitorId: competitor.id,
-        competitorName: competitor.name,
-        competitorUrl: competitor.websiteUrl,
-        products: productsWithUrl, // ONLY products with URLs
-        scraperConfig: competitor.scraperConfig, // NEW v3: Pass scraper configuration
-      });
+      // Route based on scraperType
+      let result: {
+        success: boolean;
+        scrapedProducts: any[];
+        productsScraped: number;
+        productsFailed: number;
+        errors: any[];
+        metadata?: any;
+      };
+
+      if (competitor.scraperConfig.scraperType === 'scrapingbee') {
+        // Use ScrapingBee API
+        await db
+          .update(pricingScans)
+          .set({
+            currentStep: `Scraping ${competitor.name} via ScrapingBee`,
+            progressCurrent: 30,
+            logs: logs,
+            updatedAt: new Date(),
+          })
+          .where(eq(pricingScans.id, scanId));
+
+        const scrapingBeeResult = await this.scrapeWithScrapingBee(competitor, productsWithUrl);
+
+        result = {
+          ...scrapingBeeResult,
+          metadata: {
+            duration: 0,
+            scraperType: 'scrapingbee',
+            workerStatus: 'completed',
+          },
+        };
+      } else {
+        // Use Railway worker (Playwright)
+        await db
+          .update(pricingScans)
+          .set({
+            currentStep: `Scraping ${competitor.name} via Railway worker`,
+            progressCurrent: 30,
+            logs: logs,
+            updatedAt: new Date(),
+          })
+          .where(eq(pricingScans.id, scanId));
+
+        result = await this.workerClient.scrape({
+          companyId: competitor.companyId,
+          companySlug: competitor.companySlug,
+          competitorId: competitor.id,
+          competitorName: competitor.name,
+          competitorUrl: competitor.websiteUrl,
+          products: productsWithUrl, // ONLY products with URLs
+          scraperConfig: competitor.scraperConfig, // NEW v3: Pass scraper configuration
+        });
+      }
 
       logs.push({
         timestamp: new Date().toISOString(),
@@ -836,5 +871,189 @@ export class ScrapingService {
       .limit(1);
 
     return scan;
+  }
+
+  /**
+   * Scrape products using ScrapingBee API
+   * @param competitor - Competitor configuration
+   * @param products - Products to scrape with URLs
+   * @returns Scraping result
+   */
+  private async scrapeWithScrapingBee(
+    competitor: any,
+    products: any[]
+  ): Promise<{
+    success: boolean;
+    scrapedProducts: ScrapedProduct[];
+    productsScraped: number;
+    productsFailed: number;
+    errors: ScrapingError[];
+  }> {
+    const axios = require('axios');
+    const cheerio = require('cheerio');
+
+    const scrapedProducts: ScrapedProduct[] = [];
+    const errors: ScrapingError[] = [];
+    const config = competitor.scraperConfig.scrapingbee;
+
+    if (!process.env.SCRAPINGBEE_API_KEY) {
+      throw new Error('SCRAPINGBEE_API_KEY not configured');
+    }
+
+    console.log(`[ScrapingBee] Starting scraping for ${products.length} products`);
+
+    for (const product of products) {
+      const startTime = Date.now();
+      const productUrl = product.url;
+
+      try {
+        console.log(`[ScrapingBee] Scraping: ${productUrl}`);
+
+        // Build ScrapingBee API request
+        const params = new URLSearchParams({
+          api_key: process.env.SCRAPINGBEE_API_KEY,
+          url: productUrl,
+          premium_proxy: config.api.premium_proxy.toString(),
+          country_code: config.api.country_code,
+          render_js: config.api.render_js.toString(),
+          wait: config.api.wait.toString(),
+          block_ads: config.api.block_ads.toString(),
+          block_resources: config.api.block_resources.toString(),
+        });
+
+        if (config.api.wait_for) {
+          params.append('wait_for', config.api.wait_for);
+        }
+
+        const response = await axios.get(
+          `https://app.scrapingbee.com/api/v1/?${params.toString()}`,
+          {
+            timeout: config.api.timeout,
+          }
+        );
+
+        const html = response.data;
+        const creditsUsed = response.headers['spb-cost'];
+
+        console.log(`[ScrapingBee] Response received (${creditsUsed} credits)`);
+
+        // Check for Cloudflare challenge
+        if (
+          typeof html === 'string' &&
+          (html.includes('Just a moment...') ||
+            html.includes('Checking your browser') ||
+            html.includes('Cloudflare'))
+        ) {
+          throw new Error('Cloudflare challenge detected - bypass failed');
+        }
+
+        // Parse HTML with Cheerio
+        const $ = cheerio.load(html);
+
+        // Extract product data using fallback selectors
+        const name = this.extractWithFallback($, config.selectors.productName);
+        const priceText = this.extractWithFallback($, config.selectors.productPrice);
+        const sku = config.selectors.productSku
+          ? this.extractWithFallback($, config.selectors.productSku)
+          : null;
+        const imageUrl = config.selectors.productImage
+          ? this.extractImageWithFallback($, config.selectors.productImage)
+          : null;
+
+        const duration = Date.now() - startTime;
+        console.log(`[ScrapingBee] Extraction completed in ${duration}ms`);
+
+        // Validate and parse price
+        if (!name || !priceText) {
+          console.warn('[ScrapingBee] Missing required fields:', { name, priceText });
+          errors.push({
+            url: productUrl,
+            error: 'Missing required fields (name or price)',
+            timestamp: new Date(),
+          });
+          continue;
+        }
+
+        // Parse price from text (remove currency symbols, commas, etc.)
+        const priceMatch = priceText.match(/[\d,]+\.?\d*/);
+        if (!priceMatch) {
+          errors.push({
+            url: productUrl,
+            error: `Could not parse price from: ${priceText}`,
+            timestamp: new Date(),
+          });
+          continue;
+        }
+
+        const price = parseFloat(priceMatch[0].replace(/,/g, ''));
+
+        scrapedProducts.push({
+          url: productUrl,
+          name,
+          sku: sku || undefined,
+          price,
+          currency: 'CAD',
+          inStock: true,
+          imageUrl: imageUrl || undefined,
+        });
+
+        console.log(`[ScrapingBee] ✅ Success: ${name} - $${price}`);
+      } catch (error: any) {
+        console.error('[ScrapingBee] Error:', error.message);
+        errors.push({
+          url: productUrl,
+          error: error.message,
+          timestamp: new Date(),
+        });
+      }
+    }
+
+    return {
+      success: scrapedProducts.length > 0,
+      scrapedProducts,
+      productsScraped: scrapedProducts.length,
+      productsFailed: errors.length,
+      errors,
+    };
+  }
+
+  /**
+   * Extract text using fallback selectors
+   */
+  private extractWithFallback($: any, selectors: string[]): string | null {
+    for (const selector of selectors) {
+      try {
+        const element = $(selector).first();
+        if (element.length) {
+          const text = element.text().trim();
+          if (text) {
+            return text;
+          }
+        }
+      } catch (error) {
+        console.warn(`[ScrapingBee] Selector failed: ${selector}`);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Extract image src using fallback selectors
+   */
+  private extractImageWithFallback($: any, selectors: string[]): string | null {
+    for (const selector of selectors) {
+      try {
+        const element = $(selector).first();
+        if (element.length) {
+          const src = element.attr('src') || element.attr('data-src');
+          if (src) {
+            return src;
+          }
+        }
+      } catch (error) {
+        console.warn(`[ScrapingBee] Image selector failed: ${selector}`);
+      }
+    }
+    return null;
   }
 }

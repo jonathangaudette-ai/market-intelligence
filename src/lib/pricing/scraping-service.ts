@@ -272,7 +272,7 @@ export class ScrapingService {
         })
         .where(eq(pricingScans.id, scanId));
 
-      // Fetch active products for this company
+      // Fetch active products for this company (exclude soft-deleted)
       const activeProducts = await db
         .select({
           id: pricingProducts.id,
@@ -285,7 +285,8 @@ export class ScrapingService {
         .where(
           and(
             eq(pricingProducts.companyId, competitor.companyId),
-            eq(pricingProducts.isActive, true)
+            eq(pricingProducts.isActive, true),
+            isNull(pricingProducts.deletedAt) // Exclude soft-deleted products
           )
         );
 

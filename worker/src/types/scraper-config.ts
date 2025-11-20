@@ -62,6 +62,7 @@ export type PlaywrightRateLimiting = z.infer<typeof PlaywrightRateLimitingSchema
 
 // Advanced Options
 export const PlaywrightAdvancedSchema = z.object({
+  useStealthMode: z.boolean().optional().default(true), // NEW: Enable stealth mode to bypass Cloudflare
   useProxy: z.boolean().optional(),
   requiresAuth: z.boolean().optional(),
   userAgent: z.string().optional(),
@@ -167,6 +168,7 @@ export const DEFAULT_PLAYWRIGHT_CONFIG: Partial<PlaywrightConfig> = {
     maxPages: 5,
   },
   advanced: {
+    useStealthMode: true, // Enable stealth mode by default
     useProxy: false,
     requiresAuth: false,
     viewport: { width: 1920, height: 1080 },

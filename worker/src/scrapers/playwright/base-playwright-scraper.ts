@@ -14,6 +14,8 @@
  */
 
 import { Browser, Page, chromium } from 'playwright';
+import { chromium as chromiumExtra } from 'playwright-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { BaseScraper } from '../base-scraper.js';
 import { CompetitorInfo, ScraperResult, ScrapedProduct, DirectProduct } from '../../types/index.js';
 import type { PlaywrightConfig } from '../../types/scraper-config.js';
@@ -34,27 +36,52 @@ export abstract class BasePlaywrightScraper extends BaseScraper {
 
   /**
    * Initialize browser and page
+   * NEW: Supports stealth mode to bypass Cloudflare and other bot detection
    */
   protected async init(): Promise<void> {
     this.log('Initializing Playwright browser');
 
-    // Launch browser
-    this.browser = await chromium.launch({
-      headless: true, // Always headless in production
-      // Note: Stealth plugin requires playwright-extra (optional dependency)
-      // For now, use standard Playwright
-    });
+    // Check if stealth mode is enabled
+    const useStealthMode = this.config.advanced?.useStealthMode !== false; // Default to true
+
+    if (useStealthMode) {
+      this.log('🥷 Stealth mode ENABLED - Using playwright-extra with stealth plugin');
+
+      // Add stealth plugin to chromium-extra
+      chromiumExtra.use(StealthPlugin());
+
+      // Launch browser with stealth
+      this.browser = await chromiumExtra.launch({
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-blink-features=AutomationControlled',
+        ],
+      }) as unknown as Browser;
+    } else {
+      this.log('Using standard Playwright (stealth disabled)');
+
+      // Launch standard browser
+      this.browser = await chromium.launch({
+        headless: true,
+      });
+    }
 
     // Create context with custom settings
     const viewport = this.config.advanced?.viewport || { width: 1920, height: 1080 };
     const userAgent = this.config.advanced?.userAgent ||
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 
     const context = await this.browser.newContext({
       userAgent,
       viewport,
       locale: 'en-CA',
       timezoneId: 'America/Toronto',
+      // Additional anti-detection measures
+      extraHTTPHeaders: {
+        'Accept-Language': 'en-CA,en;q=0.9',
+      },
     });
 
     this.page = await context.newPage();
@@ -63,7 +90,7 @@ export abstract class BasePlaywrightScraper extends BaseScraper {
     this.page.setDefaultTimeout(30000); // 30s for elements
     this.page.setDefaultNavigationTimeout(60000); // 60s for navigation
 
-    this.log('Browser initialized successfully');
+    this.log(`Browser initialized successfully (stealth: ${useStealthMode})`);
   }
 
   /**

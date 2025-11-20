@@ -49,6 +49,20 @@ export interface LogEvent {
   metadata?: Record<string, any>;
 }
 
+export interface DiscoveredUrl {
+  productId: string;
+  url: string | null;
+  confidence: number;
+  searchDuration: number;
+}
+
+export interface DiscoveryResult {
+  success: boolean;
+  urlsDiscovered: number;
+  urlsFailed: number;
+  discoveredUrls: DiscoveredUrl[];
+}
+
 // ============================================================================
 // Scraping Service
 // ============================================================================
@@ -63,13 +77,154 @@ export class ScrapingService {
   }
 
   /**
+   * Discover product URLs using GPT-5 Search (without scraping prices)
+   * @param competitorId - ID of the competitor
+   * @param productId - Optional: ID of a specific product (if not provided, discovers all products without URLs)
+   * @returns DiscoveryResult with discovered URLs
+   */
+  async discoverUrls(
+    competitorId: string,
+    productId?: string
+  ): Promise<DiscoveryResult> {
+    // Fetch competitor config
+    const [competitor] = await db
+      .select()
+      .from(pricingCompetitors)
+      .where(eq(pricingCompetitors.id, competitorId))
+      .limit(1);
+
+    if (!competitor) {
+      throw new Error(`Competitor ${competitorId} not found`);
+    }
+
+    if (!competitor.isActive) {
+      throw new Error(`Competitor ${competitor.name} is not active`);
+    }
+
+    console.log(`[ScrapingService] Discovering URLs for ${competitor.name}`);
+
+    // Fetch active products for this company
+    const productFilters = [
+      eq(pricingProducts.companyId, competitor.companyId),
+      eq(pricingProducts.isActive, true),
+      isNull(pricingProducts.deletedAt),
+    ];
+
+    if (productId) {
+      productFilters.push(eq(pricingProducts.id, productId));
+    }
+
+    const activeProducts = await db
+      .select({
+        id: pricingProducts.id,
+        sku: pricingProducts.sku,
+        name: pricingProducts.name,
+        brand: pricingProducts.brand,
+        category: pricingProducts.category,
+      })
+      .from(pricingProducts)
+      .where(and(...productFilters));
+
+    if (activeProducts.length === 0) {
+      return {
+        success: true,
+        urlsDiscovered: 0,
+        urlsFailed: 0,
+        discoveredUrls: [],
+      };
+    }
+
+    console.log(`[ScrapingService] Discovering URLs for ${activeProducts.length} products`);
+
+    // Call GPT-5 Search Service
+    const discoveredUrls = await gpt5SearchService.discoverProductUrls(
+      {
+        id: competitor.id,
+        name: competitor.name,
+        websiteUrl: competitor.websiteUrl,
+      },
+      activeProducts.map((p) => ({
+        id: p.id,
+        sku: p.sku,
+        name: p.name,
+        brand: p.brand,
+        category: p.category,
+      }))
+    );
+
+    // Filter valid URLs (confidence >= 0.7)
+    const validUrls = discoveredUrls.filter((d) => d.url && d.confidence >= 0.7);
+
+    console.log(
+      `[ScrapingService] GPT-5 discovered ${validUrls.length}/${discoveredUrls.length} URLs`
+    );
+
+    // Cache discovered URLs in pricingMatches
+    for (const discovered of validUrls) {
+      const product = activeProducts.find((p) => p.id === discovered.productId);
+      if (product && discovered.url) {
+        try {
+          await db
+            .insert(pricingMatches)
+            .values({
+              productId: product.id,
+              competitorId: competitor.id,
+              competitorProductUrl: discovered.url,
+              competitorProductName: "", // Will be updated after scraping
+              price: "0.00", // No price yet - discovery only
+              currency: "CAD",
+              matchType: "ai",
+              matchSource: "gpt5-search",
+              confidenceScore: discovered.confidence.toString(),
+              matchDetails: {
+                searchDuration: discovered.searchDuration,
+                discoveredAt: new Date().toISOString(),
+              } as any,
+              needsRevalidation: false,
+              lastScrapedAt: new Date(), // Set to now, even though not scraped yet
+            })
+            .onConflictDoUpdate({
+              target: [pricingMatches.productId, pricingMatches.competitorId],
+              set: {
+                competitorProductUrl: discovered.url,
+                matchSource: "gpt5-search",
+                confidenceScore: discovered.confidence.toString(),
+                matchDetails: {
+                  searchDuration: discovered.searchDuration,
+                  discoveredAt: new Date().toISOString(),
+                } as any,
+                needsRevalidation: false,
+                updatedAt: new Date(),
+              },
+            });
+        } catch (cacheError: any) {
+          console.error(
+            `[ScrapingService] Failed to cache URL for product ${product.id}:`,
+            cacheError.message
+          );
+          // Continue even if cache fails
+        }
+      }
+    }
+
+    return {
+      success: true,
+      urlsDiscovered: validUrls.length,
+      urlsFailed: discoveredUrls.length - validUrls.length,
+      discoveredUrls: discoveredUrls,
+    };
+  }
+
+  /**
    * Scrape a specific competitor website
    * @param competitorId - ID of the competitor to scrape
    * @param productId - Optional: ID of a specific product to scan (if not provided, scans all products)
+   * @param skipDiscovery - Optional: Skip GPT-5 URL discovery and only scrape known URLs (default: false)
    */
   async scrapeCompetitor(
     competitorId: string,
-    productId?: string
+    productId?: string,
+    skipDiscovery: boolean = false
   ): Promise<ScrapingResult> {
     // Fetch competitor config
     const [competitor] = await db
@@ -126,7 +281,8 @@ export class ScrapingService {
         competitor,
         scanId,
         logs,
-        productId
+        productId,
+        skipDiscovery
       );
 
       let productsMatched = 0;
@@ -248,12 +404,14 @@ export class ScrapingService {
   /**
    * Execute the actual scraping logic via Railway worker
    * NEW v2: Calls Railway worker with WorkerClient
+   * NEW v3: Optional skipDiscovery parameter
    */
   private async executeScraping(
     competitor: any,
     scanId: string,
     logs: LogEvent[],
-    productId?: string
+    productId?: string,
+    skipDiscovery: boolean = false
   ): Promise<{
     success: boolean;
     scrapedProducts: ScrapedProduct[];
@@ -363,7 +521,8 @@ export class ScrapingService {
       });
 
       // NEW: GPT-5 Search Discovery for products without cached URLs
-      if (productsWithoutUrl.length > 0) {
+      // NEW v3: Skip if skipDiscovery = true (price-only scan)
+      if (!skipDiscovery && productsWithoutUrl.length > 0) {
         logs.push({
           timestamp: new Date().toISOString(),
           type: "progress",

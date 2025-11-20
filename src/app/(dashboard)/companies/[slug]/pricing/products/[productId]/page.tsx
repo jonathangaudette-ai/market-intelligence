@@ -18,6 +18,8 @@ import {
   ShoppingCart,
   Clock,
   RefreshCw,
+  Search,
+  AlertTriangle,
 } from "lucide-react";
 
 interface Product {
@@ -41,6 +43,7 @@ interface CompetitorMatch {
   competitorUrl: string | null;
   matchConfidence: string; // Comes from DB as string
   lastChecked: Date;
+  needsRevalidation: boolean | null;
 }
 
 interface PricingAnalysis {
@@ -66,6 +69,7 @@ export default function ProductDetailPage() {
   const [analysis, setAnalysis] = useState<PricingAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [scanning, setScanning] = useState(false);
+  const [discovering, setDiscovering] = useState(false);
 
   useEffect(() => {
     async function fetchProductData() {
@@ -129,14 +133,51 @@ export default function ProductDetailPage() {
     fetchProductData();
   }, [slug, productId]);
 
-  // Handle trigger scan
-  async function handleTriggerScan() {
+  // Handle URL discovery (GPT-5 search)
+  async function handleDiscoverUrls() {
+    setDiscovering(true);
+    try {
+      const response = await fetch(`/api/companies/${slug}/pricing/discover`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Discovery failed");
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Refresh matches to show newly discovered URLs
+        const matchesRes = await fetch(`/api/companies/${slug}/pricing/matches?productId=${productId}`);
+        if (matchesRes.ok) {
+          const matchesData = await matchesRes.json();
+          setMatches(matchesData.matches || []);
+        }
+
+        alert(`Découverte terminée!\nURLs découvertes: ${data.totalUrlsDiscovered}\nÉchecs: ${data.totalUrlsFailed}`);
+      }
+    } catch (error) {
+      console.error("Error discovering URLs:", error);
+      alert("Erreur lors de la découverte des URLs");
+    } finally {
+      setDiscovering(false);
+    }
+  }
+
+  // Handle price scan (skip URL discovery)
+  async function handleScanPrices() {
     setScanning(true);
     try {
       const response = await fetch(`/api/companies/${slug}/pricing/scans`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId }), // Scan only this product across all competitors
+        body: JSON.stringify({
+          productId,
+          skipDiscovery: true // NEW: Skip GPT-5 URL discovery, only scrape prices
+        }),
       });
 
       if (!response.ok) {
@@ -187,11 +228,11 @@ export default function ProductDetailPage() {
           }
         }
 
-        alert(`Scan lancé avec succès!\n${data.totalCompetitors} concurrents scannés.\nSuccès: ${data.successfulScans}\nÉchecs: ${data.failedScans}`);
+        alert(`Scan terminé!\n${data.totalCompetitors} concurrents scannés.\nSuccès: ${data.successfulScans}\nÉchecs: ${data.failedScans}`);
       }
     } catch (error) {
-      console.error("Error triggering scan:", error);
-      alert("Erreur lors du lancement du scan");
+      console.error("Error scanning prices:", error);
+      alert("Erreur lors du scan des prix");
     } finally {
       setScanning(false);
     }
@@ -414,19 +455,43 @@ export default function ProductDetailPage() {
                 <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p className="text-lg font-medium">Aucune correspondance trouvée</p>
                 <p className="text-sm mb-4">
-                  Lancez un scan pour identifier les produits équivalents
+                  Découvrez d'abord les produits équivalents, puis scannez leurs prix
                 </p>
-                <Button
-                  onClick={handleTriggerScan}
-                  disabled={scanning}
-                  className="bg-teal-600 hover:bg-teal-700"
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${scanning ? "animate-spin" : ""}`} />
-                  {scanning ? "Scan en cours..." : "Lancer scan"}
-                </Button>
+                <div className="flex gap-2 justify-center">
+                  <Button
+                    onClick={handleDiscoverUrls}
+                    disabled={discovering}
+                    variant="default"
+                    className="bg-teal-600 hover:bg-teal-700"
+                  >
+                    <Search className={`h-4 w-4 mr-2 ${discovering ? "animate-spin" : ""}`} />
+                    {discovering ? "Recherche..." : "Rechercher Équivalents"}
+                  </Button>
+                </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <>
+                <div className="mb-4 flex gap-2 justify-end">
+                  <Button
+                    onClick={handleDiscoverUrls}
+                    disabled={discovering}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Search className={`h-4 w-4 mr-2 ${discovering ? "animate-spin" : ""}`} />
+                    {discovering ? "Re-recherche..." : "Re-scanner Équivalents"}
+                  </Button>
+                  <Button
+                    onClick={handleScanPrices}
+                    disabled={scanning}
+                    size="sm"
+                    className="bg-teal-600 hover:bg-teal-700"
+                  >
+                    <RefreshCw className={`h-4 w-4 mr-2 ${scanning ? "animate-spin" : ""}`} />
+                    {scanning ? "Scan en cours..." : "Scanner Prix"}
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {matches.map((match) => {
                   const yourPrice = product.currentPrice
                     ? parseFloat(product.currentPrice)
@@ -441,9 +506,17 @@ export default function ProductDetailPage() {
                     <Card key={match.id} className="border-2">
                       <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
-                          <Badge variant="secondary" className="text-xs">
-                            {Math.round(parseFloat(match.matchConfidence) * 100)}% correspondance
-                          </Badge>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <Badge variant="secondary" className="text-xs">
+                              {Math.round(parseFloat(match.matchConfidence) * 100)}% correspondance
+                            </Badge>
+                            {match.needsRevalidation && (
+                              <Badge variant="destructive" className="text-xs flex items-center gap-1">
+                                <AlertTriangle className="h-3 w-3" />
+                                URL à revalider
+                              </Badge>
+                            )}
+                          </div>
                           {match.competitorUrl && (
                             <a
                               href={match.competitorUrl}
@@ -473,9 +546,19 @@ export default function ProductDetailPage() {
                         <div className="pt-3 border-t space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-sm text-muted-foreground">Leur prix:</span>
-                            <span className="text-lg font-bold">
-                              ${competitorPrice.toFixed(2)}
-                            </span>
+                            {competitorPrice > 0 ? (
+                              <span className="text-lg font-bold">
+                                ${competitorPrice.toFixed(2)}
+                              </span>
+                            ) : match.competitorUrl ? (
+                              <span className="text-sm text-muted-foreground italic">
+                                Prix non scanné
+                              </span>
+                            ) : (
+                              <span className="text-sm text-muted-foreground">
+                                -
+                              </span>
+                            )}
                           </div>
                           {yourPrice > 0 && (
                             <div className="flex items-center justify-between">
@@ -503,7 +586,8 @@ export default function ProductDetailPage() {
                     </Card>
                   );
                 })}
-              </div>
+                </div>
+              </>
             )}
           </CardContent>
         </Card>

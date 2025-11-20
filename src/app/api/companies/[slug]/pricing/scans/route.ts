@@ -37,7 +37,8 @@ export async function POST(
       // Scrape single competitor (optionally for a specific product)
       const result = await scrapingService.scrapeCompetitor(
         body.competitorId,
-        body.productId // Optional: if provided, scan only this product
+        body.productId, // Optional: if provided, scan only this product
+        body.skipDiscovery // NEW v3: Skip GPT-5 URL discovery (price-only scan)
       );
 
       return NextResponse.json({

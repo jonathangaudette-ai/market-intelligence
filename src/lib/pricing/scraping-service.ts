@@ -935,6 +935,8 @@ export class ScrapingService {
 
       try {
         console.log(`[ScrapingBee] Scraping: ${productUrl}`);
+        console.log(`[ScrapingBee] API Key present: ${!!process.env.SCRAPINGBEE_API_KEY}`);
+        console.log(`[ScrapingBee] API Key length: ${process.env.SCRAPINGBEE_API_KEY?.length || 0}`);
 
         // Build ScrapingBee API request
         const params = new URLSearchParams({
@@ -952,12 +954,16 @@ export class ScrapingService {
           params.append('wait_for', config.api.wait_for);
         }
 
+        console.log(`[ScrapingBee] Making API request to ScrapingBee...`);
+
         const response = await axios.get(
           `https://app.scrapingbee.com/api/v1/?${params.toString()}`,
           {
             timeout: config.api.timeout,
           }
         );
+
+        console.log(`[ScrapingBee] API request successful, status: ${response.status}`);
 
         const html = response.data;
         const creditsUsed = response.headers['spb-cost'];
@@ -1026,10 +1032,16 @@ export class ScrapingService {
 
         console.log(`[ScrapingBee] ✅ Success: ${name} - $${price}`);
       } catch (error: any) {
-        console.error('[ScrapingBee] Error:', error.message);
+        console.error('[ScrapingBee] ❌ Error occurred:');
+        console.error('[ScrapingBee]    Message:', error.message);
+        console.error('[ScrapingBee]    Status:', error.response?.status);
+        console.error('[ScrapingBee]    Status Text:', error.response?.statusText);
+        console.error('[ScrapingBee]    Data:', error.response?.data);
+        console.error('[ScrapingBee]    Stack:', error.stack);
+
         errors.push({
           url: productUrl,
-          error: error.message,
+          error: `${error.message} (Status: ${error.response?.status || 'N/A'})`,
           timestamp: new Date(),
         });
       }

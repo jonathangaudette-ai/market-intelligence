@@ -722,6 +722,12 @@ export class ScrapingService {
         console.log('[ScrapingService] DEBUG - competitor.scraperConfig.scrapingbee exists:', !!competitor.scraperConfig?.scrapingbee);
         console.log('[ScrapingService] DEBUG - Full scraperConfig:', JSON.stringify(competitor.scraperConfig, null, 2));
 
+        logs.push({
+          timestamp: new Date().toISOString(),
+          type: "info",
+          message: `ABOUT TO CALL scrapeWithScrapingBee with ${productsWithUrl.length} products`,
+        });
+
         await db
           .update(pricingScans)
           .set({
@@ -733,7 +739,9 @@ export class ScrapingService {
           .where(eq(pricingScans.id, scanId));
 
         try {
+          console.log('[ScrapingService] CALLING scrapeWithScrapingBee NOW...');
           const scrapingBeeResult = await this.scrapeWithScrapingBee(competitor, productsWithUrl);
+          console.log('[ScrapingService] scrapeWithScrapingBee RETURNED');
 
           console.log(`[ScrapingService] ScrapingBee result:`, {
             success: scrapingBeeResult.success,

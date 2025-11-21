@@ -26,6 +26,7 @@ interface Product {
   id: string;
   sku: string;
   name: string;
+  description: string | null;
   currentPrice: string | null;
   category: string | null;
   brand: string | null;
@@ -70,6 +71,7 @@ export default function ProductDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [scanning, setScanning] = useState(false);
   const [discovering, setDiscovering] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchProductData() {
@@ -328,6 +330,41 @@ export default function ProductDetailPage() {
                 </p>
               </div>
             </div>
+
+            {/* Section Description */}
+            {product.description ? (
+              <div className="mt-6 pt-6 border-t">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">
+                  Description du produit
+                </h4>
+                <div className={`text-sm text-gray-600 leading-relaxed max-w-prose ${expanded ? '' : 'line-clamp-3'}`}>
+                  {product.description}
+                </div>
+                {product.description.length > 150 && (
+                  <button
+                    onClick={() => setExpanded(!expanded)}
+                    className="text-teal-600 hover:underline text-sm mt-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded py-1"
+                    aria-expanded={expanded}
+                    aria-controls="product-description-content"
+                  >
+                    {expanded ? 'Réduire' : 'Lire la suite'}
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="mt-6 pt-6 border-t">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                  <AlertCircle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 mb-1">
+                    Aucune description disponible
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Ajoutez une description lors du prochain import pour améliorer le matching IA
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="mt-4 pt-4 border-t">
               <p className="text-xs text-muted-foreground">
                 Dernière mise à jour:{" "}

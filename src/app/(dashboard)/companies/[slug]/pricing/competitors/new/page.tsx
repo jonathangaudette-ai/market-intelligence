@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowLeft, Save } from "lucide-react";
+import { toast } from "sonner";
 
 export default function NewCompetitorPage() {
   const params = useParams();
@@ -50,8 +51,12 @@ export default function NewCompetitorPage() {
         throw new Error(data.error || "Erreur lors de la création");
       }
 
-      // Success - redirect to competitors list
-      router.push(`/companies/${slug}/pricing/competitors`);
+      const data = await response.json();
+      const competitorId = data.competitor?.id;
+
+      // Success - redirect to edit page to configure scraping
+      toast.success("Compétiteur créé! Configurez maintenant le scraping.");
+      router.push(`/companies/${slug}/pricing/competitors/${competitorId}`);
     } catch (err) {
       console.error("Error creating competitor:", err);
       setError(err instanceof Error ? err.message : "Erreur inconnue");

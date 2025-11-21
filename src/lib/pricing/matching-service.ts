@@ -23,6 +23,7 @@ interface MatchCandidate {
   productId: string;
   sku: string;
   name: string;
+  description: string | null;
   characteristics: Record<string, any> | null;
 }
 
@@ -136,6 +137,7 @@ export class MatchingService {
         productId: pricingProducts.id,
         sku: pricingProducts.sku,
         name: pricingProducts.name,
+        description: pricingProducts.description,
         characteristics: pricingProducts.characteristics,
       })
       .from(pricingProducts)
@@ -216,9 +218,10 @@ export class MatchingService {
             role: "system",
             content: `Tu es un expert en matching de produits industriels (brosses, balais, équipement de nettoyage).
 Tu dois identifier les produits équivalents entre deux catalogues basé sur:
-1. Similarité du nom/description (brosse, balai, type)
-2. Caractéristiques techniques (matériau, dimensions, couleur)
-3. Catégorie produit
+1. Similarité du nom produit
+2. Description détaillée (usage, matériaux, dimensions, certifications)
+3. Caractéristiques techniques structurées (matériau, dimensions, couleur)
+4. Catégorie produit
 
 Retourne uniquement un JSON array de matches avec format exact:
 [
@@ -321,6 +324,7 @@ Retourne UNIQUEMENT le JSON array, sans texte avant ou après.`,
       id: p.productId,
       sku: p.sku,
       name: p.name,
+      description: p.description ? p.description.substring(0, 500) : "",
       characteristics: p.characteristics,
     }));
 

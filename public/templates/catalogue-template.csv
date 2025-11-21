@@ -1,4 +1,4 @@
-SKU,Nom,Prix,Categorie,Marque,URL
-ATL-2024,Brosse à cuvette polypropylene,4.99,Brosses,Atlas Graham,https://exemple.com/atl-2024
-ATL-3001,Balai industriel 24 pouces,12.50,Balais,Atlas Graham,https://exemple.com/atl-3001
-SWISH-4000,Vadrouille microfibre,8.75,Vadrouilles,Swish,https://exemple.com/swish-4000
+SKU,Nom,Description,Prix,Categorie,Marque,URL
+ATL-2024,Brosse à cuvette polypropylene,"Brosse de toilette avec poils en polypropylène résistant et manche ergonomique. Idéale pour nettoyage commercial. Certifiée EPA.",4.99,Brosses,Atlas Graham,https://exemple.com/atl-2024
+ATL-3001,Balai industriel 24 pouces,"Balai robuste de 24 pouces avec fibres synthétiques durables. Poignée en métal renforcé pour usage intensif. Parfait pour surfaces commerciales.",12.50,Balais,Atlas Graham,https://exemple.com/atl-3001
+SWISH-4000,Vadrouille microfibre,"Vadrouille en microfibre ultra-absorbante pour nettoyage humide et sec. Compatible avec poignées standard. Lavable en machine jusqu'à 500 cycles.",8.75,Vadrouilles,Swish,https://exemple.com/swish-4000

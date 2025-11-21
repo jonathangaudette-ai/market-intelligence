@@ -30,6 +30,7 @@ interface Product {
   id: string;
   sku: string;
   name: string;
+  description: string | null;
   currentPrice: string | null;
   category: string | null;
   brand: string | null;
@@ -256,8 +257,15 @@ export default function ProductsListPage() {
                         <TableCell className="font-mono text-sm">
                           {product.sku}
                         </TableCell>
-                        <TableCell className="font-medium max-w-md truncate">
-                          {product.name}
+                        <TableCell className="font-medium max-w-md">
+                          <div className="space-y-1">
+                            <div className="truncate">{product.name}</div>
+                            {product.description && (
+                              <div className="text-xs text-gray-500 line-clamp-1" aria-hidden="true">
+                                {product.description}
+                              </div>
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">{product.brand || "N/A"}</Badge>

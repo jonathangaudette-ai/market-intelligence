@@ -131,9 +131,16 @@ async function processImportJob(companyId: string, jobId: string, columnMapping:
             continue;
           }
 
+          // Extract description and normalize empty strings to NULL
+          const description = reverseMapping['description']
+            ? String(row[reverseMapping['description']] || '').trim()
+            : null;
+          const cleanDescription = description && description.length > 0 ? description : null;
+
           productsToInsert.push({
             id: createId(), companyId, sku, name,
             nameCleaned: name.toLowerCase().trim(),
+            description: cleanDescription,
             brand: reverseMapping['brand'] ? String(row[reverseMapping['brand']] || '').trim() : null,
             category: reverseMapping['category'] ? String(row[reverseMapping['category']] || '').trim() : null,
             currentPrice: price.toString(), cost: null, currency: 'CAD', unit: null,
@@ -158,6 +165,7 @@ async function processImportJob(companyId: string, jobId: string, columnMapping:
               set: {
                 name: sql`EXCLUDED.name`,
                 nameCleaned: sql`EXCLUDED.name_cleaned`,
+                description: sql`EXCLUDED.description`,
                 brand: sql`EXCLUDED.brand`,
                 category: sql`EXCLUDED.category`,
                 currentPrice: sql`EXCLUDED.current_price`,

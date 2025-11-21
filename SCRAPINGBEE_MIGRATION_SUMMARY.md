@@ -177,6 +177,60 @@ curl -X POST http://localhost:3000/api/companies/swish/pricing/test-scrapingbee 
   }'
 ```
 
+## ⚠️ Deployment Troubleshooting
+
+### Common Issue: API Key with Trailing Newline
+
+**Problem**: ScrapingBee returns `401 UNAUTHORIZED` even though the API key is correct.
+
+**Root Cause**: When adding the API key to Vercel environment variables using `echo`, a trailing newline character (`\n`) is added to the value, causing the API to reject it.
+
+**Detection**:
+```bash
+# Check API key length - should be 80 characters, not 81
+curl https://your-domain.vercel.app/api/test-env-debug
+# Look for: "keyLength": 81 and "keyEnd": "...XYZ\n"
+```
+
+**Solution**:
+```bash
+# ❌ WRONG - Adds newline
+echo "YOUR_API_KEY" | vercel env add SCRAPINGBEE_API_KEY production
+
+# ✅ CORRECT - No newline
+echo -n "YOUR_API_KEY" | vercel env add SCRAPINGBEE_API_KEY production
+```
+
+**Complete Fix**:
+```bash
+# Remove corrupted keys
+echo "y" | vercel env rm SCRAPINGBEE_API_KEY production
+echo "y" | vercel env rm SCRAPINGBEE_API_KEY preview
+echo "y" | vercel env rm SCRAPINGBEE_API_KEY development
+
+# Add keys correctly (note the -n flag)
+echo -n "X7CB1EQ0KZJFPDS0OG6KBGARG2ALQ0ZVI9067OE2O11Y7YY6X6MECRU0LO8B265YDCKXDHH6UTW7J32K" | vercel env add SCRAPINGBEE_API_KEY production
+echo -n "X7CB1EQ0KZJFPDS0OG6KBGARG2ALQ0ZVI9067OE2O11Y7YY6X6MECRU0LO8B265YDCKXDHH6UTW7J32K" | vercel env add SCRAPINGBEE_API_KEY preview
+echo -n "X7CB1EQ0KZJFPDS0OG6KBGARG2ALQ0ZVI9067OE2O11Y7YY6X6MECRU0LO8B265YDCKXDHH6UTW7J32K" | vercel env add SCRAPINGBEE_API_KEY development
+
+# Redeploy
+vercel --prod
+```
+
+### Vercel Runtime Configuration
+
+**Important**: ScrapingBee endpoints require Node.js runtime, not Edge runtime.
+
+Add this to all ScrapingBee-related API routes:
+```typescript
+export const runtime = "nodejs";
+```
+
+Files that need this:
+- `src/app/api/companies/[slug]/pricing/scans/route.ts`
+- `src/app/api/companies/[slug]/pricing/test-scrapingbee/route.ts`
+- `src/app/api/test-scrapingbee-direct/route.ts`
+
 ## 📈 Next Steps
 
 1. **Monitor Production Performance**

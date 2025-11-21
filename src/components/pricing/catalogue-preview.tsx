@@ -15,7 +15,7 @@ import { CheckCircle, AlertCircle, FileCheck, Loader2, X } from "lucide-react";
 
 interface ColumnMapping {
   detectedColumn: string;
-  mappedTo: 'sku' | 'name' | 'price' | 'category' | 'brand' | 'url' | 'ignore';
+  mappedTo: 'sku' | 'name' | 'description' | 'price' | 'category' | 'brand' | 'url' | 'ignore';
   confidence: number;
   sampleValues: string[];
 }
@@ -43,6 +43,7 @@ interface CataloguePreviewProps {
 const FIELD_OPTIONS = [
   { value: 'sku', label: 'SKU (Code produit)', required: true },
   { value: 'name', label: 'Nom du produit', required: true },
+  { value: 'description', label: 'Description', required: false },
   { value: 'price', label: 'Prix', required: true },
   { value: 'category', label: 'Catégorie', required: false },
   { value: 'brand', label: 'Marque', required: false },
@@ -224,6 +225,29 @@ export function CataloguePreview({
           </div>
         </CardContent>
       </Card>
+
+      {/* Feedback sur les descriptions */}
+      {columnMapping.find(col => col.mappedTo === 'description') ? (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-start gap-2">
+          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-green-900">
+            <p className="font-medium">Excellent ! Descriptions détectées</p>
+            <p className="text-green-700">
+              Vos produits bénéficieront d&apos;un matching IA plus précis grâce aux descriptions.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-2">
+          <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-amber-900">
+            <p className="font-medium">Colonne &quot;Description&quot; non détectée</p>
+            <p className="text-amber-700">
+              Pour améliorer la précision du matching IA, incluez une colonne &quot;Description&quot; avec les détails produits.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Actions */}
       <div className="flex items-center justify-end gap-3">

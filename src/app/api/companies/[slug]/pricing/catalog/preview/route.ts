@@ -17,7 +17,7 @@ interface PreviewParams {
 
 interface ColumnMapping {
   detectedColumn: string;
-  mappedTo: 'sku' | 'name' | 'price' | 'category' | 'brand' | 'url' | 'ignore';
+  mappedTo: 'sku' | 'name' | 'description' | 'price' | 'category' | 'brand' | 'url' | 'ignore';
   confidence: number;
   sampleValues: string[];
 }
@@ -187,7 +187,8 @@ function detectColumnMapping(
   // Pattern matching for common column names
   const patterns: Record<string, { patterns: string[]; confidence: number }> = {
     sku: { patterns: ["sku", "code", "ref", "référence", "product_code", "item_code"], confidence: 0.9 },
-    name: { patterns: ["nom", "name", "titre", "title", "description", "produit", "product", "désignation"], confidence: 0.85 },
+    name: { patterns: ["nom", "name", "titre", "title", "produit", "product", "désignation"], confidence: 0.85 },
+    description: { patterns: ["description", "desc", "détails", "details", "long_description", "product_description", "product_desc", "info", "information"], confidence: 0.85 },
     price: { patterns: ["prix", "price", "cost", "coût", "tarif", "montant"], confidence: 0.9 },
     category: { patterns: ["catégorie", "category", "cat", "type", "famille"], confidence: 0.8 },
     brand: { patterns: ["marque", "brand", "fabricant", "manufacturer"], confidence: 0.8 },

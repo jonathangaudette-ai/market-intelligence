@@ -119,6 +119,10 @@ export async function PATCH(
       updateData.brand = body.brand;
     }
 
+    if (body.description !== undefined) {
+      updateData.description = body.description;
+    }
+
     await db
       .update(pricingProducts)
       .set(updateData)

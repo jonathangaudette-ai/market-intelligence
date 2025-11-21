@@ -1,0 +1,28 @@
+{
+  "swish": {
+    "name": "Swish",
+    "baseUrl": "https://www.swish.ca",
+    "selectors": {
+      "searchInput": "#search",
+      "searchResults": ".product-item",
+      "productLink": "a.product-item-link",
+      "title": "h1.page-title",
+      "price": ".price-final_price .price",
+      "sku": ".sku .value",
+      "image": ".gallery-placeholder__image"
+    }
+  },
+  "a1": {
+    "name": "A1 Cash & Carry",
+    "baseUrl": "https://www.a1cashandcarry.com",
+    "selectors": {
+      "searchInput": "input[name='q']",
+      "searchResults": ".product-card, .grid-view-item, .product-item",
+      "productLink": "a",
+      "title": "h1.product-title",
+      "price": ".price-item--regular, .product__price, meta[property='og:price:amount']",
+      "sku": ".uom-holder, .product-single__sku",
+      "image": ".product-single__photo"
+    }
+  }
+}

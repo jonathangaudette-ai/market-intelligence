@@ -20,6 +20,7 @@ export interface ProductWithoutUrl {
   id: string;
   sku: string;
   name: string;
+  description?: string | null;
   brand?: string | null;
   category?: string | null;
 }
@@ -210,6 +211,7 @@ Instructions:
 Product details:
 - Name: ${product.name}
 - SKU: ${product.sku}
+${product.description ? `- Description: ${product.description.substring(0, 300)}` : ""}
 ${product.brand ? `- Brand: ${product.brand}` : ""}
 ${product.category ? `- Category: ${product.category}` : ""}`;
   }

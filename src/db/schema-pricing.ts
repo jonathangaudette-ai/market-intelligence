@@ -49,6 +49,7 @@ export const pricingProducts = pgTable("pricing_products", {
   imageUrl: varchar("image_url", { length: 1000 }),
   productUrl: varchar("product_url", { length: 1000 }),
   notes: text("notes"),
+  description: text("description"),
   isActive: boolean("is_active").notNull().default(true),
 
   // Timestamps

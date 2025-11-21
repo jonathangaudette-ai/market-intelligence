@@ -706,13 +706,19 @@ export class ScrapingService {
         // Use ScrapingBee API
         console.log(`[ScrapingService] ✅ Using ScrapingBee for ${competitor.name}`);
         console.log(`[ScrapingService] Products to scrape: ${productsWithUrl.length}`);
-        console.log(`[ScrapingService] ScrapingBee config:`, JSON.stringify(competitor.scraperConfig.scrapingbee, null, 2));
+        console.log(`[ScrapingService] ScrapingBee config:`, JSON.stringify(competitor.scraperConfig?.scrapingbee || {}, null, 2));
 
         logs.push({
           timestamp: new Date().toISOString(),
           type: "info",
           message: `Using ScrapingBee API for ${competitor.name} (${productsWithUrl.length} products)`,
         });
+
+        // Debug: Check competitor structure before calling scrapeWithScrapingBee
+        console.log('[ScrapingService] DEBUG - competitor.scraperConfig type:', typeof competitor.scraperConfig);
+        console.log('[ScrapingService] DEBUG - competitor.scraperConfig.scraperType:', competitor.scraperConfig?.scraperType);
+        console.log('[ScrapingService] DEBUG - competitor.scraperConfig.scrapingbee exists:', !!competitor.scraperConfig?.scrapingbee);
+        console.log('[ScrapingService] DEBUG - Full scraperConfig:', JSON.stringify(competitor.scraperConfig, null, 2));
 
         await db
           .update(pricingScans)
@@ -724,23 +730,52 @@ export class ScrapingService {
           })
           .where(eq(pricingScans.id, scanId));
 
-        const scrapingBeeResult = await this.scrapeWithScrapingBee(competitor, productsWithUrl);
+        try {
+          const scrapingBeeResult = await this.scrapeWithScrapingBee(competitor, productsWithUrl);
 
-        console.log(`[ScrapingService] ScrapingBee result:`, {
-          success: scrapingBeeResult.success,
-          productsScraped: scrapingBeeResult.productsScraped,
-          productsFailed: scrapingBeeResult.productsFailed,
-          errorsCount: scrapingBeeResult.errors.length,
-        });
+          console.log(`[ScrapingService] ScrapingBee result:`, {
+            success: scrapingBeeResult.success,
+            productsScraped: scrapingBeeResult.productsScraped,
+            productsFailed: scrapingBeeResult.productsFailed,
+            errorsCount: scrapingBeeResult.errors.length,
+          });
 
-        result = {
-          ...scrapingBeeResult,
-          metadata: {
-            duration: 0,
-            scraperType: 'scrapingbee',
-            workerStatus: 'completed',
-          },
-        };
+          result = {
+            ...scrapingBeeResult,
+            metadata: {
+              duration: 0,
+              scraperType: 'scrapingbee',
+              workerStatus: 'completed',
+            },
+          };
+        } catch (scrapingBeeError: any) {
+          console.error('[ScrapingService] ❌ ScrapingBee method threw error:');
+          console.error('[ScrapingService]    Message:', scrapingBeeError.message);
+          console.error('[ScrapingService]    Stack:', scrapingBeeError.stack);
+
+          logs.push({
+            timestamp: new Date().toISOString(),
+            type: "error",
+            message: `ScrapingBee error: ${scrapingBeeError.message}`,
+          });
+
+          result = {
+            success: false,
+            scrapedProducts: [],
+            productsScraped: 0,
+            productsFailed: productsWithUrl.length,
+            errors: [{
+              url: 'N/A',
+              error: scrapingBeeError.message,
+              timestamp: new Date(),
+            }],
+            metadata: {
+              duration: 0,
+              scraperType: 'scrapingbee',
+              workerStatus: 'failed',
+            },
+          };
+        }
       } else {
         // Use Railway worker (Playwright)
         await db

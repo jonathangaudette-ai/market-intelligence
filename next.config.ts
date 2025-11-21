@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "10mb",
     },
   },
+  webpack: (config, { isServer }) => {
+    // Exclude Dissan directory from compilation
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: ['**/node_modules', '**/Dissan/**', '**/.git/**'],
+    };
+    return config;
+  },
   async headers() {
     return [
       {

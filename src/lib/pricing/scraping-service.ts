@@ -704,6 +704,16 @@ export class ScrapingService {
 
       if (competitor.scraperConfig.scraperType === 'scrapingbee') {
         // Use ScrapingBee API
+        console.log(`[ScrapingService] ✅ Using ScrapingBee for ${competitor.name}`);
+        console.log(`[ScrapingService] Products to scrape: ${productsWithUrl.length}`);
+        console.log(`[ScrapingService] ScrapingBee config:`, JSON.stringify(competitor.scraperConfig.scrapingbee, null, 2));
+
+        logs.push({
+          timestamp: new Date().toISOString(),
+          type: "info",
+          message: `Using ScrapingBee API for ${competitor.name} (${productsWithUrl.length} products)`,
+        });
+
         await db
           .update(pricingScans)
           .set({
@@ -715,6 +725,13 @@ export class ScrapingService {
           .where(eq(pricingScans.id, scanId));
 
         const scrapingBeeResult = await this.scrapeWithScrapingBee(competitor, productsWithUrl);
+
+        console.log(`[ScrapingService] ScrapingBee result:`, {
+          success: scrapingBeeResult.success,
+          productsScraped: scrapingBeeResult.productsScraped,
+          productsFailed: scrapingBeeResult.productsFailed,
+          errorsCount: scrapingBeeResult.errors.length,
+        });
 
         result = {
           ...scrapingBeeResult,

@@ -11,6 +11,8 @@ import { createId } from "@paralleldrive/cuid2";
 import { MatchingService } from "./matching-service";
 import { WorkerClient, ScrapedProduct as WorkerScrapedProduct } from "./worker-client";
 import { gpt5SearchService } from "./gpt5-search-service";
+import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 // ============================================================================
 // Types
@@ -951,12 +953,17 @@ export class ScrapingService {
     productsFailed: number;
     errors: ScrapingError[];
   }> {
-    const axios = require('axios');
-    const cheerio = require('cheerio');
+    console.log(`[ScrapingBee] 🚀 METHOD CALLED with ${products.length} products`);
+    console.log(`[ScrapingBee] First product:`, products[0]);
 
     const scrapedProducts: ScrapedProduct[] = [];
     const errors: ScrapingError[] = [];
-    const config = competitor.scraperConfig.scrapingbee;
+    const config = competitor.scraperConfig?.scrapingbee;
+
+    if (!config) {
+      console.error('[ScrapingBee] ❌ Config missing!', competitor.scraperConfig);
+      throw new Error('ScrapingBee config not found in competitor.scraperConfig');
+    }
 
     if (!process.env.SCRAPINGBEE_API_KEY) {
       throw new Error('SCRAPINGBEE_API_KEY not configured');

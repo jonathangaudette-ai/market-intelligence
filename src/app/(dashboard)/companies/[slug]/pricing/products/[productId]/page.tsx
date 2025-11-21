@@ -20,6 +20,7 @@ import {
   RefreshCw,
   Search,
   AlertTriangle,
+  AlertCircle,
 } from "lucide-react";
 
 interface Product {

@@ -241,6 +241,16 @@ export class ScrapingService {
       throw new Error(`Competitor ${competitor.name} is not active`);
     }
 
+    // IMPORTANT: Parse scraperConfig if it's a string (postgres-js sometimes returns JSONB as string)
+    if (typeof competitor.scraperConfig === 'string') {
+      try {
+        (competitor as any).scraperConfig = JSON.parse(competitor.scraperConfig);
+        console.log('[ScrapingService] Parsed scraperConfig from string to object');
+      } catch (e) {
+        console.error('[ScrapingService] Failed to parse scraperConfig:', e);
+      }
+    }
+
     // Create scan job
     const scanId = createId();
     const logs: LogEvent[] = [];

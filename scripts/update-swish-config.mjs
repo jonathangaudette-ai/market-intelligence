@@ -31,7 +31,13 @@ async function main() {
   console.log('🔧 Updating Swish competitor configuration...\\n');
 
   try {
-    // Updated configuration with stealth mode enabled and Shopify selectors
+    // ========================================================================
+    // Updated configuration with validated product detail page selectors
+    // These selectors were tested locally and successfully extracted:
+    //   - Product Name: "Sanitaire Extend® Commercial Canister Vacuum - 11""
+    //   - Price: "$313.26"
+    //   - SKU: "SKU  SC3700A"
+    // ========================================================================
     const updatedConfig = {
       scraperType: 'playwright',
       playwright: {
@@ -41,12 +47,15 @@ async function main() {
           param: 'q'
         },
         selectors: {
+          // PRODUCT DETAIL PAGE SELECTORS (for direct URL scraping)
+          productName: 'h1.product__title, h1.product-title, h1',
+          productPrice: '.price-item.price-item--regular, .price__regular .price-item, span.price-item, .product__price span, .price, .money',
+          productSku: '.product__sku, [data-product-sku], .sku',
+          productImage: '.product__media img, .product__image img, [data-product-image]',
+
+          // SEARCH/LISTING PAGE SELECTORS (for search-based scraping)
           productList: '.grid__item.product-item, .product-item, article.product, li.klevuProduct',
           productLink: 'a.product-item__title, a.product__title, .product-link, .kuName a',
-          productName: '.product-item__title, .product__title, h3.product-title, .kuName',
-          productPrice: '.price-item.price-item--regular, .price, .product__price span.money, [class*="Price"]',
-          productImage: '.product-item__image-wrapper img, .product__media img',
-          productSku: '.product-item__sku, .product__sku, .ku-sku',
           inStockIndicator: '.product-form__inventory',
           noResults: '.search__no-results, .no-results, .kuNoResultMessage'
         },
@@ -60,7 +69,10 @@ async function main() {
         },
         advanced: {
           useStealthMode: true, // 🥷 ENABLE STEALTH MODE to bypass Cloudflare
-          waitForSelector: '.product-item, .product, li.klevuProduct', // Wait for products to load
+          // IMPORTANT: Different waitForSelector based on page type:
+          // - Product detail pages: Wait for h1.product__title
+          // - Search/listing pages: Wait for .product-item, .product, li.klevuProduct
+          waitForSelector: 'h1.product__title, .product-item, .product, li.klevuProduct',
           viewport: { width: 1920, height: 1080 }
         }
       }

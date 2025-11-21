@@ -7,8 +7,7 @@
     "dev": "nodemon --watch src --exec tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "echo \"No tests yet\"",
-    "postinstall": "npx playwright install --with-deps chromium"
+    "test": "echo \"No tests yet\""
   },
   "dependencies": {
     "@sentry/node": "^7.80.0",

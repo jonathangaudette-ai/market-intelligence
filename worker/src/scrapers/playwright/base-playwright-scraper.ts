@@ -50,13 +50,22 @@ export abstract class BasePlaywrightScraper extends BaseScraper {
       // Add stealth plugin to chromium-extra
       chromiumExtra.use(StealthPlugin());
 
-      // Launch browser with stealth
+      // Launch browser with ENHANCED anti-detection args (Cloudflare bypass)
       this.browser = await chromiumExtra.launch({
         headless: true,
         args: [
+          '--disable-blink-features=AutomationControlled',
+          '--disable-dev-shm-usage',
           '--no-sandbox',
           '--disable-setuid-sandbox',
-          '--disable-blink-features=AutomationControlled',
+          '--disable-web-security',
+          '--disable-features=IsolateOrigins,site-per-process',
+          '--window-size=1920,1080',
+          // Additional Cloudflare bypass args
+          '--disable-infobars',
+          '--disable-background-timer-throttling',
+          '--disable-backgrounding-occluded-windows',
+          '--disable-renderer-backgrounding',
         ],
       }) as unknown as Browser;
     } else {
@@ -68,20 +77,62 @@ export abstract class BasePlaywrightScraper extends BaseScraper {
       });
     }
 
-    // Create context with custom settings
+    // Create context with ENHANCED anti-detection settings
     const viewport = this.config.advanced?.viewport || { width: 1920, height: 1080 };
     const userAgent = this.config.advanced?.userAgent ||
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
     const context = await this.browser.newContext({
       userAgent,
       viewport,
       locale: 'en-CA',
       timezoneId: 'America/Toronto',
-      // Additional anti-detection measures
+      permissions: [],
+      geolocation: { latitude: 45.5017, longitude: -73.5673 }, // Montreal
+      colorScheme: 'light',
+      // ENHANCED HTTP headers for Cloudflare bypass
       extraHTTPHeaders: {
-        'Accept-Language': 'en-CA,en;q=0.9',
+        'Accept-Language': 'en-CA,en-US;q=0.9,en;q=0.8',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
       },
+    });
+
+    // ENHANCED: Add init script to hide webdriver properties (Cloudflare detection)
+    await context.addInitScript(() => {
+      // Hide webdriver property
+      Object.defineProperty(navigator, 'webdriver', {
+        get: () => undefined,
+      });
+
+      // Override the chrome property
+      (window as any).chrome = {
+        runtime: {},
+      };
+
+      // Override permissions query
+      const originalQuery = (window.navigator.permissions as any).query;
+      (window.navigator.permissions as any).query = (parameters: any) => (
+        parameters.name === 'notifications'
+          ? Promise.resolve({ state: (Notification as any).permission })
+          : originalQuery(parameters)
+      );
+
+      // Override plugins to make it look real
+      Object.defineProperty(navigator, 'plugins', {
+        get: () => [1, 2, 3, 4, 5],
+      });
+
+      // Override languages
+      Object.defineProperty(navigator, 'languages', {
+        get: () => ['en-CA', 'en-US', 'en'],
+      });
     });
 
     this.page = await context.newPage();
@@ -135,15 +186,20 @@ export abstract class BasePlaywrightScraper extends BaseScraper {
           timeout: 60000,
         });
 
-        // Wait for selector if specified
+        // ENHANCED: Wait longer for Cloudflare to resolve and page to load
+        // Cloudflare JavaScript challenge can take 5-15 seconds to complete
+        await this.delay(5000); // Initial wait for Cloudflare challenge
+
+        // Wait for selector if specified (with longer timeout)
         if (this.config.advanced?.waitForSelector) {
+          this.log(`Waiting for selector: ${this.config.advanced.waitForSelector}`);
           await this.page.waitForSelector(this.config.advanced.waitForSelector, {
-            timeout: 10000,
+            timeout: 45000, // INCREASED from 10s to 45s for Cloudflare
           });
         }
 
-        // Wait a bit for dynamic content
-        await this.delay(1000);
+        // Wait a bit more for dynamic content to settle
+        await this.delay(2000);
 
         this.log(`Successfully navigated to ${url}`);
         return;
